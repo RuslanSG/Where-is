@@ -38,8 +38,8 @@ class Game {
     
     // MARK: - Initialization
     
-    init(numberOfNumbers: Int) {
-        setNumbers(count: numberOfNumbers)
+    init(rows: Int, colums: Int) {
+        setNumbers(count: rows * colums)
     }
     
     // MARK: - Helping Methods
