@@ -13,10 +13,10 @@ class GameViewController: UIViewController {
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var basicView: UIView!
     
-    private lazy var game = Game(numberOfNumbers: 5*5)
+    private var game = Game(numberOfNumbers: 5*5)
     private lazy var grid = Grid(layout: .aspectRatio(1/1), frame: basicView.bounds)
     private var buttons = [UIButton]()
-
+    
     override func viewDidLoad() {
         updateViewFromModel()
     }
@@ -34,12 +34,12 @@ class GameViewController: UIViewController {
             }
         } else {
             game.finishGame()
-            showMessage(on: label, text: String(game.elapsedTime), disappear: false)
+            showMessage(on: label, text: String(format: "%.02f", game.elapsedTime), disappear: false)
         }
     }
     
     @IBAction func startButtonPressed(sender: UIButton) {
-        self.buttons.forEach({ (button) in
+        buttons.forEach({ (button) in
             button.isEnabled = true
             UIViewPropertyAnimator.runningPropertyAnimator(
                 withDuration: 0.2,
@@ -54,32 +54,26 @@ class GameViewController: UIViewController {
     }
     
     @IBAction func newGameButtonPressed(sender: UIButton) {
-        game = Game(numberOfNumbers: 5*5)
+        game.newGame()
+        hideNumbers()
         updateViewFromModel()
+    }
+    
+    @IBAction func addFiveNumbersButtonPressed(sender: UIButton) {
+//        game = Game(numberOfNumbers: 6*5)
     }
     
     // UI Management
     
     private func updateViewFromModel() {
-        grid.cellCount = game.numberOfNumbers
-        for i in 0..<game.numberOfNumbers {
-            if let viewFrame = grid[i]?.insetBy(dx: 2.0, dy: 2.0) {
-                let number = game.numbers[i]
-                let button: UIButton = {
-                    let button = UIButton(frame: viewFrame)
-                    button.setTitle(String(number), for: .normal)
-                    button.titleLabel?.font = UIFont.systemFont(ofSize: 35)
-                    button.titleLabel?.alpha = 0.0
-                    button.backgroundColor = .red
-                    button.tag = number
-                    button.layer.cornerRadius = 5
-                    button.addTarget(self, action: #selector(buttonPressed(sender:)), for: .touchUpInside)
-                    button.isEnabled = false
-                    return button
-                }()
-                buttons.append(button)
-                basicView.addSubview(button)
-            }
+        if game.numberOfNumbers != basicView.subviews.count {
+            addButtons(count: game.numberOfNumbers - basicView.subviews.count)
+        }
+        
+        for i in buttons.indices {
+            let button = buttons[i]
+            let number = game.numbers[i]
+            button.titleLabel?.text = String(number)
         }
     }
     
@@ -105,7 +99,36 @@ class GameViewController: UIViewController {
             }
         }
     }
-
+    
+    private func addButtons(count: Int) {
+        grid.cellCount += count
+        for i in 0..<count {
+            if let viewFrame = grid[i]?.insetBy(dx: 2.0, dy: 2.0) {
+                let number = game.numbers[i]
+                let button: UIButton = {
+                    let button = UIButton(frame: viewFrame)
+                    button.setTitle(String(number), for: .normal)
+                    button.titleLabel?.font = UIFont.systemFont(ofSize: 35)
+                    button.titleLabel?.alpha = 0.0
+                    button.backgroundColor = .red
+                    button.tag = number
+                    button.layer.cornerRadius = 5
+                    button.addTarget(self, action: #selector(buttonPressed(sender:)), for: .touchUpInside)
+                    button.isEnabled = false
+                    return button
+                }()
+                buttons.append(button)
+                basicView.addSubview(button)
+            }
+        }
+    }
+    
+    private func hideNumbers() {
+        buttons.forEach({ (button) in
+            button.titleLabel?.alpha = 0.0
+        })
+    }
+    
 }
 
 

@@ -30,11 +30,23 @@ class Game {
         elapsedTime = finishTime - startTime
     }
     
+    func newGame() {
+        nextNumberToTap = 1
+        elapsedTime = 0.0
+        setNumbers(count: numberOfNumbers)
+    }
+    
     // MARK: - Initialization
     
     init(numberOfNumbers: Int) {
-        self.numberOfNumbers = numberOfNumbers
-        
+        setNumbers(count: numberOfNumbers)
+    }
+    
+    // MARK: - Helping Methods
+    
+    private func setNumbers(count: Int) {
+        numberOfNumbers = count
+        numbers.removeAll()
         for i in 1...numberOfNumbers {
             numbers.append(i)
         }
