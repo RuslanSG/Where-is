@@ -13,15 +13,7 @@ class GameViewController: UIViewController {
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var basicView: UIView!
     
-    private var rowCount = 5 {
-        didSet {
-            grid = Grid(layout: .dimensions(rowCount: rowCount, columnCount: columnCount), frame: basicView.bounds)
-        }
-    }
-    private let columnCount = 5
-    
-    private lazy var game = Game(rows: rowCount, colums: columnCount)
-    private lazy var grid = Grid(layout: .dimensions(rowCount: rowCount, columnCount: columnCount), frame: basicView.bounds)
+    private lazy var grid = Grid(layout: .dimensions(rowCount: Game.shared.rows, columnCount: Game.shared.colums), frame: basicView.bounds)
     private var buttons = [UIButton]()
     
     override func viewDidLoad() {
@@ -31,58 +23,70 @@ class GameViewController: UIViewController {
     // MARK: - Actions
     
     @objc private func buttonPressed(sender: UIButton) {
-        if game.nextNumberToTap < game.numberOfNumbers {
-            if sender.tag == game.nextNumberToTap {
-                game.numberSelected()
+        if Game.shared.nextNumberToTap < Game.shared.numberOfNumbers {
+            print(sender.tag)
+            if sender.tag == Game.shared.nextNumberToTap {
+                Game.shared.numberSelected(sender.tag)
                 showMessage(on: self.label, text: "Good!")
             } else {
                 showMessage(on: self.label, text: "Miss!")
             }
+            if Game.shared.shuffleNumbersMode {
+                Game.shared.shuffleNumbers()
+                updateViewFromModel()
+            }
         } else {
-            game.finishGame()
-            showMessage(on: label, text: String(format: "%.02f", game.elapsedTime), disappear: false)
+            Game.shared.finishGame()
+            showMessage(on: label, text: String(format: "%.02f", Game.shared.elapsedTime), disappear: false)
         }
     }
     
     @IBAction func startButtonPressed(sender: UIButton) {
         showNumbers(animated: true)
-        game.startGame()
+        Game.shared.startGame()
     }
     
     @IBAction func newGameButtonPressed(sender: UIButton) {
-        game.newGame()
+        Game.shared.newGame()
         hideNumbers(animated: false)
         updateViewFromModel()
     }
     
     @IBAction func addFiveNumbersButtonPressed(sender: UIButton) {
-        let height = self.view.bounds.width / CGFloat(columnCount) * CGFloat(rowCount + 1)
+        let height = self.view.bounds.width / CGFloat(Game.shared.colums) * CGFloat(Game.shared.rows + 1)
         let pointY = self.view.bounds.midY - height / 2
         basicView.frame = CGRect(x: 0.0, y: pointY, width: self.view.bounds.width, height: height)
-        rowCount += 1
-        game = Game(rows: rowCount, colums: columnCount)
-        addButtons(count: columnCount)
+        Game.shared.rows += 1
+        grid = Grid(layout: .dimensions(rowCount: Game.shared.rows, columnCount: Game.shared.colums), frame: basicView.bounds)
+        addButtons(count: Game.shared.colums)
         updateViewFromModel()
     }
     
     // MARK: - UI Management
     
+    private var initialCalling = true
+    
     private func updateViewFromModel() {
-        if game.numberOfNumbers != basicView.subviews.count {
-            addButtons(count: game.numberOfNumbers - basicView.subviews.count)
+        if Game.shared.numberOfNumbers != basicView.subviews.count {
+            addButtons(count: Game.shared.numberOfNumbers - basicView.subviews.count)
         }
         
-        grid.cellCount = game.numberOfNumbers
         for i in buttons.indices {
+            let button = buttons[i]
+
             if let viewFrame = grid[i]?.insetBy(dx: 2.0, dy: 2.0) {
-                let number = game.numbers[i]
-                let button = buttons[i]
                 button.frame = viewFrame
-                button.setTitle(String(number), for: .normal)
-                button.tag = number
             }
             
+            if initialCalling {
+                setNumbers()
+            } else {
+                if Game.shared.shuffleNumbersMode {
+                    updateNumbers(animated: Game.shared.shuffleNumbersMode)
+                }
+            }
         }
+        initialCalling = false
     }
     
     // MARK: - Helping Methods
@@ -157,6 +161,44 @@ class GameViewController: UIViewController {
                 button.titleLabel?.alpha = 0.0
             }
         })
+    }
+    
+    private func setNumbers() {
+        for i in buttons.indices {
+            let number = Game.shared.numbers[i]
+            let button = buttons[i]
+            button.setTitle(String(number), for: .normal)
+            button.tag = number
+        }
+    }
+    
+    private func updateNumbers(animated: Bool) {
+        for i in buttons.indices {
+            let number = Game.shared.numbers[i]
+            let button = buttons[i]
+            if animated {
+                UIViewPropertyAnimator.runningPropertyAnimator(
+                    withDuration: 0.1,
+                    delay: 0.0,
+                    options: [],
+                    animations: {
+                        button.titleLabel?.alpha = 0.0
+                }) { (position) in
+                    button.setTitle(String(number), for: .normal)
+                    button.tag = number
+                    UIViewPropertyAnimator.runningPropertyAnimator(
+                        withDuration: 0.1,
+                        delay: 0.0,
+                        options: [],
+                        animations: {
+                            button.titleLabel?.alpha = 1.0
+                    })
+                }
+            } else {
+                button.setTitle(String(number), for: .normal)
+                button.tag = number
+            }
+        }
     }
     
 }

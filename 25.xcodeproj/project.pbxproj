@@ -16,6 +16,7 @@
 		2A118DCA211A1BD50059E252 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A118DC9211A1BD50059E252 /* Utilities.swift */; };
 		2A118DCC211AEB2A0059E252 /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A118DCB211AEB2A0059E252 /* Engine.swift */; };
 		2A118DCE211AEC100059E252 /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A118DCD211AEC100059E252 /* Grid.swift */; };
+		2A8C933D212197F70068F98E /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8C933C212197F70068F98E /* SettingsTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		2A118DC9211A1BD50059E252 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		2A118DCB211AEB2A0059E252 /* Engine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Engine.swift; sourceTree = "<group>"; };
 		2A118DCD211AEC100059E252 /* Grid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
+		2A8C933C212197F70068F98E /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 			isa = PBXGroup;
 			children = (
 				2A118DB5211A132F0059E252 /* GameViewController.swift */,
+				2A8C933C212197F70068F98E /* SettingsTableViewController.swift */,
 				2A118DCB211AEB2A0059E252 /* Engine.swift */,
 				2A118DB7211A132F0059E252 /* Main.storyboard */,
 				2A118DC8211A13450059E252 /* Supporting Files */,
@@ -161,6 +164,7 @@
 				2A118DB4211A132F0059E252 /* AppDelegate.swift in Sources */,
 				2A118DCC211AEB2A0059E252 /* Engine.swift in Sources */,
 				2A118DCE211AEC100059E252 /* Grid.swift in Sources */,
+				2A8C933D212197F70068F98E /* SettingsTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

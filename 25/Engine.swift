@@ -10,19 +10,29 @@ import Foundation
 
 class Game {
     
-    var numberOfNumbers: Int!
+    static var shared = Game()
+    
+    var rows    = 5
+    var colums  = 5
+
+    var shuffleNumbersMode  = false
+    var colorMode           = false
+    var shuffleColorsMode   = false
+    
+    lazy var numberOfNumbers = rows * colums
     var nextNumberToTap = 1
     var numbers = [Int]()
-    var elapsedTime: Double!
     
     private var startTime = TimeInterval()
+    private(set) var elapsedTime: Double!
     
     func startGame() {
         startTime = Date.timeIntervalSinceReferenceDate
     }
     
-    func numberSelected() {
+    func numberSelected(_ number: Int) {
         nextNumberToTap += 1
+        print(number)
     }
     
     func finishGame() {
@@ -33,13 +43,17 @@ class Game {
     func newGame() {
         nextNumberToTap = 1
         elapsedTime = 0.0
-        setNumbers(count: numberOfNumbers)
+        numbers.shuffle()
+    }
+    
+    func shuffleNumbers() {
+        numbers.shuffle()
     }
     
     // MARK: - Initialization
     
-    init(rows: Int, colums: Int) {
-        setNumbers(count: rows * colums)
+    private init() {
+        setNumbers(count: numberOfNumbers)
     }
     
     // MARK: - Helping Methods
