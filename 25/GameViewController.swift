@@ -11,12 +11,18 @@ import UIKit
 class GameViewController: UIViewController {
 
     @IBOutlet weak var label: UILabel!
-    @IBOutlet weak var basicView: UIView!
     
-    private lazy var grid = Grid(layout: .dimensions(rowCount: Game.shared.rows, columnCount: Game.shared.colums), frame: basicView.bounds)
+    private var basicViewFrame: CGRect {
+        let height = view.bounds.width / CGFloat(Game.shared.colums) * CGFloat(Game.shared.rows)
+        let pointY = view.bounds.midY - height / 2
+        return CGRect(x: 0.0, y: pointY, width: view.bounds.width, height: height)
+    }
+    
+    private lazy var grid = Grid(layout: .dimensions(rowCount: Game.shared.rows, columnCount: Game.shared.colums), frame: basicViewFrame)
     private var buttons = [UIButton]()
     
     override func viewDidLoad() {
+        addButtons(count: Game.shared.numbers.count)
         updateViewFromModel()
     }
     
@@ -31,6 +37,7 @@ class GameViewController: UIViewController {
             } else {
                 showMessage(on: self.label, text: "Miss!")
             }
+            
             if Game.shared.shuffleNumbersMode {
                 Game.shared.shuffleNumbers()
                 updateViewFromModel()
@@ -48,29 +55,27 @@ class GameViewController: UIViewController {
     
     @IBAction func newGameButtonPressed(sender: UIButton) {
         Game.shared.newGame()
-        hideNumbers(animated: false)
+        isNewGame = true
         updateViewFromModel()
+        hideNumbers(animated: false)
+        label.text = nil
     }
     
     @IBAction func addFiveNumbersButtonPressed(sender: UIButton) {
-        let height = self.view.bounds.width / CGFloat(Game.shared.colums) * CGFloat(Game.shared.rows + 1)
-        let pointY = self.view.bounds.midY - height / 2
-        basicView.frame = CGRect(x: 0.0, y: pointY, width: self.view.bounds.width, height: height)
         Game.shared.rows += 1
-        grid = Grid(layout: .dimensions(rowCount: Game.shared.rows, columnCount: Game.shared.colums), frame: basicView.bounds)
+        Game.shared.newGame()
+        isNewGame = true
+        grid = Grid(layout: .dimensions(rowCount: Game.shared.rows, columnCount: Game.shared.colums), frame: basicViewFrame)
         addButtons(count: Game.shared.colums)
+        hideNumbers(animated: false)
         updateViewFromModel()
     }
     
     // MARK: - UI Management
     
-    private var initialCalling = true
+    private var isNewGame = true
     
     private func updateViewFromModel() {
-        if Game.shared.numberOfNumbers != basicView.subviews.count {
-            addButtons(count: Game.shared.numberOfNumbers - basicView.subviews.count)
-        }
-        
         for i in buttons.indices {
             let button = buttons[i]
 
@@ -78,15 +83,13 @@ class GameViewController: UIViewController {
                 button.frame = viewFrame
             }
             
-            if initialCalling {
+            if isNewGame {
                 setNumbers()
             } else {
-                if Game.shared.shuffleNumbersMode {
-                    updateNumbers(animated: Game.shared.shuffleNumbersMode)
-                }
+                updateNumbers(animated: Game.shared.shuffleNumbersMode)
             }
         }
-        initialCalling = false
+        isNewGame = false
     }
     
     // MARK: - Helping Methods
@@ -118,14 +121,14 @@ class GameViewController: UIViewController {
                 let button = UIButton(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
                 button.titleLabel?.font = UIFont.systemFont(ofSize: 35)
                 button.titleLabel?.alpha = 0.0
-                button.backgroundColor = .red
+                button.backgroundColor = .lightGray
                 button.layer.cornerRadius = 5
                 button.addTarget(self, action: #selector(buttonPressed(sender:)), for: .touchUpInside)
                 button.isEnabled = false
                 return button
             }()
             buttons.append(button)
-            basicView.addSubview(button)
+            view.addSubview(button)
         }
     }
     
@@ -148,7 +151,7 @@ class GameViewController: UIViewController {
     
     private func hideNumbers(animated: Bool) {
         buttons.forEach({ (button) in
-            button.isEnabled = true
+            button.isEnabled = false
             if animated {
                 UIViewPropertyAnimator.runningPropertyAnimator(
                     withDuration: 0.2,

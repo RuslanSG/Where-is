@@ -12,14 +12,20 @@ class Game {
     
     static var shared = Game()
     
-    var rows    = 5
+    var rows = 5 {
+        didSet {
+            setNumbers(count: numberOfNumbers)
+        }
+    }
     var colums  = 5
 
     var shuffleNumbersMode  = false
     var colorMode           = false
     var shuffleColorsMode   = false
     
-    lazy var numberOfNumbers = rows * colums
+    var numberOfNumbers: Int {
+        return rows * colums
+    }
     var nextNumberToTap = 1
     var numbers = [Int]()
     
@@ -59,9 +65,8 @@ class Game {
     // MARK: - Helping Methods
     
     private func setNumbers(count: Int) {
-        numberOfNumbers = count
         numbers.removeAll()
-        for i in 1...numberOfNumbers {
+        for i in 1...count {
             numbers.append(i)
         }
         numbers.shuffle()

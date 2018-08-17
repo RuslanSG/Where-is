@@ -6,7 +6,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -20,20 +19,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4GM-Oq-XXn">
-                                <rect key="frame" x="0.0" y="75" width="375" height="36"/>
+                                <rect key="frame" x="0.0" y="60" width="375" height="36"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ilp-vQ-Ppz">
-                                <rect key="frame" x="0.0" y="145.5" width="375" height="375"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="Ilp-vQ-Ppz" secondAttribute="height" multiplier="1:1" id="sc3-V8-FiL"/>
-                                </constraints>
-                            </view>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tKg-10-p2q">
-                                <rect key="frame" x="16" y="552" width="34" height="30"/>
+                                <rect key="frame" x="16" y="603" width="34" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Start"/>
                                 <connections>
@@ -41,44 +33,39 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4EG-dS-daE">
-                                <rect key="frame" x="16" y="590" width="75" height="30"/>
+                                <rect key="frame" x="16" y="630" width="75" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="New Game"/>
                                 <connections>
                                     <action selector="newGameButtonPressedWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Vt5-P8-y7D"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yui-TQ-dvz">
-                                <rect key="frame" x="252" y="552" width="107" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Add 5 Numbers"/>
-                                <connections>
-                                    <action selector="addFiveNumbersButtonPressedWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Q0l-Ec-zk7"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l9c-93-eXv">
-                                <rect key="frame" x="302" y="590" width="57" height="30"/>
+                                <rect key="frame" x="302" y="630" width="57" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Settings"/>
                                 <connections>
                                     <segue destination="5Hr-WI-hJD" kind="showDetail" id="mC6-dC-gsX"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yui-TQ-dvz">
+                                <rect key="frame" x="252" y="603" width="107" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Add 5 Numbers"/>
+                                <connections>
+                                    <action selector="addFiveNumbersButtonPressedWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Q0l-Ec-zk7"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="Ilp-vQ-Ppz" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="6Bb-xa-TgY"/>
                             <constraint firstItem="4GM-Oq-XXn" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="AJz-mM-hEE"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Ilp-vQ-Ppz" secondAttribute="trailing" id="N0X-h4-VQG"/>
+                            <constraint firstItem="4GM-Oq-XXn" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="40" id="PAZ-AX-xlH"/>
                             <constraint firstItem="4GM-Oq-XXn" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="bCz-sa-xBz"/>
-                            <constraint firstItem="Ilp-vQ-Ppz" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="ppj-Gl-fFC"/>
-                            <constraint firstItem="Ilp-vQ-Ppz" firstAttribute="top" secondItem="4GM-Oq-XXn" secondAttribute="bottom" constant="34.5" id="uMO-QI-1No"/>
-                            <constraint firstItem="Ilp-vQ-Ppz" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="wKV-cg-jLU"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <outlet property="basicView" destination="Ilp-vQ-Ppz" id="nn1-uL-VrF"/>
                         <outlet property="label" destination="4GM-Oq-XXn" id="eaL-vD-pxF"/>
                     </connections>
                 </viewController>
