@@ -8,19 +8,20 @@
 
 import UIKit
 
-class GameViewController: UIViewController {
-
+class GameViewController: UIViewController, SettingsTableViewControllerDelegate {
+    
     @IBOutlet weak var label: UILabel!
     
-    private var basicViewFrame: CGRect {
+    private var buttonsFieldFrame: CGRect {
         let height = view.bounds.width / CGFloat(Game.shared.colums) * CGFloat(Game.shared.rows)
         let pointY = view.bounds.midY - height / 2
         return CGRect(x: 0.0, y: pointY, width: view.bounds.width, height: height)
     }
     
-    private lazy var grid = Grid(layout: .dimensions(rowCount: Game.shared.rows, columnCount: Game.shared.colums), frame: basicViewFrame)
+    private lazy var grid = Grid(layout: .dimensions(rowCount: Game.shared.rows, columnCount: Game.shared.colums), frame: buttonsFieldFrame)
     private var buttons = [UIButton]()
-    
+    private let colors = [#colorLiteral(red: 0.03137254902, green: 0.3058823529, blue: 0.4941176471, alpha: 1), #colorLiteral(red: 0.06666666667, green: 0.4823529412, blue: 0.462745098, alpha: 1), #colorLiteral(red: 0.05098039216, green: 0.4392156863, blue: 0.05882352941, alpha: 1)]
+        
     override func viewDidLoad() {
         addButtons(count: Game.shared.numbers.count)
         updateViewFromModel()
@@ -30,14 +31,12 @@ class GameViewController: UIViewController {
     
     @objc private func buttonPressed(sender: UIButton) {
         if Game.shared.nextNumberToTap < Game.shared.numberOfNumbers {
-            print(sender.tag)
             if sender.tag == Game.shared.nextNumberToTap {
                 Game.shared.numberSelected(sender.tag)
                 showMessage(on: self.label, text: "Good!")
             } else {
                 showMessage(on: self.label, text: "Miss!")
             }
-            
             if Game.shared.shuffleNumbersMode {
                 Game.shared.shuffleNumbers()
                 updateViewFromModel()
@@ -62,13 +61,15 @@ class GameViewController: UIViewController {
     }
     
     @IBAction func addFiveNumbersButtonPressed(sender: UIButton) {
-        Game.shared.rows += 1
-        Game.shared.newGame()
-        isNewGame = true
-        grid = Grid(layout: .dimensions(rowCount: Game.shared.rows, columnCount: Game.shared.colums), frame: basicViewFrame)
-        addButtons(count: Game.shared.colums)
-        hideNumbers(animated: false)
-        updateViewFromModel()
+        if Game.shared.numbers.count < Game.shared.maxNumberOfNumbers {
+            Game.shared.rows += 1
+            Game.shared.newGame()
+            isNewGame = true
+            grid = Grid(layout: .dimensions(rowCount: Game.shared.rows, columnCount: Game.shared.colums), frame: buttonsFieldFrame)
+            addButtons(count: Game.shared.colums)
+            hideNumbers(animated: false)
+            updateViewFromModel()
+        }
     }
     
     // MARK: - UI Management
@@ -90,6 +91,28 @@ class GameViewController: UIViewController {
             }
         }
         isNewGame = false
+    }
+    
+    // MARK: - SettingsTableViewControllerDelegate
+    
+    func colorModeStateChanged(to state: Bool) {
+        if state == true {
+            buttons.forEach({ (button) in
+                button.backgroundColor = colors[colors.count.arc4random]
+            })
+        } else {
+            buttons.forEach({ (button) in
+                button.backgroundColor = .lightGray
+            })
+        }
+    }
+    
+    // MARK: - Segue
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let nav = segue.destination as? UINavigationController, let svc = nav.topViewController as? SettingsTableViewController {
+            svc.delegate = self
+        }
     }
     
     // MARK: - Helping Methods

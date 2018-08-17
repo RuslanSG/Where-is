@@ -8,11 +8,19 @@
 
 import UIKit
 
+protocol SettingsTableViewControllerDelegate {
+    
+    func colorModeStateChanged(to state: Bool)
+
+}
+
 class SettingsTableViewController: UITableViewController {
     
     @IBOutlet weak var colorSwitcher: UISwitch!
     @IBOutlet weak var changeColorSwitcher: UISwitch!
     @IBOutlet weak var changeNumbersSwitcher: UISwitch!
+    
+    var delegate: SettingsTableViewControllerDelegate?
     
     override func viewWillAppear(_ animated: Bool) {
         colorSwitcher.setOn(Game.shared.colorMode, animated: false)
@@ -28,6 +36,7 @@ class SettingsTableViewController: UITableViewController {
     
     @IBAction func colorSwitcherValueChanged(_ sender: UISwitch) {
         Game.shared.colorMode = sender.isOn
+        delegate?.colorModeStateChanged(to: sender.isOn)
     }
     
     @IBAction func changeColorSwitcherValueChanged(_ sender: UISwitch) {

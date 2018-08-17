@@ -18,6 +18,7 @@ class Game {
         }
     }
     var colums  = 5
+    let maxNumberOfNumbers = 35
 
     var shuffleNumbersMode  = false
     var colorMode           = false
