@@ -66,6 +66,7 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="addFiveNumbersButton" destination="yui-TQ-dvz" id="2ez-Ln-1HV"/>
                         <outlet property="label" destination="4GM-Oq-XXn" id="eaL-vD-pxF"/>
                     </connections>
                 </viewController>
@@ -102,7 +103,7 @@
                                                     <rect key="frame" x="311" y="6" width="49" height="31"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <connections>
-                                                        <action selector="changeNumbersSwitcherValueChanged:" destination="3hQ-19-uEL" eventType="valueChanged" id="Yhc-Bp-o3X"/>
+                                                        <action selector="shuffleNumbersSwitcherValueChanged:" destination="3hQ-19-uEL" eventType="valueChanged" id="Yhc-Bp-o3X"/>
                                                     </connections>
                                                 </switch>
                                             </subviews>
@@ -150,7 +151,7 @@
                                                     <rect key="frame" x="311" y="6" width="49" height="31"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <connections>
-                                                        <action selector="changeColorSwitcherValueChanged:" destination="3hQ-19-uEL" eventType="valueChanged" id="oVI-hj-x0W"/>
+                                                        <action selector="shuffleColorSwitcherValueChanged:" destination="3hQ-19-uEL" eventType="valueChanged" id="oVI-hj-x0W"/>
                                                     </connections>
                                                 </switch>
                                             </subviews>
@@ -172,9 +173,9 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="changeColorSwitcher" destination="IlI-G0-Cvg" id="iQr-gY-bKA"/>
-                        <outlet property="changeNumbersSwitcher" destination="7IF-uw-2rJ" id="ZNk-21-eSF"/>
                         <outlet property="colorSwitcher" destination="PHZ-jS-etq" id="Qji-BL-k6i"/>
+                        <outlet property="shuffleColorSwitcher" destination="IlI-G0-Cvg" id="iQr-gY-bKA"/>
+                        <outlet property="shuffleNumbersSwitcher" destination="7IF-uw-2rJ" id="ZNk-21-eSF"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ijr-Fs-JxI" userLabel="First Responder" sceneMemberID="firstResponder"/>

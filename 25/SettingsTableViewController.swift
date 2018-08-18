@@ -17,15 +17,19 @@ protocol SettingsTableViewControllerDelegate {
 class SettingsTableViewController: UITableViewController {
     
     @IBOutlet weak var colorSwitcher: UISwitch!
-    @IBOutlet weak var changeColorSwitcher: UISwitch!
-    @IBOutlet weak var changeNumbersSwitcher: UISwitch!
+    @IBOutlet weak var shuffleColorSwitcher: UISwitch!
+    @IBOutlet weak var shuffleNumbersSwitcher: UISwitch!
     
     var delegate: SettingsTableViewControllerDelegate?
     
     override func viewWillAppear(_ animated: Bool) {
         colorSwitcher.setOn(Game.shared.colorMode, animated: false)
-        changeColorSwitcher.setOn(Game.shared.shuffleColorsMode, animated: false)
-        changeNumbersSwitcher.setOn(Game.shared.shuffleNumbersMode, animated: false)
+        shuffleColorSwitcher.setOn(Game.shared.shuffleColorsMode, animated: false)
+        shuffleNumbersSwitcher.setOn(Game.shared.shuffleNumbersMode, animated: false)
+        if !colorSwitcher.isOn {
+            shuffleColorSwitcher.isEnabled = false
+            shuffleColorSwitcher.setOn(false, animated: false)
+        }
     }
     
     // MARK: - Actions
@@ -36,14 +40,19 @@ class SettingsTableViewController: UITableViewController {
     
     @IBAction func colorSwitcherValueChanged(_ sender: UISwitch) {
         Game.shared.colorMode = sender.isOn
+        Game.shared.shuffleColorsMode = false
         delegate?.colorModeStateChanged(to: sender.isOn)
+        if !sender.isOn && shuffleColorSwitcher.isOn {
+            shuffleColorSwitcher.setOn(false, animated: true)
+        }
+        shuffleColorSwitcher.isEnabled = sender.isOn
     }
     
-    @IBAction func changeColorSwitcherValueChanged(_ sender: UISwitch) {
+    @IBAction func shuffleColorSwitcherValueChanged(_ sender: UISwitch) {
         Game.shared.shuffleColorsMode = sender.isOn
     }
     
-    @IBAction func changeNumbersSwitcherValueChanged(_ sender: UISwitch) {
+    @IBAction func shuffleNumbersSwitcherValueChanged(_ sender: UISwitch) {
         Game.shared.shuffleNumbersMode = sender.isOn
     }
 

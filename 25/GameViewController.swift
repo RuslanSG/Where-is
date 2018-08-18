@@ -11,6 +11,7 @@ import UIKit
 class GameViewController: UIViewController, SettingsTableViewControllerDelegate {
     
     @IBOutlet weak var label: UILabel!
+    @IBOutlet weak var addFiveNumbersButton: UIButton!
     
     private var buttonsFieldFrame: CGRect {
         let height = view.bounds.width / CGFloat(Game.shared.colums) * CGFloat(Game.shared.rows)
@@ -20,7 +21,10 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     private lazy var grid = Grid(layout: .dimensions(rowCount: Game.shared.rows, columnCount: Game.shared.colums), frame: buttonsFieldFrame)
     private var buttons = [UIButton]()
-    private let colors = [#colorLiteral(red: 0.03137254902, green: 0.3058823529, blue: 0.4941176471, alpha: 1), #colorLiteral(red: 0.06666666667, green: 0.4823529412, blue: 0.462745098, alpha: 1), #colorLiteral(red: 0.05098039216, green: 0.4392156863, blue: 0.05882352941, alpha: 1)]
+    private var randomColor: UIColor {
+        let colors = [#colorLiteral(red: 0.03137254902, green: 0.3058823529, blue: 0.4941176471, alpha: 1), #colorLiteral(red: 0.06666666667, green: 0.4823529412, blue: 0.462745098, alpha: 1), #colorLiteral(red: 0.05098039216, green: 0.4392156863, blue: 0.05882352941, alpha: 1)]
+        return colors[colors.count.arc4random]
+    }
         
     override func viewDidLoad() {
         addButtons(count: Game.shared.numbers.count)
@@ -39,7 +43,10 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             }
             if Game.shared.shuffleNumbersMode {
                 Game.shared.shuffleNumbers()
-                updateViewFromModel()
+                updateNumbers(animated: true)
+            }
+            if Game.shared.shuffleColorsMode {
+                updateColors(animated: true)
             }
         } else {
             Game.shared.finishGame()
@@ -53,22 +60,18 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     }
     
     @IBAction func newGameButtonPressed(sender: UIButton) {
-        Game.shared.newGame()
-        isNewGame = true
-        updateViewFromModel()
-        hideNumbers(animated: false)
-        label.text = nil
+        prepareForNewGame()
     }
     
     @IBAction func addFiveNumbersButtonPressed(sender: UIButton) {
         if Game.shared.numbers.count < Game.shared.maxNumberOfNumbers {
             Game.shared.rows += 1
-            Game.shared.newGame()
-            isNewGame = true
             grid = Grid(layout: .dimensions(rowCount: Game.shared.rows, columnCount: Game.shared.colums), frame: buttonsFieldFrame)
             addButtons(count: Game.shared.colums)
-            hideNumbers(animated: false)
-            updateViewFromModel()
+            prepareForNewGame()
+        }
+        if Game.shared.numbers.count >= Game.shared.maxNumberOfNumbers {
+            addFiveNumbersButton.isEnabled = false
         }
     }
     
@@ -79,15 +82,11 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     private func updateViewFromModel() {
         for i in buttons.indices {
             let button = buttons[i]
-
             if let viewFrame = grid[i]?.insetBy(dx: 2.0, dy: 2.0) {
                 button.frame = viewFrame
             }
-            
             if isNewGame {
                 setNumbers()
-            } else {
-                updateNumbers(animated: Game.shared.shuffleNumbersMode)
             }
         }
         isNewGame = false
@@ -98,7 +97,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     func colorModeStateChanged(to state: Bool) {
         if state == true {
             buttons.forEach({ (button) in
-                button.backgroundColor = colors[colors.count.arc4random]
+                button.backgroundColor = randomColor
             })
         } else {
             buttons.forEach({ (button) in
@@ -144,9 +143,9 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
                 let button = UIButton(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
                 button.titleLabel?.font = UIFont.systemFont(ofSize: 35)
                 button.titleLabel?.alpha = 0.0
-                button.backgroundColor = .lightGray
+                button.backgroundColor = Game.shared.colorMode ? randomColor : .lightGray
                 button.layer.cornerRadius = 5
-                button.addTarget(self, action: #selector(buttonPressed(sender:)), for: .touchUpInside)
+                button.addTarget(self, action: #selector(buttonPressed(sender:)), for: .touchDown)
                 button.isEnabled = false
                 return button
             }()
@@ -225,6 +224,30 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
                 button.tag = number
             }
         }
+    }
+    
+    private func updateColors(animated: Bool) {
+        buttons.forEach({ (button) in
+            if animated {
+                UIViewPropertyAnimator.runningPropertyAnimator(
+                    withDuration: 0.1,
+                    delay: 0.0,
+                    options: [],
+                    animations: {
+                        button.backgroundColor = self.randomColor
+                })
+            } else {
+                button.backgroundColor = randomColor
+            }
+        })
+    }
+    
+    private func prepareForNewGame() {
+        isNewGame = true
+        hideNumbers(animated: false)
+        Game.shared.newGame()
+        label.text = nil
+        updateViewFromModel()
     }
     
 }
