@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AudioToolbox.AudioServices
 
 class GameViewController: UIViewController, SettingsTableViewControllerDelegate {
     
@@ -35,28 +36,41 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     @objc private func buttonPressed(sender: UIButton) {
         if Game.shared.nextNumberToTap < Game.shared.numberOfNumbers {
-            if sender.tag == Game.shared.nextNumberToTap {
-                Game.shared.numberSelected(sender.tag)
+            let selectedNumberIsRight = Game.shared.selectedNumberIsRight(sender.tag)
+            Game.shared.numberSelected(sender.tag)
+            if selectedNumberIsRight {
+                // User tapped the right number
                 showMessage(on: self.label, text: "Good!")
+                playImpactHapticFeedback(needsToPrepare: true, style: .medium)
             } else {
+                // User tapped the wrong number
                 showMessage(on: self.label, text: "Miss!")
+                playNotificationHapticFeedback(notificationFeedbackType: .error)
             }
             if Game.shared.shuffleNumbersMode {
                 Game.shared.shuffleNumbers()
                 updateNumbers(animated: true)
             }
             if Game.shared.shuffleColorsMode {
-                updateColors(animated: true)
+                shuffleColors(animated: true)
             }
         } else {
+            // User tapped the last number
             Game.shared.finishGame()
             showMessage(on: label, text: String(format: "%.02f", Game.shared.elapsedTime), disappear: false)
+            prepareForNewGame()
+            playNotificationHapticFeedback(notificationFeedbackType: .success)
         }
+        
     }
     
     @IBAction func startButtonPressed(sender: UIButton) {
         showNumbers(animated: true)
+        label.text = nil
         Game.shared.startGame()
+        
+        impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
+        impactFeedbackGenerator?.prepare()
     }
     
     @IBAction func newGameButtonPressed(sender: UIButton) {
@@ -114,6 +128,47 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         }
     }
     
+    // MARK: - Haptic Feedback
+    
+    private enum FeedbackGenerator {
+        case notificationFeedbackGenerator
+        case impactFeedbackGenerator
+    }
+    
+    private var notificationFeedbackGenerator: UINotificationFeedbackGenerator? = nil
+    private var impactFeedbackGenerator: UIImpactFeedbackGenerator? = nil
+    
+    private func playNotificationHapticFeedback(notificationFeedbackType: UINotificationFeedbackType) {
+        if UIDevice.current.hasHapticFeedback {
+            notificationFeedbackGenerator = UINotificationFeedbackGenerator()
+            notificationFeedbackGenerator?.notificationOccurred(notificationFeedbackType)
+        } else if UIDevice.current.hasTapticEngine {
+            if notificationFeedbackType == .error {
+                let cancelled = SystemSoundID(1521)
+                AudioServicesPlaySystemSound(cancelled)
+            }
+        } else {
+            if notificationFeedbackType == .error {
+                let cancelled = SystemSoundID(kSystemSoundID_Vibrate)
+                AudioServicesPlaySystemSound(cancelled)
+            }
+        }
+        notificationFeedbackGenerator = nil
+    }
+    
+    private func playImpactHapticFeedback(needsToPrepare: Bool, style: UIImpactFeedbackStyle) {
+        if UIDevice.current.hasHapticFeedback {
+            impactFeedbackGenerator = UIImpactFeedbackGenerator(style: style)
+            impactFeedbackGenerator?.impactOccurred()
+            if needsToPrepare {
+                impactFeedbackGenerator?.prepare()
+            }
+        } else if UIDevice.current.hasTapticEngine {
+            let peek = SystemSoundID(1519)
+            AudioServicesPlaySystemSound(peek)
+        }
+    }
+    
     // MARK: - Helping Methods
     
     private func showMessage(on label: UILabel, text: String, disappear: Bool = true) {
@@ -138,6 +193,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     }
     
     private func addButtons(count: Int) {
+        assert(count % 5 == 0, "Reason: invalid number of buttons to add. Provide a multiple of five number.")
         for _ in 0..<count {
             let button: UIButton = {
                 let button = UIButton(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
@@ -226,7 +282,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         }
     }
     
-    private func updateColors(animated: Bool) {
+    private func shuffleColors(animated: Bool) {
         buttons.forEach({ (button) in
             if animated {
                 UIViewPropertyAnimator.runningPropertyAnimator(
@@ -247,6 +303,9 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         hideNumbers(animated: false)
         Game.shared.newGame()
         label.text = nil
+        if Game.shared.colorMode {
+            shuffleColors(animated: true)
+        }
         updateViewFromModel()
     }
     

@@ -38,8 +38,13 @@ class Game {
     }
     
     func numberSelected(_ number: Int) {
-        nextNumberToTap += 1
-        print(number)
+        if number == nextNumberToTap {
+            nextNumberToTap += 1
+        }
+    }
+    
+    func selectedNumberIsRight(_ number: Int) -> Bool {
+        return number == nextNumberToTap
     }
     
     func finishGame() {
