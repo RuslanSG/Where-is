@@ -11,6 +11,8 @@ import UIKit
 protocol SettingsTableViewControllerDelegate {
     
     func colorModeStateChanged(to state: Bool)
+    func levelChanged(to level: Int)
+    func maxNumberChanged(to maxNumber: Int)
 
 }
 
@@ -20,21 +22,38 @@ class SettingsTableViewController: UITableViewController {
     @IBOutlet weak var shuffleColorSwitcher: UISwitch!
     @IBOutlet weak var shuffleNumbersSwitcher: UISwitch!
     
+    @IBOutlet weak var levelLabel: UILabel!
+    @IBOutlet weak var maxNumberLabel: UILabel!
+    
+    @IBOutlet weak var levelStepper: UIStepper!
+    @IBOutlet weak var maxNumberStepper: UIStepper!
+    
     var delegate: SettingsTableViewControllerDelegate?
     
     override func viewWillAppear(_ animated: Bool) {
         colorSwitcher.setOn(Game.shared.colorMode, animated: false)
         shuffleColorSwitcher.setOn(Game.shared.shuffleColorsMode, animated: false)
         shuffleNumbersSwitcher.setOn(Game.shared.shuffleNumbersMode, animated: false)
+        
         if !colorSwitcher.isOn {
             shuffleColorSwitcher.isEnabled = false
             shuffleColorSwitcher.setOn(false, animated: false)
         }
+        
+        levelLabel.text = String(Game.shared.level)
+        maxNumberLabel.text = String(Game.shared.maxNumber)
+        
+        levelStepper.maximumValue = Double(Game.shared.maxLevel - 1)
+        levelStepper.value = Double(Game.shared.level)
+        levelStepper.stepValue = 1
+        maxNumberStepper.maximumValue = Double(Game.shared.maxPossibleNumber)
+        maxNumberStepper.value = Double(Game.shared.maxNumber)
+        maxNumberStepper.stepValue = 5
     }
     
     // MARK: - Actions
     
-    @IBAction func save(_ sender: UIBarButtonItem) {
+    @IBAction func doneButtonPressed(_ sender: UIBarButtonItem) {
         self.dismiss(animated: true)
     }
     
@@ -55,5 +74,18 @@ class SettingsTableViewController: UITableViewController {
     @IBAction func shuffleNumbersSwitcherValueChanged(_ sender: UISwitch) {
         Game.shared.shuffleNumbersMode = sender.isOn
     }
-
+    
+    @IBAction func levelStepperValueChanged(_ sender: UIStepper) {
+        let level = Int(sender.value)
+        Game.shared.level = level
+        levelLabel.text = String(level)
+        delegate?.levelChanged(to: level)
+    }
+    
+    @IBAction func maxNumberStepperValueChanged(_ sender: UIStepper) {
+        let maxNumber = Int(sender.value)
+        Game.shared.rows += 1
+        maxNumberLabel.text = String(maxNumber)
+        delegate?.maxNumberChanged(to: maxNumber)
+    }
 }

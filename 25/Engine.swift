@@ -12,21 +12,42 @@ class Game {
     
     static var shared = Game()
     
-    var rows = 5 {
-        didSet {
-            setNumbers(count: numberOfNumbers)
+    private let userDefaults = UserDefaults.standard
+    private let levelKey = "level"
+    
+    let maxLevel = 4
+    
+    var level: Int {
+        set {
+            userDefaults.set(newValue, forKey: levelKey)
+            setGameMode(level: newValue)
+        }
+        get {
+            let value = userDefaults.integer(forKey: levelKey)
+            if value < maxLevel - 1 {
+                return value
+            } else {
+                return maxLevel - 1
+            }
         }
     }
+    
     var colums  = 5
-    let maxNumberOfNumbers = 35
+    var rows = 5 {
+        didSet {
+            setNumbers(count: maxNumber)
+        }
+    }
 
     var shuffleNumbersMode  = false
     var colorMode           = false
     var shuffleColorsMode   = false
     
-    var numberOfNumbers: Int {
+    let maxPossibleNumber = 35
+    var maxNumber: Int {
         return rows * colums
     }
+    
     var nextNumberToTap = 1
     var numbers = [Int]()
     
@@ -50,6 +71,9 @@ class Game {
     func finishGame() {
         let finishTime = Date.timeIntervalSinceReferenceDate
         elapsedTime = finishTime - startTime
+        if elapsedTime <= 60.0 {
+            level += 1
+        }
     }
     
     func newGame() {
@@ -65,7 +89,8 @@ class Game {
     // MARK: - Initialization
     
     private init() {
-        setNumbers(count: numberOfNumbers)
+        setNumbers(count: maxNumber)
+        setGameMode(level: level)
     }
     
     // MARK: - Helping Methods
@@ -76,6 +101,29 @@ class Game {
             numbers.append(i)
         }
         numbers.shuffle()
+    }
+    
+    private func setGameMode(level: Int) {
+        switch level {
+        case 0:
+            colorMode           = false
+            shuffleColorsMode   = false
+            shuffleNumbersMode  = false
+        case 1:
+            colorMode           = true
+            shuffleColorsMode   = false
+            shuffleNumbersMode  = false
+        case 2:
+            colorMode           = true
+            shuffleColorsMode   = false
+            shuffleNumbersMode  = true
+        case 3:
+            colorMode           = true
+            shuffleColorsMode   = true
+            shuffleNumbersMode  = true
+        default:
+            break
+        }
     }
     
 }

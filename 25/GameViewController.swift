@@ -16,7 +16,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     private var buttonsFieldFrame: CGRect {
         let height = view.bounds.width / CGFloat(Game.shared.colums) * CGFloat(Game.shared.rows)
-        let pointY = view.bounds.midY - height / 2
+        let pointY = view.bounds.midY - height / 2 - 38
         return CGRect(x: 0.0, y: pointY, width: view.bounds.width, height: height)
     }
     
@@ -35,7 +35,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     // MARK: - Actions
     
     @objc private func buttonPressed(sender: UIButton) {
-        if Game.shared.nextNumberToTap < Game.shared.numberOfNumbers {
+        if Game.shared.nextNumberToTap < Game.shared.maxNumber {
             let selectedNumberIsRight = Game.shared.selectedNumberIsRight(sender.tag)
             Game.shared.numberSelected(sender.tag)
             if selectedNumberIsRight {
@@ -58,7 +58,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             // User tapped the last number
             Game.shared.finishGame()
             showMessage(on: label, text: String(format: "%.02f", Game.shared.elapsedTime), disappear: false)
-            prepareForNewGame()
+            prepareForNewGame(hideMessageLabel: false)
             playNotificationHapticFeedback(notificationFeedbackType: .success)
         }
         
@@ -75,18 +75,6 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     @IBAction func newGameButtonPressed(sender: UIButton) {
         prepareForNewGame()
-    }
-    
-    @IBAction func addFiveNumbersButtonPressed(sender: UIButton) {
-        if Game.shared.numbers.count < Game.shared.maxNumberOfNumbers {
-            Game.shared.rows += 1
-            grid = Grid(layout: .dimensions(rowCount: Game.shared.rows, columnCount: Game.shared.colums), frame: buttonsFieldFrame)
-            addButtons(count: Game.shared.colums)
-            prepareForNewGame()
-        }
-        if Game.shared.numbers.count >= Game.shared.maxNumberOfNumbers {
-            addFiveNumbersButton.isEnabled = false
-        }
     }
     
     // MARK: - UI Management
@@ -120,6 +108,22 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         }
     }
     
+    func levelChanged(to level: Int) {
+        if level == 0 {
+            removeColors(animated: false)
+        } else if level > 0 {
+            shuffleColors(animated: false)
+        }
+    }
+    
+    func maxNumberChanged(to maxNumber: Int) {
+        if buttons.count < maxNumber {
+            addButtons(count: maxNumber - buttons.count)
+            grid = Grid(layout: .dimensions(rowCount: Game.shared.rows, columnCount: Game.shared.colums), frame: buttonsFieldFrame)
+            prepareForNewGame()
+        }
+    }
+    
     // MARK: - Segue
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -142,16 +146,12 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         if UIDevice.current.hasHapticFeedback {
             notificationFeedbackGenerator = UINotificationFeedbackGenerator()
             notificationFeedbackGenerator?.notificationOccurred(notificationFeedbackType)
-        } else if UIDevice.current.hasTapticEngine {
-            if notificationFeedbackType == .error {
-                let cancelled = SystemSoundID(1521)
-                AudioServicesPlaySystemSound(cancelled)
-            }
-        } else {
-            if notificationFeedbackType == .error {
-                let cancelled = SystemSoundID(kSystemSoundID_Vibrate)
-                AudioServicesPlaySystemSound(cancelled)
-            }
+        } else if UIDevice.current.hasTapticEngine, notificationFeedbackType == .error {
+            let cancelled = SystemSoundID(1521)
+            AudioServicesPlaySystemSound(cancelled)
+        } else if notificationFeedbackType == .error {
+            let cancelled = SystemSoundID(kSystemSoundID_Vibrate)
+            AudioServicesPlaySystemSound(cancelled)
         }
         notificationFeedbackGenerator = nil
     }
@@ -209,6 +209,15 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             view.addSubview(button)
         }
     }
+    
+//    private func removeButtons(count: Int) {
+//        assert(count % 5 == 0, "Reason: invalid number of buttons to remove. Provide a multiple of five number.")
+//        for i in 0..<count {
+//
+//            buttons.removeLast()
+//
+//        }
+//    }
     
     private func showNumbers(animated: Bool) {
         buttons.forEach({ (button) in
@@ -282,6 +291,22 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         }
     }
     
+    private func removeColors(animated: Bool) {
+        buttons.forEach({ (button) in
+            if animated {
+                UIViewPropertyAnimator.runningPropertyAnimator(
+                    withDuration: 0.1,
+                    delay: 0.0,
+                    options: [],
+                    animations: {
+                        button.backgroundColor = .lightGray
+                })
+            } else {
+                button.backgroundColor = .lightGray
+            }
+        })
+    }
+    
     private func shuffleColors(animated: Bool) {
         buttons.forEach({ (button) in
             if animated {
@@ -298,11 +323,13 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         })
     }
     
-    private func prepareForNewGame() {
+    private func prepareForNewGame(hideMessageLabel: Bool = true) {
         isNewGame = true
         hideNumbers(animated: false)
         Game.shared.newGame()
-        label.text = nil
+        if hideMessageLabel {
+            label.text = nil
+        }
         if Game.shared.colorMode {
             shuffleColors(animated: true)
         }
