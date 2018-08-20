@@ -12,7 +12,6 @@ import AudioToolbox.AudioServices
 class GameViewController: UIViewController, SettingsTableViewControllerDelegate {
     
     @IBOutlet weak var label: UILabel!
-    @IBOutlet weak var addFiveNumbersButton: UIButton!
     
     private var buttonsFieldFrame: CGRect {
         let height = view.bounds.width / CGFloat(Game.shared.colums) * CGFloat(Game.shared.rows)
