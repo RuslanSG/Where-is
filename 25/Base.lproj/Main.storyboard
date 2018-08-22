@@ -83,6 +83,9 @@
                     </view>
                     <connections>
                         <outlet property="label" destination="4GM-Oq-XXn" id="eaL-vD-pxF"/>
+                        <outlet property="newGameButton" destination="4EG-dS-daE" id="AWf-vv-1Ce"/>
+                        <outlet property="settingsButton" destination="l9c-93-eXv" id="7lp-NF-HbA"/>
+                        <outlet property="startButton" destination="tKg-10-p2q" id="lGf-dA-pfE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -290,6 +293,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="colorSwitcher" destination="PHZ-jS-etq" id="Qji-BL-k6i"/>
+                        <outlet property="doneButton" destination="ZBl-rg-R9a" id="Vf8-4A-tXF"/>
                         <outlet property="levelLabel" destination="QWE-vK-WKH" id="MZN-yc-J1B"/>
                         <outlet property="levelStepper" destination="e2E-Tq-oia" id="WRe-Re-DpZ"/>
                         <outlet property="maxNumberLabel" destination="EtJ-9Z-T6v" id="R0d-xf-QJ1"/>

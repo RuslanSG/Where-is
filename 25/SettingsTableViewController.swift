@@ -28,12 +28,23 @@ class SettingsTableViewController: UITableViewController {
     @IBOutlet weak var levelStepper: UIStepper!
     @IBOutlet weak var maxNumberStepper: UIStepper!
     
+    @IBOutlet weak var doneButton: UIBarButtonItem!
+    
+    var userInterfaceColor: UIColor!
+    
     var delegate: SettingsTableViewControllerDelegate?
     
     override func viewWillAppear(_ animated: Bool) {
         colorSwitcher.setOn(Game.shared.colorMode, animated: false)
+        colorSwitcher.onTintColor = userInterfaceColor
+        
         shuffleColorSwitcher.setOn(Game.shared.shuffleColorsMode, animated: false)
+        shuffleColorSwitcher.onTintColor = userInterfaceColor
+        
         shuffleNumbersSwitcher.setOn(Game.shared.shuffleNumbersMode, animated: false)
+        shuffleNumbersSwitcher.onTintColor = userInterfaceColor
+        
+        doneButton.tintColor = userInterfaceColor
         
         if !colorSwitcher.isOn {
             shuffleColorSwitcher.isEnabled = false
@@ -46,9 +57,12 @@ class SettingsTableViewController: UITableViewController {
         levelStepper.maximumValue = Double(Game.shared.maxLevel - 1)
         levelStepper.value = Double(Game.shared.level)
         levelStepper.stepValue = 1
+        levelStepper.tintColor = userInterfaceColor
+        
         maxNumberStepper.maximumValue = Double(Game.shared.maxPossibleNumber)
         maxNumberStepper.value = Double(Game.shared.maxNumber)
         maxNumberStepper.stepValue = 5
+        maxNumberStepper.tintColor = userInterfaceColor
     }
     
     // MARK: - Actions

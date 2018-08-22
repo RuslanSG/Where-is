@@ -12,6 +12,9 @@ import AudioToolbox.AudioServices
 class GameViewController: UIViewController, SettingsTableViewControllerDelegate {
     
     @IBOutlet weak var label: UILabel!
+    @IBOutlet weak var startButton: UIButton!
+    @IBOutlet weak var newGameButton: UIButton!
+    @IBOutlet weak var settingsButton: UIButton!
     
     private var buttonsFieldFrame: CGRect {
         let height = view.bounds.width / CGFloat(Game.shared.colums) * CGFloat(Game.shared.rows)
@@ -21,12 +24,21 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     private lazy var grid = Grid(layout: .dimensions(rowCount: Game.shared.rows, columnCount: Game.shared.colums), frame: buttonsFieldFrame)
     private var buttons = [UIButton]()
+    
+    private let colorSets = [[#colorLiteral(red: 0.03137254902, green: 0.3058823529, blue: 0.4941176471, alpha: 1), #colorLiteral(red: 0.06666666667, green: 0.4823529412, blue: 0.462745098, alpha: 1), #colorLiteral(red: 0.05098039216, green: 0.4392156863, blue: 0.05882352941, alpha: 1)],
+                             [#colorLiteral(red: 0.9921568627, green: 0.5764705882, blue: 0.1490196078, alpha: 1), #colorLiteral(red: 0.7019607843, green: 0.1019607843, blue: 0.06274509804, alpha: 1), #colorLiteral(red: 0.5921568627, green: 0.1176470588, blue: 0.368627451, alpha: 1)]]
+    private lazy var randomColorSet = colorSets[colorSets.count.arc4random]
     private var randomColor: UIColor {
-        let colors = [#colorLiteral(red: 0.03137254902, green: 0.3058823529, blue: 0.4941176471, alpha: 1), #colorLiteral(red: 0.06666666667, green: 0.4823529412, blue: 0.462745098, alpha: 1), #colorLiteral(red: 0.05098039216, green: 0.4392156863, blue: 0.05882352941, alpha: 1)]
-        return colors[colors.count.arc4random]
+        let randomColor = randomColorSet[randomColorSet.count.arc4random]
+        return randomColor
     }
+    private lazy var userInterfaceColor = randomColor
         
     override func viewDidLoad() {
+        startButton.backgroundColor = userInterfaceColor
+        newGameButton.tintColor = userInterfaceColor
+        settingsButton.tintColor = userInterfaceColor
+
         addButtons(count: Game.shared.numbers.count)
         updateViewFromModel()
     }
@@ -128,6 +140,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let nav = segue.destination as? UINavigationController, let svc = nav.topViewController as? SettingsTableViewController {
             svc.delegate = self
+            svc.userInterfaceColor = userInterfaceColor
         }
     }
     
