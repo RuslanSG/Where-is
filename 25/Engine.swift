@@ -40,8 +40,10 @@ class Game {
     }
 
     var shuffleNumbersMode  = false
-    var colorMode           = false
+    var colorfulCellsMode   = false
+    var colorfulNumbersMode = false
     var shuffleColorsMode   = false
+    var winkMode            = false
     
     let maxPossibleNumber = 35
     var maxNumber: Int {
@@ -54,9 +56,8 @@ class Game {
     private var startTime = TimeInterval()
     private(set) var elapsedTime: Double!
     
-    func startGame() {
-        startTime = Date.timeIntervalSinceReferenceDate
-    }
+    var inGame = false
+    
     
     func numberSelected(_ number: Int) {
         if number == nextNumberToTap {
@@ -68,7 +69,13 @@ class Game {
         return number == nextNumberToTap
     }
     
+    func startGame() {
+        inGame = true
+        startTime = Date.timeIntervalSinceReferenceDate
+    }
+    
     func finishGame() {
+        inGame = false
         let finishTime = Date.timeIntervalSinceReferenceDate
         elapsedTime = finishTime - startTime
         if elapsedTime <= 60.0 {
@@ -77,6 +84,7 @@ class Game {
     }
     
     func newGame() {
+        inGame = false
         nextNumberToTap = 1
         elapsedTime = 0.0
         numbers.shuffle()
@@ -106,19 +114,19 @@ class Game {
     private func setGameMode(level: Int) {
         switch level {
         case 0:
-            colorMode           = false
+            colorfulCellsMode           = false
             shuffleColorsMode   = false
             shuffleNumbersMode  = false
         case 1:
-            colorMode           = true
+            colorfulCellsMode           = true
             shuffleColorsMode   = false
             shuffleNumbersMode  = false
         case 2:
-            colorMode           = true
+            colorfulCellsMode           = true
             shuffleColorsMode   = false
             shuffleNumbersMode  = true
         case 3:
-            colorMode           = true
+            colorfulCellsMode           = true
             shuffleColorsMode   = true
             shuffleNumbersMode  = true
         default:

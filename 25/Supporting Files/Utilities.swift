@@ -46,11 +46,11 @@ extension Sequence {
 
 extension UIDevice {
     enum DevicePlatform: String {
-        case other = "Old Device"
-        case iPhone6S = "iPhone 6S"
-        case iPhone6SPlus = "iPhone 6S Plus"
-        case iPhone7 = "iPhone 7"
-        case iPhone7Plus = "iPhone 7 Plus"
+        case other          = "Old Device"
+        case iPhone6S       = "iPhone 6S"
+        case iPhone6SPlus   = "iPhone 6S Plus"
+        case iPhone7        = "iPhone 7"
+        case iPhone7Plus    = "iPhone 7 Plus"
     }
     
     var platform: DevicePlatform {
@@ -75,8 +75,8 @@ extension UIDevice {
     
     var hasTapticEngine: Bool {
         get {
-            return platform == .iPhone6S || platform == .iPhone6SPlus ||
-                platform == .iPhone7 || platform == .iPhone7Plus
+            return  platform == .iPhone6S || platform == .iPhone6SPlus ||
+                    platform == .iPhone7 || platform == .iPhone7Plus
         }
     }
     
@@ -86,3 +86,24 @@ extension UIDevice {
         }
     }
 }
+
+//extension UIButton {
+//    func hideAndShowTitle() {
+//        UIViewPropertyAnimator.runningPropertyAnimator(
+//            withDuration: 0.3,
+//            delay: 0.0,
+//            options: [],
+//            animations: {
+//                self.titleLabel?.alpha = 0.0
+//        }) { (position) in
+//            UIViewPropertyAnimator.runningPropertyAnimator(
+//                withDuration: 0.3,
+//                delay: 1.0,
+//                options: [],
+//                animations: {
+//                    self.titleLabel?.alpha = 1.0
+//            })
+//        }
+//    }
+//
+//}

@@ -22,6 +22,8 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         return CGRect(x: 0.0, y: pointY, width: view.bounds.width, height: height)
     }
     
+    //private var game = Game()
+    
     private lazy var grid = Grid(layout: .dimensions(rowCount: Game.shared.rows, columnCount: Game.shared.colums), frame: buttonsFieldFrame)
     private var buttons = [UIButton]()
     
@@ -33,12 +35,14 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         return randomColor
     }
     private lazy var userInterfaceColor = randomColor
-        
+    
+    private var timer = Timer()
+    private var animator = UIViewPropertyAnimator()
+    
     override func viewDidLoad() {
         startButton.backgroundColor = userInterfaceColor
         newGameButton.tintColor = userInterfaceColor
         settingsButton.tintColor = userInterfaceColor
-
         addButtons(count: Game.shared.numbers.count)
         updateViewFromModel()
     }
@@ -82,6 +86,16 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         
         impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
         impactFeedbackGenerator?.prepare()
+        
+        if Game.shared.winkMode {
+            timer = Timer.scheduledTimer(
+                timeInterval: 0.2,
+                target: self,
+                selector: #selector(winkNumbers),
+                userInfo: nil,
+                repeats: true
+            )
+        }
     }
     
     @IBAction func newGameButtonPressed(sender: UIButton) {
@@ -109,13 +123,9 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     func colorModeStateChanged(to state: Bool) {
         if state == true {
-            buttons.forEach({ (button) in
-                button.backgroundColor = randomColor
-            })
+            buttons.forEach { $0.backgroundColor = randomColor }
         } else {
-            buttons.forEach({ (button) in
-                button.backgroundColor = .lightGray
-            })
+            buttons.forEach { $0.backgroundColor = .lightGray }
         }
     }
     
@@ -211,7 +221,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
                 let button = UIButton(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
                 button.titleLabel?.font = UIFont.systemFont(ofSize: 35)
                 button.titleLabel?.alpha = 0.0
-                button.backgroundColor = Game.shared.colorMode ? randomColor : .lightGray
+                button.backgroundColor = Game.shared.colorfulCellsMode ? randomColor : .lightGray
                 button.layer.cornerRadius = 5
                 button.addTarget(self, action: #selector(buttonPressed(sender:)), for: .touchDown)
                 button.isEnabled = false
@@ -336,16 +346,48 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     }
     
     private func prepareForNewGame(hideMessageLabel: Bool = true) {
+        Game.shared.newGame()
         isNewGame = true
         hideNumbers(animated: false)
-        Game.shared.newGame()
         if hideMessageLabel {
             label.text = nil
         }
-        if Game.shared.colorMode {
+        if Game.shared.colorfulCellsMode {
             shuffleColors(animated: true)
         }
         updateViewFromModel()
+    }
+    
+    @objc private func winkNumbers() {
+        if Game.shared.inGame {
+            let button = buttons[buttons.count.arc4random]
+            print("wink \(button.titleLabel!.text!)")
+            winkNumber(at: button)
+        } else {
+            timer.invalidate()
+            animator.stopAnimation(false)
+            animator.finishAnimation(at: .end)
+            animator.stopAnimation(false)
+            animator.finishAnimation(at: .start)
+        }
+    }
+    
+    private func winkNumber(at button: UIButton) {
+        animator = UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: 0.3,
+            delay: 0.0,
+            options: [],
+            animations: {
+                button.titleLabel?.alpha = 0.0
+        }) { (position) in
+            self.animator = UIViewPropertyAnimator.runningPropertyAnimator(
+                withDuration: 0.3,
+                delay: 1.0,
+                options: [],
+                animations: {
+                    button.titleLabel?.alpha = 1.0
+            })
+        }
     }
     
 }

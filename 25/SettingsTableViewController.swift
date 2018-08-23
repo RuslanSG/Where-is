@@ -18,9 +18,10 @@ protocol SettingsTableViewControllerDelegate {
 
 class SettingsTableViewController: UITableViewController {
     
-    @IBOutlet weak var colorSwitcher: UISwitch!
-    @IBOutlet weak var shuffleColorSwitcher: UISwitch!
-    @IBOutlet weak var shuffleNumbersSwitcher: UISwitch!
+    @IBOutlet weak var colorModeSwitcher: UISwitch!
+    @IBOutlet weak var shuffleColorsModeSwitcher: UISwitch!
+    @IBOutlet weak var shuffleNumbersModeSwitcher: UISwitch!
+    @IBOutlet weak var winkModeSwitcher: UISwitch!
     
     @IBOutlet weak var levelLabel: UILabel!
     @IBOutlet weak var maxNumberLabel: UILabel!
@@ -35,20 +36,24 @@ class SettingsTableViewController: UITableViewController {
     var delegate: SettingsTableViewControllerDelegate?
     
     override func viewWillAppear(_ animated: Bool) {
-        colorSwitcher.setOn(Game.shared.colorMode, animated: false)
-        colorSwitcher.onTintColor = userInterfaceColor
+        // TODO: Use OutletCollections
+        colorModeSwitcher.setOn(Game.shared.colorfulCellsMode, animated: false)
+        colorModeSwitcher.onTintColor = userInterfaceColor
         
-        shuffleColorSwitcher.setOn(Game.shared.shuffleColorsMode, animated: false)
-        shuffleColorSwitcher.onTintColor = userInterfaceColor
+        shuffleColorsModeSwitcher.setOn(Game.shared.shuffleColorsMode, animated: false)
+        shuffleColorsModeSwitcher.onTintColor = userInterfaceColor
         
-        shuffleNumbersSwitcher.setOn(Game.shared.shuffleNumbersMode, animated: false)
-        shuffleNumbersSwitcher.onTintColor = userInterfaceColor
+        shuffleNumbersModeSwitcher.setOn(Game.shared.shuffleNumbersMode, animated: false)
+        shuffleNumbersModeSwitcher.onTintColor = userInterfaceColor
+        
+        winkModeSwitcher.setOn(Game.shared.winkMode, animated: false)
+        winkModeSwitcher.onTintColor = userInterfaceColor
         
         doneButton.tintColor = userInterfaceColor
         
-        if !colorSwitcher.isOn {
-            shuffleColorSwitcher.isEnabled = false
-            shuffleColorSwitcher.setOn(false, animated: false)
+        if !colorModeSwitcher.isOn {
+            shuffleColorsModeSwitcher.isEnabled = false
+            shuffleColorsModeSwitcher.setOn(false, animated: false)
         }
         
         levelLabel.text = String(Game.shared.level)
@@ -72,21 +77,28 @@ class SettingsTableViewController: UITableViewController {
     }
     
     @IBAction func colorSwitcherValueChanged(_ sender: UISwitch) {
-        Game.shared.colorMode = sender.isOn
+        Game.shared.colorfulCellsMode = sender.isOn
         Game.shared.shuffleColorsMode = false
         delegate?.colorModeStateChanged(to: sender.isOn)
-        if !sender.isOn && shuffleColorSwitcher.isOn {
-            shuffleColorSwitcher.setOn(false, animated: true)
+        if !sender.isOn && shuffleColorsModeSwitcher.isOn {
+            shuffleColorsModeSwitcher.setOn(false, animated: true)
         }
-        shuffleColorSwitcher.isEnabled = sender.isOn
+        shuffleColorsModeSwitcher.isEnabled = sender.isOn
     }
     
-    @IBAction func shuffleColorSwitcherValueChanged(_ sender: UISwitch) {
+    @IBAction func shuffleColorsModeSwitcherValueChanged(_ sender: UISwitch) {
         Game.shared.shuffleColorsMode = sender.isOn
     }
     
-    @IBAction func shuffleNumbersSwitcherValueChanged(_ sender: UISwitch) {
+    @IBAction func shuffleNumbersModeSwitcherValueChanged(_ sender: UISwitch) {
         Game.shared.shuffleNumbersMode = sender.isOn
+    }
+    
+    @IBAction func winkModeSwitcherValueChanged(_ sender: UISwitch) {
+        Game.shared.winkMode = sender.isOn
+        if sender.isOn {
+            //delegate?.winkModeIsOn()
+        }
     }
     
     @IBAction func levelStepperValueChanged(_ sender: UIStepper) {

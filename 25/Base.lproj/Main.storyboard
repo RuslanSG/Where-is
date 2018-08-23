@@ -119,7 +119,7 @@
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="7IF-uw-2rJ">
                                                     <rect key="frame" x="311" y="6" width="51" height="31"/>
                                                     <connections>
-                                                        <action selector="shuffleNumbersSwitcherValueChanged:" destination="3hQ-19-uEL" eventType="valueChanged" id="Yhc-Bp-o3X"/>
+                                                        <action selector="shuffleNumbersModeSwitcherValueChanged:" destination="3hQ-19-uEL" eventType="valueChanged" id="Yhc-Bp-o3X"/>
                                                     </connections>
                                                 </switch>
                                             </subviews>
@@ -177,7 +177,7 @@
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="IlI-G0-Cvg">
                                                     <rect key="frame" x="311" y="6" width="51" height="31"/>
                                                     <connections>
-                                                        <action selector="shuffleColorSwitcherValueChanged:" destination="3hQ-19-uEL" eventType="valueChanged" id="oVI-hj-x0W"/>
+                                                        <action selector="shuffleColorsModeSwitcherValueChanged:" destination="3hQ-19-uEL" eventType="valueChanged" id="oVI-hj-x0W"/>
                                                     </connections>
                                                 </switch>
                                             </subviews>
@@ -190,12 +190,41 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="9BH-vS-ZDi">
+                                        <rect key="frame" x="0.0" y="187.5" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="9BH-vS-ZDi" id="PK6-63-IM5">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wink mode" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LuZ-qn-2u7">
+                                                    <rect key="frame" x="15" y="12" width="87" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="swB-WF-1nb">
+                                                    <rect key="frame" x="311" y="6" width="51" height="31"/>
+                                                    <connections>
+                                                        <action selector="winkModeSwitcherValueChanged:" destination="3hQ-19-uEL" eventType="valueChanged" id="GHq-me-YxN"/>
+                                                    </connections>
+                                                </switch>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="swB-WF-1nb" secondAttribute="trailing" constant="15" id="7sY-AG-0Ya"/>
+                                                <constraint firstItem="swB-WF-1nb" firstAttribute="centerY" secondItem="PK6-63-IM5" secondAttribute="centerY" id="CeK-iL-fQD"/>
+                                                <constraint firstItem="LuZ-qn-2u7" firstAttribute="centerY" secondItem="PK6-63-IM5" secondAttribute="centerY" id="a5b-zL-Y3e"/>
+                                                <constraint firstItem="LuZ-qn-2u7" firstAttribute="leading" secondItem="PK6-63-IM5" secondAttribute="leading" constant="15" id="hCF-IE-7wL"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="LuZ-qn-2u7" secondAttribute="trailing" constant="20" symbolic="YES" id="vR4-Vf-V0M"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection headerTitle="" footerTitle="Choose level and max number." id="Ct6-Pk-3eQ">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="nqK-xB-ueq">
-                                        <rect key="frame" x="0.0" y="235.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="279.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="nqK-xB-ueq" id="HK8-EM-ojJ">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
@@ -236,7 +265,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="S74-qt-6Sw">
-                                        <rect key="frame" x="0.0" y="279.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="323.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="S74-qt-6Sw" id="v71-7C-UKx">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
@@ -292,14 +321,15 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="colorSwitcher" destination="PHZ-jS-etq" id="Qji-BL-k6i"/>
+                        <outlet property="colorModeSwitcher" destination="PHZ-jS-etq" id="Qji-BL-k6i"/>
                         <outlet property="doneButton" destination="ZBl-rg-R9a" id="Vf8-4A-tXF"/>
                         <outlet property="levelLabel" destination="QWE-vK-WKH" id="MZN-yc-J1B"/>
                         <outlet property="levelStepper" destination="e2E-Tq-oia" id="WRe-Re-DpZ"/>
                         <outlet property="maxNumberLabel" destination="EtJ-9Z-T6v" id="R0d-xf-QJ1"/>
                         <outlet property="maxNumberStepper" destination="8Xu-fM-NhZ" id="XMZ-wN-uy2"/>
-                        <outlet property="shuffleColorSwitcher" destination="IlI-G0-Cvg" id="iQr-gY-bKA"/>
-                        <outlet property="shuffleNumbersSwitcher" destination="7IF-uw-2rJ" id="ZNk-21-eSF"/>
+                        <outlet property="shuffleColorsModeSwitcher" destination="IlI-G0-Cvg" id="iQr-gY-bKA"/>
+                        <outlet property="shuffleNumbersModeSwitcher" destination="7IF-uw-2rJ" id="ZNk-21-eSF"/>
+                        <outlet property="winkModeSwitcher" destination="swB-WF-1nb" id="Fom-GY-c1x"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ijr-Fs-JxI" userLabel="First Responder" sceneMemberID="firstResponder"/>
