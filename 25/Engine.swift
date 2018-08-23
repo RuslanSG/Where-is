@@ -9,9 +9,7 @@
 import Foundation
 
 class Game {
-    
-    static var shared = Game()
-    
+        
     private let userDefaults = UserDefaults.standard
     private let levelKey = "level"
     
@@ -58,7 +56,6 @@ class Game {
     
     var inGame = false
     
-    
     func numberSelected(_ number: Int) {
         if number == nextNumberToTap {
             nextNumberToTap += 1
@@ -96,7 +93,7 @@ class Game {
     
     // MARK: - Initialization
     
-    private init() {
+    init() {
         setNumbers(count: maxNumber)
         setGameMode(level: level)
     }

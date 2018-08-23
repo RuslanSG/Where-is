@@ -17,14 +17,14 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     @IBOutlet weak var settingsButton: UIButton!
     
     private var buttonsFieldFrame: CGRect {
-        let height = view.bounds.width / CGFloat(Game.shared.colums) * CGFloat(Game.shared.rows)
+        let height = view.bounds.width / CGFloat(game.colums) * CGFloat(game.rows)
         let pointY = view.bounds.midY - height / 2 - 38
         return CGRect(x: 0.0, y: pointY, width: view.bounds.width, height: height)
     }
     
-    //private var game = Game()
+    private lazy var game = Game()
     
-    private lazy var grid = Grid(layout: .dimensions(rowCount: Game.shared.rows, columnCount: Game.shared.colums), frame: buttonsFieldFrame)
+    private lazy var grid = Grid(layout: .dimensions(rowCount: game.rows, columnCount: game.colums), frame: buttonsFieldFrame)
     private var buttons = [UIButton]()
     
     private let colorSets = [[#colorLiteral(red: 0.03137254902, green: 0.3058823529, blue: 0.4941176471, alpha: 1), #colorLiteral(red: 0.06666666667, green: 0.4823529412, blue: 0.462745098, alpha: 1), #colorLiteral(red: 0.05098039216, green: 0.4392156863, blue: 0.05882352941, alpha: 1)],
@@ -43,16 +43,16 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         startButton.backgroundColor = userInterfaceColor
         newGameButton.tintColor = userInterfaceColor
         settingsButton.tintColor = userInterfaceColor
-        addButtons(count: Game.shared.numbers.count)
+        addButtons(count: game.numbers.count)
         updateViewFromModel()
     }
     
     // MARK: - Actions
     
     @objc private func buttonPressed(sender: UIButton) {
-        if Game.shared.nextNumberToTap < Game.shared.maxNumber {
-            let selectedNumberIsRight = Game.shared.selectedNumberIsRight(sender.tag)
-            Game.shared.numberSelected(sender.tag)
+        if game.nextNumberToTap < game.maxNumber {
+            let selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
+            game.numberSelected(sender.tag)
             if selectedNumberIsRight {
                 // User tapped the right number
                 showMessage(on: self.label, text: "Good!")
@@ -62,17 +62,17 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
                 showMessage(on: self.label, text: "Miss!")
                 playNotificationHapticFeedback(notificationFeedbackType: .error)
             }
-            if Game.shared.shuffleNumbersMode {
-                Game.shared.shuffleNumbers()
+            if game.shuffleNumbersMode {
+                game.shuffleNumbers()
                 updateNumbers(animated: true)
             }
-            if Game.shared.shuffleColorsMode {
+            if game.shuffleColorsMode {
                 shuffleColors(animated: true)
             }
         } else {
             // User tapped the last number
-            Game.shared.finishGame()
-            showMessage(on: label, text: String(format: "%.02f", Game.shared.elapsedTime), disappear: false)
+            game.finishGame()
+            showMessage(on: label, text: String(format: "%.02f", game.elapsedTime), disappear: false)
             prepareForNewGame(hideMessageLabel: false)
             playNotificationHapticFeedback(notificationFeedbackType: .success)
         }
@@ -82,12 +82,12 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     @IBAction func startButtonPressed(sender: UIButton) {
         showNumbers(animated: true)
         label.text = nil
-        Game.shared.startGame()
+        game.startGame()
         
         impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
         impactFeedbackGenerator?.prepare()
         
-        if Game.shared.winkMode {
+        if game.winkMode {
             timer = Timer.scheduledTimer(
                 timeInterval: 0.2,
                 target: self,
@@ -121,7 +121,8 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     // MARK: - SettingsTableViewControllerDelegate
     
-    func colorModeStateChanged(to state: Bool) {
+    func colorfulCellsModeStateChanged(to state: Bool) {
+        game.colorfulCellsMode = state
         if state == true {
             buttons.forEach { $0.backgroundColor = randomColor }
         } else {
@@ -130,6 +131,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     }
     
     func levelChanged(to level: Int) {
+        game.level = level
         if level == 0 {
             removeColors(animated: false)
         } else if level > 0 {
@@ -139,10 +141,23 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     func maxNumberChanged(to maxNumber: Int) {
         if buttons.count < maxNumber {
+            game.rows += 1
             addButtons(count: maxNumber - buttons.count)
-            grid = Grid(layout: .dimensions(rowCount: Game.shared.rows, columnCount: Game.shared.colums), frame: buttonsFieldFrame)
+            grid = Grid(layout: .dimensions(rowCount: game.rows, columnCount: game.colums), frame: buttonsFieldFrame)
             prepareForNewGame()
         }
+    }
+    
+    func shuffleColorsModeStateChanged(to state: Bool) {
+        game.shuffleColorsMode = state
+    }
+    
+    func shuffleNumbersModeStateChanged(to state: Bool) {
+        game.shuffleNumbersMode = state
+    }
+    
+    func winkModeStateChanged(to state: Bool) {
+        game.winkMode = state
     }
     
     // MARK: - Segue
@@ -151,6 +166,14 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         if let nav = segue.destination as? UINavigationController, let svc = nav.topViewController as? SettingsTableViewController {
             svc.delegate = self
             svc.userInterfaceColor = userInterfaceColor
+            svc.colorfulCellsMode = game.colorfulCellsMode
+            svc.shuffleColorsMode = game.shuffleColorsMode
+            svc.shuffleNumbersMode = game.shuffleNumbersMode
+            svc.winkMode = game.winkMode
+            svc.level = game.level
+            svc.maxNumber = game.maxNumber
+            svc.maxLevel = game.maxLevel
+            svc.maxPossibleNumber = game.maxPossibleNumber
         }
     }
     
@@ -221,7 +244,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
                 let button = UIButton(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
                 button.titleLabel?.font = UIFont.systemFont(ofSize: 35)
                 button.titleLabel?.alpha = 0.0
-                button.backgroundColor = Game.shared.colorfulCellsMode ? randomColor : .lightGray
+                button.backgroundColor = game.colorfulCellsMode ? randomColor : .lightGray
                 button.layer.cornerRadius = 5
                 button.addTarget(self, action: #selector(buttonPressed(sender:)), for: .touchDown)
                 button.isEnabled = false
@@ -277,7 +300,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     private func setNumbers() {
         for i in buttons.indices {
-            let number = Game.shared.numbers[i]
+            let number = game.numbers[i]
             let button = buttons[i]
             button.setTitle(String(number), for: .normal)
             button.tag = number
@@ -286,7 +309,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     private func updateNumbers(animated: Bool) {
         for i in buttons.indices {
-            let number = Game.shared.numbers[i]
+            let number = game.numbers[i]
             let button = buttons[i]
             if animated {
                 UIViewPropertyAnimator.runningPropertyAnimator(
@@ -346,20 +369,20 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     }
     
     private func prepareForNewGame(hideMessageLabel: Bool = true) {
-        Game.shared.newGame()
+        game.newGame()
         isNewGame = true
         hideNumbers(animated: false)
         if hideMessageLabel {
             label.text = nil
         }
-        if Game.shared.colorfulCellsMode {
+        if game.colorfulCellsMode {
             shuffleColors(animated: true)
         }
         updateViewFromModel()
     }
     
     @objc private func winkNumbers() {
-        if Game.shared.inGame {
+        if game.inGame {
             let button = buttons[buttons.count.arc4random]
             print("wink \(button.titleLabel!.text!)")
             winkNumber(at: button)
