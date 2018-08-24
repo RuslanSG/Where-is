@@ -379,25 +379,23 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     private func prepareForNewGame(hideMessageLabel: Bool = true) {
         game.newGame()
         isNewGame = true
-        hideNumbers(animated: false)
         if hideMessageLabel {
             label.text = nil
         }
         if game.colorfulCellsMode {
             shuffleColors(animated: true)
         }
+        if game.winkMode {
+            timer.invalidate()
+            buttons.forEach { $0.titleLabel?.layer.removeAllAnimations() }
+        }
+        hideNumbers(animated: false)
         updateViewFromModel()
     }
     
     @objc private func winkNumbers() {
-        if game.inGame {
-            let button = buttons[buttons.count.arc4random]
-            winkNumber(at: button)
-        } else {
-            timer.invalidate()
-            buttons.forEach { $0.titleLabel?.layer.removeAllAnimations() }
-            hideNumbers(animated: false)
-        }
+        let button = buttons[buttons.count.arc4random]
+        winkNumber(at: button)
     }
     
     private func winkNumber(at button: UIButton) {
