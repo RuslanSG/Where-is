@@ -7,9 +7,17 @@
 //
 
 import UIKit
-import AudioToolbox.AudioServices
 
 extension GameViewController {
+    
+    func updateButtonsFrames() {
+        for i in buttons.indices {
+            let button = buttons[i]
+            if let viewFrame = grid[i]?.insetBy(dx: 2.0, dy: 2.0) {
+                button.frame = viewFrame
+            }
+        }
+    }
     
     func showMessage(on label: UILabel, text: String, disappear: Bool = true) {
         label.text = text
@@ -42,6 +50,7 @@ extension GameViewController {
                 button.backgroundColor = game.colorfulCellsMode ? randomColor : .lightGray
                 button.layer.cornerRadius = 5
                 button.addTarget(self, action: #selector(buttonPressed(sender:)), for: .touchDown)
+                button.addTarget(self, action: #selector(buttonResign(sender:)), for: .touchUpInside)
                 button.isEnabled = false
                 return button
             }()
@@ -167,7 +176,7 @@ extension GameViewController {
     
     func prepareForNewGame(hideMessageLabel: Bool = true) {
         game.newGame()
-        isNewGame = true
+        setNumbers()
         if hideMessageLabel {
             label.text = nil
         }
@@ -179,7 +188,7 @@ extension GameViewController {
             buttons.forEach { $0.titleLabel?.layer.removeAllAnimations() }
         }
         hideNumbers(animated: false)
-        updateViewFromModel()
+        //updateViewFromModel()
     }
     
     @objc func winkNumbers() {
@@ -206,5 +215,5 @@ extension GameViewController {
             }
         }
     }
-    
+
 }

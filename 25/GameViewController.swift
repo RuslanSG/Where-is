@@ -24,9 +24,9 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     lazy var game = Game()
     
-    var isNewGame = true
-    
-    private lazy var grid = Grid(layout: .dimensions(rowCount: game.rows, columnCount: game.colums), frame: buttonsFieldFrame)
+    var grid: Grid {
+        return Grid(layout: .dimensions(rowCount: game.rows, columnCount: game.colums), frame: buttonsFieldFrame)
+    }
     var buttons = [UIButton]()
     
     private let colorSets = [[#colorLiteral(red: 0.03137254902, green: 0.3058823529, blue: 0.4941176471, alpha: 1), #colorLiteral(red: 0.06666666667, green: 0.4823529412, blue: 0.462745098, alpha: 1), #colorLiteral(red: 0.05098039216, green: 0.4392156863, blue: 0.05882352941, alpha: 1)],
@@ -45,7 +45,8 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         newGameButton.tintColor = userInterfaceColor
         settingsButton.tintColor = userInterfaceColor
         addButtons(count: game.numbers.count)
-        updateViewFromModel()
+        prepareForNewGame()
+        updateButtonsFrames()
     }
     
     // MARK: - Actions
@@ -66,6 +67,8 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             if game.shuffleNumbersMode {
                 game.shuffleNumbers()
                 updateNumbers(animated: true)
+            } else {
+                sender.titleLabel?.alpha = 0.2
             }
             if game.shuffleColorsMode {
                 shuffleColors(animated: true)
@@ -77,7 +80,18 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             prepareForNewGame(hideMessageLabel: false)
             playNotificationHapticFeedback(notificationFeedbackType: .success)
         }
-        
+    }
+    
+    @objc func buttonResign(sender: UIButton) {
+        if sender.tag < game.maxNumber, !game.shuffleNumbersMode {
+            UIViewPropertyAnimator.runningPropertyAnimator(
+                withDuration: 0.2,
+                delay: 0.0,
+                options: [],
+                animations: {
+                    sender.titleLabel?.alpha = 1.0
+            })
+        }
     }
     
     @IBAction func startButtonPressed(sender: UIButton) {
@@ -101,21 +115,6 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     @IBAction func newGameButtonPressed(sender: UIButton) {
         prepareForNewGame()
-    }
-    
-    // MARK: - UI Management
-    
-    func updateViewFromModel() {
-        for i in buttons.indices {
-            let button = buttons[i]
-            if let viewFrame = grid[i]?.insetBy(dx: 2.0, dy: 2.0) {
-                button.frame = viewFrame
-            }
-            if isNewGame {
-                setNumbers()
-            }
-        }
-        isNewGame = false
     }
     
     // MARK: - SettingsTableViewControllerDelegate
@@ -142,14 +141,13 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         if buttons.count < maxNumber {
             game.rows += 1
             addButtons(count: maxNumber - buttons.count)
-            grid = Grid(layout: .dimensions(rowCount: game.rows, columnCount: game.colums), frame: buttonsFieldFrame)
             prepareForNewGame()
         } else {
             game.rows -= 1
             removeButtons(count: buttons.count - maxNumber)
-            grid = Grid(layout: .dimensions(rowCount: game.rows, columnCount: game.colums), frame: buttonsFieldFrame)
             prepareForNewGame()
         }
+        updateButtonsFrames()
     }
     
     func shuffleColorsModeStateChanged(to state: Bool) {
