@@ -145,6 +145,11 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             addButtons(count: maxNumber - buttons.count)
             grid = Grid(layout: .dimensions(rowCount: game.rows, columnCount: game.colums), frame: buttonsFieldFrame)
             prepareForNewGame()
+        } else {
+            game.rows -= 1
+            removeButtons(count: buttons.count - maxNumber)
+            grid = Grid(layout: .dimensions(rowCount: game.rows, columnCount: game.colums), frame: buttonsFieldFrame)
+            prepareForNewGame()
         }
     }
     
@@ -174,6 +179,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             svc.maxNumber = game.maxNumber
             svc.maxLevel = game.maxLevel
             svc.maxPossibleNumber = game.maxPossibleNumber
+            svc.minPossibleNumber = game.minPossibleNumber
         }
     }
     
@@ -255,14 +261,16 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         }
     }
     
-    //    private func removeButtons(count: Int) {
-    //        assert(count % 5 == 0, "Reason: invalid number of buttons to remove. Provide a multiple of five number.")
-    //        for i in 0..<count {
-    //
-    //            buttons.removeLast()
-    //
-    //        }
-    //    }
+    private func removeButtons(count: Int) {
+        assert(count % 5 == 0, "Reason: invalid number of buttons to remove. Provide a multiple of five number.")
+        for _ in 0..<count {
+            let lastButton = buttons.last
+            if let lastButton = lastButton {
+                lastButton.removeFromSuperview()
+            }
+            buttons.removeLast()
+        }
+    }
     
     private func showNumbers(animated: Bool) {
         buttons.forEach({ (button) in
@@ -384,7 +392,6 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     @objc private func winkNumbers() {
         if game.inGame {
             let button = buttons[buttons.count.arc4random]
-            print("wink \(button.titleLabel!.text!)")
             winkNumber(at: button)
         } else {
             timer.invalidate()
@@ -395,7 +402,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     private func winkNumber(at button: UIButton) {
         animator = UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: 0.3,
+            withDuration: 0.5,
             delay: 0.0,
             options: [],
             animations: {
@@ -403,7 +410,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         }) { (position) in
             if self.game.inGame {
                 self.animator = UIViewPropertyAnimator.runningPropertyAnimator(
-                    withDuration: 0.3,
+                    withDuration: 0.5,
                     delay: 1.0,
                     options: [],
                     animations: {

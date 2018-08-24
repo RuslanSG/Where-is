@@ -86,24 +86,3 @@ extension UIDevice {
         }
     }
 }
-
-//extension UIButton {
-//    func hideAndShowTitle() {
-//        UIViewPropertyAnimator.runningPropertyAnimator(
-//            withDuration: 0.3,
-//            delay: 0.0,
-//            options: [],
-//            animations: {
-//                self.titleLabel?.alpha = 0.0
-//        }) { (position) in
-//            UIViewPropertyAnimator.runningPropertyAnimator(
-//                withDuration: 0.3,
-//                delay: 1.0,
-//                options: [],
-//                animations: {
-//                    self.titleLabel?.alpha = 1.0
-//            })
-//        }
-//    }
-//
-//}

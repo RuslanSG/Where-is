@@ -46,6 +46,7 @@ class SettingsTableViewController: UITableViewController {
     var maxNumber: Int!
     var maxLevel: Int!
     var maxPossibleNumber: Int!
+    var minPossibleNumber: Int!
     
     override func viewWillAppear(_ animated: Bool) {
         // TODO: Use OutletCollections
@@ -77,6 +78,7 @@ class SettingsTableViewController: UITableViewController {
         levelStepper.tintColor = userInterfaceColor
 
         maxNumberStepper.maximumValue = Double(maxPossibleNumber)
+        maxNumberStepper.minimumValue = Double(minPossibleNumber)
         maxNumberStepper.value = Double(maxNumber)
         maxNumberStepper.stepValue = 5
         maxNumberStepper.tintColor = userInterfaceColor

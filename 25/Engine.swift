@@ -44,6 +44,8 @@ class Game {
     var winkMode            = false
     
     let maxPossibleNumber = 35
+    let minPossibleNumber = 25
+    
     var maxNumber: Int {
         return rows * colums
     }
