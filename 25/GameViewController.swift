@@ -120,6 +120,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     // MARK: - SettingsTableViewControllerDelegate
     
     func colorfulCellsModeStateChanged(to state: Bool) {
+        prepareForNewGame()
         game.colorfulCellsMode = state
         if state == true {
             buttons.forEach { $0.backgroundColor = randomColor }
@@ -129,36 +130,39 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     }
     
     func levelChanged(to level: Int) {
+        prepareForNewGame()
         game.level = level
-        if level == 0 {
+        if level == game.minLevel {
             removeColors(animated: false)
-        } else if level > 0 {
+        } else if level > game.minLevel {
             shuffleColors(animated: false)
         }
     }
     
     func maxNumberChanged(to maxNumber: Int) {
+        prepareForNewGame()
         if buttons.count < maxNumber {
             game.rows += 1
             addButtons(count: maxNumber - buttons.count)
-            prepareForNewGame()
         } else {
             game.rows -= 1
             removeButtons(count: buttons.count - maxNumber)
-            prepareForNewGame()
         }
         updateButtonsFrames()
     }
     
     func shuffleColorsModeStateChanged(to state: Bool) {
+        prepareForNewGame()
         game.shuffleColorsMode = state
     }
     
     func shuffleNumbersModeStateChanged(to state: Bool) {
         game.shuffleNumbersMode = state
+        prepareForNewGame()
     }
     
     func winkModeStateChanged(to state: Bool) {
+        prepareForNewGame()
         game.winkMode = state
     }
     
@@ -175,6 +179,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             svc.level = game.level
             svc.maxNumber = game.maxNumber
             svc.maxLevel = game.maxLevel
+            svc.minLevel = game.minLevel
             svc.maxPossibleNumber = game.maxPossibleNumber
             svc.minPossibleNumber = game.minPossibleNumber
         }

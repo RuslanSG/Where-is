@@ -45,6 +45,7 @@ class SettingsTableViewController: UITableViewController {
     var level: Int!
     var maxNumber: Int!
     var maxLevel: Int!
+    var minLevel: Int!
     var maxPossibleNumber: Int!
     var minPossibleNumber: Int!
     
@@ -72,7 +73,8 @@ class SettingsTableViewController: UITableViewController {
         levelLabel.text = String(level)
         maxNumberLabel.text = String(maxNumber)
 
-        levelStepper.maximumValue = Double(maxLevel - 1)
+        levelStepper.maximumValue = Double(maxLevel)
+        levelStepper.minimumValue = Double(minLevel)
         levelStepper.value = Double(level)
         levelStepper.stepValue = 1
         levelStepper.tintColor = userInterfaceColor

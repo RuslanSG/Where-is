@@ -188,7 +188,6 @@ extension GameViewController {
             buttons.forEach { $0.titleLabel?.layer.removeAllAnimations() }
         }
         hideNumbers(animated: false)
-        //updateViewFromModel()
     }
     
     @objc func winkNumbers() {

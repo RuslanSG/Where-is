@@ -13,20 +13,16 @@ class Game {
     private let userDefaults = UserDefaults.standard
     private let levelKey = "level"
     
-    let maxLevel = 4
+    let minLevel = 1
+    let maxLevel = 5
     
     var level: Int {
         set {
             userDefaults.set(newValue, forKey: levelKey)
-            setGameMode(level: newValue)
+            setGameMode(level: newValue - 1)
         }
         get {
-            let value = userDefaults.integer(forKey: levelKey)
-            if value < maxLevel - 1 {
-                return value
-            } else {
-                return maxLevel - 1
-            }
+            return userDefaults.integer(forKey: levelKey)
         }
     }
     
@@ -116,18 +112,27 @@ class Game {
             colorfulCellsMode   = false
             shuffleColorsMode   = false
             shuffleNumbersMode  = false
+            winkMode            = false
         case 1:
             colorfulCellsMode   = true
             shuffleColorsMode   = false
             shuffleNumbersMode  = false
+            winkMode            = false
         case 2:
             colorfulCellsMode   = true
             shuffleColorsMode   = false
             shuffleNumbersMode  = true
+            winkMode            = false
         case 3:
             colorfulCellsMode   = true
             shuffleColorsMode   = true
             shuffleNumbersMode  = true
+            winkMode            = false
+        case 4:
+            colorfulCellsMode   = true
+            shuffleColorsMode   = true
+            shuffleNumbersMode  = true
+            winkMode            = true
         default:
             break
         }
