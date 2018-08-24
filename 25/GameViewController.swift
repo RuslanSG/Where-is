@@ -22,22 +22,23 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         return CGRect(x: 0.0, y: pointY, width: view.bounds.width, height: height)
     }
     
-    private lazy var game = Game()
+    lazy var game = Game()
+    
+    var isNewGame = true
     
     private lazy var grid = Grid(layout: .dimensions(rowCount: game.rows, columnCount: game.colums), frame: buttonsFieldFrame)
-    private var buttons = [UIButton]()
+    var buttons = [UIButton]()
     
     private let colorSets = [[#colorLiteral(red: 0.03137254902, green: 0.3058823529, blue: 0.4941176471, alpha: 1), #colorLiteral(red: 0.06666666667, green: 0.4823529412, blue: 0.462745098, alpha: 1), #colorLiteral(red: 0.05098039216, green: 0.4392156863, blue: 0.05882352941, alpha: 1)],
                              [#colorLiteral(red: 0.9921568627, green: 0.5764705882, blue: 0.1490196078, alpha: 1), #colorLiteral(red: 0.7019607843, green: 0.1019607843, blue: 0.06274509804, alpha: 1), #colorLiteral(red: 0.5921568627, green: 0.1176470588, blue: 0.368627451, alpha: 1)]]
     private lazy var randomColorSet = colorSets[colorSets.count.arc4random]
-    private var randomColor: UIColor {
+    var randomColor: UIColor {
         let randomColor = randomColorSet[randomColorSet.count.arc4random]
         return randomColor
     }
     private lazy var userInterfaceColor = randomColor
     
-    private var timer = Timer()
-    private var animator = UIViewPropertyAnimator()
+    var timer = Timer()
     
     override func viewDidLoad() {
         startButton.backgroundColor = userInterfaceColor
@@ -49,7 +50,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     // MARK: - Actions
     
-    @objc private func buttonPressed(sender: UIButton) {
+    @objc func buttonPressed(sender: UIButton) {
         if game.nextNumberToTap < game.maxNumber {
             let selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
             game.numberSelected(sender.tag)
@@ -104,9 +105,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     // MARK: - UI Management
     
-    private var isNewGame = true
-    
-    private func updateViewFromModel() {
+    func updateViewFromModel() {
         for i in buttons.indices {
             let button = buttons[i]
             if let viewFrame = grid[i]?.insetBy(dx: 2.0, dy: 2.0) {
@@ -217,204 +216,6 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         } else if UIDevice.current.hasTapticEngine {
             let peek = SystemSoundID(1519)
             AudioServicesPlaySystemSound(peek)
-        }
-    }
-    
-    // MARK: - Helping Methods
-    
-    private func showMessage(on label: UILabel, text: String, disappear: Bool = true) {
-        label.text = text
-        UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: 0.2,
-            delay: 0.0,
-            options: [],
-            animations: {
-                label.alpha = 1.0
-        }) { (position) in
-            if disappear {
-                UIViewPropertyAnimator.runningPropertyAnimator(
-                    withDuration: 0.2,
-                    delay: 0.5,
-                    options: [],
-                    animations: {
-                        label.alpha = 0.0
-                })
-            }
-        }
-    }
-    
-    private func addButtons(count: Int) {
-        assert(count % 5 == 0, "Reason: invalid number of buttons to add. Provide a multiple of five number.")
-        for _ in 0..<count {
-            let button: UIButton = {
-                let button = UIButton(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
-                button.titleLabel?.font = UIFont.systemFont(ofSize: 35)
-                button.titleLabel?.alpha = 0.0
-                button.backgroundColor = game.colorfulCellsMode ? randomColor : .lightGray
-                button.layer.cornerRadius = 5
-                button.addTarget(self, action: #selector(buttonPressed(sender:)), for: .touchDown)
-                button.isEnabled = false
-                return button
-            }()
-            buttons.append(button)
-            view.addSubview(button)
-        }
-    }
-    
-    private func removeButtons(count: Int) {
-        assert(count % 5 == 0, "Reason: invalid number of buttons to remove. Provide a multiple of five number.")
-        for _ in 0..<count {
-            let lastButton = buttons.last
-            if let lastButton = lastButton {
-                lastButton.removeFromSuperview()
-            }
-            buttons.removeLast()
-        }
-    }
-    
-    private func showNumbers(animated: Bool) {
-        buttons.forEach({ (button) in
-            button.isEnabled = true
-            if animated {
-                UIViewPropertyAnimator.runningPropertyAnimator(
-                    withDuration: 0.2,
-                    delay: 0.0,
-                    options: [],
-                    animations: {
-                        button.titleLabel?.alpha = 1.0
-                })
-            } else {
-                button.titleLabel?.alpha = 1.0
-            }
-        })
-    }
-    
-    private func hideNumbers(animated: Bool) {
-        buttons.forEach({ (button) in
-            button.isEnabled = false
-            if animated {
-                UIViewPropertyAnimator.runningPropertyAnimator(
-                    withDuration: 0.2,
-                    delay: 0.0,
-                    options: [],
-                    animations: {
-                        button.titleLabel?.alpha = 0.0
-                })
-            } else {
-                button.titleLabel?.alpha = 0.0
-            }
-        })
-    }
-    
-    private func setNumbers() {
-        for i in buttons.indices {
-            let number = game.numbers[i]
-            let button = buttons[i]
-            button.setTitle(String(number), for: .normal)
-            button.tag = number
-        }
-    }
-    
-    private func updateNumbers(animated: Bool) {
-        for i in buttons.indices {
-            let number = game.numbers[i]
-            let button = buttons[i]
-            if animated {
-                UIViewPropertyAnimator.runningPropertyAnimator(
-                    withDuration: 0.1,
-                    delay: 0.0,
-                    options: [],
-                    animations: {
-                        button.titleLabel?.alpha = 0.0
-                }) { (position) in
-                    button.setTitle(String(number), for: .normal)
-                    button.tag = number
-                    UIViewPropertyAnimator.runningPropertyAnimator(
-                        withDuration: 0.1,
-                        delay: 0.0,
-                        options: [],
-                        animations: {
-                            button.titleLabel?.alpha = 1.0
-                    })
-                }
-            } else {
-                button.setTitle(String(number), for: .normal)
-                button.tag = number
-            }
-        }
-    }
-    
-    private func removeColors(animated: Bool) {
-        buttons.forEach({ (button) in
-            if animated {
-                UIViewPropertyAnimator.runningPropertyAnimator(
-                    withDuration: 0.1,
-                    delay: 0.0,
-                    options: [],
-                    animations: {
-                        button.backgroundColor = .lightGray
-                })
-            } else {
-                button.backgroundColor = .lightGray
-            }
-        })
-    }
-    
-    private func shuffleColors(animated: Bool) {
-        buttons.forEach({ (button) in
-            if animated {
-                UIViewPropertyAnimator.runningPropertyAnimator(
-                    withDuration: 0.1,
-                    delay: 0.0,
-                    options: [],
-                    animations: {
-                        button.backgroundColor = self.randomColor
-                })
-            } else {
-                button.backgroundColor = randomColor
-            }
-        })
-    }
-    
-    private func prepareForNewGame(hideMessageLabel: Bool = true) {
-        game.newGame()
-        isNewGame = true
-        if hideMessageLabel {
-            label.text = nil
-        }
-        if game.colorfulCellsMode {
-            shuffleColors(animated: true)
-        }
-        if game.winkMode {
-            timer.invalidate()
-            buttons.forEach { $0.titleLabel?.layer.removeAllAnimations() }
-        }
-        hideNumbers(animated: false)
-        updateViewFromModel()
-    }
-    
-    @objc private func winkNumbers() {
-        let button = buttons[buttons.count.arc4random]
-        winkNumber(at: button)
-    }
-    
-    private func winkNumber(at button: UIButton) {
-        animator = UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: 0.5,
-            delay: 0.0,
-            options: [],
-            animations: {
-                button.titleLabel?.alpha = 0.0
-        }) { (position) in
-            if self.game.inGame {
-                self.animator = UIViewPropertyAnimator.runningPropertyAnimator(
-                    withDuration: 0.5,
-                    delay: 1.0,
-                    options: [],
-                    animations: {
-                        button.titleLabel?.alpha = 1.0
-                })
-            }
         }
     }
     
