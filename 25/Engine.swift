@@ -111,19 +111,19 @@ class Game {
     private func setGameMode(level: Int) {
         switch level {
         case 0:
-            colorfulCellsMode           = false
+            colorfulCellsMode   = false
             shuffleColorsMode   = false
             shuffleNumbersMode  = false
         case 1:
-            colorfulCellsMode           = true
+            colorfulCellsMode   = true
             shuffleColorsMode   = false
             shuffleNumbersMode  = false
         case 2:
-            colorfulCellsMode           = true
+            colorfulCellsMode   = true
             shuffleColorsMode   = false
             shuffleNumbersMode  = true
         case 3:
-            colorfulCellsMode           = true
+            colorfulCellsMode   = true
             shuffleColorsMode   = true
             shuffleNumbersMode  = true
         default:

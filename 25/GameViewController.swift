@@ -255,14 +255,14 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         }
     }
     
-//    private func removeButtons(count: Int) {
-//        assert(count % 5 == 0, "Reason: invalid number of buttons to remove. Provide a multiple of five number.")
-//        for i in 0..<count {
-//
-//            buttons.removeLast()
-//
-//        }
-//    }
+    //    private func removeButtons(count: Int) {
+    //        assert(count % 5 == 0, "Reason: invalid number of buttons to remove. Provide a multiple of five number.")
+    //        for i in 0..<count {
+    //
+    //            buttons.removeLast()
+    //
+    //        }
+    //    }
     
     private func showNumbers(animated: Bool) {
         buttons.forEach({ (button) in
@@ -388,10 +388,8 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             winkNumber(at: button)
         } else {
             timer.invalidate()
-            animator.stopAnimation(false)
-            animator.finishAnimation(at: .end)
-            animator.stopAnimation(false)
-            animator.finishAnimation(at: .start)
+            buttons.forEach { $0.titleLabel?.layer.removeAllAnimations() }
+            hideNumbers(animated: false)
         }
     }
     
@@ -403,13 +401,15 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             animations: {
                 button.titleLabel?.alpha = 0.0
         }) { (position) in
-            self.animator = UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: 0.3,
-                delay: 1.0,
-                options: [],
-                animations: {
-                    button.titleLabel?.alpha = 1.0
-            })
+            if self.game.inGame {
+                self.animator = UIViewPropertyAnimator.runningPropertyAnimator(
+                    withDuration: 0.3,
+                    delay: 1.0,
+                    options: [],
+                    animations: {
+                        button.titleLabel?.alpha = 1.0
+                })
+            }
         }
     }
     
