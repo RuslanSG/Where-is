@@ -19,25 +19,29 @@ extension GameViewController {
         }
     }
     
-    func showMessage(on label: UILabel, text: String, disappear: Bool = true) {
-        label.text = text
+    func showResults(time: Double) {
+        titleLabel.text = time < 60.0 ? "Excellent!" : "Almost there!"
+        timeLabel.text = String(format: "%.02f", time)
+        self.view.bringSubview(toFront: messageView)
         UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: 0.2,
+            withDuration: 0.15,
             delay: 0.0,
             options: [],
             animations: {
-                label.alpha = 1.0
-        }) { (position) in
-            if disappear {
-                UIViewPropertyAnimator.runningPropertyAnimator(
-                    withDuration: 0.2,
-                    delay: 0.5,
-                    options: [],
-                    animations: {
-                        label.alpha = 0.0
-                })
-            }
-        }
+                self.messageView.alpha = 1.0
+        })
+    }
+    
+    func hideResults() {
+        titleLabel.text = nil
+        timeLabel.text = nil
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: 0.15,
+            delay: 0.0,
+            options: [],
+            animations: {
+                self.messageView.alpha = 0.0
+        })
     }
     
     func feedbackSelection(isRight: Bool) {
@@ -196,9 +200,6 @@ extension GameViewController {
         game.newGame()
         setNumbers()
         gameFinished = true
-        if hideMessageLabel {
-            label.text = nil
-        }
         if game.colorfulCellsMode {
             shuffleColors(animated: true)
         }

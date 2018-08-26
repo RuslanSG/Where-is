@@ -11,17 +11,58 @@ import AudioToolbox.AudioServices
 
 class GameViewController: UIViewController, SettingsTableViewControllerDelegate {
     
-    @IBOutlet weak var label: UILabel!
     @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var newGameButton: UIButton!
     @IBOutlet weak var settingsButton: UIButton!
     
-    lazy var feedbackView: UIView = {
+    let feedbackView: UIView = {
         let statusBarFrame = UIApplication.shared.statusBarFrame
         let view = UIView(frame: statusBarFrame)
         view.backgroundColor = .clear
-        self.view.addSubview(view)
         return view
+    }()
+    
+    // MARK: - Message view
+    
+    lazy var messageView: UIVisualEffectView = {
+        let blur = UIBlurEffect(style: .light)
+        let view = UIVisualEffectView(effect: blur)
+        let offset: CGFloat = 2.0
+        view.frame = CGRect(
+            x: buttonsFieldFrame.minX + offset,
+            y: buttonsFieldFrame.minY + offset - 50,
+            width: buttonsFieldFrame.width - offset * 2,    // WTF?
+            height: buttonsFieldFrame.height - offset * 2 + 100   // WTF?
+        )
+        view.alpha = 0.0
+        view.layer.cornerRadius = 20
+        view.clipsToBounds = true
+        return view
+    }()
+    
+    let titleLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.font = UIFont(name: label.font.fontName, size: 30)
+        return label
+    }()
+    
+    let detailsLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+        label.textAlignment = .left
+        label.font = UIFont(name: label.font.fontName, size: 15)
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    lazy var timeLabel: UILabel = {
+        let label = UILabel(frame: CGRect(x: 0.0, y: 0.0, width: 200.0, height: 40.0))
+        label.text = "140.00"
+        label.center = messageView.center
+        label.textAlignment = .center
+        label.font = UIFont(name: label.font.fontName, size: 40)
+        return label
     }()
 
     private var buttonsFieldFrame: CGRect {
@@ -49,12 +90,29 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     var timer = Timer()
     
     override func viewDidLoad() {
-        startButton.backgroundColor = userInterfaceColor
-        newGameButton.tintColor = userInterfaceColor
-        settingsButton.tintColor = userInterfaceColor
         addButtons(count: game.numbers.count)
+        
         prepareForNewGame()
         updateButtonsFrames()
+        
+        setupInputComponents()
+    }
+    
+    // MARK: - Setup UI
+    
+    func setupInputComponents() {
+        startButton.backgroundColor = userInterfaceColor
+        newGameButton.tintColor     = userInterfaceColor
+        settingsButton.tintColor    = userInterfaceColor
+        
+        self.view.addSubview(messageView)
+        self.view.addSubview(feedbackView)
+        
+        messageView.contentView.addSubview(titleLabel)
+        messageView.contentView.addSubview(timeLabel)
+        
+        messageView.addConstraintsWithFormat(format: "H:|-30-[v0]-30-|", views: titleLabel)
+        messageView.addConstraintsWithFormat(format: "V:|-30-[v0(35)]", views: titleLabel)
     }
     
     // MARK: - Actions
@@ -64,15 +122,8 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             let selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
             game.numberSelected(sender.tag)
             feedbackSelection(isRight: selectedNumberIsRight)
-            if selectedNumberIsRight {
-                // User tapped the right number
-                showMessage(on: self.label, text: "Good!")
-                playImpactHapticFeedback(needsToPrepare: true, style: .medium)
-            } else {
-                // User tapped the wrong number
-                showMessage(on: self.label, text: "Miss!")
-                playNotificationHapticFeedback(notificationFeedbackType: .error)
-            }
+            selectedNumberIsRight ? playImpactHapticFeedback(needsToPrepare: true, style: .medium) :
+                                    playNotificationHapticFeedback(notificationFeedbackType: .error)
             if game.shuffleNumbersMode {
                 game.shuffleNumbers()
                 updateNumbers(animated: true)
@@ -85,13 +136,19 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         } else {
             // User tapped the last number
             game.finishGame()
-            showMessage(on: label, text: String(format: "%.02f", game.elapsedTime), disappear: false)
+            showResults(time: game.elapsedTime)
             prepareForNewGame(hideMessageLabel: false)
             playNotificationHapticFeedback(notificationFeedbackType: .success)
         }
     }
     
-    var gameFinished = false
+    var gameFinished = false {
+        didSet {
+            startButton.isEnabled = gameFinished
+            startButton.alpha = startButton.isEnabled ? 1.0 : 0.3
+            newGameButton.isEnabled = !gameFinished
+        }
+    }
     
     @objc func buttonResign(sender: UIButton) {
         if !gameFinished, !game.shuffleNumbersMode {
@@ -106,8 +163,8 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     }
     
     @IBAction func startButtonPressed(sender: UIButton) {
+        hideResults()
         showNumbers(animated: true)
-        label.text = nil
         game.startGame()
         gameFinished = false
         
@@ -161,6 +218,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         }
         prepareForNewGame()
         updateButtonsFrames()
+        hideResults()
     }
     
     func shuffleColorsModeStateChanged(to state: Bool) {

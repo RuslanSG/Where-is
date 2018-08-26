@@ -57,32 +57,21 @@
                                     <segue destination="5Hr-WI-hJD" kind="showDetail" id="mC6-dC-gsX"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4GM-Oq-XXn">
-                                <rect key="frame" x="2" y="631" width="140" height="28"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="4EG-dS-daE" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="14I-9C-7Xj"/>
                             <constraint firstItem="tKg-10-p2q" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="2" id="24U-eG-xRd"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="l9c-93-eXv" secondAttribute="trailing" constant="10" id="2cs-ln-kCp"/>
-                            <constraint firstItem="4GM-Oq-XXn" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="2" id="KoT-eT-Sew"/>
                             <constraint firstItem="4EG-dS-daE" firstAttribute="top" secondItem="tKg-10-p2q" secondAttribute="bottom" constant="6" id="QX5-A0-5SV"/>
                             <constraint firstItem="tKg-10-p2q" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="bRc-7x-WKT"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="l9c-93-eXv" secondAttribute="bottom" constant="10" id="iHE-6G-z8d"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="tKg-10-p2q" secondAttribute="trailing" constant="2" id="iWk-UC-JZV"/>
-                            <constraint firstItem="4EG-dS-daE" firstAttribute="leading" secondItem="4GM-Oq-XXn" secondAttribute="trailing" constant="8" id="kDv-TM-7Eo"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="4GM-Oq-XXn" secondAttribute="bottom" constant="8" id="qxt-QQ-0Jy"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="4EG-dS-daE" secondAttribute="bottom" constant="6" id="sY5-ah-kVP"/>
-                            <constraint firstItem="4GM-Oq-XXn" firstAttribute="top" secondItem="tKg-10-p2q" secondAttribute="bottom" constant="6" id="tiF-AN-fei"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <outlet property="label" destination="4GM-Oq-XXn" id="eaL-vD-pxF"/>
                         <outlet property="newGameButton" destination="4EG-dS-daE" id="AWf-vv-1Ce"/>
                         <outlet property="settingsButton" destination="l9c-93-eXv" id="7lp-NF-HbA"/>
                         <outlet property="startButton" destination="tKg-10-p2q" id="lGf-dA-pfE"/>
