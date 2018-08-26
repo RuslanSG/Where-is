@@ -57,13 +57,16 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     }()
     
     lazy var timeLabel: UILabel = {
-        let label = UILabel(frame: CGRect(x: 0.0, y: 0.0, width: 200.0, height: 40.0))
+        let label = UILabel(frame: CGRect(x: 0.0, y: 0.0, width: 200.0, height: 100.0))
         label.text = "140.00"
         label.center = messageView.center
         label.textAlignment = .center
-        label.font = UIFont(name: label.font.fontName, size: 40)
+        label.font = UIFont(name: label.font.fontName, size: 25)
+        label.numberOfLines = 0
         return label
     }()
+
+    // MARK: -
 
     private var buttonsFieldFrame: CGRect {
         let height = view.bounds.width / CGFloat(game.colums) * CGFloat(game.rows)
@@ -136,7 +139,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         } else {
             // User tapped the last number
             game.finishGame()
-            showResults(time: game.elapsedTime)
+            showResults(time: game.elapsedTime, maxNumber: game.maxNumber, level: game.level - 1)
             prepareForNewGame(hideMessageLabel: false)
             playNotificationHapticFeedback(notificationFeedbackType: .success)
         }

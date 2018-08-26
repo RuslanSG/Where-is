@@ -19,9 +19,9 @@ extension GameViewController {
         }
     }
     
-    func showResults(time: Double) {
+    func showResults(time: Double, maxNumber: Int, level: Int) {
         titleLabel.text = time < 60.0 ? "Excellent!" : "Almost there!"
-        timeLabel.text = String(format: "%.02f", time)
+        timeLabel.text = String(format: "Max number: \(maxNumber)\nLevel: \(level)\nTime: %.02f", time)
         self.view.bringSubview(toFront: messageView)
         UIViewPropertyAnimator.runningPropertyAnimator(
             withDuration: 0.15,
