@@ -16,6 +16,14 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     @IBOutlet weak var newGameButton: UIButton!
     @IBOutlet weak var settingsButton: UIButton!
     
+    lazy var feedbackView: UIView = {
+        let statusBarFrame = UIApplication.shared.statusBarFrame
+        let view = UIView(frame: statusBarFrame)
+        view.backgroundColor = .clear
+        self.view.addSubview(view)
+        return view
+    }()
+
     private var buttonsFieldFrame: CGRect {
         let height = view.bounds.width / CGFloat(game.colums) * CGFloat(game.rows)
         let pointY = view.bounds.midY - height / 2 - 38
@@ -55,6 +63,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         if game.nextNumberToTap < game.maxNumber {
             let selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
             game.numberSelected(sender.tag)
+            feedbackSelection(isRight: selectedNumberIsRight)
             if selectedNumberIsRight {
                 // User tapped the right number
                 showMessage(on: self.label, text: "Good!")
@@ -82,10 +91,12 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         }
     }
     
+    var gameFinished = false
+    
     @objc func buttonResign(sender: UIButton) {
-        if sender.tag < game.maxNumber, !game.shuffleNumbersMode {
+        if !gameFinished, !game.shuffleNumbersMode {
             UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: 0.2,
+                withDuration: 0.1,
                 delay: 0.0,
                 options: [],
                 animations: {
@@ -98,15 +109,16 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         showNumbers(animated: true)
         label.text = nil
         game.startGame()
+        gameFinished = false
         
         impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
         impactFeedbackGenerator?.prepare()
         
-        if game.winkMode {
+        if game.winkNumbersMode || game.winkColorsMode {
             timer = Timer.scheduledTimer(
                 timeInterval: 0.2,
                 target: self,
-                selector: #selector(winkNumbers),
+                selector: #selector(timerSceduled),
                 userInfo: nil,
                 repeats: true
             )
@@ -121,7 +133,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     func colorfulCellsModeStateChanged(to state: Bool) {
         prepareForNewGame()
-        game.colorfulCellsMode = state
+//        game.colorfulCellsMode = state
         if state == true {
             buttons.forEach { $0.backgroundColor = randomColor }
         } else {
@@ -140,7 +152,6 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     }
     
     func maxNumberChanged(to maxNumber: Int) {
-        prepareForNewGame()
         if buttons.count < maxNumber {
             game.rows += 1
             addButtons(count: maxNumber - buttons.count)
@@ -148,22 +159,27 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             game.rows -= 1
             removeButtons(count: buttons.count - maxNumber)
         }
+        prepareForNewGame()
         updateButtonsFrames()
     }
     
     func shuffleColorsModeStateChanged(to state: Bool) {
         prepareForNewGame()
-        game.shuffleColorsMode = state
+//        game.shuffleColorsMode = state
     }
     
     func shuffleNumbersModeStateChanged(to state: Bool) {
-        game.shuffleNumbersMode = state
         prepareForNewGame()
+//        game.shuffleNumbersMode = state
     }
     
-    func winkModeStateChanged(to state: Bool) {
+    func winkNumbersModeStateChanged(to state: Bool) {
         prepareForNewGame()
-        game.winkMode = state
+//        game.winkMode = state
+    }
+    
+    func winkColorsModeStateChanged(to state: Bool) {
+        prepareForNewGame()
     }
     
     // MARK: - Segue
@@ -175,7 +191,8 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             svc.colorfulCellsMode = game.colorfulCellsMode
             svc.shuffleColorsMode = game.shuffleColorsMode
             svc.shuffleNumbersMode = game.shuffleNumbersMode
-            svc.winkMode = game.winkMode
+            svc.winkNumbersMode = game.winkNumbersMode
+            svc.winkColorsMode = game.winkColorsMode
             svc.level = game.level
             svc.maxNumber = game.maxNumber
             svc.maxLevel = game.maxLevel

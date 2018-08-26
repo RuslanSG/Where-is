@@ -40,6 +40,24 @@ extension GameViewController {
         }
     }
     
+    func feedbackSelection(isRight: Bool) {
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: 0.1,
+            delay: 0.0,
+            options: [],
+            animations: {
+                self.feedbackView.backgroundColor = isRight ? #colorLiteral(red: 0.3960784314, green: 0.8392156863, blue: 0.262745098, alpha: 1) : #colorLiteral(red: 0.9215686275, green: 0.1490196078, blue: 0.1215686275, alpha: 1)
+        }) { (position) in
+            UIViewPropertyAnimator.runningPropertyAnimator(
+                withDuration: 0.1,
+                delay: 0.0,
+                options: [],
+                animations: {
+                    self.feedbackView.backgroundColor = .clear
+            })
+        }
+    }
+    
     func addButtons(count: Int) {
         assert(count % 5 == 0, "Reason: invalid number of buttons to add. Provide a multiple of five number.")
         for _ in 0..<count {
@@ -177,22 +195,43 @@ extension GameViewController {
     func prepareForNewGame(hideMessageLabel: Bool = true) {
         game.newGame()
         setNumbers()
+        gameFinished = true
         if hideMessageLabel {
             label.text = nil
         }
         if game.colorfulCellsMode {
             shuffleColors(animated: true)
         }
-        if game.winkMode {
+        if game.winkNumbersMode {
             timer.invalidate()
             buttons.forEach { $0.titleLabel?.layer.removeAllAnimations() }
         }
         hideNumbers(animated: false)
     }
     
-    @objc func winkNumbers() {
-        let button = buttons[buttons.count.arc4random]
-        winkNumber(at: button)
+    enum CellPart {
+        case number
+        case color
+    }
+    
+    @objc func timerSceduled() {
+        if game.winkNumbersMode {
+            wink(.number)
+        }
+        if game.winkColorsMode {
+            wink(.color)
+        }
+    }
+    
+    func wink(_ cellPart: CellPart) {
+        if cellPart == .number {
+            let button = buttons[buttons.count.arc4random]
+            winkNumber(at: button)
+        }
+        if cellPart == .color {
+            let button = buttons[buttons.count.arc4random]
+            winkColor(at: button)
+        }
     }
     
     func winkNumber(at button: UIButton) {
@@ -213,6 +252,16 @@ extension GameViewController {
                 })
             }
         }
+    }
+    
+    func winkColor(at button: UIButton) {
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: 0.5,
+            delay: 0.0,
+            options: [],
+            animations: {
+                button.backgroundColor = self.randomColor
+        })
     }
 
 }
