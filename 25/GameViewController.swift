@@ -15,10 +15,13 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     @IBOutlet weak var newGameButton: UIButton!
     @IBOutlet weak var settingsButton: UIButton!
     
-    let feedbackView: UIView = {
+    // MARK: -
+    
+    lazy var feedbackView: UIView = {
         let statusBarFrame = UIApplication.shared.statusBarFrame
-        let view = UIView(frame: statusBarFrame)
+        let view = UIView(frame: self.view.frame)
         view.backgroundColor = .clear
+        view.alpha = 0.25
         return view
     }()
     
@@ -60,7 +63,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         let label = UILabel(frame: CGRect(x: 0.0, y: 0.0, width: 200.0, height: 100.0))
         label.text = "140.00"
         label.center = messageView.center
-        label.textAlignment = .center
+        label.textAlignment = .left
         label.font = UIFont(name: label.font.fontName, size: 25)
         label.numberOfLines = 0
         return label
@@ -84,21 +87,22 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     private let colorSets = [[#colorLiteral(red: 0.03137254902, green: 0.3058823529, blue: 0.4941176471, alpha: 1), #colorLiteral(red: 0.06666666667, green: 0.4823529412, blue: 0.462745098, alpha: 1), #colorLiteral(red: 0.05098039216, green: 0.4392156863, blue: 0.05882352941, alpha: 1)],
                              [#colorLiteral(red: 0.9921568627, green: 0.5764705882, blue: 0.1490196078, alpha: 1), #colorLiteral(red: 0.7019607843, green: 0.1019607843, blue: 0.06274509804, alpha: 1), #colorLiteral(red: 0.5921568627, green: 0.1176470588, blue: 0.368627451, alpha: 1)]]
     private lazy var randomColorSet = colorSets[colorSets.count.arc4random]
+    
+    let defaultCellColor = #colorLiteral(red: 0.2203874684, green: 0.2203874684, blue: 0.2203874684, alpha: 1)
     var randomColor: UIColor {
         let randomColor = randomColorSet[randomColorSet.count.arc4random]
         return randomColor
     }
+    
     private lazy var userInterfaceColor = randomColor
     
     var timer = Timer()
     
+    // MARK: -
+    
     override func viewDidLoad() {
-        addButtons(count: game.numbers.count)
-        
-        prepareForNewGame()
-        updateButtonsFrames()
-        
         setupInputComponents()
+        prepareForNewGame()
     }
     
     // MARK: - Setup UI
@@ -108,14 +112,18 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         newGameButton.tintColor     = userInterfaceColor
         settingsButton.tintColor    = userInterfaceColor
         
+        addButtons(count: game.numbers.count)
+        updateButtonsFrames()
+        
         self.view.addSubview(messageView)
         self.view.addSubview(feedbackView)
-        
+        self.view.sendSubview(toBack: feedbackView)
+
         messageView.contentView.addSubview(titleLabel)
         messageView.contentView.addSubview(timeLabel)
         
         messageView.addConstraintsWithFormat(format: "H:|-30-[v0]-30-|", views: titleLabel)
-        messageView.addConstraintsWithFormat(format: "V:|-30-[v0(35)]", views: titleLabel)
+        messageView.addConstraintsWithFormat(format: "V:|-60-[v0(35)]", views: titleLabel)
     }
     
     // MARK: - Actions

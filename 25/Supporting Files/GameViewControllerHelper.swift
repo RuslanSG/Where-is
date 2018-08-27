@@ -69,7 +69,7 @@ extension GameViewController {
                 let button = UIButton(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
                 button.titleLabel?.font = UIFont.systemFont(ofSize: 35)
                 button.titleLabel?.alpha = 0.0
-                button.backgroundColor = game.colorfulCellsMode ? randomColor : .lightGray
+                button.backgroundColor = game.colorfulCellsMode ? randomColor : defaultCellColor
                 button.layer.cornerRadius = 5
                 button.addTarget(self, action: #selector(buttonPressed(sender:)), for: .touchDown)
                 button.addTarget(self, action: #selector(buttonResign(sender:)), for: .touchUpInside)
@@ -172,10 +172,10 @@ extension GameViewController {
                     delay: 0.0,
                     options: [],
                     animations: {
-                        button.backgroundColor = .lightGray
+                        button.backgroundColor = self.defaultCellColor
                 })
             } else {
-                button.backgroundColor = .lightGray
+                button.backgroundColor = defaultCellColor
             }
         })
     }
