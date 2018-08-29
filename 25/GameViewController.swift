@@ -40,12 +40,6 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         let view = UIVisualEffectView(effect: blur)
         let offset: CGFloat = 2.0
         view.frame = self.view.frame
-//        view.frame = CGRect(
-//            x: buttonsFieldFrame.minX + offset,
-//            y: buttonsFieldFrame.minY + offset - 50,
-//            width: buttonsFieldFrame.width - offset * 2,    // WTF?
-//            height: buttonsFieldFrame.height - offset * 2 + 100   // WTF?
-//        )
         view.alpha = 0.0
         view.layer.cornerRadius = 20
         view.clipsToBounds = true
@@ -80,18 +74,55 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     // MARK: -
     
-    private var buttonsFieldFrame: CGRect {
-        let height = view.bounds.width / CGFloat(game.colums) * CGFloat(game.rows)
-        let pointY = view.bounds.midY - height / 2 - 38
-        return CGRect(x: 0.0, y: pointY, width: view.bounds.width, height: height)
+    var cornerRadius: CGFloat {
+        if self.view.traitCollection.horizontalSizeClass == .regular, self.view.traitCollection.verticalSizeClass == .regular {
+            return 12.0
+        } else {
+            return 7.0
+        }
     }
+    
+    var numbersFontSize: CGFloat {
+        return self.view.bounds.width / 10
+    }
+    
+    var gridInset: CGFloat {
+        return self.view.bounds.width / 200
+    }
+    
+    private var buttonsFieldFrame: CGRect {
+        let height = self.view.bounds.width / CGFloat(game.colums) * CGFloat(game.rows)
+        let pointY = self.view.bounds.midY - height / 2 - 38
+        let staturBarHeight = UIApplication.shared.statusBarFrame.height
+        let startButtonFrameY = startButton.frame.minY
+        let maxAlllowedButtonsContainerViewHeight = startButtonFrameY - staturBarHeight - gridInset / 2
+        return CGRect(
+            x: gridInset / 2,
+            y: pointY > 0 ? pointY : staturBarHeight,
+            width: self.view.bounds.width - gridInset,
+            height: height < maxAlllowedButtonsContainerViewHeight ? height : maxAlllowedButtonsContainerViewHeight
+        )
+    }
+    
+    // MARK: -
     
     lazy var game = Game()
+    var gameFinished = false {
+        didSet {
+            startButton.isEnabled = gameFinished
+            startButton.alpha = startButton.isEnabled ? 1.0 : 0.3
+            newGameButton.isEnabled = !gameFinished
+        }
+    }
     
     var grid: Grid {
-        return Grid(layout: .dimensions(rowCount: game.rows, columnCount: game.colums), frame: buttonsFieldFrame)
+        return Grid(layout: .dimensions(rowCount: game.rows, columnCount: game.colums), frame: buttonsContainerView.bounds)
     }
-    var buttons = [UIButton]()
+    var buttons = [UIButton]() {
+        didSet {
+            buttonsContainerView.frame = buttonsFieldFrame
+        }
+    }
     
     let defaultCellColor = #colorLiteral(red: 0.2203874684, green: 0.2203874684, blue: 0.2203874684, alpha: 1)
     private let colorSets = [[#colorLiteral(red: 0.03137254902, green: 0.3058823529, blue: 0.4941176471, alpha: 1), #colorLiteral(red: 0.06666666667, green: 0.4823529412, blue: 0.462745098, alpha: 1), #colorLiteral(red: 0.05098039216, green: 0.4392156863, blue: 0.05882352941, alpha: 1)],
@@ -120,11 +151,16 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         newGameButton.tintColor     = userInterfaceColor
         settingsButton.tintColor    = userInterfaceColor
         
-        addButtons(count: game.numbers.count)
-        updateButtonsFrames()
+        startButton.layer.cornerRadius = cornerRadius
         
         self.view.addSubview(messageView)
         self.view.addSubview(feedbackView)
+        self.view.addSubview(buttonsContainerView)
+        
+        addButtons(count: game.numbers.count)
+        updateButtonsFrames()
+        
+        self.view.sendSubview(toBack: buttonsContainerView)
         self.view.sendSubview(toBack: feedbackView)
         
         messageView.contentView.addSubview(titleLabel)
@@ -137,42 +173,34 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     // MARK: - Actions
     
     @objc func buttonPressed(sender: UIButton) {
-//        let selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
-//        if selectedNumberIsRight && sender.tag == game.maxNumber {
+        let selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
+        if selectedNumberIsRight && sender.tag == game.maxNumber {
             // User tapped the last number
             game.finishGame()
             showResults(time: game.elapsedTime, maxNumber: game.maxNumber, level: game.level - 1)
             prepareForNewGame(hideMessageLabel: false)
             playNotificationHapticFeedback(notificationFeedbackType: .success)
             return
-//        }
-//        if game.shuffleNumbersMode {
-//            game.shuffleNumbers()
-//            updateNumbers(animated: true)
-//        } else {
-//            sender.titleLabel?.alpha = 0.2
-//        }
-//        if game.shuffleColorsMode {
-//            shuffleColors(animated: true)
-//        }
-//        if selectedNumberIsRight {
-//            // User tapped the right number
-//            feedbackSelection(isRight: true)
-//            playImpactHapticFeedback(needsToPrepare: true, style: .medium)
-//        } else {
-//            // User tapped the wrong number
-//            feedbackSelection(isRight: false)
-//            playNotificationHapticFeedback(notificationFeedbackType: .error)
-//        }
-//        game.numberSelected(sender.tag)
-    }
-    
-    var gameFinished = false {
-        didSet {
-            startButton.isEnabled = gameFinished
-            startButton.alpha = startButton.isEnabled ? 1.0 : 0.3
-            newGameButton.isEnabled = !gameFinished
         }
+        if game.shuffleNumbersMode {
+            game.shuffleNumbers()
+            updateNumbers(animated: true)
+        } else {
+            sender.titleLabel?.alpha = 0.2
+        }
+        if game.shuffleColorsMode {
+            shuffleColors(animated: true)
+        }
+        if selectedNumberIsRight {
+            // User tapped the right number
+            feedbackSelection(isRight: true)
+            playImpactHapticFeedback(needsToPrepare: true, style: .medium)
+        } else {
+            // User tapped the wrong number
+            feedbackSelection(isRight: false)
+            playNotificationHapticFeedback(notificationFeedbackType: .error)
+        }
+        game.numberSelected(sender.tag)
     }
     
     @objc func buttonResign(sender: UIButton) {

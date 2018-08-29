@@ -14,7 +14,7 @@ extension GameViewController {
     func updateButtonsFrames() {
         for i in buttons.indices {
             let button = buttons[i]
-            if let viewFrame = grid[i]?.insetBy(dx: 2.0, dy: 2.0) {
+            if let viewFrame = grid[i]?.insetBy(dx: gridInset, dy: gridInset) {
                 button.frame = viewFrame
             }
         }
@@ -68,17 +68,17 @@ extension GameViewController {
         for _ in 0..<count {
             let button: UIButton = {
                 let button = UIButton(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
-                button.titleLabel?.font = UIFont.systemFont(ofSize: 35)
+                button.titleLabel?.font = UIFont.systemFont(ofSize: numbersFontSize)
                 button.titleLabel?.alpha = 0.0
                 button.backgroundColor = game.colorfulCellsMode ? randomColor : defaultCellColor
-                button.layer.cornerRadius = 5
+                button.layer.cornerRadius = cornerRadius
                 button.addTarget(self, action: #selector(buttonPressed(sender:)), for: .touchDown)
                 button.addTarget(self, action: #selector(buttonResign(sender:)), for: .touchUpInside)
                 button.isEnabled = false
                 return button
             }()
             buttons.append(button)
-            view.addSubview(button)
+            buttonsContainerView.addSubview(button)
         }
     }
     
