@@ -18,10 +18,18 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     // MARK: -
     
     lazy var feedbackView: UIView = {
-        let statusBarFrame = UIApplication.shared.statusBarFrame
         let view = UIView(frame: self.view.frame)
         view.backgroundColor = .clear
         view.alpha = 0.25
+        return view
+    }()
+    
+    lazy var buttonsContainerView: UIView = {
+        let height = self.view.bounds.width / CGFloat(game.colums) * CGFloat(game.rows)
+        let pointY = self.view.bounds.midY - height / 2 - 38
+        let frame = CGRect(x: 0.0, y: pointY, width: self.view.bounds.width, height: height)
+        let view = UIView(frame: frame)
+        view.backgroundColor = .clear
         return view
     }()
     
@@ -31,12 +39,13 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         let blur = UIBlurEffect(style: .light)
         let view = UIVisualEffectView(effect: blur)
         let offset: CGFloat = 2.0
-        view.frame = CGRect(
-            x: buttonsFieldFrame.minX + offset,
-            y: buttonsFieldFrame.minY + offset - 50,
-            width: buttonsFieldFrame.width - offset * 2,    // WTF?
-            height: buttonsFieldFrame.height - offset * 2 + 100   // WTF?
-        )
+        view.frame = self.view.frame
+//        view.frame = CGRect(
+//            x: buttonsFieldFrame.minX + offset,
+//            y: buttonsFieldFrame.minY + offset - 50,
+//            width: buttonsFieldFrame.width - offset * 2,    // WTF?
+//            height: buttonsFieldFrame.height - offset * 2 + 100   // WTF?
+//        )
         view.alpha = 0.0
         view.layer.cornerRadius = 20
         view.clipsToBounds = true
@@ -63,14 +72,14 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         let label = UILabel(frame: CGRect(x: 0.0, y: 0.0, width: 200.0, height: 100.0))
         label.text = "140.00"
         label.center = messageView.center
-        label.textAlignment = .left
-        label.font = UIFont(name: label.font.fontName, size: 25)
+        label.textAlignment = .center
+        label.font = UIFont(name: label.font.fontName, size: 50)
         label.numberOfLines = 0
         return label
     }()
-
+    
     // MARK: -
-
+    
     private var buttonsFieldFrame: CGRect {
         let height = view.bounds.width / CGFloat(game.colums) * CGFloat(game.rows)
         let pointY = view.bounds.midY - height / 2 - 38
@@ -84,11 +93,10 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     }
     var buttons = [UIButton]()
     
+    let defaultCellColor = #colorLiteral(red: 0.2203874684, green: 0.2203874684, blue: 0.2203874684, alpha: 1)
     private let colorSets = [[#colorLiteral(red: 0.03137254902, green: 0.3058823529, blue: 0.4941176471, alpha: 1), #colorLiteral(red: 0.06666666667, green: 0.4823529412, blue: 0.462745098, alpha: 1), #colorLiteral(red: 0.05098039216, green: 0.4392156863, blue: 0.05882352941, alpha: 1)],
                              [#colorLiteral(red: 0.9921568627, green: 0.5764705882, blue: 0.1490196078, alpha: 1), #colorLiteral(red: 0.7019607843, green: 0.1019607843, blue: 0.06274509804, alpha: 1), #colorLiteral(red: 0.5921568627, green: 0.1176470588, blue: 0.368627451, alpha: 1)]]
-    private lazy var randomColorSet = colorSets[colorSets.count.arc4random]
-    
-    let defaultCellColor = #colorLiteral(red: 0.2203874684, green: 0.2203874684, blue: 0.2203874684, alpha: 1)
+    lazy var randomColorSet = colorSets[colorSets.count.arc4random]
     var randomColor: UIColor {
         let randomColor = randomColorSet[randomColorSet.count.arc4random]
         return randomColor
@@ -118,7 +126,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         self.view.addSubview(messageView)
         self.view.addSubview(feedbackView)
         self.view.sendSubview(toBack: feedbackView)
-
+        
         messageView.contentView.addSubview(titleLabel)
         messageView.contentView.addSubview(timeLabel)
         
@@ -129,28 +137,34 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     // MARK: - Actions
     
     @objc func buttonPressed(sender: UIButton) {
-        if game.nextNumberToTap < game.maxNumber {
-            let selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
-            game.numberSelected(sender.tag)
-            feedbackSelection(isRight: selectedNumberIsRight)
-            selectedNumberIsRight ? playImpactHapticFeedback(needsToPrepare: true, style: .medium) :
-                                    playNotificationHapticFeedback(notificationFeedbackType: .error)
-            if game.shuffleNumbersMode {
-                game.shuffleNumbers()
-                updateNumbers(animated: true)
-            } else {
-                sender.titleLabel?.alpha = 0.2
-            }
-            if game.shuffleColorsMode {
-                shuffleColors(animated: true)
-            }
-        } else {
+//        let selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
+//        if selectedNumberIsRight && sender.tag == game.maxNumber {
             // User tapped the last number
             game.finishGame()
             showResults(time: game.elapsedTime, maxNumber: game.maxNumber, level: game.level - 1)
             prepareForNewGame(hideMessageLabel: false)
             playNotificationHapticFeedback(notificationFeedbackType: .success)
-        }
+            return
+//        }
+//        if game.shuffleNumbersMode {
+//            game.shuffleNumbers()
+//            updateNumbers(animated: true)
+//        } else {
+//            sender.titleLabel?.alpha = 0.2
+//        }
+//        if game.shuffleColorsMode {
+//            shuffleColors(animated: true)
+//        }
+//        if selectedNumberIsRight {
+//            // User tapped the right number
+//            feedbackSelection(isRight: true)
+//            playImpactHapticFeedback(needsToPrepare: true, style: .medium)
+//        } else {
+//            // User tapped the wrong number
+//            feedbackSelection(isRight: false)
+//            playNotificationHapticFeedback(notificationFeedbackType: .error)
+//        }
+//        game.numberSelected(sender.tag)
     }
     
     var gameFinished = false {
@@ -184,7 +198,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         
         if game.winkNumbersMode || game.winkColorsMode {
             timer = Timer.scheduledTimer(
-                timeInterval: 0.2,
+                timeInterval: game.winkColorsMode ? 0.1 : 0.2,
                 target: self,
                 selector: #selector(timerSceduled),
                 userInfo: nil,
@@ -201,11 +215,11 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     func colorfulCellsModeStateChanged(to state: Bool) {
         prepareForNewGame()
-//        game.colorfulCellsMode = state
+        game.colorfulCellsMode = state
         if state == true {
             buttons.forEach { $0.backgroundColor = randomColor }
         } else {
-            buttons.forEach { $0.backgroundColor = .lightGray }
+            buttons.forEach { $0.backgroundColor = defaultCellColor }
         }
     }
     
@@ -234,21 +248,22 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     func shuffleColorsModeStateChanged(to state: Bool) {
         prepareForNewGame()
-//        game.shuffleColorsMode = state
+        game.shuffleColorsMode = state
     }
     
     func shuffleNumbersModeStateChanged(to state: Bool) {
         prepareForNewGame()
-//        game.shuffleNumbersMode = state
+        game.shuffleNumbersMode = state
     }
     
     func winkNumbersModeStateChanged(to state: Bool) {
         prepareForNewGame()
-//        game.winkMode = state
+        game.winkNumbersMode = state
     }
     
     func winkColorsModeStateChanged(to state: Bool) {
         prepareForNewGame()
+        game.winkColorsMode = state
     }
     
     // MARK: - Segue

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QuartzCore
 
 extension GameViewController {
     
@@ -21,7 +22,7 @@ extension GameViewController {
     
     func showResults(time: Double, maxNumber: Int, level: Int) {
         titleLabel.text = time < 60.0 ? "Excellent!" : "Almost there!"
-        timeLabel.text = String(format: "Max number: \(maxNumber)\nLevel: \(level)\nTime: %.02f", time)
+        timeLabel.text = String(format: "%.02f", time)
         self.view.bringSubview(toFront: messageView)
         UIViewPropertyAnimator.runningPropertyAnimator(
             withDuration: 0.15,
@@ -203,7 +204,7 @@ extension GameViewController {
         if game.colorfulCellsMode {
             shuffleColors(animated: true)
         }
-        if game.winkNumbersMode {
+        if game.winkNumbersMode || game.winkColorsMode {
             timer.invalidate()
             buttons.forEach { $0.titleLabel?.layer.removeAllAnimations() }
         }
@@ -256,13 +257,28 @@ extension GameViewController {
     }
     
     func winkColor(at button: UIButton) {
-        UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: 0.5,
-            delay: 0.0,
-            options: [],
-            animations: {
-                button.backgroundColor = self.randomColor
-        })
+        let buttonColor = button.backgroundColor
+        var otherColors = randomColorSet
+        if let buttonColor = buttonColor {
+            let index = otherColors.index(of: buttonColor)
+            if let index = index {
+                otherColors.remove(at: index)
+                UIViewPropertyAnimator.runningPropertyAnimator(
+                    withDuration: 0.5,
+                    delay: 0.0,
+                    options: [],
+                    animations: {
+                        button.backgroundColor = otherColors[otherColors.count.arc4random]
+                })
+            }
+        }
+    }
+    
+    func executionTimeInterval(block: () -> ()) -> CFTimeInterval {
+        let start = CACurrentMediaTime()
+        block();
+        let end = CACurrentMediaTime()
+        return end - start
     }
 
 }

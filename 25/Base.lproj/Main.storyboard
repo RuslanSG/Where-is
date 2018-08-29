@@ -90,7 +90,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
-                            <tableViewSection headerTitle="Game Mode (DISABLED FOR TESTING)" footerTitle="Setup the game mode." id="KfN-yX-A4c">
+                            <tableViewSection headerTitle="Game Mode" footerTitle="Setup the game mode." id="KfN-yX-A4c">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="oJC-Sj-QO8">
                                         <rect key="frame" x="0.0" y="55.5" width="375" height="44"/>
@@ -179,8 +179,37 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="9BH-vS-ZDi">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="evT-lp-HU8">
                                         <rect key="frame" x="0.0" y="187.5" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="evT-lp-HU8" id="Rlv-Ck-s6c">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wink colors mode" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5MC-mq-uCh">
+                                                    <rect key="frame" x="15" y="12" width="138" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="lh6-Vw-gnA">
+                                                    <rect key="frame" x="311" y="6" width="51" height="31"/>
+                                                    <connections>
+                                                        <action selector="winkColorsModeSwitcherValueChanged:" destination="3hQ-19-uEL" eventType="valueChanged" id="vbq-pC-BOl"/>
+                                                    </connections>
+                                                </switch>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="5MC-mq-uCh" firstAttribute="centerY" secondItem="Rlv-Ck-s6c" secondAttribute="centerY" id="5Hb-JS-rPi"/>
+                                                <constraint firstAttribute="trailing" secondItem="lh6-Vw-gnA" secondAttribute="trailing" constant="15" id="BAq-5q-rwY"/>
+                                                <constraint firstItem="5MC-mq-uCh" firstAttribute="leading" secondItem="Rlv-Ck-s6c" secondAttribute="leading" constant="15" id="EHw-Co-oDn"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="5MC-mq-uCh" secondAttribute="trailing" constant="20" symbolic="YES" id="ddX-UV-jyW"/>
+                                                <constraint firstItem="lh6-Vw-gnA" firstAttribute="centerY" secondItem="Rlv-Ck-s6c" secondAttribute="centerY" id="iJc-XR-9G8"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="9BH-vS-ZDi">
+                                        <rect key="frame" x="0.0" y="231.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="9BH-vS-ZDi" id="PK6-63-IM5">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
@@ -208,78 +237,9 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="evT-lp-HU8">
-                                        <rect key="frame" x="0.0" y="231.5" width="375" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="evT-lp-HU8" id="Rlv-Ck-s6c">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wink colors mode" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5MC-mq-uCh">
-                                                    <rect key="frame" x="15" y="12" width="138" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="lh6-Vw-gnA">
-                                                    <rect key="frame" x="311" y="6" width="51" height="31"/>
-                                                </switch>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="5MC-mq-uCh" firstAttribute="centerY" secondItem="Rlv-Ck-s6c" secondAttribute="centerY" id="5Hb-JS-rPi"/>
-                                                <constraint firstAttribute="trailing" secondItem="lh6-Vw-gnA" secondAttribute="trailing" constant="15" id="BAq-5q-rwY"/>
-                                                <constraint firstItem="5MC-mq-uCh" firstAttribute="leading" secondItem="Rlv-Ck-s6c" secondAttribute="leading" constant="15" id="EHw-Co-oDn"/>
-                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="5MC-mq-uCh" secondAttribute="trailing" constant="20" symbolic="YES" id="ddX-UV-jyW"/>
-                                                <constraint firstItem="lh6-Vw-gnA" firstAttribute="centerY" secondItem="Rlv-Ck-s6c" secondAttribute="centerY" id="iJc-XR-9G8"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="LEVEL &amp; MAX NUMBER" id="Ct6-Pk-3eQ">
-                                <mutableString key="footerTitle">Choose level and max number.
-
-Level 1:
-Colorful cells 			— NO
-Change numbers		— NO
-Change colors		 	— NO
-Wink numbers mode 	— NO
-Wink colors mode 		— NO
-
-Level 2:
-Colorful cells 			— YES
-Change numbers		— NO
-Change colors 		— NO
-Wink numbers mode 	— NO
-Wink colors mode		— NO
-
-Level 3:
-Colorful cells 			— YES
-Change numbers 		— YES
-Change colors 		— NO
-Wink numbers mode 	— NO
-Wink colors mode 		— NO
-
-Level 4:
-Colorful cells 			— YES
-Change numbers 		— YES
-Change colors 		— YES
-Wink numbers mode 	— NO
-Wink colors mode 		— NO
-
-Level 5:
-Colorful cells 			— YES
-Change numbers 		— YES
-Change colors 		— YES
-Wink numbers mode 	— YES
-Wink colors mode 		— NO
-
-Level 6:
-Colorful cells 			— YES
-Change numbers 		— YES
-Change colors 		— YES
-Wink numbers mode 	— YES
-Wink colors mode 		— YES</mutableString>
+                            <tableViewSection headerTitle="LEVEL &amp; MAX NUMBER" footerTitle="Choose level and max number." id="Ct6-Pk-3eQ">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="nqK-xB-ueq">
                                         <rect key="frame" x="0.0" y="351" width="375" height="44"/>
@@ -288,8 +248,8 @@ Wink colors mode 		— YES</mutableString>
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Level" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tKO-CG-E8A">
-                                                    <rect key="frame" x="15" y="12" width="40" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Level (disabled)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tKO-CG-E8A">
+                                                    <rect key="frame" x="15" y="12" width="121" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>

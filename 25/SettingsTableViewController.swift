@@ -53,13 +53,6 @@ class SettingsTableViewController: UITableViewController {
     var minPossibleNumber: Int!
     
     override func viewWillAppear(_ animated: Bool) {
-        // Swithers disabled for levels testing
-        colorModeSwitcher.isEnabled = false
-        shuffleColorsModeSwitcher.isEnabled = false
-        shuffleNumbersModeSwitcher.isEnabled = false
-        winkNumbersModeSwitcher.isEnabled = false
-        winkColorsModeSwitcher.isEnabled = false
-        
         // TODO: Use OutletCollections
         colorModeSwitcher.setOn(colorfulCellsMode, animated: false)
         colorModeSwitcher.onTintColor = userInterfaceColor
@@ -81,11 +74,14 @@ class SettingsTableViewController: UITableViewController {
         if !colorModeSwitcher.isOn {
             shuffleColorsModeSwitcher.isEnabled = false
             shuffleColorsModeSwitcher.setOn(false, animated: false)
+            winkColorsModeSwitcher.isEnabled = false
+            winkColorsModeSwitcher.setOn(false, animated: false)
         }
 
         levelLabel.text = String(level)
         maxNumberLabel.text = String(maxNumber)
 
+        levelStepper.isEnabled = false // Disabled for testing
         levelStepper.maximumValue = Double(maxLevel)
         levelStepper.minimumValue = Double(minLevel)
         levelStepper.value = Double(level)
@@ -109,8 +105,10 @@ class SettingsTableViewController: UITableViewController {
         delegate?.colorfulCellsModeStateChanged(to: sender.isOn)
         if !sender.isOn && shuffleColorsModeSwitcher.isOn {
             shuffleColorsModeSwitcher.setOn(false, animated: true)
+            winkColorsModeSwitcher.setOn(false, animated: true)
         }
         shuffleColorsModeSwitcher.isEnabled = sender.isOn
+        winkColorsModeSwitcher.isEnabled = sender.isOn
     }
     
     @IBAction func shuffleColorsModeSwitcherValueChanged(_ sender: UISwitch) {
