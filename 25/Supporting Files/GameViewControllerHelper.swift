@@ -11,6 +11,8 @@ import QuartzCore
 
 extension GameViewController {
     
+    // MARK: - Cells
+    
     func updateButtonsFrames() {
         for i in buttons.indices {
             let button = buttons[i]
@@ -18,31 +20,6 @@ extension GameViewController {
                 button.frame = viewFrame
             }
         }
-    }
-    
-    func showResults(time: Double, maxNumber: Int, level: Int) {
-        titleLabel.text = time < 60.0 ? "Excellent!" : "Almost there!"
-        timeLabel.text = String(format: "%.02f", time)
-        self.view.bringSubview(toFront: messageView)
-        UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: 0.15,
-            delay: 0.0,
-            options: [],
-            animations: {
-                self.messageView.alpha = 1.0
-        })
-    }
-    
-    func hideResults() {
-        titleLabel.text = nil
-        timeLabel.text = nil
-        UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: 0.15,
-            delay: 0.0,
-            options: [],
-            animations: {
-                self.messageView.alpha = 0.0
-        })
     }
     
     func feedbackSelection(isRight: Bool) {
@@ -70,7 +47,7 @@ extension GameViewController {
                 let button = UIButton(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
                 button.titleLabel?.font = UIFont.systemFont(ofSize: numbersFontSize)
                 button.titleLabel?.alpha = 0.0
-                button.backgroundColor = game.colorfulCellsMode ? randomColor : defaultCellColor
+                button.backgroundColor = game.colorfulCellsMode ? randomColor : defaultCellsColor
                 button.layer.cornerRadius = cornerRadius
                 button.addTarget(self, action: #selector(buttonPressed(sender:)), for: .touchDown)
                 button.addTarget(self, action: #selector(buttonResign(sender:)), for: .touchUpInside)
@@ -92,6 +69,8 @@ extension GameViewController {
             buttons.removeLast()
         }
     }
+    
+    // MARK: - Numbers
     
     func showNumbers(animated: Bool) {
         buttons.forEach({ (button) in
@@ -165,23 +144,29 @@ extension GameViewController {
         }
     }
     
-    func removeColors(animated: Bool) {
-        buttons.forEach({ (button) in
-            if animated {
+    func winkNumber(at button: UIButton) {
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: 0.5,
+            delay: 0.0,
+            options: [],
+            animations: {
+                button.titleLabel?.alpha = 0.0
+        }) { (position) in
+            if self.game.inGame {
                 UIViewPropertyAnimator.runningPropertyAnimator(
-                    withDuration: 0.1,
-                    delay: 0.0,
+                    withDuration: 0.5,
+                    delay: 1.0,
                     options: [],
                     animations: {
-                        button.backgroundColor = self.defaultCellColor
+                        button.titleLabel?.alpha = 1.0
                 })
-            } else {
-                button.backgroundColor = defaultCellColor
             }
-        })
+        }
     }
     
-    func shuffleColors(animated: Bool) {
+    // MARK: - Colors
+    
+    func shuffleCellColors(animated: Bool) {
         buttons.forEach({ (button) in
             if animated {
                 UIViewPropertyAnimator.runningPropertyAnimator(
@@ -197,18 +182,124 @@ extension GameViewController {
         })
     }
     
+    func removeCellColors(animated: Bool) {
+        buttons.forEach({ (button) in
+            if animated {
+                UIViewPropertyAnimator.runningPropertyAnimator(
+                    withDuration: 0.1,
+                    delay: 0.0,
+                    options: [],
+                    animations: {
+                        button.backgroundColor = self.defaultCellsColor
+                })
+            } else {
+                button.backgroundColor = defaultCellsColor
+            }
+        })
+    }
+    
+    func winkCellColor(at button: UIButton) {
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: 0.5,
+            delay: 0.0,
+            options: [],
+            animations: {
+                if let color = self.getAnotherColor(for: button, from: self.randomColorSet) {
+                    button.backgroundColor = color
+                }
+        })
+    }
+    
+    func shuffleNumberColors(animated: Bool) {
+        buttons.forEach({ (button) in
+            if animated {
+                UIViewPropertyAnimator.runningPropertyAnimator(
+                    withDuration: 0.1,
+                    delay: 0.0,
+                    options: [],
+                    animations: {
+                        button.setTitleColor(self.getAnotherColor(for: button, from: self.randomColorSet), for: .normal)
+                })
+            } else {
+                button.setTitleColor(getAnotherColor(for: button, from: self.randomColorSet), for: .normal)
+            }
+        })
+    }
+    
+    func removeNumberColors(animated: Bool) {
+        buttons.forEach({ (button) in
+            if animated {
+                UIViewPropertyAnimator.runningPropertyAnimator(
+                    withDuration: 0.1,
+                    delay: 0.0,
+                    options: [],
+                    animations: {
+                        button.setTitleColor(self.defaultNumbersColor, for: .normal)
+                })
+            } else {
+                button.setTitleColor(self.defaultNumbersColor, for: .normal)
+            }
+        })
+    }
+    
+    // MARK: - Results
+    
+    func showResults(time: Double, maxNumber: Int, level: Int) {
+        titleLabel.text = time < 60.0 ? "Excellent!" : "Almost there!"
+        actionButton.setTitle("New Game", for: .normal)
+        timeLabel.text = String(format: "%.02f", time)
+        self.view.bringSubview(toFront: messageView)
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: 0.15,
+            delay: 0.0,
+            options: [],
+            animations: {
+                self.messageView.alpha = 1.0
+        })
+    }
+    
+    func hideResults() {
+        titleLabel.text = nil
+        timeLabel.text = nil
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: 0.15,
+            delay: 0.0,
+            options: [],
+            animations: {
+                self.messageView.alpha = 0.0
+        })
+    }
+    
+    // MARK: - Helping Methods
+    
     func prepareForNewGame(hideMessageLabel: Bool = true) {
         game.newGame()
         setNumbers()
         gameFinished = true
         if game.colorfulCellsMode {
-            shuffleColors(animated: true)
+            shuffleCellColors(animated: true)
+        }
+        if game.colorfulNumbersMode {
+            shuffleNumberColors(animated: true)
         }
         if game.winkNumbersMode || game.winkColorsMode {
             timer.invalidate()
             buttons.forEach { $0.titleLabel?.layer.removeAllAnimations() }
         }
         hideNumbers(animated: false)
+    }
+    
+    func getAnotherColor(for button: UIButton, from colorSet: [UIColor]) -> UIColor? {
+        let buttonColor = button.backgroundColor
+        var otherColors = colorSet
+        if let buttonColor = buttonColor {
+            let index = otherColors.index(of: buttonColor)
+            if let index = index {
+                otherColors.remove(at: index)
+                return otherColors[otherColors.count.arc4random]
+            }
+        }
+        return nil
     }
     
     enum CellPart {
@@ -232,53 +323,8 @@ extension GameViewController {
         }
         if cellPart == .color {
             let button = buttons[buttons.count.arc4random]
-            winkColor(at: button)
+            winkCellColor(at: button)
         }
-    }
-    
-    func winkNumber(at button: UIButton) {
-        UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: 0.5,
-            delay: 0.0,
-            options: [],
-            animations: {
-                button.titleLabel?.alpha = 0.0
-        }) { (position) in
-            if self.game.inGame {
-                UIViewPropertyAnimator.runningPropertyAnimator(
-                    withDuration: 0.5,
-                    delay: 1.0,
-                    options: [],
-                    animations: {
-                        button.titleLabel?.alpha = 1.0
-                })
-            }
-        }
-    }
-    
-    func winkColor(at button: UIButton) {
-        let buttonColor = button.backgroundColor
-        var otherColors = randomColorSet
-        if let buttonColor = buttonColor {
-            let index = otherColors.index(of: buttonColor)
-            if let index = index {
-                otherColors.remove(at: index)
-                UIViewPropertyAnimator.runningPropertyAnimator(
-                    withDuration: 0.5,
-                    delay: 0.0,
-                    options: [],
-                    animations: {
-                        button.backgroundColor = otherColors[otherColors.count.arc4random]
-                })
-            }
-        }
-    }
-    
-    func executionTimeInterval(block: () -> ()) -> CFTimeInterval {
-        let start = CACurrentMediaTime()
-        block();
-        let end = CACurrentMediaTime()
-        return end - start
     }
 
 }

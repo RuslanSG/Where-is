@@ -25,10 +25,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     }()
     
     lazy var buttonsContainerView: UIView = {
-        let height = self.view.bounds.width / CGFloat(game.colums) * CGFloat(game.rows)
-        let pointY = self.view.bounds.midY - height / 2 - 38
-        let frame = CGRect(x: 0.0, y: pointY, width: self.view.bounds.width, height: height)
-        let view = UIView(frame: frame)
+        let view = UIView(frame: buttonsFieldFrame)
         view.backgroundColor = .clear
         return view
     }()
@@ -41,15 +38,13 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         let offset: CGFloat = 2.0
         view.frame = self.view.frame
         view.alpha = 0.0
-        view.layer.cornerRadius = 20
-        view.clipsToBounds = true
         return view
     }()
     
     let titleLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = UIFont(name: label.font.fontName, size: 30)
+        label.font = UIFont(name: label.font.fontName, size: 45)
         return label
     }()
     
@@ -63,13 +58,24 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     }()
     
     lazy var timeLabel: UILabel = {
-        let label = UILabel(frame: CGRect(x: 0.0, y: 0.0, width: 200.0, height: 100.0))
+        let label = UILabel(frame: CGRect(x: 0.0, y: 0.0, width: 250.0, height: 100.0))
         label.text = "140.00"
         label.center = messageView.center
         label.textAlignment = .center
-        label.font = UIFont(name: label.font.fontName, size: 50)
+        label.font = UIFont(name: label.font.fontName, size: 90)
         label.numberOfLines = 0
+        label.adjustsFontSizeToFitWidth = true
         return label
+    }()
+    
+    lazy var actionButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = userInterfaceColor
+        button.layer.cornerRadius = cornerRadius
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 15.0)
+        button.addTarget(self, action: #selector(startButtonPressed(sender:)), for: .touchUpInside)
+        return button
     }()
     
     // MARK: -
@@ -95,11 +101,11 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         let pointY = self.view.bounds.midY - height / 2 - 38
         let staturBarHeight = UIApplication.shared.statusBarFrame.height
         let startButtonFrameY = startButton.frame.minY
-        let maxAlllowedButtonsContainerViewHeight = startButtonFrameY - staturBarHeight - gridInset / 2
+        let maxAlllowedButtonsContainerViewHeight = startButtonFrameY - staturBarHeight - gridInset
         return CGRect(
-            x: gridInset / 2,
+            x: gridInset,
             y: pointY > 0 ? pointY : staturBarHeight,
-            width: self.view.bounds.width - gridInset,
+            width: self.view.bounds.width - gridInset * 2,
             height: height < maxAlllowedButtonsContainerViewHeight ? height : maxAlllowedButtonsContainerViewHeight
         )
     }
@@ -124,10 +130,18 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         }
     }
     
-    let defaultCellColor = #colorLiteral(red: 0.2203874684, green: 0.2203874684, blue: 0.2203874684, alpha: 1)
+    var timer = Timer()
+    
+    // MARK: - Colors
+    
+    let defaultCellsColor = #colorLiteral(red: 0.2203874684, green: 0.2203874684, blue: 0.2203874684, alpha: 1)
+    let defaultNumbersColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+    
     private let colorSets = [[#colorLiteral(red: 0.03137254902, green: 0.3058823529, blue: 0.4941176471, alpha: 1), #colorLiteral(red: 0.06666666667, green: 0.4823529412, blue: 0.462745098, alpha: 1), #colorLiteral(red: 0.05098039216, green: 0.4392156863, blue: 0.05882352941, alpha: 1)],
-                             [#colorLiteral(red: 0.9921568627, green: 0.5764705882, blue: 0.1490196078, alpha: 1), #colorLiteral(red: 0.7019607843, green: 0.1019607843, blue: 0.06274509804, alpha: 1), #colorLiteral(red: 0.5921568627, green: 0.1176470588, blue: 0.368627451, alpha: 1)]]
+                             [#colorLiteral(red: 0.9921568627, green: 0.5764705882, blue: 0.1490196078, alpha: 1), #colorLiteral(red: 0.7019607843, green: 0.1019607843, blue: 0.06274509804, alpha: 1), #colorLiteral(red: 0.5921568627, green: 0.1176470588, blue: 0.368627451, alpha: 1)],
+                             [#colorLiteral(red: 0.5738074183, green: 0.5655357838, blue: 0, alpha: 1), #colorLiteral(red: 0.5787474513, green: 0.3215198815, blue: 0, alpha: 1), #colorLiteral(red: 0.370555222, green: 0.3705646992, blue: 0.3705595732, alpha: 1)]]
     lazy var randomColorSet = colorSets[colorSets.count.arc4random]
+    
     var randomColor: UIColor {
         let randomColor = randomColorSet[randomColorSet.count.arc4random]
         return randomColor
@@ -135,9 +149,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     private lazy var userInterfaceColor = randomColor
     
-    var timer = Timer()
-    
-    // MARK: -
+    // MARK: - View Controller Lifecycle
     
     override func viewDidLoad() {
         setupInputComponents()
@@ -165,9 +177,14 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         
         messageView.contentView.addSubview(titleLabel)
         messageView.contentView.addSubview(timeLabel)
+        messageView.contentView.addSubview(actionButton)
         
         messageView.addConstraintsWithFormat(format: "H:|-30-[v0]-30-|", views: titleLabel)
-        messageView.addConstraintsWithFormat(format: "V:|-60-[v0(35)]", views: titleLabel)
+        messageView.addConstraintsWithFormat(format: "V:|-100-[v0(35)]", views: titleLabel)
+        
+        let currentDeviceIsIPhoneX = UIScreen.main.nativeBounds.height == 2436
+        messageView.addConstraintsWithFormat(format: "H:|-\(gridInset * 2)-[v0]-\(gridInset * 2)-|", views: actionButton)
+        messageView.addConstraintsWithFormat(format: currentDeviceIsIPhoneX ? "V:[v0(40)]-76-|" : "V:[v0(40)]-42-|", views: actionButton)
     }
     
     // MARK: - Actions
@@ -189,7 +206,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             sender.titleLabel?.alpha = 0.2
         }
         if game.shuffleColorsMode {
-            shuffleColors(animated: true)
+            shuffleCellColors(animated: true)
         }
         if selectedNumberIsRight {
             // User tapped the right number
@@ -241,23 +258,52 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     // MARK: - SettingsTableViewControllerDelegate
     
-    func colorfulCellsModeStateChanged(to state: Bool) {
+    func shuffleNumbersModeStateChanged(to state: Bool) {
+        game.shuffleNumbersMode = state
         prepareForNewGame()
-        game.colorfulCellsMode = state
-        if state == true {
-            buttons.forEach { $0.backgroundColor = randomColor }
-        } else {
-            buttons.forEach { $0.backgroundColor = defaultCellColor }
+    }
+    
+    func colorfulNumbersModeStateChanged(to state: Bool) {
+        game.colorfulNumbersMode = state
+        prepareForNewGame()
+        if state == false {
+            removeNumberColors(animated: false)
         }
     }
+    
+    func winkNumbersModeStateChanged(to state: Bool) {
+        game.winkNumbersMode = state
+        prepareForNewGame()
+    }
+    
+    
+    func colorfulCellsModeStateChanged(to state: Bool) {
+        game.colorfulCellsMode = state
+        prepareForNewGame()
+        if state == false {
+            removeCellColors(animated: false)
+            removeNumberColors(animated: false)
+        }
+    }
+    
+    func shuffleColorsModeStateChanged(to state: Bool) {
+        prepareForNewGame()
+        game.shuffleColorsMode = state
+    }
+    
+    func winkColorsModeStateChanged(to state: Bool) {
+        prepareForNewGame()
+        game.winkColorsMode = state
+    }
+
     
     func levelChanged(to level: Int) {
         prepareForNewGame()
         game.level = level
         if level == game.minLevel {
-            removeColors(animated: false)
+            removeCellColors(animated: false)
         } else if level > game.minLevel {
-            shuffleColors(animated: false)
+            shuffleCellColors(animated: false)
         }
     }
     
@@ -274,39 +320,26 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         hideResults()
     }
     
-    func shuffleColorsModeStateChanged(to state: Bool) {
-        prepareForNewGame()
-        game.shuffleColorsMode = state
-    }
-    
-    func shuffleNumbersModeStateChanged(to state: Bool) {
-        prepareForNewGame()
-        game.shuffleNumbersMode = state
-    }
-    
-    func winkNumbersModeStateChanged(to state: Bool) {
-        prepareForNewGame()
-        game.winkNumbersMode = state
-    }
-    
-    func winkColorsModeStateChanged(to state: Bool) {
-        prepareForNewGame()
-        game.winkColorsMode = state
-    }
-    
     // MARK: - Segue
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let nav = segue.destination as? UINavigationController, let svc = nav.topViewController as? SettingsTableViewController {
+        if  let nav = segue.destination as? UINavigationController,
+            let svc = nav.topViewController as? SettingsTableViewController {
             svc.delegate = self
+            
             svc.userInterfaceColor = userInterfaceColor
+            
+            svc.shuffleNumbersMode = game.shuffleNumbersMode
+            svc.colorfulNumbersMode = game.colorfulNumbersMode
+            svc.winkNumbersMode = game.winkNumbersMode
+
             svc.colorfulCellsMode = game.colorfulCellsMode
             svc.shuffleColorsMode = game.shuffleColorsMode
-            svc.shuffleNumbersMode = game.shuffleNumbersMode
-            svc.winkNumbersMode = game.winkNumbersMode
             svc.winkColorsMode = game.winkColorsMode
+            
             svc.level = game.level
             svc.maxNumber = game.maxNumber
+            
             svc.maxLevel = game.maxLevel
             svc.minLevel = game.minLevel
             svc.maxPossibleNumber = game.maxPossibleNumber
