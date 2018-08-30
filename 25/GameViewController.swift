@@ -145,7 +145,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         return darkMode ? cellsColors.darkMode : cellsColors.lightMode
     }
     var defaultNumbersColor: UIColor {
-        return darkMode ? numbersColors.darkMode : numbersColors.lightMode
+        return darkMode || game.colorfulCellsMode ? numbersColors.darkMode : numbersColors.lightMode
     }
     var mainViewColor: UIColor {
         return darkMode ? mainViewColors.darkMode : mainViewColors.lightMode
@@ -318,9 +318,9 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     func colorfulCellsModeStateChanged(to state: Bool) {
         game.colorfulCellsMode = state
         prepareForNewGame()
+        removeNumberColors(animated: false)
         if state == false {
             removeCellColors(animated: false)
-            removeNumberColors(animated: false)
         }
     }
     
