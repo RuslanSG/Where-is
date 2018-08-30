@@ -48,6 +48,7 @@ extension GameViewController {
                 button.titleLabel?.font = UIFont.systemFont(ofSize: numbersFontSize)
                 button.titleLabel?.alpha = 0.0
                 button.backgroundColor = game.colorfulCellsMode ? randomColor : defaultCellsColor
+                button.setTitleColor(defaultNumbersColor, for: .normal)
                 button.layer.cornerRadius = cornerRadius
                 button.addTarget(self, action: #selector(buttonPressed(sender:)), for: .touchDown)
                 button.addTarget(self, action: #selector(buttonResign(sender:)), for: .touchUpInside)
@@ -199,18 +200,20 @@ extension GameViewController {
     }
     
     func winkCellColor(at button: UIButton) {
+        let colorSet = randomColorSet.map { darkMode ? $0.dark : $0.light }
         UIViewPropertyAnimator.runningPropertyAnimator(
             withDuration: 0.5,
             delay: 0.0,
             options: [],
             animations: {
-                if let color = self.getAnotherColor(for: button, from: self.randomColorSet) {
+                if let color = self.getAnotherColor(for: button, from: colorSet) {
                     button.backgroundColor = color
                 }
         })
     }
     
     func shuffleNumberColors(animated: Bool) {
+        let colorSet = randomColorSet.map { darkMode ? $0.dark : $0.light }
         buttons.forEach({ (button) in
             if animated {
                 UIViewPropertyAnimator.runningPropertyAnimator(
@@ -218,10 +221,10 @@ extension GameViewController {
                     delay: 0.0,
                     options: [],
                     animations: {
-                        button.setTitleColor(self.getAnotherColor(for: button, from: self.randomColorSet), for: .normal)
+                        button.setTitleColor(self.getAnotherColor(for: button, from: colorSet), for: .normal)
                 })
             } else {
-                button.setTitleColor(getAnotherColor(for: button, from: self.randomColorSet), for: .normal)
+                button.setTitleColor(getAnotherColor(for: button, from: colorSet), for: .normal)
             }
         })
     }

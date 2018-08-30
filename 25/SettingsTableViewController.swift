@@ -20,11 +20,17 @@ protocol SettingsTableViewControllerDelegate {
     
     func levelChanged(to level: Int)
     func maxNumberChanged(to maxNumber: Int)
+    
+    func darkModeStateChanged(to state: Bool)
 
 }
 
 class SettingsTableViewController: UITableViewController {
    
+    @IBOutlet var switchers: [UISwitch]!
+    @IBOutlet var labels: [UILabel]!
+    @IBOutlet var cells: [UITableViewCell]!
+    
     @IBOutlet weak var doneButton: UIBarButtonItem!
     
     @IBOutlet weak var shuffleNumbersModeSwitcher: UISwitch!
@@ -40,6 +46,8 @@ class SettingsTableViewController: UITableViewController {
     
     @IBOutlet weak var levelStepper: UIStepper!
     @IBOutlet weak var maxNumberStepper: UIStepper!
+    
+    @IBOutlet weak var darkModeSwitcher: UISwitch!
     
     var delegate: SettingsTableViewControllerDelegate?
     
@@ -61,8 +69,24 @@ class SettingsTableViewController: UITableViewController {
     var maxPossibleNumber: Int!
     var minPossibleNumber: Int!
     
+    // MARK: - Colors
+    
+    var darkMode: Bool! {
+        didSet {
+            switchAppearanceTo(darkMode: darkMode)
+        }
+    }
+    
+    private let navigationBarColor = (darkMode: #colorLiteral(red: 0.1137254902, green: 0.1137254902, blue: 0.1215686275, alpha: 1), lightMode: #colorLiteral(red: 0.9647058824, green: 0.9647058824, blue: 0.9725490196, alpha: 1))
+    private let cellsColor = (darkMode: #colorLiteral(red: 0.1098039216, green: 0.1098039216, blue: 0.1176470588, alpha: 1), lightMode: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
+    private let tableViewBackgraoundColor = (darkMode: #colorLiteral(red: 0.09019607843, green: 0.09019607843, blue: 0.09019607843, alpha: 1), lightMode: #colorLiteral(red: 0.9411764706, green: 0.937254902, blue: 0.9607843137, alpha: 1))
+    private let tableViewSeparatorColor = (darkMode: #colorLiteral(red: 0.1764705882, green: 0.1764705882, blue: 0.1843137255, alpha: 1), lightMode: #colorLiteral(red: 0.8274509804, green: 0.8235294118, blue: 0.8392156863, alpha: 1))
+    private let swithersTintColor = (darkMode: #colorLiteral(red: 0.262745098, green: 0.2588235294, blue: 0.2705882353, alpha: 1), lightMode: #colorLiteral(red: 0.8980392157, green: 0.8980392157, blue: 0.8980392157, alpha: 1))
+    
     override func viewWillAppear(_ animated: Bool) {
         // TODO: Use OutletCollections
+        doneButton.tintColor = userInterfaceColor
+        
         shuffleNumbersModeSwitcher.setOn(shuffleNumbersMode, animated: false)
         shuffleNumbersModeSwitcher.onTintColor = userInterfaceColor
         
@@ -80,8 +104,6 @@ class SettingsTableViewController: UITableViewController {
         
         winkColorsModeSwitcher.setOn(winkColorsMode, animated: false)
         winkColorsModeSwitcher.onTintColor = userInterfaceColor
-
-        doneButton.tintColor = userInterfaceColor
 
         if !colorModeSwitcher.isOn {
             shuffleColorsModeSwitcher.isEnabled = false
@@ -110,7 +132,17 @@ class SettingsTableViewController: UITableViewController {
         maxNumberStepper.value = Double(maxNumber)
         maxNumberStepper.stepValue = 5
         maxNumberStepper.tintColor = userInterfaceColor
+        
+        darkModeSwitcher.setOn(darkMode, animated: false)
+        darkModeSwitcher.onTintColor = userInterfaceColor
+        
+        darkMode ? cells.forEach { $0.backgroundColor = cellsColor.darkMode } :
+                   cells.forEach { $0.backgroundColor = cellsColor.lightMode }
     }
+    
+//    override func viewDidAppear(_ animated: Bool) {
+//
+//    }
     
     // MARK: - Actions
     
@@ -168,4 +200,40 @@ class SettingsTableViewController: UITableViewController {
         maxNumberLabel.text = String(maxNumber)
         delegate?.maxNumberChanged(to: maxNumber)
     }
+    
+    @IBAction func darkModeSwitcherValueChanged(_ sender: UISwitch) {
+        darkMode = sender.isOn
+        delegate?.darkModeStateChanged(to: sender.isOn)
+    }
+    
+    // MARK: - Helping Methods
+    
+    private func switchAppearanceTo(darkMode: Bool) {
+        if darkMode {
+            navigationController?.navigationBar.barTintColor = navigationBarColor.darkMode
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.white]
+            tableView.backgroundColor = tableViewBackgraoundColor.darkMode
+            cells.forEach { $0.backgroundColor = cellsColor.darkMode }
+            tableView.separatorColor = tableViewSeparatorColor.darkMode
+            switchers.forEach { (switcher) in
+                switcher.tintColor = swithersTintColor.darkMode
+            }
+            labels.forEach { (label) in
+                label.textColor = .white
+            }
+        } else {
+            navigationController?.navigationBar.barTintColor = navigationBarColor.lightMode
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.black]
+            tableView.backgroundColor = tableViewBackgraoundColor.lightMode
+            cells.forEach { $0.backgroundColor = cellsColor.lightMode }
+            tableView.separatorColor = tableViewSeparatorColor.lightMode
+            switchers.forEach { (switcher) in
+                switcher.tintColor = swithersTintColor.lightMode
+            }
+            labels.forEach { (label) in
+                label.textColor = .black
+            }
+        }
+    }
+    
 }
