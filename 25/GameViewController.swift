@@ -133,6 +133,13 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         }
     }
     
+    var buttonFrameX: CGFloat!
+    var buttonFrameY: CGFloat!
+    var buttonFrameHeight: CGFloat!
+    var buttonFrameWidth: CGFloat!
+    
+    var compressionRatio = 0.90
+    
     var timer = Timer()
     
     // MARK: - Colors
@@ -140,16 +147,6 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     private let cellsColors     = (darkMode: #colorLiteral(red: 0.2203874684, green: 0.2203874684, blue: 0.2203874684, alpha: 1), lightMode: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1))
     private let numbersColors   = (darkMode: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), lightMode: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1))
     private let mainViewColors  = (darkMode: #colorLiteral(red: 0.09019607843, green: 0.09019607843, blue: 0.09019607843, alpha: 1), lightMode: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
-    
-    var defaultCellsColor: UIColor {
-        return darkMode ? cellsColors.darkMode : cellsColors.lightMode
-    }
-    var defaultNumbersColor: UIColor {
-        return darkMode || game.colorfulCellsMode ? numbersColors.darkMode : numbersColors.lightMode
-    }
-    var mainViewColor: UIColor {
-        return darkMode ? mainViewColors.darkMode : mainViewColors.lightMode
-    }
     
     private let colorSets = [[(light: #colorLiteral(red: 0.06666666667, green: 0.4666666667, blue: 0.7215686275, alpha: 1), dark: #colorLiteral(red: 0.03137254902, green: 0.3058823529, blue: 0.4941176471, alpha: 1)),
                               (light: #colorLiteral(red: 0.09803921569, green: 0.6588235294, blue: 0.6117647059, alpha: 1), dark: #colorLiteral(red: 0.06666666667, green: 0.4823529412, blue: 0.462745098, alpha: 1)),
@@ -162,6 +159,16 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
                              [(light: #colorLiteral(red: 0.370555222, green: 0.3705646992, blue: 0.3705595732, alpha: 1), dark: #colorLiteral(red: 0.3025199942, green: 0.301058545, blue: 0.3039814435, alpha: 1)),
                               (light: #colorLiteral(red: 0.5787474513, green: 0.3215198815, blue: 0, alpha: 1), dark: #colorLiteral(red: 0.4634119638, green: 0.2628604885, blue: 0.05822089579, alpha: 1)),
                               (light: #colorLiteral(red: 0.5738074183, green: 0.5655357838, blue: 0, alpha: 1), dark: #colorLiteral(red: 0.4723546985, green: 0.4624517336, blue: 0.09191328908, alpha: 1))]]
+    
+    var defaultCellsColor: UIColor {
+        return darkMode ? cellsColors.darkMode : cellsColors.lightMode
+    }
+    var defaultNumbersColor: UIColor {
+        return darkMode || game.colorfulCellsMode ? numbersColors.darkMode : numbersColors.lightMode
+    }
+    var mainViewColor: UIColor {
+        return darkMode ? mainViewColors.darkMode : mainViewColors.lightMode
+    }
 
     lazy var randomColorSet = colorSets[colorSets.count.arc4random]
 
@@ -248,25 +255,27 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         }
         if selectedNumberIsRight {
             // User tapped the right number
-            feedbackSelection(isRight: true)
             playImpactHapticFeedback(needsToPrepare: true, style: .medium)
         } else {
             // User tapped the wrong number
             feedbackSelection(isRight: false)
             playNotificationHapticFeedback(notificationFeedbackType: .error)
         }
+        
         game.numberSelected(sender.tag)
+        compressButton(sender)
     }
     
     @objc func buttonResign(sender: UIButton) {
         if !gameFinished, !game.shuffleNumbersMode {
             UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: 0.1,
+                withDuration: 0.2,
                 delay: 0.0,
                 options: [],
                 animations: {
                     sender.titleLabel?.alpha = 1.0
             })
+            uncompressButton(sender)
         }
     }
     

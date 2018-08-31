@@ -71,6 +71,46 @@ extension GameViewController {
         }
     }
     
+    func compressButton(_ button: UIButton) {
+        buttonFrameX = button.frame.minX
+        buttonFrameY = button.frame.minY
+        buttonFrameWidth = button.frame.width
+        buttonFrameHeight = button.frame.height
+        
+        let newButtonFrameX = button.frame.minX + button.frame.width * CGFloat(1 - compressionRatio) / 2
+        let newButtonFrameY = button.frame.minY + button.frame.height * CGFloat(1 - compressionRatio) / 2
+        let newButtonFrameWidth = button.frame.width * CGFloat(compressionRatio)
+        let newButtonFrameHeight = button.frame.height * CGFloat(compressionRatio)
+        
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: 0.1,
+            delay: 0.0,
+            options: [],
+            animations: {
+                button.frame = CGRect(
+                    x: newButtonFrameX,
+                    y: newButtonFrameY,
+                    width: newButtonFrameWidth,
+                    height: newButtonFrameHeight
+                )
+        })
+    }
+    
+    func uncompressButton(_ button: UIButton) {
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: 0.3,
+            delay: 0.0,
+            options: [],
+            animations: {
+                button.frame = CGRect(
+                    x: self.buttonFrameX,
+                    y: self.buttonFrameY,
+                    width: self.buttonFrameWidth,
+                    height: self.buttonFrameHeight
+                )
+        })
+    }
+    
     // MARK: - Numbers
     
     func showNumbers(animated: Bool) {
