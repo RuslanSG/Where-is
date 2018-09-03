@@ -62,6 +62,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     var grid: Grid {
         return Grid(layout: .dimensions(rowCount: game.rows, columnCount: game.colums), frame: buttonsContainerView.bounds)
     }
+    
     var buttons = [UIButton]() {
         didSet {
             buttonsContainerView.frame = buttonsFieldFrame
