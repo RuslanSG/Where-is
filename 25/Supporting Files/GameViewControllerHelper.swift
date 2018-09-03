@@ -11,6 +11,37 @@ import QuartzCore
 
 extension GameViewController {
     
+    var cornerRadius: CGFloat {
+        if  self.view.traitCollection.horizontalSizeClass == .regular,
+            self.view.traitCollection.verticalSizeClass == .regular {
+            return 12.0
+        } else {
+            return 7.0
+        }
+    }
+    
+    var numbersFontSize: CGFloat {
+        return self.view.bounds.width / 10
+    }
+    
+    var gridInset: CGFloat {
+        return self.view.bounds.width / 200
+    }
+    
+    var buttonsFieldFrame: CGRect {
+        let height = self.view.bounds.width / CGFloat(game.colums) * CGFloat(game.rows)
+        let pointY = self.view.bounds.midY - height / 2
+        let staturBarHeight = UIApplication.shared.statusBarFrame.height
+        let newGameButtonFrameY = newGameButton.frame.minY
+        let maxAlllowedButtonsContainerViewHeight = newGameButtonFrameY - staturBarHeight - gridInset
+        return CGRect(
+            x: gridInset,
+            y: pointY > 0 ? pointY : staturBarHeight,
+            width: self.view.bounds.width - gridInset * 2,
+            height: height < maxAlllowedButtonsContainerViewHeight ? height : maxAlllowedButtonsContainerViewHeight
+        )
+    }
+    
     // MARK: - Cells
     
     func updateButtonsFrames() {
@@ -28,7 +59,7 @@ extension GameViewController {
             delay: 0.0,
             options: [],
             animations: {
-                self.feedbackView.backgroundColor = isRight ? #colorLiteral(red: 0.3960784314, green: 0.8392156863, blue: 0.262745098, alpha: 1) : #colorLiteral(red: 0.9215686275, green: 0.1490196078, blue: 0.1215686275, alpha: 1)
+                self.feedbackView.backgroundColor = #colorLiteral(red: 0.9215686275, green: 0.1490196078, blue: 0.1215686275, alpha: 1)
         }) { (position) in
             UIViewPropertyAnimator.runningPropertyAnimator(
                 withDuration: 0.1,
@@ -52,7 +83,6 @@ extension GameViewController {
                 button.layer.cornerRadius = cornerRadius
                 button.addTarget(self, action: #selector(buttonPressed(sender:)), for: .touchDown)
                 button.addTarget(self, action: #selector(buttonResign(sender:)), for: .touchUpInside)
-                button.isEnabled = false
                 return button
             }()
             buttons.append(button)
@@ -83,7 +113,7 @@ extension GameViewController {
         let newButtonFrameHeight = button.frame.height * CGFloat(compressionRatio)
         
         UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: 0.1,
+            withDuration: 0.05,
             delay: 0.0,
             options: [],
             animations: {
@@ -132,7 +162,6 @@ extension GameViewController {
     
     func hideNumbers(animated: Bool) {
         buttons.forEach({ (button) in
-            button.isEnabled = false
             if animated {
                 UIViewPropertyAnimator.runningPropertyAnimator(
                     withDuration: 0.2,
@@ -288,28 +317,27 @@ extension GameViewController {
     // MARK: - Results
     
     func showResults(time: Double, maxNumber: Int, level: Int) {
-        titleLabel.text = time < 60.0 ? "Excellent!" : "Almost there!"
-        actionButton.setTitle("New Game", for: .normal)
-        timeLabel.text = String(format: "%.02f", time)
-        self.view.bringSubview(toFront: messageView)
+        resultsView.titleLabel.text = time < 60.0 ? "Excellent!" : "Almost there!"
+        resultsView.timeLabel.text = String(format: "%.02f", time)
+        self.view.bringSubview(toFront: resultsView)
         UIViewPropertyAnimator.runningPropertyAnimator(
             withDuration: 0.15,
             delay: 0.0,
             options: [],
             animations: {
-                self.messageView.alpha = 1.0
+                self.resultsView.alpha = 1.0
         })
     }
     
     func hideResults() {
-        titleLabel.text = nil
-        timeLabel.text = nil
+        resultsView.titleLabel.text = nil
+        resultsView.timeLabel.text = nil
         UIViewPropertyAnimator.runningPropertyAnimator(
             withDuration: 0.15,
             delay: 0.0,
             options: [],
             animations: {
-                self.messageView.alpha = 0.0
+                self.resultsView.alpha = 0.0
         })
     }
     

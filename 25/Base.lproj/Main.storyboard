@@ -18,19 +18,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tKg-10-p2q">
-                                <rect key="frame" x="4" y="1284" width="1016" height="40"/>
-                                <color key="backgroundColor" red="0.1481618583" green="0.52966481450000003" blue="0.98237007860000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="Lyx-ne-YUr"/>
-                                </constraints>
-                                <state key="normal" title="Start">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <connections>
-                                    <action selector="startButtonPressedWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="zuI-nC-4UM"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4EG-dS-daE">
                                 <rect key="frame" x="37" y="1330" width="950" height="30"/>
                                 <constraints>
@@ -54,14 +41,10 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="tKg-10-p2q" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="4" id="24U-eG-xRd"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="l9c-93-eXv" secondAttribute="trailing" constant="10" id="2cs-ln-kCp"/>
-                            <constraint firstItem="4EG-dS-daE" firstAttribute="top" secondItem="tKg-10-p2q" secondAttribute="bottom" constant="6" id="QX5-A0-5SV"/>
                             <constraint firstItem="4EG-dS-daE" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="37" id="Z1F-JD-fP7"/>
                             <constraint firstItem="l9c-93-eXv" firstAttribute="leading" secondItem="4EG-dS-daE" secondAttribute="trailing" constant="5" id="ZYL-1G-4vh"/>
-                            <constraint firstItem="tKg-10-p2q" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="bRc-7x-WKT"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="l9c-93-eXv" secondAttribute="bottom" constant="10" id="iHE-6G-z8d"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="tKg-10-p2q" secondAttribute="trailing" constant="4" id="iWk-UC-JZV"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="4EG-dS-daE" secondAttribute="bottom" constant="6" id="sY5-ah-kVP"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -69,7 +52,6 @@
                     <connections>
                         <outlet property="newGameButton" destination="4EG-dS-daE" id="AWf-vv-1Ce"/>
                         <outlet property="settingsButton" destination="l9c-93-eXv" id="7lp-NF-HbA"/>
-                        <outlet property="startButton" destination="tKg-10-p2q" id="lGf-dA-pfE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

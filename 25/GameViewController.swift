@@ -11,7 +11,6 @@ import AudioToolbox.AudioServices
 
 class GameViewController: UIViewController, SettingsTableViewControllerDelegate {
     
-    @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var newGameButton: UIButton!
     @IBOutlet weak var settingsButton: UIButton!
     
@@ -30,86 +29,19 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         return view
     }()
     
-    // MARK: - Message view
-    
-    lazy var messageView: UIVisualEffectView = {
+    lazy var resultsView: ResultsView = {
         let blur = UIBlurEffect(style: .light)
-        let view = UIVisualEffectView(effect: blur)
-        let offset: CGFloat = 2.0
-        view.frame = self.view.frame
+        let view = ResultsView(
+            frame: self.view.frame,
+            effect: blur,
+            userInterfaceColor: userInterfaceColor,
+            cornerRadius: cornerRadius,
+            fontsColor: darkMode ? numbersColors.darkMode : numbersColors.lightMode
+        )
         view.alpha = 0.0
         return view
     }()
-    
-    let titleLabel: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .center
-        label.font = UIFont(name: label.font.fontName, size: 45)
-        return label
-    }()
-    
-    let detailsLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-        label.textAlignment = .left
-        label.font = UIFont(name: label.font.fontName, size: 15)
-        label.numberOfLines = 0
-        return label
-    }()
-    
-    lazy var timeLabel: UILabel = {
-        let label = UILabel(frame: CGRect(x: 0.0, y: 0.0, width: 250.0, height: 100.0))
-        label.text = "140.00"
-        label.center = messageView.center
-        label.textAlignment = .center
-        label.font = UIFont(name: label.font.fontName, size: 90)
-        label.numberOfLines = 0
-        label.adjustsFontSizeToFitWidth = true
-        return label
-    }()
-    
-    lazy var actionButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = userInterfaceColor
-        button.layer.cornerRadius = cornerRadius
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 15.0)
-        button.addTarget(self, action: #selector(startButtonPressed(sender:)), for: .touchUpInside)
-        return button
-    }()
-    
-    // MARK: -
-    
-    var cornerRadius: CGFloat {
-        if self.view.traitCollection.horizontalSizeClass == .regular, self.view.traitCollection.verticalSizeClass == .regular {
-            return 12.0
-        } else {
-            return 7.0
-        }
-    }
-    
-    var numbersFontSize: CGFloat {
-        return self.view.bounds.width / 10
-    }
-    
-    var gridInset: CGFloat {
-        return self.view.bounds.width / 200
-    }
-    
-    private var buttonsFieldFrame: CGRect {
-        let height = self.view.bounds.width / CGFloat(game.colums) * CGFloat(game.rows)
-        let pointY = self.view.bounds.midY - height / 2 - 38
-        let staturBarHeight = UIApplication.shared.statusBarFrame.height
-        let startButtonFrameY = startButton.frame.minY
-        let maxAlllowedButtonsContainerViewHeight = startButtonFrameY - staturBarHeight - gridInset
-        return CGRect(
-            x: gridInset,
-            y: pointY > 0 ? pointY : staturBarHeight,
-            width: self.view.bounds.width - gridInset * 2,
-            height: height < maxAlllowedButtonsContainerViewHeight ? height : maxAlllowedButtonsContainerViewHeight
-        )
-    }
-    
+        
     // MARK: -
     
     private let userDefaults = UserDefaults.standard
@@ -118,8 +50,11 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     lazy var game = Game()
     var gameFinished = false {
         didSet {
-            startButton.isEnabled = gameFinished
-            startButton.alpha = startButton.isEnabled ? 1.0 : 0.3
+            if gameFinished {
+                self.view.bringSubview(toFront: resultsView)
+            } else {
+                self.view.sendSubview(toBack: resultsView)
+            }
             newGameButton.isEnabled = !gameFinished
         }
     }
@@ -180,9 +115,8 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     private var userInterfaceColor: UIColor! {
         didSet {
-            startButton.backgroundColor = userInterfaceColor
-            newGameButton.tintColor     = userInterfaceColor
-            settingsButton.tintColor    = userInterfaceColor
+            newGameButton.tintColor = userInterfaceColor
+            settingsButton.tintColor = userInterfaceColor
         }
     }
     
@@ -193,6 +127,10 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             removeNumberColors(animated: false)
             UIApplication.shared.statusBarStyle = darkMode ? .lightContent : .default
             userInterfaceColor = randomColor
+            
+            resultsView.effect = darkMode ? UIBlurEffect(style: .dark) : UIBlurEffect(style: .light)
+            resultsView.userInterfaceColor = userInterfaceColor
+            resultsView.fontsColor = darkMode ? numbersColors.darkMode : numbersColors.lightMode
         }
     }
     
@@ -208,33 +146,26 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     func setupInputComponents() {
         userInterfaceColor = randomColor
         
-        startButton.layer.cornerRadius = cornerRadius
-        
-        self.view.addSubview(messageView)
+        self.view.addSubview(resultsView)
         self.view.addSubview(feedbackView)
         self.view.addSubview(buttonsContainerView)
         
         addButtons(count: game.numbers.count)
         updateButtonsFrames()
         
-        self.view.sendSubview(toBack: buttonsContainerView)
         self.view.sendSubview(toBack: feedbackView)
-        
-        messageView.contentView.addSubview(titleLabel)
-        messageView.contentView.addSubview(timeLabel)
-        messageView.contentView.addSubview(actionButton)
-        
-        messageView.addConstraintsWithFormat(format: "H:|-30-[v0]-30-|", views: titleLabel)
-        messageView.addConstraintsWithFormat(format: "V:|-100-[v0(35)]", views: titleLabel)
-        
-        let currentDeviceIsIPhoneX = UIScreen.main.nativeBounds.height == 2436
-        messageView.addConstraintsWithFormat(format: "H:|-\(gridInset * 2)-[v0]-\(gridInset * 2)-|", views: actionButton)
-        messageView.addConstraintsWithFormat(format: currentDeviceIsIPhoneX ? "V:[v0(40)]-76-|" : "V:[v0(40)]-42-|", views: actionButton)
+        self.view.sendSubview(toBack: resultsView)
     }
     
     // MARK: - Actions
     
     @objc func buttonPressed(sender: UIButton) {
+        if gameFinished {
+            start()
+            compressButton(sender)
+            return
+        }
+        compressButton(sender)
         let selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
         if selectedNumberIsRight && sender.tag == game.maxNumber {
             // User tapped the last number
@@ -242,7 +173,16 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             showResults(time: game.elapsedTime, maxNumber: game.maxNumber, level: game.level - 1)
             prepareForNewGame(hideMessageLabel: false)
             playNotificationHapticFeedback(notificationFeedbackType: .success)
+            uncompressButton(sender)
             return
+        }
+        if selectedNumberIsRight {
+            // User tapped the right number
+            playImpactHapticFeedback(needsToPrepare: true, style: .medium)
+        } else {
+            // User tapped the wrong number
+            feedbackSelection(isRight: false)
+            playNotificationHapticFeedback(notificationFeedbackType: .error)
         }
         if game.shuffleNumbersMode {
             game.shuffleNumbers()
@@ -253,33 +193,23 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         if game.shuffleColorsMode {
             shuffleCellColors(animated: true)
         }
-        if selectedNumberIsRight {
-            // User tapped the right number
-            playImpactHapticFeedback(needsToPrepare: true, style: .medium)
-        } else {
-            // User tapped the wrong number
-            feedbackSelection(isRight: false)
-            playNotificationHapticFeedback(notificationFeedbackType: .error)
-        }
-        
         game.numberSelected(sender.tag)
-        compressButton(sender)
     }
     
     @objc func buttonResign(sender: UIButton) {
         if !gameFinished, !game.shuffleNumbersMode {
             UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: 0.2,
+                withDuration: 0.3,
                 delay: 0.0,
                 options: [],
                 animations: {
                     sender.titleLabel?.alpha = 1.0
             })
-            uncompressButton(sender)
         }
+        uncompressButton(sender)
     }
     
-    @IBAction func startButtonPressed(sender: UIButton) {
+    internal func start() {
         hideResults()
         showNumbers(animated: true)
         game.startGame()
