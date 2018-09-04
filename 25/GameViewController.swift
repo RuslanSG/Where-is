@@ -93,6 +93,22 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     let feedbackGenerator = FeedbackGenerator()
     
+    private var messageViewHeight: CGFloat {
+        if let button = buttons.first {
+            let height = buttons.count % 10 == 0 ? button.bounds.height * 2 + gridInset * 2 : button.bounds.height
+            return height
+        }
+        return 0.0
+    }
+    
+    private var messageViewWidth: CGFloat {
+        if let button = buttons.first {
+            let width = button.bounds.width * 3 + gridInset * 4
+            return width
+        }
+        return 0.0
+    }
+    
     // MARK: - Colors
     
     private let cellsColors     = (darkMode: #colorLiteral(red: 0.2203874684, green: 0.2203874684, blue: 0.2203874684, alpha: 1), lightMode: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1))
@@ -177,17 +193,12 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         self.view.sendSubview(toBack: resultsView)
         self.view.bringSubview(toFront: messageView)
         
+        let height = messageViewHeight
         if let button = buttons.first {
-            let height = button.bounds.height
             let width = button.bounds.width * 3 + gridInset * 4
-            self.view.addConstraintsWithFormat(format: "H:[v0(\(width))]", views: messageView)
-            self.view.addConstraintsWithFormat(format: "V:[v0(\(height))]", views: messageView)
+            messageView.frame = CGRect(x: 0.0, y: 0.0, width: width, height: height)
+            messageView.center = self.view.center
         }
-        
-        
-        
-        messageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        messageView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
     }
     
     // MARK: - Actions
@@ -281,6 +292,10 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             game.rows -= 1
             removeButtons(count: buttons.count - maxNumber)
         }
+        
+        messageView.frame = CGRect(x: 0.0, y: 0.0, width: messageViewWidth, height: messageViewHeight)
+        messageView.center = self.view.center
+        
         updateButtonsFrames()
         prepareForNewGame()
     }
