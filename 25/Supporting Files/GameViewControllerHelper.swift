@@ -331,7 +331,7 @@ extension GameViewController {
         })
     }
     
-    // MARK: - Results
+    // MARK: - Results view
     
     func showResults(time: Double, maxNumber: Int, level: Int) {
         resultsView.titleLabel.text = time < 60.0 ? "Excellent!" : "Almost there!"
@@ -355,6 +355,29 @@ extension GameViewController {
             options: [],
             animations: {
                 self.resultsView.alpha = 0.0
+        })
+    }
+    
+    // MARK: - Message view
+    
+    func showMessage() {
+        self.view.bringSubview(toFront: messageView)
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: 1.0,
+            delay: 0.0,
+            options: [],
+            animations: {
+                self.messageView.alpha = 1.0
+        })
+    }
+    
+    func hideMessage() {
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: 0.2,
+            delay: 0.0,
+            options: [],
+            animations: {
+                self.messageView.alpha = 0.0
         })
     }
     
@@ -395,6 +418,7 @@ extension GameViewController {
             buttons.forEach { $0.titleLabel?.layer.removeAllAnimations() }
         }
         hideNumbers(animated: false)
+        showMessage()
     }
     
     func getAnotherColor(for button: UIButton, from colorSet: [UIColor]) -> UIColor? {

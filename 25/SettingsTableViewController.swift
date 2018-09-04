@@ -55,7 +55,6 @@ class SettingsTableViewController: UITableViewController {
         }
     }
     
-    private let navigationBarColor          = (darkMode: #colorLiteral(red: 0.1098039216, green: 0.1098039216, blue: 0.1176470588, alpha: 1), lightMode: #colorLiteral(red: 0.9647058824, green: 0.9647058824, blue: 0.9725490196, alpha: 1))
     private let cellsColor                  = (darkMode: #colorLiteral(red: 0.1098039216, green: 0.1098039216, blue: 0.1176470588, alpha: 1), lightMode: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
     private let tableViewBackgroundColor    = (darkMode: #colorLiteral(red: 0.09019607843, green: 0.09019607843, blue: 0.09019607843, alpha: 1), lightMode: #colorLiteral(red: 0.9411764706, green: 0.937254902, blue: 0.9607843137, alpha: 1))
     private let tableViewSeparatorColor     = (darkMode: #colorLiteral(red: 0.1764705882, green: 0.1764705882, blue: 0.1843137255, alpha: 1), lightMode: #colorLiteral(red: 0.8274509804, green: 0.8235294118, blue: 0.8392156863, alpha: 1))
@@ -73,6 +72,7 @@ class SettingsTableViewController: UITableViewController {
         shuffleColorsModeSwitcher.setOn(game.shuffleColorsMode, animated: false)
         winkNumbersModeSwitcher.setOn(game.winkNumbersMode, animated: false)
         winkColorsModeSwitcher.setOn(game.winkColorsMode, animated: false)
+        winkColorsModeSwitcher.isEnabled = false // Disabled for testing
 
         if !colorModeSwitcher.isOn {
             shuffleColorsModeSwitcher.isEnabled = false
@@ -135,15 +135,15 @@ class SettingsTableViewController: UITableViewController {
             if shuffleColorsModeSwitcher.isOn {
                 shuffleColorsModeSwitcher.setOn(false, animated: true)
             }
-            if winkColorsModeSwitcher.isOn {
-                winkColorsModeSwitcher.setOn(false, animated: true)
-            }
+//            if winkColorsModeSwitcher.isOn {
+//                winkColorsModeSwitcher.setOn(false, animated: true)
+//            }
             if colorfulNumbersModeSwitcher.isOn {
                 colorfulNumbersModeSwitcher.setOn(false, animated: true)
             }
         }
         shuffleColorsModeSwitcher.isEnabled = sender.isOn
-        winkColorsModeSwitcher.isEnabled = sender.isOn
+//        winkColorsModeSwitcher.isEnabled = sender.isOn
         colorfulNumbersModeSwitcher.isEnabled = sender.isOn
     }
     
@@ -165,6 +165,7 @@ class SettingsTableViewController: UITableViewController {
     @IBAction func maxNumberStepperValueChanged(_ sender: UIStepper) {
         let maxNumber = Int(sender.value)
         maxNumberLabel.text = String(maxNumber)
+        
         delegate?.maxNumberChanged(to: maxNumber)
     }
     
@@ -177,7 +178,7 @@ class SettingsTableViewController: UITableViewController {
     
     private func switchAppearanceTo(darkMode: Bool) {
         if darkMode {
-            navigationController?.navigationBar.barTintColor = navigationBarColor.darkMode
+            navigationController?.navigationBar.barStyle = .black
             navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.white]
             tableView.backgroundColor = tableViewBackgroundColor.darkMode
             cells.forEach { $0.backgroundColor = cellsColor.darkMode }
@@ -189,7 +190,7 @@ class SettingsTableViewController: UITableViewController {
                 label.textColor = .white
             }
         } else {
-            navigationController?.navigationBar.barTintColor = navigationBarColor.lightMode
+            navigationController?.navigationBar.barStyle = .default
             navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.black]
             tableView.backgroundColor = tableViewBackgroundColor.lightMode
             cells.forEach { $0.backgroundColor = cellsColor.lightMode }

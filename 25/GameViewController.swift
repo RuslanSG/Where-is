@@ -40,6 +40,15 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         view.alpha = 0.0
         return view
     }()
+    
+    lazy var messageView: MessageView = {
+        let blur = UIBlurEffect(style: darkMode ? .dark : .light)
+        let view = MessageView(effect: blur)
+        view.layer.cornerRadius = cornerRadius
+        view.clipsToBounds = true
+        view.alpha = 0.0
+        return view
+    }()
         
     // MARK: -
     
@@ -138,6 +147,9 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             resultsView.effect = darkMode ? UIBlurEffect(style: .dark) : UIBlurEffect(style: .light)
             resultsView.userInterfaceColor = userInterfaceColor
             resultsView.fontsColor = darkMode ? numbersColors.darkMode : numbersColors.lightMode
+            
+            messageView.label.textColor = defaultNumbersColor
+            messageView.effect = darkMode ? UIBlurEffect(style: .dark) : UIBlurEffect(style: .light)
         }
     }
     
@@ -156,12 +168,26 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         self.view.addSubview(resultsView)
         self.view.addSubview(feedbackView)
         self.view.addSubview(buttonsContainerView)
+        self.view.addSubview(messageView)
         
         addButtons(count: game.numbers.count)
         updateButtonsFrames()
         
         self.view.sendSubview(toBack: feedbackView)
         self.view.sendSubview(toBack: resultsView)
+        self.view.bringSubview(toFront: messageView)
+        
+        if let button = buttons.first {
+            let height = button.bounds.height
+            let width = button.bounds.width * 3 + gridInset * 4
+            self.view.addConstraintsWithFormat(format: "H:[v0(\(width))]", views: messageView)
+            self.view.addConstraintsWithFormat(format: "V:[v0(\(height))]", views: messageView)
+        }
+        
+        
+        
+        messageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        messageView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
     }
     
     // MARK: - Actions
@@ -170,6 +196,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         compressButton(sender)
         if gameFinished {
             startGame()
+            hideMessage()
             feedbackGenerator.playImpactHapticFeedback(needsToPrepare: true, style: .medium)
             return
         }
@@ -195,7 +222,9 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             game.shuffleNumbers()
             updateNumbers(animated: true)
         } else {
-            sender.titleLabel?.alpha = 0.2
+            if !game.winkNumbersMode {
+                sender.titleLabel?.alpha = 0.2
+            }
         }
         if game.shuffleColorsMode {
             shuffleCellsColors(animated: true)
@@ -205,7 +234,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     }
     
     @objc func buttonReleased(sender: UIButton) {
-        if !gameFinished, !game.shuffleNumbersMode {
+        if !gameFinished, !game.shuffleNumbersMode, !game.winkNumbersMode {
             UIViewPropertyAnimator.runningPropertyAnimator(
                 withDuration: 0.3,
                 delay: 0.0,
@@ -222,7 +251,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     }
     
     @IBAction func settingsButtonPressed(sender: UIButton) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8, execute: {
              self.prepareForNewGame()
         })
     }
@@ -253,6 +282,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             removeButtons(count: buttons.count - maxNumber)
         }
         updateButtonsFrames()
+        prepareForNewGame()
     }
     
     
