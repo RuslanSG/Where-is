@@ -90,7 +90,7 @@ class ResultsView: UIVisualEffectView {
         
         let currentDeviceIsIPhoneX = UIScreen.main.nativeBounds.height == 2436
         self.contentView.addConstraintsWithFormat(format: "H:|-10-[v0]-10-|", views: actionButton)
-        self.contentView.addConstraintsWithFormat(format: currentDeviceIsIPhoneX ? "V:[v0(40)]-76-|" : "V:[v0(40)]-42-|", views: actionButton)
+        self.contentView.addConstraintsWithFormat(format: currentDeviceIsIPhoneX ? "V:[v0(50)]-76-|" : "V:[v0(50)]-42-|", views: actionButton)
     }
     
 }

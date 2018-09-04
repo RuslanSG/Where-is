@@ -24,6 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window.rootViewController = viewController()
         self.window = window
         self.window?.makeKeyAndVisible()
+        UIView.appearance().isExclusiveTouch = true
         return true
     }
 

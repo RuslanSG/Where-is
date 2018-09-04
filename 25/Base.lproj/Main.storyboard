@@ -25,7 +25,7 @@
                                 </constraints>
                                 <state key="normal" title="Stop"/>
                                 <connections>
-                                    <action selector="newGameButtonPressedWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Vt5-P8-y7D"/>
+                                    <action selector="stopButtonPressedWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="IM0-fy-eBp"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l9c-93-eXv">
@@ -35,6 +35,7 @@
                                     <constraint firstAttribute="width" constant="22" id="C6D-7v-53F"/>
                                 </constraints>
                                 <connections>
+                                    <action selector="settingsButtonPressedWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="8aN-qf-GRw"/>
                                     <segue destination="5Hr-WI-hJD" kind="showDetail" id="mC6-dC-gsX"/>
                                 </connections>
                             </button>
@@ -50,8 +51,8 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <outlet property="newGameButton" destination="4EG-dS-daE" id="AWf-vv-1Ce"/>
                         <outlet property="settingsButton" destination="l9c-93-eXv" id="7lp-NF-HbA"/>
+                        <outlet property="stopButton" destination="4EG-dS-daE" id="AWf-vv-1Ce"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -176,7 +177,7 @@
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="PHZ-jS-etq">
                                                     <rect key="frame" x="960" y="10.5" width="51" height="31"/>
                                                     <connections>
-                                                        <action selector="colorSwitcherValueChanged:" destination="3hQ-19-uEL" eventType="valueChanged" id="DnI-IP-Gt0"/>
+                                                        <action selector="colorfulCellsSwitcherValueChanged:" destination="3hQ-19-uEL" eventType="valueChanged" id="DnI-IP-Gt0"/>
                                                     </connections>
                                                 </switch>
                                             </subviews>

@@ -7,11 +7,10 @@
 //
 
 import UIKit
-import AudioToolbox.AudioServices
 
 class GameViewController: UIViewController, SettingsTableViewControllerDelegate {
     
-    @IBOutlet weak var newGameButton: UIButton!
+    @IBOutlet weak var stopButton: UIButton!
     @IBOutlet weak var settingsButton: UIButton!
     
     // MARK: -
@@ -47,7 +46,12 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     private let userDefaults = UserDefaults.standard
     private let darkModeKey = "darkMode"
     
-    lazy var game = Game()
+    var game = Game() {
+        didSet {
+            print("didSet")
+        }
+    }
+    
     var gameFinished = false {
         didSet {
             if gameFinished {
@@ -55,7 +59,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             } else {
                 self.view.sendSubview(toBack: resultsView)
             }
-            newGameButton.isEnabled = !gameFinished
+            stopButton.isEnabled = !gameFinished
         }
     }
     
@@ -69,14 +73,16 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         }
     }
     
-    var buttonFrameX: CGFloat!
-    var buttonFrameY: CGFloat!
-    var buttonFrameHeight: CGFloat!
-    var buttonFrameWidth: CGFloat!
+    var buttonFrameX: CGFloat?
+    var buttonFrameY: CGFloat?
+    var buttonFrameHeight: CGFloat?
+    var buttonFrameWidth: CGFloat?
     
-    var compressionRatio = 0.90
+    let cellCompressionRatio = 0.90
     
     var timer = Timer()
+    
+    let feedbackGenerator = FeedbackGenerator()
     
     // MARK: - Colors
     
@@ -116,7 +122,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     private var userInterfaceColor: UIColor! {
         didSet {
-            newGameButton.tintColor = userInterfaceColor
+            stopButton.tintColor = userInterfaceColor
             settingsButton.tintColor = userInterfaceColor
         }
     }
@@ -124,7 +130,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     var darkMode = false {
         didSet {
             self.view.backgroundColor = mainViewColor
-            game.colorfulCellsMode ? shuffleCellColors(animated: false) : removeCellColors(animated: false)
+            game.colorfulCellsMode ? shuffleCellsColors(animated: false) : removeCellColors(animated: false)
             removeNumberColors(animated: false)
             UIApplication.shared.statusBarStyle = darkMode ? .lightContent : .default
             userInterfaceColor = randomColor
@@ -161,29 +167,29 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     // MARK: - Actions
     
     @objc func buttonPressed(sender: UIButton) {
+        compressButton(sender)
         if gameFinished {
-            start()
-            compressButton(sender)
+            startGame()
+            feedbackGenerator.playImpactHapticFeedback(needsToPrepare: true, style: .medium)
             return
         }
-        compressButton(sender)
         let selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
         if selectedNumberIsRight && sender.tag == game.maxNumber {
             // User tapped the last number
             game.finishGame()
             showResults(time: game.elapsedTime, maxNumber: game.maxNumber, level: game.level - 1)
             prepareForNewGame(hideMessageLabel: false)
-            playNotificationHapticFeedback(notificationFeedbackType: .success)
+            feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .success)
             uncompressButton(sender)
             return
         }
         if selectedNumberIsRight {
             // User tapped the right number
-            playImpactHapticFeedback(needsToPrepare: true, style: .medium)
+            feedbackGenerator.playImpactHapticFeedback(needsToPrepare: true, style: .medium)
         } else {
             // User tapped the wrong number
             feedbackSelection(isRight: false)
-            playNotificationHapticFeedback(notificationFeedbackType: .error)
+            feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .error)
         }
         if game.shuffleNumbersMode {
             game.shuffleNumbers()
@@ -192,12 +198,13 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             sender.titleLabel?.alpha = 0.2
         }
         if game.shuffleColorsMode {
-            shuffleCellColors(animated: true)
+            shuffleCellsColors(animated: true)
+            shuffleNumbersColors(animated: true)
         }
         game.numberSelected(sender.tag)
     }
     
-    @objc func buttonResign(sender: UIButton) {
+    @objc func buttonReleased(sender: UIButton) {
         if !gameFinished, !game.shuffleNumbersMode {
             UIViewPropertyAnimator.runningPropertyAnimator(
                 withDuration: 0.3,
@@ -210,79 +217,31 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         uncompressButton(sender)
     }
     
-    internal func start() {
-        hideResults()
-        showNumbers(animated: true)
-        game.startGame()
-        gameFinished = false
-        
-        impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
-        impactFeedbackGenerator?.prepare()
-        
-        if game.winkNumbersMode || game.winkColorsMode {
-            timer = Timer.scheduledTimer(
-                timeInterval: game.winkColorsMode ? 0.1 : 0.2,
-                target: self,
-                selector: #selector(timerSceduled),
-                userInfo: nil,
-                repeats: true
-            )
-        }
+    @IBAction func stopButtonPressed(sender: UIButton) {
+        prepareForNewGame()
     }
     
-    @IBAction func newGameButtonPressed(sender: UIButton) {
-        prepareForNewGame()
+    @IBAction func settingsButtonPressed(sender: UIButton) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
+             self.prepareForNewGame()
+        })
     }
     
     // MARK: - SettingsTableViewControllerDelegate
     
-    func shuffleNumbersModeStateChanged(to state: Bool) {
-        game.shuffleNumbersMode = state
-        prepareForNewGame()
-    }
-    
     func colorfulNumbersModeStateChanged(to state: Bool) {
-        game.colorfulNumbersMode = state
-        prepareForNewGame()
         if state == false {
             removeNumberColors(animated: false)
         }
-    }
-    
-    func winkNumbersModeStateChanged(to state: Bool) {
-        game.winkNumbersMode = state
         prepareForNewGame()
     }
-    
     
     func colorfulCellsModeStateChanged(to state: Bool) {
-        game.colorfulCellsMode = state
-        prepareForNewGame()
-        removeNumberColors(animated: false)
         if state == false {
             removeCellColors(animated: false)
+            removeNumberColors(animated: false)
         }
-    }
-    
-    func shuffleColorsModeStateChanged(to state: Bool) {
         prepareForNewGame()
-        game.shuffleColorsMode = state
-    }
-    
-    func winkColorsModeStateChanged(to state: Bool) {
-        prepareForNewGame()
-        game.winkColorsMode = state
-    }
-
-    
-    func levelChanged(to level: Int) {
-        prepareForNewGame()
-        game.level = level
-        if level == game.minLevel {
-            removeCellColors(animated: false)
-        } else if level > game.minLevel {
-            shuffleCellColors(animated: false)
-        }
     }
     
     func maxNumberChanged(to maxNumber: Int) {
@@ -293,7 +252,6 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             game.rows -= 1
             removeButtons(count: buttons.count - maxNumber)
         }
-        prepareForNewGame()
         updateButtonsFrames()
     }
     
@@ -309,66 +267,12 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         if  let nav = segue.destination as? UINavigationController,
             let svc = nav.topViewController as? SettingsTableViewController {
             svc.delegate = self
-            
+            svc.game = game
             svc.userInterfaceColor = userInterfaceColor
-            
-            svc.shuffleNumbersMode = game.shuffleNumbersMode
-            svc.colorfulNumbersMode = game.colorfulNumbersMode
-            svc.winkNumbersMode = game.winkNumbersMode
-
-            svc.colorfulCellsMode = game.colorfulCellsMode
-            svc.shuffleColorsMode = game.shuffleColorsMode
-            svc.winkColorsMode = game.winkColorsMode
-            
-            svc.level = game.level
-            svc.maxNumber = game.maxNumber
-            
-            svc.maxLevel = game.maxLevel
-            svc.minLevel = game.minLevel
-            svc.maxPossibleNumber = game.maxPossibleNumber
-            svc.minPossibleNumber = game.minPossibleNumber
-            
             svc.darkMode = darkMode
         }
     }
-    
-    // MARK: - Haptic Feedback
-    
-    private enum FeedbackGenerator {
-        case notificationFeedbackGenerator
-        case impactFeedbackGenerator
-    }
-    
-    private var notificationFeedbackGenerator: UINotificationFeedbackGenerator? = nil
-    private var impactFeedbackGenerator: UIImpactFeedbackGenerator? = nil
-    
-    private func playNotificationHapticFeedback(notificationFeedbackType: UINotificationFeedbackType) {
-        if UIDevice.current.hasHapticFeedback {
-            notificationFeedbackGenerator = UINotificationFeedbackGenerator()
-            notificationFeedbackGenerator?.notificationOccurred(notificationFeedbackType)
-        } else if UIDevice.current.hasTapticEngine, notificationFeedbackType == .error {
-            let cancelled = SystemSoundID(1521)
-            AudioServicesPlaySystemSound(cancelled)
-        } else if notificationFeedbackType == .error {
-            let cancelled = SystemSoundID(kSystemSoundID_Vibrate)
-            AudioServicesPlaySystemSound(cancelled)
-        }
-        notificationFeedbackGenerator = nil
-    }
-    
-    private func playImpactHapticFeedback(needsToPrepare: Bool, style: UIImpactFeedbackStyle) {
-        if UIDevice.current.hasHapticFeedback {
-            impactFeedbackGenerator = UIImpactFeedbackGenerator(style: style)
-            impactFeedbackGenerator?.impactOccurred()
-            if needsToPrepare {
-                impactFeedbackGenerator?.prepare()
-            }
-        } else if UIDevice.current.hasTapticEngine {
-            let peek = SystemSoundID(1519)
-            AudioServicesPlaySystemSound(peek)
-        }
-    }
-    
+        
 }
 
 

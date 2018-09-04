@@ -32,7 +32,7 @@ extension GameViewController {
         let height = self.view.bounds.width / CGFloat(game.colums) * CGFloat(game.rows)
         let pointY = self.view.bounds.midY - height / 2
         let staturBarHeight = UIApplication.shared.statusBarFrame.height
-        let newGameButtonFrameY = newGameButton.frame.minY
+        let newGameButtonFrameY = stopButton.frame.minY
         let maxAlllowedButtonsContainerViewHeight = newGameButtonFrameY - staturBarHeight - gridInset
         return CGRect(
             x: gridInset,
@@ -82,7 +82,8 @@ extension GameViewController {
                 button.setTitleColor(defaultNumbersColor, for: .normal)
                 button.layer.cornerRadius = cornerRadius
                 button.addTarget(self, action: #selector(buttonPressed(sender:)), for: .touchDown)
-                button.addTarget(self, action: #selector(buttonResign(sender:)), for: .touchUpInside)
+                button.addTarget(self, action: #selector(buttonReleased(sender:)), for: .touchUpInside)
+                button.addTarget(self, action: #selector(buttonReleased(sender:)), for: .touchUpOutside)
                 return button
             }()
             buttons.append(button)
@@ -107,10 +108,10 @@ extension GameViewController {
         buttonFrameWidth = button.frame.width
         buttonFrameHeight = button.frame.height
         
-        let newButtonFrameX = button.frame.minX + button.frame.width * CGFloat(1 - compressionRatio) / 2
-        let newButtonFrameY = button.frame.minY + button.frame.height * CGFloat(1 - compressionRatio) / 2
-        let newButtonFrameWidth = button.frame.width * CGFloat(compressionRatio)
-        let newButtonFrameHeight = button.frame.height * CGFloat(compressionRatio)
+        let newButtonFrameX = button.frame.minX + button.frame.width * CGFloat(1 - cellCompressionRatio) / 2
+        let newButtonFrameY = button.frame.minY + button.frame.height * CGFloat(1 - cellCompressionRatio) / 2
+        let newButtonFrameWidth = button.frame.width * CGFloat(cellCompressionRatio)
+        let newButtonFrameHeight = button.frame.height * CGFloat(cellCompressionRatio)
         
         UIViewPropertyAnimator.runningPropertyAnimator(
             withDuration: 0.05,
@@ -127,19 +128,31 @@ extension GameViewController {
     }
     
     func uncompressButton(_ button: UIButton) {
-        UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: 0.3,
-            delay: 0.0,
-            options: [],
-            animations: {
-                button.frame = CGRect(
-                    x: self.buttonFrameX,
-                    y: self.buttonFrameY,
-                    width: self.buttonFrameWidth,
-                    height: self.buttonFrameHeight
-                )
-        })
+        if let buttonFrameX = self.buttonFrameX,
+            let buttonFrameY = self.buttonFrameY,
+            let buttonFrameWidth = self.buttonFrameWidth,
+            let buttonFrameHeight = self.buttonFrameHeight {
+            UIViewPropertyAnimator.runningPropertyAnimator(
+                withDuration: 0.3,
+                delay: 0.0,
+                options: [],
+                animations: {
+                    button.frame = CGRect(
+                        x: buttonFrameX,
+                        y: buttonFrameY,
+                        width: buttonFrameWidth,
+                        height: buttonFrameHeight
+                    )
+            })
+            
+            self.buttonFrameX = nil
+            self.buttonFrameY = nil
+            self.buttonFrameWidth = nil
+            self.buttonFrameHeight = nil
+        }
     }
+    
+    
     
     // MARK: - Numbers
     
@@ -236,7 +249,7 @@ extension GameViewController {
     
     // MARK: - Colors
     
-    func shuffleCellColors(animated: Bool) {
+    func shuffleCellsColors(animated: Bool) {
         buttons.forEach({ (button) in
             if animated {
                 UIViewPropertyAnimator.runningPropertyAnimator(
@@ -248,6 +261,27 @@ extension GameViewController {
                 })
             } else {
                 button.backgroundColor = randomColor
+            }
+        })
+    }
+    
+    func shuffleNumbersColors(animated: Bool) {
+        let colorSet = randomColorSet.map { darkMode ? $0.dark : $0.light }
+        buttons.forEach({ (button) in
+            if animated {
+                UIViewPropertyAnimator.runningPropertyAnimator(
+                    withDuration: 0.1,
+                    delay: 0.0,
+                    options: [],
+                    animations: {
+                        if let color = self.getAnotherColor(for: button, from: colorSet) {
+                            button.setTitleColor(color, for: .normal)
+                        }
+                })
+            } else {
+                if let color = self.getAnotherColor(for: button, from: colorSet) {
+                    button.setTitleColor(color, for: .normal)
+                }
             }
         })
     }
@@ -278,23 +312,6 @@ extension GameViewController {
                 if let color = self.getAnotherColor(for: button, from: colorSet) {
                     button.backgroundColor = color
                 }
-        })
-    }
-    
-    func shuffleNumberColors(animated: Bool) {
-        let colorSet = randomColorSet.map { darkMode ? $0.dark : $0.light }
-        buttons.forEach({ (button) in
-            if animated {
-                UIViewPropertyAnimator.runningPropertyAnimator(
-                    withDuration: 0.1,
-                    delay: 0.0,
-                    options: [],
-                    animations: {
-                        button.setTitleColor(self.getAnotherColor(for: button, from: colorSet), for: .normal)
-                })
-            } else {
-                button.setTitleColor(getAnotherColor(for: button, from: colorSet), for: .normal)
-            }
         })
     }
     
@@ -343,15 +360,35 @@ extension GameViewController {
     
     // MARK: - Helping Methods
     
+    internal func startGame() {
+        hideResults()
+        showNumbers(animated: true)
+        game.startGame()
+        gameFinished = false
+        
+        feedbackGenerator.impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
+        feedbackGenerator.impactFeedbackGenerator?.prepare()
+        
+        if game.winkNumbersMode || game.winkColorsMode {
+            timer = Timer.scheduledTimer(
+                timeInterval: game.winkColorsMode ? 0.1 : 0.2,
+                target: self,
+                selector: #selector(timerSceduled),
+                userInfo: nil,
+                repeats: true
+            )
+        }
+    }
+    
     func prepareForNewGame(hideMessageLabel: Bool = true) {
         game.newGame()
         setNumbers()
         gameFinished = true
         if game.colorfulCellsMode {
-            shuffleCellColors(animated: true)
+            shuffleCellsColors(animated: true)
         }
         if game.colorfulNumbersMode {
-            shuffleNumberColors(animated: true)
+            shuffleNumbersColors(animated: true)
         }
         if game.winkNumbersMode || game.winkColorsMode {
             timer.invalidate()
@@ -397,5 +434,5 @@ extension GameViewController {
             winkCellColor(at: button)
         }
     }
-
+    
 }

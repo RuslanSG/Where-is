@@ -10,17 +10,9 @@ import UIKit
 
 protocol SettingsTableViewControllerDelegate {
     
-    func shuffleNumbersModeStateChanged(to state: Bool)
     func colorfulNumbersModeStateChanged(to state: Bool)
-    func winkNumbersModeStateChanged(to state: Bool)
-
     func colorfulCellsModeStateChanged(to state: Bool)
-    func shuffleColorsModeStateChanged(to state: Bool)
-    func winkColorsModeStateChanged(to state: Bool)
-    
-    func levelChanged(to level: Int)
     func maxNumberChanged(to maxNumber: Int)
-    
     func darkModeStateChanged(to state: Bool)
 
 }
@@ -49,25 +41,11 @@ class SettingsTableViewController: UITableViewController {
     
     @IBOutlet weak var darkModeSwitcher: UISwitch!
     
+    var game: Game!
+    
     var delegate: SettingsTableViewControllerDelegate?
     
     var userInterfaceColor: UIColor!
-    
-    var shuffleNumbersMode: Bool!
-    var colorfulNumbersMode: Bool!
-    var winkNumbersMode: Bool!
-    
-    var colorfulCellsMode: Bool!
-    var shuffleColorsMode: Bool!
-    var winkColorsMode: Bool!
-    
-    var level: Int!
-    var maxNumber: Int!
-    
-    var maxLevel: Int!
-    var minLevel: Int!
-    var maxPossibleNumber: Int!
-    var minPossibleNumber: Int!
     
     // MARK: - Colors
     
@@ -84,15 +62,17 @@ class SettingsTableViewController: UITableViewController {
     private let swithersTintColor           = (darkMode: #colorLiteral(red: 0.262745098, green: 0.2588235294, blue: 0.2705882353, alpha: 1), lightMode: #colorLiteral(red: 0.8980392157, green: 0.8980392157, blue: 0.8980392157, alpha: 1))
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
         doneButton.tintColor = userInterfaceColor
         switchers.forEach { $0.onTintColor = userInterfaceColor }
         
-        shuffleNumbersModeSwitcher.setOn(shuffleNumbersMode, animated: false)
-        colorfulNumbersModeSwitcher.setOn(colorfulNumbersMode, animated: false)
-        colorModeSwitcher.setOn(colorfulCellsMode, animated: false)
-        shuffleColorsModeSwitcher.setOn(shuffleColorsMode, animated: false)
-        winkNumbersModeSwitcher.setOn(winkNumbersMode, animated: false)
-        winkColorsModeSwitcher.setOn(winkColorsMode, animated: false)
+        shuffleNumbersModeSwitcher.setOn(game.shuffleNumbersMode, animated: false)
+        colorfulNumbersModeSwitcher.setOn(game.colorfulNumbersMode, animated: false)
+        colorModeSwitcher.setOn(game.colorfulCellsMode, animated: false)
+        shuffleColorsModeSwitcher.setOn(game.shuffleColorsMode, animated: false)
+        winkNumbersModeSwitcher.setOn(game.winkNumbersMode, animated: false)
+        winkColorsModeSwitcher.setOn(game.winkColorsMode, animated: false)
 
         if !colorModeSwitcher.isOn {
             shuffleColorsModeSwitcher.isEnabled = false
@@ -105,20 +85,20 @@ class SettingsTableViewController: UITableViewController {
             colorfulNumbersModeSwitcher.setOn(false, animated: false)
         }
 
-        levelLabel.text = String(level)
-        maxNumberLabel.text = String(maxNumber)
+        levelLabel.text = String(game.level)
+        maxNumberLabel.text = String(game.maxNumber)
 
         levelStepper.isEnabled = false // Disabled for testing
-        levelStepper.maximumValue = Double(maxLevel)
-        levelStepper.minimumValue = Double(minLevel)
-        levelStepper.value = Double(level)
+        levelStepper.maximumValue = Double(game.maxLevel)
+        levelStepper.minimumValue = Double(game.minLevel)
+        levelStepper.value = Double(game.level)
         levelStepper.stepValue = 1
         levelStepper.tintColor = userInterfaceColor
         levelStepper.alpha = 0.5
 
-        maxNumberStepper.maximumValue = Double(maxPossibleNumber)
-        maxNumberStepper.minimumValue = Double(minPossibleNumber)
-        maxNumberStepper.value = Double(maxNumber)
+        maxNumberStepper.maximumValue = Double(game.maxPossibleNumber)
+        maxNumberStepper.minimumValue = Double(game.minPossibleNumber)
+        maxNumberStepper.value = Double(game.maxNumber)
         maxNumberStepper.stepValue = 5
         maxNumberStepper.tintColor = userInterfaceColor
         
@@ -136,18 +116,20 @@ class SettingsTableViewController: UITableViewController {
     }
     
     @IBAction func shuffleNumbersModeSwitcherValueChanged(_ sender: UISwitch) {
-        delegate?.shuffleNumbersModeStateChanged(to: sender.isOn)
+        game.shuffleNumbersMode = sender.isOn
     }
     
     @IBAction func colorfulNumbersModeSwitcherValueChanged(_ sender: UISwitch) {
+        game.colorfulNumbersMode = sender.isOn
         delegate?.colorfulNumbersModeStateChanged(to: sender.isOn)
     }
     
     @IBAction func winkNumbersModeSwitcherValueChanged(_ sender: UISwitch) {
-        delegate?.winkNumbersModeStateChanged(to: sender.isOn)
+        game.winkNumbersMode = sender.isOn
     }
     
-    @IBAction func colorSwitcherValueChanged(_ sender: UISwitch) {
+    @IBAction func colorfulCellsSwitcherValueChanged(_ sender: UISwitch) {
+        game.colorfulCellsMode = sender.isOn
         delegate?.colorfulCellsModeStateChanged(to: sender.isOn)
         if !sender.isOn {
             if shuffleColorsModeSwitcher.isOn {
@@ -166,18 +148,18 @@ class SettingsTableViewController: UITableViewController {
     }
     
     @IBAction func shuffleColorsModeSwitcherValueChanged(_ sender: UISwitch) {
-       delegate?.shuffleColorsModeStateChanged(to: sender.isOn)
+        game.shuffleColorsMode = sender.isOn
     }
     
     @IBAction func winkColorsModeSwitcherValueChanged(_ sender: UISwitch) {
-        delegate?.winkColorsModeStateChanged(to: sender.isOn)
+        game.winkColorsMode = sender.isOn
     }
     
     
     @IBAction func levelStepperValueChanged(_ sender: UIStepper) {
         let level = Int(sender.value)
         levelLabel.text = String(level)
-        delegate?.levelChanged(to: level)
+        game.level = level
     }
     
     @IBAction func maxNumberStepperValueChanged(_ sender: UIStepper) {
