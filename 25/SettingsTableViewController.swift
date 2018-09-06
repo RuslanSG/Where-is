@@ -165,7 +165,6 @@ class SettingsTableViewController: UITableViewController {
     @IBAction func maxNumberStepperValueChanged(_ sender: UIStepper) {
         let maxNumber = Int(sender.value)
         maxNumberLabel.text = String(maxNumber)
-        
         delegate?.maxNumberChanged(to: maxNumber)
     }
     

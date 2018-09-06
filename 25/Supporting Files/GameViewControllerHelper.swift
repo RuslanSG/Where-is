@@ -28,17 +28,46 @@ extension GameViewController {
         return self.view.bounds.width / 200
     }
     
-    var buttonsFieldFrame: CGRect {
-        let height = self.view.bounds.width / CGFloat(game.colums) * CGFloat(game.rows)
-        let pointY = self.view.bounds.midY - height / 2
+    var buttonsContainerViewFrame: CGRect {
+        let screenHeight = UIScreen.main.bounds.height
+        let screenWidth = UIScreen.main.bounds.width
         let staturBarHeight = UIApplication.shared.statusBarFrame.height
-        let newGameButtonFrameY = stopButton.frame.minY
-        let maxAlllowedButtonsContainerViewHeight = newGameButtonFrameY - staturBarHeight - gridInset
+        
+        let bottomGap = screenHeight - stopButton.frame.maxY
+        
+        let minY = staturBarHeight + gridInset
+        let maxY = screenHeight - stopButton.frame.height - bottomGap - gridInset
+        let maxAlllowedHeight = maxY - minY
+        
+        let expectedHeight = screenWidth / CGFloat(game.colums) * CGFloat(game.rows)
+        let expectedMinY = screenHeight / 2 - expectedHeight / 2
+        let expectedMaxY = screenHeight / 2 + expectedHeight / 2
+        
+        let width = screenWidth - gridInset * 2
+        var height: CGFloat {
+            return expectedHeight < maxAlllowedHeight ? expectedHeight : maxAlllowedHeight
+        }
+        
+        let x = gridInset
+        var y: CGFloat {
+            if expectedHeight < maxAlllowedHeight {
+                if expectedMinY < minY && expectedMaxY < maxY {
+                    return minY
+                } else if expectedMinY > minY && expectedMaxY > maxY {
+                    return expectedMinY - (expectedMaxY - maxY)
+                } else {
+                    return expectedMinY
+                }
+            } else {
+                return minY
+            }
+        }
+        
         return CGRect(
-            x: gridInset,
-            y: pointY > 0 ? pointY : staturBarHeight,
-            width: self.view.bounds.width - gridInset * 2,
-            height: height < maxAlllowedButtonsContainerViewHeight ? height : maxAlllowedButtonsContainerViewHeight
+            x: x,
+            y: y,
+            width: width,
+            height: height
         )
     }
     
@@ -349,6 +378,7 @@ extension GameViewController {
     func hideResults() {
         resultsView.titleLabel.text = nil
         resultsView.timeLabel.text = nil
+        self.view.bringSubview(toFront: messageView)
         UIViewPropertyAnimator.runningPropertyAnimator(
             withDuration: 0.15,
             delay: 0.0,
@@ -362,8 +392,9 @@ extension GameViewController {
     
     func showMessage() {
         self.view.bringSubview(toFront: messageView)
+        self.view.bringSubview(toFront: resultsView)
         UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: 1.0,
+            withDuration: 0.1,
             delay: 0.0,
             options: [],
             animations: {
@@ -373,7 +404,7 @@ extension GameViewController {
     
     func hideMessage() {
         UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: 0.2,
+            withDuration: 0.1,
             delay: 0.0,
             options: [],
             animations: {

@@ -14,15 +14,17 @@ class MessageView: UIVisualEffectView {
     
     override init(effect: UIVisualEffect?) {
         super.init(effect: effect)
-        
+                
         contentView.addSubview(label)
         contentView.addConstraintsWithFormat(format: "H:|[v0]|", views: label)
         contentView.addConstraintsWithFormat(format: "V:|[v0]|", views: label)
         
-        label.text = "Tap any cell to start"
-        label.font = UIFont.systemFont(ofSize: 20.0)
+        label.text = "Start"
+        label.font = UIFont.systemFont(ofSize: 30.0)
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
+        label.isOpaque = false
+        label.isUserInteractionEnabled = true
     }
     
     required init?(coder aDecoder: NSCoder) {

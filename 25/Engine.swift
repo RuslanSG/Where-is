@@ -48,25 +48,7 @@ class Game {
     var shuffleColorsMode   = false
     var winkColorsMode      = false
     
-    /*
-    var colorfulCellsMode: Bool {
-        return level > 1 ? true : false
-    }
-    var shuffleNumbersMode: Bool {
-        return level > 2 ? true : false
-    }
-    var shuffleColorsMode: Bool {
-        return level > 3 ? true : false
-    }
-    var winkNumbersMode: Bool {
-        return level > 4 ? true : false
-    }
-    var winkColorsMode: Bool {
-        return level > 5 ? true : false
-    }
-     */
-    
-    let maxPossibleNumber = 35
+    let maxPossibleNumber = 40
     let minPossibleNumber = 25
     
     var maxNumber: Int {
@@ -132,53 +114,6 @@ class Game {
             numbers.append(i)
         }
         numbers.shuffle()
-    }
-    
-    private func setGameMode(level: Int) { // Disabled
-        switch level {
-        case 0:
-            shuffleNumbersMode  = false
-            colorfulNumbersMode = false
-            winkNumbersMode     = false
-            
-            colorfulCellsMode   = false
-            shuffleColorsMode   = false
-            winkColorsMode      = false
-        case 1:
-            shuffleNumbersMode  = false
-            colorfulNumbersMode = false
-            winkNumbersMode     = false
-            
-            colorfulCellsMode   = false
-            shuffleColorsMode   = false
-            winkColorsMode      = false
-        case 2:
-            shuffleNumbersMode  = false
-            colorfulNumbersMode = false
-            winkNumbersMode     = false
-            
-            colorfulCellsMode   = false
-            shuffleColorsMode   = false
-            winkColorsMode      = false
-        case 3:
-            shuffleNumbersMode  = false
-            colorfulNumbersMode = false
-            winkNumbersMode     = false
-            
-            colorfulCellsMode   = false
-            shuffleColorsMode   = false
-            winkColorsMode      = false
-        case 4:
-            shuffleNumbersMode  = false
-            colorfulNumbersMode = false
-            winkNumbersMode     = false
-            
-            colorfulCellsMode   = false
-            shuffleColorsMode   = false
-            winkColorsMode      = false
-        default:
-            break
-        }
     }
     
 }

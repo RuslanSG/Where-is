@@ -23,7 +23,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     }()
     
     lazy var buttonsContainerView: UIView = {
-        let view = UIView(frame: buttonsFieldFrame)
+        let view = UIView()
         view.backgroundColor = .clear
         return view
     }()
@@ -43,10 +43,12 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     lazy var messageView: MessageView = {
         let blur = UIBlurEffect(style: darkMode ? .dark : .light)
+        let tapRecogrizer = UITapGestureRecognizer(target: self, action: #selector(messageViewTapped(sender:)))
         let view = MessageView(effect: blur)
         view.layer.cornerRadius = cornerRadius
         view.clipsToBounds = true
         view.alpha = 0.0
+        view.addGestureRecognizer(tapRecogrizer)
         return view
     }()
         
@@ -78,7 +80,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     var buttons = [UIButton]() {
         didSet {
-            buttonsContainerView.frame = buttonsFieldFrame
+            buttonsContainerView.frame = buttonsContainerViewFrame
         }
     }
     
@@ -93,9 +95,16 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     let feedbackGenerator = FeedbackGenerator()
     
-    private var messageViewHeight: CGFloat {
+    private var buttonHeight: CGFloat? {
         if let button = buttons.first {
-            let height = buttons.count % 10 == 0 ? button.bounds.height * 2 + gridInset * 2 : button.bounds.height
+            return button.bounds.height
+        }
+        return 0.0
+    }
+    
+    private var messageViewHeight: CGFloat {
+        if let buttonHeight = buttonHeight {
+            let height = buttons.count % 10 == 0 ? buttonHeight * 2 + gridInset * 2 : buttonHeight
             return height
         }
         return 0.0
@@ -179,6 +188,8 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     // MARK: - Setup UI
     
     func setupInputComponents() {
+        self.view.layoutSubviews()
+        
         userInterfaceColor = randomColor
         
         self.view.addSubview(resultsView)
@@ -197,7 +208,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         if let button = buttons.first {
             let width = button.bounds.width * 3 + gridInset * 4
             messageView.frame = CGRect(x: 0.0, y: 0.0, width: width, height: height)
-            messageView.center = self.view.center
+            messageView.center = buttonsContainerView.center
         }
     }
     
@@ -216,7 +227,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             // User tapped the last number
             game.finishGame()
             showResults(time: game.elapsedTime, maxNumber: game.maxNumber, level: game.level - 1)
-            prepareForNewGame(hideMessageLabel: false)
+            prepareForNewGame()
             feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .success)
             uncompressButton(sender)
             return
@@ -267,6 +278,12 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         })
     }
     
+    @objc private func messageViewTapped(sender: UITapGestureRecognizer) {
+        startGame()
+        hideMessage()
+        feedbackGenerator.playImpactHapticFeedback(needsToPrepare: true, style: .medium)
+    }
+    
     // MARK: - SettingsTableViewControllerDelegate
     
     func colorfulNumbersModeStateChanged(to state: Bool) {
@@ -281,6 +298,8 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             removeCellColors(animated: false)
             removeNumberColors(animated: false)
         }
+        buttons.forEach { $0.setTitleColor(defaultNumbersColor, for: .normal) }
+        messageView.label.textColor = defaultNumbersColor
         prepareForNewGame()
     }
     
@@ -293,11 +312,10 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             removeButtons(count: buttons.count - maxNumber)
         }
         
-        messageView.frame = CGRect(x: 0.0, y: 0.0, width: messageViewWidth, height: messageViewHeight)
-        messageView.center = self.view.center
-        
         updateButtonsFrames()
         prepareForNewGame()
+        messageView.frame = CGRect(x: 0.0, y: 0.0, width: messageViewWidth, height: messageViewHeight)
+        messageView.center = buttonsContainerView.center
     }
     
     
