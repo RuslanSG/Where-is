@@ -9,7 +9,7 @@
 import UIKit
 
 class GameViewController: UIViewController, SettingsTableViewControllerDelegate {
-    
+
     @IBOutlet weak var stopButton: UIButton!
     @IBOutlet weak var settingsButton: UIButton!
     
@@ -56,6 +56,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     private let userDefaults = UserDefaults.standard
     private let darkModeKey = "darkMode"
+    private let automaticDarkModeKey = "automaticDarkModeKey"
     
     var game = Game() {
         didSet {
@@ -94,7 +95,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     var timer = Timer()
     
     let feedbackGenerator = FeedbackGenerator()
-    
+        
     private var buttonHeight: CGFloat? {
         if let button = buttons.first {
             return button.bounds.height
@@ -161,20 +162,21 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         }
     }
     
-    var darkMode = false {
+    var darkMode: Bool = false {
         didSet {
-            self.view.backgroundColor = mainViewColor
-            game.colorfulCellsMode ? shuffleCellsColors(animated: false) : removeCellColors(animated: false)
-            removeNumberColors(animated: false)
-            UIApplication.shared.statusBarStyle = darkMode ? .lightContent : .default
-            userInterfaceColor = randomColor
-            
-            resultsView.effect = darkMode ? UIBlurEffect(style: .dark) : UIBlurEffect(style: .light)
-            resultsView.userInterfaceColor = userInterfaceColor
-            resultsView.fontsColor = darkMode ? numbersColors.darkMode : numbersColors.lightMode
-            
-            messageView.label.textColor = defaultNumbersColor
-            messageView.effect = darkMode ? UIBlurEffect(style: .dark) : UIBlurEffect(style: .light)
+            setupColors()
+        }
+    }
+    
+    var automaticDarkMode: Bool! {
+        get {
+            return userDefaults.bool(forKey: automaticDarkModeKey)
+        }
+        set {
+            if automaticDarkMode {
+                darkMode = UIScreen.main.brightness < 0.5
+            }
+            userDefaults.set(newValue, forKey: automaticDarkModeKey)
         }
     }
     
@@ -189,6 +191,9 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     func setupInputComponents() {
         self.view.layoutSubviews()
+        if automaticDarkMode {
+            darkMode = UIScreen.main.brightness > 0.5 ? false : true
+        }
         
         userInterfaceColor = randomColor
         
@@ -210,6 +215,21 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             messageView.frame = CGRect(x: 0.0, y: 0.0, width: width, height: height)
             messageView.center = buttonsContainerView.center
         }
+    }
+    
+    func setupColors() {
+        self.view.backgroundColor = mainViewColor
+        game.colorfulCellsMode ? shuffleCellsColors(animated: false) : removeCellColors(animated: false)
+        removeNumberColors(animated: false)
+        UIApplication.shared.statusBarStyle = darkMode ? .lightContent : .default
+        userInterfaceColor = randomColor
+        
+        resultsView.effect = darkMode ? UIBlurEffect(style: .dark) : UIBlurEffect(style: .light)
+        resultsView.userInterfaceColor = userInterfaceColor
+        resultsView.fontsColor = darkMode ? numbersColors.darkMode : numbersColors.lightMode
+        
+        messageView.label.textColor = defaultNumbersColor
+        messageView.effect = darkMode ? UIBlurEffect(style: .dark) : UIBlurEffect(style: .light)
     }
     
     // MARK: - Actions
@@ -324,6 +344,16 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         prepareForNewGame()
     }
     
+    func automaticDarkModeStateChanged(to state: Bool) {
+        if state == true {
+            darkMode = UIScreen.main.brightness > 0.5 ? false : true
+        } else {
+            darkMode = false
+        }
+        automaticDarkMode = state
+        prepareForNewGame()
+    }
+    
     // MARK: - Segue
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -333,6 +363,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             svc.game = game
             svc.userInterfaceColor = userInterfaceColor
             svc.darkMode = darkMode
+            svc.automaticDarkMode = automaticDarkMode
         }
     }
         

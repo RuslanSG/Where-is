@@ -14,6 +14,7 @@ protocol SettingsTableViewControllerDelegate {
     func colorfulCellsModeStateChanged(to state: Bool)
     func maxNumberChanged(to maxNumber: Int)
     func darkModeStateChanged(to state: Bool)
+    func automaticDarkModeStateChanged(to state: Bool)
 
 }
 
@@ -40,10 +41,12 @@ class SettingsTableViewController: UITableViewController {
     @IBOutlet weak var maxNumberStepper: UIStepper!
     
     @IBOutlet weak var darkModeSwitcher: UISwitch!
+    @IBOutlet weak var automaticDarkModeSwitcher: UISwitch!
     
     var game: Game!
     
     var delegate: SettingsTableViewControllerDelegate?
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     var userInterfaceColor: UIColor!
     
@@ -52,13 +55,18 @@ class SettingsTableViewController: UITableViewController {
     var darkMode: Bool! {
         didSet {
             switchAppearanceTo(darkMode: darkMode)
+            darkModeSwitcher.setOn(darkMode, animated: true)
         }
     }
+    
+    var automaticDarkMode: Bool!
     
     private let cellsColor                  = (darkMode: #colorLiteral(red: 0.1098039216, green: 0.1098039216, blue: 0.1176470588, alpha: 1), lightMode: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
     private let tableViewBackgroundColor    = (darkMode: #colorLiteral(red: 0.09019607843, green: 0.09019607843, blue: 0.09019607843, alpha: 1), lightMode: #colorLiteral(red: 0.9411764706, green: 0.937254902, blue: 0.9607843137, alpha: 1))
     private let tableViewSeparatorColor     = (darkMode: #colorLiteral(red: 0.1764705882, green: 0.1764705882, blue: 0.1843137255, alpha: 1), lightMode: #colorLiteral(red: 0.8274509804, green: 0.8235294118, blue: 0.8392156863, alpha: 1))
     private let swithersTintColor           = (darkMode: #colorLiteral(red: 0.262745098, green: 0.2588235294, blue: 0.2705882353, alpha: 1), lightMode: #colorLiteral(red: 0.8980392157, green: 0.8980392157, blue: 0.8980392157, alpha: 1))
+    
+    // MARK: - Lifecycle
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -103,10 +111,13 @@ class SettingsTableViewController: UITableViewController {
         maxNumberStepper.tintColor = userInterfaceColor
         
         darkModeSwitcher.setOn(darkMode, animated: false)
-        darkModeSwitcher.onTintColor = userInterfaceColor
+        darkModeSwitcher.isEnabled = !automaticDarkMode
+        
+        automaticDarkModeSwitcher.setOn(automaticDarkMode, animated: false)
         
         darkMode ? cells.forEach { $0.backgroundColor = cellsColor.darkMode } :
                    cells.forEach { $0.backgroundColor = cellsColor.lightMode }
+        
     }
         
     // MARK: - Actions
@@ -173,6 +184,16 @@ class SettingsTableViewController: UITableViewController {
         delegate?.darkModeStateChanged(to: sender.isOn)
     }
     
+    @IBAction func automaticDarkModeSwitcherValueChanged(_ sender: UISwitch) {
+        automaticDarkMode = sender.isOn
+        darkModeSwitcher.isEnabled = !sender.isOn
+        delegate?.automaticDarkModeStateChanged(to: sender.isOn)
+        
+        if automaticDarkMode {
+            darkMode = UIScreen.main.brightness < 0.5
+        }
+    }
+    
     // MARK: - Helping Methods
     
     private func switchAppearanceTo(darkMode: Bool) {
@@ -200,6 +221,17 @@ class SettingsTableViewController: UITableViewController {
             labels.forEach { (label) in
                 label.textColor = .black
             }
+        }
+    }
+    
+    // MARK: - UIScreen Notifications
+    
+    @objc private func brigtnessDidChange(notification: Notification) {
+        if  UIScreen.main.brightness > 0.49,
+            UIScreen.main.brightness < 0.51,
+            appDelegate.applicationIsActive,
+            automaticDarkMode {
+            darkMode = UIScreen.main.brightness > 0.5 ? false : true
         }
     }
     
