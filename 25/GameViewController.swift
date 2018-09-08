@@ -85,6 +85,8 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         }
     }
     
+    lazy var buttonsNotAnimating = buttons
+    
     var buttonFrameX: CGFloat?
     var buttonFrameY: CGFloat?
     var buttonFrameHeight: CGFloat?
@@ -235,6 +237,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     // MARK: - Actions
     
     @objc func buttonPressed(sender: UIButton) {
+        print(sender.tag)
         compressButton(sender)
         if gameFinished {
             startGame()
@@ -260,6 +263,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             feedbackSelection(isRight: false)
             feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .error)
         }
+        game.numberSelected(sender.tag)
         if game.shuffleNumbersMode {
             game.shuffleNumbers()
             updateNumbers(animated: true)
@@ -270,9 +274,10 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         }
         if game.shuffleColorsMode {
             shuffleCellsColors(animated: true)
-            shuffleNumbersColors(animated: true)
+            if game.colorfulNumbersMode {
+                shuffleNumbersColors(animated: true)
+            }
         }
-        game.numberSelected(sender.tag)
     }
     
     @objc func buttonReleased(sender: UIButton) {

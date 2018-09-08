@@ -231,7 +231,7 @@ extension GameViewController {
         for i in buttons.indices {
             let number = game.numbers[i]
             let button = buttons[i]
-            if animated {
+            if animated && buttonsNotAnimating.contains(button) {
                 UIViewPropertyAnimator.runningPropertyAnimator(
                     withDuration: 0.1,
                     delay: 0.0,
@@ -263,14 +263,16 @@ extension GameViewController {
             options: [],
             animations: {
                 button.titleLabel?.alpha = 0.0
-        }) { (position) in
+        }) { (_) in
             if self.game.inGame {
                 UIViewPropertyAnimator.runningPropertyAnimator(
                     withDuration: 0.5,
-                    delay: 1.0,
+                    delay: 0.9,
                     options: [],
                     animations: {
                         button.titleLabel?.alpha = 1.0
+                }, completion: { (_) in
+                    self.buttonsNotAnimating.append(button)
                 })
             }
         }
@@ -423,9 +425,9 @@ extension GameViewController {
         feedbackGenerator.impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
         feedbackGenerator.impactFeedbackGenerator?.prepare()
         
-        if game.winkNumbersMode || game.winkColorsMode {
+        if game.winkNumbersMode /* || game.winkColorsMode */ {
             timer = Timer.scheduledTimer(
-                timeInterval: game.winkColorsMode ? 0.1 : 0.2,
+                timeInterval: TimeInterval(3.5 / Double(game.maxNumber)), // game.winkColorsMode ? 0.1 : 0.2,
                 target: self,
                 selector: #selector(timerSceduled),
                 userInfo: nil,
@@ -481,7 +483,10 @@ extension GameViewController {
     
     func wink(_ cellPart: CellPart) {
         if cellPart == .number {
-            let button = buttons[buttons.count.arc4random]
+            let button = buttonsNotAnimating[buttonsNotAnimating.count.arc4random]
+            if let index = buttonsNotAnimating.index(of: button) {
+                buttonsNotAnimating.remove(at: index)
+            }
             winkNumber(at: button)
         }
         if cellPart == .color {

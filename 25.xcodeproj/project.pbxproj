@@ -79,7 +79,6 @@
 				2A8C933C212197F70068F98E /* SettingsTableViewController.swift */,
 				2AAC1632213C04210042D4A1 /* ResultsView.swift */,
 				2ACDF75D213F35B9004FEA1B /* MessageView.swift */,
-				2ACDF75B213D5B43004FEA1B /* FeedbackGenerator.swift */,
 				2A118DB7211A132F0059E252 /* Main.storyboard */,
 				2A118DC8211A13450059E252 /* Supporting Files */,
 				2A118DC2211A13300059E252 /* Info.plist */,
@@ -93,6 +92,7 @@
 			children = (
 				2A118DB3211A132F0059E252 /* AppDelegate.swift */,
 				2AAC160F212D94D00042D4A1 /* GameViewControllerHelper.swift */,
+				2ACDF75B213D5B43004FEA1B /* FeedbackGenerator.swift */,
 				2A118DC9211A1BD50059E252 /* Utilities.swift */,
 				2A118DCD211AEC100059E252 /* Grid.swift */,
 				2AC91A1421432201006C98AC /* Throttler.swift */,

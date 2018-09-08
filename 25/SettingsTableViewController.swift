@@ -224,15 +224,4 @@ class SettingsTableViewController: UITableViewController {
         }
     }
     
-    // MARK: - UIScreen Notifications
-    
-    @objc private func brigtnessDidChange(notification: Notification) {
-        if  UIScreen.main.brightness > 0.49,
-            UIScreen.main.brightness < 0.51,
-            appDelegate.applicationIsActive,
-            automaticDarkMode {
-            darkMode = UIScreen.main.brightness > 0.5 ? false : true
-        }
-    }
-    
 }
