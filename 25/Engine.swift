@@ -35,6 +35,7 @@ class Game {
     var shuffleNumbersMode  = false
     var colorfulNumbersMode = false
     var winkNumbersMode     = false
+    var swapNumbersMode     = false
     
     var colorfulCellsMode   = false {
         didSet {

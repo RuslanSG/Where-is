@@ -278,6 +278,48 @@ extension GameViewController {
         }
     }
     
+    func swapNumbers(animated: Bool) {
+        let button1 = buttonsNotAnimating[buttonsNotAnimating.count.arc4random]
+        guard let index1 = buttonsNotAnimating.index(of: button1) else { return }
+        buttonsNotAnimating.remove(at: index1)
+        
+        let button2 = buttonsNotAnimating[buttonsNotAnimating.count.arc4random]
+        guard let index2 = buttonsNotAnimating.index(of: button2) else { return }
+        buttonsNotAnimating.remove(at: index2)
+        
+        let number1 = button1.tag
+        let number2 = button2.tag
+        
+        if animated {
+            UIViewPropertyAnimator.runningPropertyAnimator(
+                withDuration: 0.5,
+                delay: 0.0,
+                options: [],
+                animations: {
+                    button1.titleLabel?.alpha = 0.0
+                    button2.titleLabel?.alpha = 0.0
+            }) { (position) in
+                button1.setTitle(String(number2), for: .normal)
+                button2.setTitle(String(number1), for: .normal)
+                button1.tag = number2
+                button2.tag = number1
+                if self.game.inGame {
+                    UIViewPropertyAnimator.runningPropertyAnimator(
+                        withDuration: 0.5,
+                        delay: 0.0,
+                        options: [],
+                        animations: {
+                            button1.titleLabel?.alpha = 1.0
+                            button2.titleLabel?.alpha = 1.0
+                    }) { (position) in
+                        self.buttonsNotAnimating.append(button1)
+                        self.buttonsNotAnimating.append(button2)
+                    }
+                }
+            }
+        }
+    }
+    
     // MARK: - Colors
     
     func shuffleCellsColors(animated: Bool) {
@@ -425,9 +467,19 @@ extension GameViewController {
         feedbackGenerator.impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
         feedbackGenerator.impactFeedbackGenerator?.prepare()
         
-        if game.winkNumbersMode /* || game.winkColorsMode */ {
-            timer = Timer.scheduledTimer(
-                timeInterval: TimeInterval(3.5 / Double(game.maxNumber)), // game.winkColorsMode ? 0.1 : 0.2,
+        if game.winkNumbersMode {
+            timer1 = Timer.scheduledTimer(
+                timeInterval: TimeInterval(3.5 / Double(game.maxNumber)),
+                target: self,
+                selector: #selector(timerSceduled),
+                userInfo: nil,
+                repeats: true
+            )
+        }
+        
+        if game.swapNumbersMode {
+            timer2 = Timer.scheduledTimer(
+                timeInterval: TimeInterval(7.0 / Double(game.maxNumber)),
                 target: self,
                 selector: #selector(timerSceduled),
                 userInfo: nil,
@@ -446,8 +498,9 @@ extension GameViewController {
         if game.colorfulNumbersMode {
             shuffleNumbersColors(animated: true)
         }
-        if game.winkNumbersMode || game.winkColorsMode {
-            timer.invalidate()
+        if game.winkNumbersMode || game.winkColorsMode || game.swapNumbersMode {
+            timer1.invalidate()
+            timer2.invalidate()
             buttons.forEach { $0.titleLabel?.layer.removeAllAnimations() }
         }
         hideNumbers(animated: false)
@@ -478,6 +531,9 @@ extension GameViewController {
         }
         if game.winkColorsMode {
             wink(.color)
+        }
+        if game.swapNumbersMode {
+            swapNumbers(animated: true)
         }
     }
     

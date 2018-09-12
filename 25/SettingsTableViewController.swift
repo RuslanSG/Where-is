@@ -29,6 +29,7 @@ class SettingsTableViewController: UITableViewController {
     @IBOutlet weak var shuffleNumbersModeSwitcher: UISwitch!
     @IBOutlet weak var colorfulNumbersModeSwitcher: UISwitch!
     @IBOutlet weak var winkNumbersModeSwitcher: UISwitch!
+    @IBOutlet weak var swapNumbersModeSwitcher: UISwitch!
 
     @IBOutlet weak var colorModeSwitcher: UISwitch!
     @IBOutlet weak var shuffleColorsModeSwitcher: UISwitch!
@@ -76,10 +77,13 @@ class SettingsTableViewController: UITableViewController {
         
         shuffleNumbersModeSwitcher.setOn(game.shuffleNumbersMode, animated: false)
         colorfulNumbersModeSwitcher.setOn(game.colorfulNumbersMode, animated: false)
+        winkNumbersModeSwitcher.setOn(game.winkNumbersMode, animated: false)
+        swapNumbersModeSwitcher.setOn(game.swapNumbersMode, animated: false)
+
         colorModeSwitcher.setOn(game.colorfulCellsMode, animated: false)
         shuffleColorsModeSwitcher.setOn(game.shuffleColorsMode, animated: false)
-        winkNumbersModeSwitcher.setOn(game.winkNumbersMode, animated: false)
         winkColorsModeSwitcher.setOn(game.winkColorsMode, animated: false)
+        
         winkColorsModeSwitcher.isEnabled = false // Disabled for testing
 
         if !colorModeSwitcher.isOn {
@@ -137,6 +141,10 @@ class SettingsTableViewController: UITableViewController {
     
     @IBAction func winkNumbersModeSwitcherValueChanged(_ sender: UISwitch) {
         game.winkNumbersMode = sender.isOn
+    }
+    
+    @IBAction func swapNumbersModeSwitcherValueChanged(_ sender: UISwitch) {
+        game.swapNumbersMode = sender.isOn
     }
     
     @IBAction func colorfulCellsSwitcherValueChanged(_ sender: UISwitch) {

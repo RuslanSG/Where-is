@@ -82,6 +82,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     var buttons = [UIButton]() {
         didSet {
             buttonsContainerView.frame = buttonsContainerViewFrame
+            buttonsNotAnimating = buttons
         }
     }
     
@@ -94,7 +95,8 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     let cellCompressionRatio = 0.90
     
-    var timer = Timer()
+    var timer1 = Timer()
+    var timer2 = Timer()
     
     let feedbackGenerator = FeedbackGenerator()
         
