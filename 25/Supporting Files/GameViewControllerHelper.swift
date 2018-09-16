@@ -8,8 +8,9 @@
 
 import UIKit
 import QuartzCore
+import CoreLocation
 
-extension GameViewController {
+extension GameViewController: CLLocationManagerDelegate {
     
     var cornerRadius: CGFloat {
         if  self.view.traitCollection.horizontalSizeClass == .regular,
@@ -172,8 +173,8 @@ extension GameViewController {
                         width: buttonFrameWidth,
                         height: buttonFrameHeight
                     )
+                    button.titleLabel?.alpha = 1.0
             })
-            
             self.buttonFrameX = nil
             self.buttonFrameY = nil
             self.buttonFrameWidth = nil
@@ -290,32 +291,36 @@ extension GameViewController {
         let number1 = button1.tag
         let number2 = button2.tag
         
+        let duration = 1.0
+        
         if animated {
             UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: 0.5,
+                withDuration: duration / 2,
                 delay: 0.0,
                 options: [],
                 animations: {
                     button1.titleLabel?.alpha = 0.0
                     button2.titleLabel?.alpha = 0.0
             }) { (position) in
-                button1.setTitle(String(number2), for: .normal)
-                button2.setTitle(String(number1), for: .normal)
-                button1.tag = number2
-                button2.tag = number1
                 if self.game.inGame {
+                    button1.setTitle(String(number2), for: .normal)
+                    button2.setTitle(String(number1), for: .normal)
+                    button1.tag = number2
+                    button2.tag = number1
                     UIViewPropertyAnimator.runningPropertyAnimator(
-                        withDuration: 0.5,
+                        withDuration: duration / 2,
                         delay: 0.0,
                         options: [],
                         animations: {
                             button1.titleLabel?.alpha = 1.0
                             button2.titleLabel?.alpha = 1.0
-                    }) { (position) in
-                        self.buttonsNotAnimating.append(button1)
-                        self.buttonsNotAnimating.append(button2)
-                    }
+                    })
                 }
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+                self.buttonsNotAnimating.append(button1)
+                self.buttonsNotAnimating.append(button2)
             }
         }
     }
@@ -339,7 +344,7 @@ extension GameViewController {
     }
     
     func shuffleNumbersColors(animated: Bool) {
-        let colorSet = randomColorSet.map { darkMode ? $0.dark : $0.light }
+        let colorSet = currentColorSet.map { darkMode ? $0.dark : $0.light }
         buttons.forEach({ (button) in
             if animated {
                 UIViewPropertyAnimator.runningPropertyAnimator(
@@ -376,7 +381,7 @@ extension GameViewController {
     }
     
     func winkCellColor(at button: UIButton) {
-        let colorSet = randomColorSet.map { darkMode ? $0.dark : $0.light }
+        let colorSet = currentColorSet.map { darkMode ? $0.dark : $0.light }
         UIViewPropertyAnimator.runningPropertyAnimator(
             withDuration: 0.5,
             delay: 0.0,
@@ -456,6 +461,28 @@ extension GameViewController {
         })
     }
     
+    // MARK: - Location
+    
+    func getUserLocation() {
+        self.locationManager.requestWhenInUseAuthorization()
+        
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
+            locationManager.startUpdatingLocation()
+        }
+    }
+    
+    // MARK: - CLLocationManagerDelegate
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if currentLocation == nil {
+            guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
+            currentLocation = CLLocationCoordinate2D(latitude: locValue.latitude, longitude: locValue.longitude)
+            print("location = \(locValue.longitude) \(locValue.latitude)")
+        }
+    }
+    
     // MARK: - Helping Methods
     
     internal func startGame() {
@@ -466,6 +493,10 @@ extension GameViewController {
         
         feedbackGenerator.impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
         feedbackGenerator.impactFeedbackGenerator?.prepare()
+        
+        if game.colorfulCellsMode {
+            shuffleCellsColors(animated: true)
+        }
         
         if game.winkNumbersMode {
             timer1 = Timer.scheduledTimer(
@@ -479,7 +510,7 @@ extension GameViewController {
         
         if game.swapNumbersMode {
             timer2 = Timer.scheduledTimer(
-                timeInterval: TimeInterval(7.0 / Double(game.maxNumber)),
+                timeInterval: TimeInterval(5.0 / Double(game.maxNumber)),
                 target: self,
                 selector: #selector(timerSceduled),
                 userInfo: nil,
@@ -492,9 +523,6 @@ extension GameViewController {
         game.newGame()
         setNumbers()
         gameFinished = true
-        if game.colorfulCellsMode {
-            shuffleCellsColors(animated: true)
-        }
         if game.colorfulNumbersMode {
             shuffleNumbersColors(animated: true)
         }
@@ -502,6 +530,7 @@ extension GameViewController {
             timer1.invalidate()
             timer2.invalidate()
             buttons.forEach { $0.titleLabel?.layer.removeAllAnimations() }
+            //buttonsNotAnimating = buttons
         }
         hideNumbers(animated: false)
         showMessage()
@@ -548,6 +577,15 @@ extension GameViewController {
         if cellPart == .color {
             let button = buttons[buttons.count.arc4random]
             winkCellColor(at: button)
+        }
+    }
+    
+    func setDarkModeByCurrentTime() {
+        let currentTime = calendar.date(byAdding: .hour, value: 3, to: Date())!
+        if currentTime > self.sunrise && currentTime < self.sunset {
+            darkMode = false
+        } else {
+            darkMode = true
         }
     }
     

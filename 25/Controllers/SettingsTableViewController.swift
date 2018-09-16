@@ -86,7 +86,7 @@ class SettingsTableViewController: UITableViewController {
         
         winkColorsModeSwitcher.isEnabled = false // Disabled for testing
 
-        if !colorModeSwitcher.isOn {
+        if !game.colorfulCellsMode {
             shuffleColorsModeSwitcher.isEnabled = false
             shuffleColorsModeSwitcher.setOn(false, animated: false)
             
@@ -95,6 +95,13 @@ class SettingsTableViewController: UITableViewController {
             
             colorfulNumbersModeSwitcher.isEnabled = false
             colorfulNumbersModeSwitcher.setOn(false, animated: false)
+        }
+        if game.swapNumbersMode {
+            winkNumbersModeSwitcher.isEnabled = false
+            shuffleNumbersModeSwitcher.isEnabled = false
+        }
+        if game.winkNumbersMode || game.shuffleColorsMode {
+            swapNumbersModeSwitcher.isEnabled = false
         }
 
         levelLabel.text = String(game.level)
@@ -141,10 +148,13 @@ class SettingsTableViewController: UITableViewController {
     
     @IBAction func winkNumbersModeSwitcherValueChanged(_ sender: UISwitch) {
         game.winkNumbersMode = sender.isOn
+        swapNumbersModeSwitcher.isEnabled = !sender.isOn
     }
     
     @IBAction func swapNumbersModeSwitcherValueChanged(_ sender: UISwitch) {
         game.swapNumbersMode = sender.isOn
+        winkNumbersModeSwitcher.isEnabled = !sender.isOn
+        shuffleNumbersModeSwitcher.isEnabled = !sender.isOn
     }
     
     @IBAction func colorfulCellsSwitcherValueChanged(_ sender: UISwitch) {
@@ -196,10 +206,6 @@ class SettingsTableViewController: UITableViewController {
         automaticDarkMode = sender.isOn
         darkModeSwitcher.isEnabled = !sender.isOn
         delegate?.automaticDarkModeStateChanged(to: sender.isOn)
-        
-        if automaticDarkMode {
-            darkMode = UIScreen.main.brightness < 0.5
-        }
     }
     
     // MARK: - Helping Methods

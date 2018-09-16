@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreLocation
 
 class GameViewController: UIViewController, SettingsTableViewControllerDelegate {
 
@@ -57,6 +58,10 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     private let userDefaults = UserDefaults.standard
     private let darkModeKey = "darkMode"
     private let automaticDarkModeKey = "automaticDarkModeKey"
+    let sunriseKey = "sunrise"
+    let sunsetKey = "sunset"
+    
+    let calendar = Calendar.current
     
     var game = Game() {
         didSet {
@@ -75,23 +80,11 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         }
     }
     
+    var firstTimeAppeared = true
+    
     var grid: Grid {
         return Grid(layout: .dimensions(rowCount: game.rows, columnCount: game.colums), frame: buttonsContainerView.bounds)
     }
-    
-    var buttons = [UIButton]() {
-        didSet {
-            buttonsContainerView.frame = buttonsContainerViewFrame
-            buttonsNotAnimating = buttons
-        }
-    }
-    
-    lazy var buttonsNotAnimating = buttons
-    
-    var buttonFrameX: CGFloat?
-    var buttonFrameY: CGFloat?
-    var buttonFrameHeight: CGFloat?
-    var buttonFrameWidth: CGFloat?
     
     let cellCompressionRatio = 0.90
     
@@ -99,13 +92,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     var timer2 = Timer()
     
     let feedbackGenerator = FeedbackGenerator()
-        
-    private var buttonHeight: CGFloat? {
-        if let button = buttons.first {
-            return button.bounds.height
-        }
-        return 0.0
-    }
+    let locationManager = CLLocationManager()
     
     private var messageViewHeight: CGFloat {
         if let buttonHeight = buttonHeight {
@@ -123,13 +110,41 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         return 0.0
     }
     
+    // MARK: - Buttons
+    
+    var buttons = [UIButton]() {
+        didSet {
+            buttonsContainerView.frame = buttonsContainerViewFrame
+            buttonsNotAnimating = buttons
+        }
+    }
+    
+    lazy var buttonsNotAnimating = buttons
+    private var lastPressedButton: UIButton!
+    
+    var buttonFrameX: CGFloat?
+    var buttonFrameY: CGFloat?
+    var buttonFrameHeight: CGFloat?
+    var buttonFrameWidth: CGFloat?
+    
+    private var buttonHeight: CGFloat? {
+        if let button = buttons.first {
+            return button.bounds.height
+        }
+        return 0.0
+    }
+    
     // MARK: - Colors
     
     private let cellsColors     = (darkMode: #colorLiteral(red: 0.2203874684, green: 0.2203874684, blue: 0.2203874684, alpha: 1), lightMode: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1))
     private let numbersColors   = (darkMode: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), lightMode: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1))
     private let mainViewColors  = (darkMode: #colorLiteral(red: 0.09019607843, green: 0.09019607843, blue: 0.09019607843, alpha: 1), lightMode: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
     
-    private let colorSets = [[(light: #colorLiteral(red: 0.06666666667, green: 0.4666666667, blue: 0.7215686275, alpha: 1), dark: #colorLiteral(red: 0.03137254902, green: 0.3058823529, blue: 0.4941176471, alpha: 1)),
+    private let colorSets = [[(light: #colorLiteral(red: 0.968627451, green: 0.7254901961, blue: 0.168627451, alpha: 1), dark: #colorLiteral(red: 0.8057276114, green: 0.4694959764, blue: 0.1296572619, alpha: 1)),
+                              (light: #colorLiteral(red: 0.9215686275, green: 0.1490196078, blue: 0.1215686275, alpha: 1), dark: #colorLiteral(red: 0.599486165, green: 0.08605109967, blue: 0.05797519395, alpha: 1)),
+                              (light: #colorLiteral(red: 0.7882352941, green: 0.1843137255, blue: 0.4823529412, alpha: 1), dark: #colorLiteral(red: 0.5, green: 0.1014612427, blue: 0.3135548154, alpha: 1))]]
+    
+    private let colorSetsR = [[(light: #colorLiteral(red: 0.06666666667, green: 0.4666666667, blue: 0.7215686275, alpha: 1), dark: #colorLiteral(red: 0.03137254902, green: 0.3058823529, blue: 0.4941176471, alpha: 1)),
                               (light: #colorLiteral(red: 0.09803921569, green: 0.6588235294, blue: 0.6117647059, alpha: 1), dark: #colorLiteral(red: 0.06666666667, green: 0.4823529412, blue: 0.462745098, alpha: 1)),
                               (light: #colorLiteral(red: 0.1607843137, green: 0.6862745098, blue: 0.1137254902, alpha: 1), dark: #colorLiteral(red: 0.05098039216, green: 0.4392156863, blue: 0.05882352941, alpha: 1))],
                              
@@ -151,11 +166,11 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         return darkMode ? mainViewColors.darkMode : mainViewColors.lightMode
     }
 
-    lazy var randomColorSet = colorSets[colorSets.count.arc4random]
+    lazy var currentColorSet = colorSets[colorSets.count.arc4random]
 
     var randomColor: UIColor {
-        let randomColor = darkMode ? randomColorSet[randomColorSet.count.arc4random].dark :
-                                     randomColorSet[randomColorSet.count.arc4random].light
+        let randomColor = darkMode ? currentColorSet[currentColorSet.count.arc4random].dark :
+                                     currentColorSet[currentColorSet.count.arc4random].light
         return randomColor
     }
     
@@ -165,6 +180,8 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             settingsButton.tintColor = userInterfaceColor
         }
     }
+    
+    // MARK: - Dark Mode / Light Mode
     
     var darkMode: Bool = false {
         didSet {
@@ -184,11 +201,62 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         }
     }
     
+    var sunrise: Date {
+        set {
+            userDefaults.set(newValue, forKey: sunriseKey)
+            print("SET sunrise: \(newValue)")
+        }
+        get {
+            print("GET sunrise: \(userDefaults.value(forKey: sunriseKey) as! Date)")
+            return userDefaults.value(forKey: sunriseKey) as! Date
+        }
+    }
+    
+    var sunset: Date {
+        set {
+            userDefaults.set(newValue, forKey: sunsetKey)
+            print("SET sunset: \(newValue)")
+        }
+        get {
+            print("GET sunset: \(userDefaults.value(forKey: sunsetKey) as! Date)")
+            return userDefaults.value(forKey: sunsetKey) as! Date
+        }
+    }
+    
+    // MARK: - Location
+    
+    var currentLocation: CLLocationCoordinate2D? = nil {
+        didSet {
+            if currentLocation != nil {
+                guard let solar = Solar(coordinate: currentLocation!) else { return }
+                let sunrise = calendar.date(byAdding: .hour, value: 3, to: solar.sunrise!)!
+                let sunset = calendar.date(byAdding: .hour, value: 3, to: solar.sunset!)!
+                self.sunrise = sunrise
+                self.sunset = sunset
+                setDarkModeByCurrentTime()
+            }
+        }
+    }
+    
     // MARK: - View Controller Lifecycle
     
     override func viewDidLoad() {
         setupInputComponents()
         prepareForNewGame()
+        getUserLocation()
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(willResignActive),
+            name: .UIApplicationWillResignActive,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(didBecomeActive),
+            name: .UIApplicationDidBecomeActive,
+            object: nil
+        )
     }
     
     // MARK: - Setup UI
@@ -223,10 +291,21 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     func setupColors() {
         self.view.backgroundColor = mainViewColor
-        game.colorfulCellsMode ? shuffleCellsColors(animated: false) : removeCellColors(animated: false)
         removeNumberColors(animated: false)
         UIApplication.shared.statusBarStyle = darkMode ? .lightContent : .default
         userInterfaceColor = randomColor
+        
+        if game.colorfulCellsMode {
+            buttons.forEach { (button) in
+                currentColorSet.forEach { (color) in
+                    if darkMode, button.backgroundColor == color.light {
+                        button.backgroundColor = color.dark
+                    } else if !darkMode, button.backgroundColor == color.dark {
+                        button.backgroundColor = color.light
+                    }
+                }
+            }
+        }
         
         resultsView.effect = darkMode ? UIBlurEffect(style: .dark) : UIBlurEffect(style: .light)
         resultsView.userInterfaceColor = userInterfaceColor
@@ -239,7 +318,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     // MARK: - Actions
     
     @objc func buttonPressed(sender: UIButton) {
-        print(sender.tag)
+        lastPressedButton = sender
         compressButton(sender)
         if gameFinished {
             startGame()
@@ -252,9 +331,9 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             // User tapped the last number
             game.finishGame()
             showResults(time: game.elapsedTime, maxNumber: game.maxNumber, level: game.level - 1)
-            prepareForNewGame()
             feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .success)
             uncompressButton(sender)
+            prepareForNewGame()
             return
         }
         if selectedNumberIsRight {
@@ -324,6 +403,8 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         if state == false {
             removeCellColors(animated: false)
             removeNumberColors(animated: false)
+        } else {
+            shuffleCellsColors(animated: false)
         }
         buttons.forEach { $0.setTitleColor(defaultNumbersColor, for: .normal) }
         messageView.label.textColor = defaultNumbersColor
@@ -372,6 +453,21 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             svc.darkMode = darkMode
             svc.automaticDarkMode = automaticDarkMode
         }
+    }
+    
+    // MARK: - Notification
+    
+    @objc private func willResignActive() {
+        if let buttonToUncompress = lastPressedButton {
+            uncompressButton(buttonToUncompress)
+        }
+        prepareForNewGame()
+    }
+    @objc private func didBecomeActive() {
+        if !firstTimeAppeared {
+            setDarkModeByCurrentTime()
+        }
+        firstTimeAppeared = false
     }
         
 }

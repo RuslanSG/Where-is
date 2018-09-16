@@ -365,7 +365,7 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="Appearance" footerTitle="" id="QRs-2j-qDO">
+                            <tableViewSection headerTitle="DARK MODE" footerTitle="Automatic Dark Mode turns on Dark Mode at night." id="QRs-2j-qDO">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="Bwc-sR-ifx">
                                         <rect key="frame" x="0.0" y="710.5" width="1024" height="52"/>
