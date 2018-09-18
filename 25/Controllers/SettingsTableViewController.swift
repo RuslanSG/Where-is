@@ -55,12 +55,21 @@ class SettingsTableViewController: UITableViewController {
     
     var darkMode: Bool! {
         didSet {
-            switchAppearanceTo(darkMode: darkMode)
-            darkModeSwitcher.setOn(darkMode, animated: true)
+            setupComponents(darkMode: darkMode)
         }
     }
     
-    var automaticDarkMode: Bool!
+    var isDay: Bool?
+    
+    var automaticDarkMode: Bool! {
+        didSet {
+            if let isDay = isDay, automaticDarkMode {
+                darkMode = !isDay
+                automaticDarkModeSwitcher.setOn(automaticDarkMode, animated: false)
+                darkModeSwitcher.isEnabled = !automaticDarkMode
+            }
+        }
+    }
     
     private let cellsColor                  = (darkMode: #colorLiteral(red: 0.1098039216, green: 0.1098039216, blue: 0.1176470588, alpha: 1), lightMode: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
     private let tableViewBackgroundColor    = (darkMode: #colorLiteral(red: 0.09019607843, green: 0.09019607843, blue: 0.09019607843, alpha: 1), lightMode: #colorLiteral(red: 0.9411764706, green: 0.937254902, blue: 0.9607843137, alpha: 1))
@@ -210,10 +219,10 @@ class SettingsTableViewController: UITableViewController {
     
     // MARK: - Helping Methods
     
-    private func switchAppearanceTo(darkMode: Bool) {
+    private func setupComponents(darkMode: Bool) {
         if darkMode {
             navigationController?.navigationBar.barStyle = .black
-            navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.white]
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
             tableView.backgroundColor = tableViewBackgroundColor.darkMode
             cells.forEach { $0.backgroundColor = cellsColor.darkMode }
             tableView.separatorColor = tableViewSeparatorColor.darkMode
@@ -225,7 +234,7 @@ class SettingsTableViewController: UITableViewController {
             }
         } else {
             navigationController?.navigationBar.barStyle = .default
-            navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.black]
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
             tableView.backgroundColor = tableViewBackgroundColor.lightMode
             cells.forEach { $0.backgroundColor = cellsColor.lightMode }
             tableView.separatorColor = tableViewSeparatorColor.lightMode

@@ -318,7 +318,7 @@ extension GameViewController: CLLocationManagerDelegate {
                 }
             }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
                 self.buttonsNotAnimating.append(button1)
                 self.buttonsNotAnimating.append(button2)
             }
@@ -414,7 +414,7 @@ extension GameViewController: CLLocationManagerDelegate {
     func showResults(time: Double, maxNumber: Int, level: Int) {
         resultsView.titleLabel.text = time < 60.0 ? "Excellent!" : "Almost there!"
         resultsView.timeLabel.text = String(format: "%.02f", time)
-        self.view.bringSubview(toFront: resultsView)
+        self.view.bringSubviewToFront(resultsView)
         UIViewPropertyAnimator.runningPropertyAnimator(
             withDuration: 0.15,
             delay: 0.0,
@@ -427,7 +427,7 @@ extension GameViewController: CLLocationManagerDelegate {
     func hideResults() {
         resultsView.titleLabel.text = nil
         resultsView.timeLabel.text = nil
-        self.view.bringSubview(toFront: messageView)
+        self.view.bringSubviewToFront(messageView)
         UIViewPropertyAnimator.runningPropertyAnimator(
             withDuration: 0.15,
             delay: 0.0,
@@ -440,8 +440,8 @@ extension GameViewController: CLLocationManagerDelegate {
     // MARK: - Message view
     
     func showMessage() {
-        self.view.bringSubview(toFront: messageView)
-        self.view.bringSubview(toFront: resultsView)
+        self.view.bringSubviewToFront(messageView)
+        self.view.bringSubviewToFront(resultsView)
         UIViewPropertyAnimator.runningPropertyAnimator(
             withDuration: 0.1,
             delay: 0.0,
@@ -465,7 +465,6 @@ extension GameViewController: CLLocationManagerDelegate {
     
     func getUserLocation() {
         self.locationManager.requestWhenInUseAuthorization()
-        
         if CLLocationManager.locationServicesEnabled() {
             locationManager.delegate = self
             locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
@@ -479,8 +478,18 @@ extension GameViewController: CLLocationManagerDelegate {
         if currentLocation == nil {
             guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
             currentLocation = CLLocationCoordinate2D(latitude: locValue.latitude, longitude: locValue.longitude)
-            print("location = \(locValue.longitude) \(locValue.latitude)")
         }
+    }
+    
+    // MARK: - Sunrise/Sunset Time Info
+    
+    internal func getSunTimeInfo(with location: CLLocationCoordinate2D) {
+        guard let solar = Solar(coordinate: location) else { return }
+        let sunrise = calendar.date(byAdding: .hour, value: 3, to: solar.sunrise!)!
+        let sunset = calendar.date(byAdding: .hour, value: 3, to: solar.sunset!)!
+        self.sunrise = sunrise
+        self.sunset = sunset
+        
     }
     
     // MARK: - Helping Methods
@@ -496,6 +505,9 @@ extension GameViewController: CLLocationManagerDelegate {
         
         if game.colorfulCellsMode {
             shuffleCellsColors(animated: true)
+        }
+        if game.colorfulNumbersMode {
+            shuffleNumbersColors(animated: true)
         }
         
         if game.winkNumbersMode {
@@ -523,9 +535,6 @@ extension GameViewController: CLLocationManagerDelegate {
         game.newGame()
         setNumbers()
         gameFinished = true
-        if game.colorfulNumbersMode {
-            shuffleNumbersColors(animated: true)
-        }
         if game.winkNumbersMode || game.winkColorsMode || game.swapNumbersMode {
             timer1.invalidate()
             timer2.invalidate()
@@ -581,11 +590,8 @@ extension GameViewController: CLLocationManagerDelegate {
     }
     
     func setDarkModeByCurrentTime() {
-        let currentTime = calendar.date(byAdding: .hour, value: 3, to: Date())!
-        if currentTime > self.sunrise && currentTime < self.sunset {
-            darkMode = false
-        } else {
-            darkMode = true
+        if let isDay = isDay {
+            darkMode = !isDay
         }
     }
     

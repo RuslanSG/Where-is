@@ -19,7 +19,7 @@ class FeedbackGenerator {
     var notificationFeedbackGenerator: UINotificationFeedbackGenerator? = nil
     var impactFeedbackGenerator: UIImpactFeedbackGenerator? = nil
     
-    func playNotificationHapticFeedback(notificationFeedbackType: UINotificationFeedbackType) {
+    func playNotificationHapticFeedback(notificationFeedbackType: UINotificationFeedbackGenerator.FeedbackType) {
         if UIDevice.current.hasHapticFeedback {
             notificationFeedbackGenerator = UINotificationFeedbackGenerator()
             notificationFeedbackGenerator?.notificationOccurred(notificationFeedbackType)
@@ -33,7 +33,7 @@ class FeedbackGenerator {
         notificationFeedbackGenerator = nil
     }
     
-    func playImpactHapticFeedback(needsToPrepare: Bool, style: UIImpactFeedbackStyle) {
+    func playImpactHapticFeedback(needsToPrepare: Bool, style: UIImpactFeedbackGenerator.FeedbackStyle) {
         if UIDevice.current.hasHapticFeedback {
             impactFeedbackGenerator = UIImpactFeedbackGenerator(style: style)
             impactFeedbackGenerator?.impactOccurred()

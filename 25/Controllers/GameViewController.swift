@@ -72,9 +72,9 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     var gameFinished = false {
         didSet {
             if gameFinished {
-                self.view.bringSubview(toFront: resultsView)
+                self.view.bringSubviewToFront(resultsView)
             } else {
-                self.view.sendSubview(toBack: resultsView)
+                self.view.sendSubviewToBack(resultsView)
             }
             stopButton.isEnabled = !gameFinished
         }
@@ -183,43 +183,49 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     // MARK: - Dark Mode / Light Mode
     
-    var darkMode: Bool = false {
-        didSet {
+    var darkMode: Bool {
+        set {
+            userDefaults.set(newValue, forKey: darkModeKey)
             setupColors()
+        }
+        get {
+            return userDefaults.bool(forKey: darkModeKey)
         }
     }
     
-    var automaticDarkMode: Bool! {
+    var automaticDarkMode: Bool {
+        set {
+            userDefaults.set(newValue, forKey: automaticDarkModeKey)
+        }
         get {
             return userDefaults.bool(forKey: automaticDarkModeKey)
         }
-        set {
-            if automaticDarkMode {
-                darkMode = UIScreen.main.brightness < 0.5
-            }
-            userDefaults.set(newValue, forKey: automaticDarkModeKey)
-        }
     }
     
-    var sunrise: Date {
+    var sunrise: Date? {
         set {
             userDefaults.set(newValue, forKey: sunriseKey)
-            print("SET sunrise: \(newValue)")
         }
         get {
-            print("GET sunrise: \(userDefaults.value(forKey: sunriseKey) as! Date)")
-            return userDefaults.value(forKey: sunriseKey) as! Date
+            return userDefaults.value(forKey: sunriseKey) as? Date
         }
     }
     
-    var sunset: Date {
+    var sunset: Date? {
         set {
             userDefaults.set(newValue, forKey: sunsetKey)
-            print("SET sunset: \(newValue)")
         }
         get {
-            print("GET sunset: \(userDefaults.value(forKey: sunsetKey) as! Date)")
-            return userDefaults.value(forKey: sunsetKey) as! Date
+            return userDefaults.value(forKey: sunsetKey) as? Date
+        }
+    }
+    
+    var isDay: Bool? {
+        if let sunrise = self.sunrise, let sunset = self.sunset {
+            let currentTime = calendar.date(byAdding: .hour, value: 3, to: Date())!
+            return currentTime > sunrise && currentTime < sunset
+        } else {
+            return nil
         }
     }
     
@@ -228,12 +234,10 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     var currentLocation: CLLocationCoordinate2D? = nil {
         didSet {
             if currentLocation != nil {
-                guard let solar = Solar(coordinate: currentLocation!) else { return }
-                let sunrise = calendar.date(byAdding: .hour, value: 3, to: solar.sunrise!)!
-                let sunset = calendar.date(byAdding: .hour, value: 3, to: solar.sunset!)!
-                self.sunrise = sunrise
-                self.sunset = sunset
-                setDarkModeByCurrentTime()
+                getSunTimeInfo(with: currentLocation!)
+                if automaticDarkMode {
+                    setDarkModeByCurrentTime()
+                }
             }
         }
     }
@@ -242,19 +246,20 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     override func viewDidLoad() {
         setupInputComponents()
+        setupColors()
         prepareForNewGame()
         getUserLocation()
         
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(willResignActive),
-            name: .UIApplicationWillResignActive,
+            name: UIApplication.willResignActiveNotification,
             object: nil
         )
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(didBecomeActive),
-            name: .UIApplicationDidBecomeActive,
+            name: UIApplication.didBecomeActiveNotification,
             object: nil
         )
     }
@@ -263,9 +268,6 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     func setupInputComponents() {
         self.view.layoutSubviews()
-        if automaticDarkMode {
-            darkMode = UIScreen.main.brightness > 0.5 ? false : true
-        }
         
         userInterfaceColor = randomColor
         
@@ -277,9 +279,9 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         addButtons(count: game.numbers.count)
         updateButtonsFrames()
         
-        self.view.sendSubview(toBack: feedbackView)
-        self.view.sendSubview(toBack: resultsView)
-        self.view.bringSubview(toFront: messageView)
+        self.view.sendSubviewToBack(feedbackView)
+        self.view.sendSubviewToBack(resultsView)
+        self.view.bringSubviewToFront(messageView)
         
         let height = messageViewHeight
         if let button = buttons.first {
@@ -292,11 +294,11 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     func setupColors() {
         self.view.backgroundColor = mainViewColor
         removeNumberColors(animated: false)
-        UIApplication.shared.statusBarStyle = darkMode ? .lightContent : .default
+        //UIApplication.shared.statusBarStyle = darkMode ? .lightContent : .default
         userInterfaceColor = randomColor
         
-        if game.colorfulCellsMode {
-            buttons.forEach { (button) in
+        buttons.forEach { (button) in
+            if game.colorfulCellsMode {
                 currentColorSet.forEach { (color) in
                     if darkMode, button.backgroundColor == color.light {
                         button.backgroundColor = color.dark
@@ -304,9 +306,11 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
                         button.backgroundColor = color.light
                     }
                 }
+            } else {
+                button.backgroundColor = defaultCellsColor
             }
         }
-        
+
         resultsView.effect = darkMode ? UIBlurEffect(style: .dark) : UIBlurEffect(style: .light)
         resultsView.userInterfaceColor = userInterfaceColor
         resultsView.fontsColor = darkMode ? numbersColors.darkMode : numbersColors.lightMode
@@ -433,11 +437,6 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     }
     
     func automaticDarkModeStateChanged(to state: Bool) {
-        if state == true {
-            darkMode = UIScreen.main.brightness > 0.5 ? false : true
-        } else {
-            darkMode = false
-        }
         automaticDarkMode = state
         prepareForNewGame()
     }
@@ -449,6 +448,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             let svc = nav.topViewController as? SettingsTableViewController {
             svc.delegate = self
             svc.game = game
+            svc.isDay = isDay
             svc.userInterfaceColor = userInterfaceColor
             svc.darkMode = darkMode
             svc.automaticDarkMode = automaticDarkMode
@@ -464,7 +464,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         prepareForNewGame()
     }
     @objc private func didBecomeActive() {
-        if !firstTimeAppeared {
+        if !firstTimeAppeared && automaticDarkMode {
             setDarkModeByCurrentTime()
         }
         firstTimeAppeared = false
