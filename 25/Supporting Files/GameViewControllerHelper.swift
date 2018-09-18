@@ -109,7 +109,7 @@ extension GameViewController: CLLocationManagerDelegate {
                 button.titleLabel?.font = UIFont.systemFont(ofSize: numbersFontSize)
                 button.titleLabel?.alpha = 0.0
                 button.backgroundColor = game.colorfulCellsMode ? randomColor : defaultCellsColor
-                button.setTitleColor(defaultNumbersColor, for: .normal)
+                button.setTitleColor(textColor, for: .normal)
                 button.layer.cornerRadius = cornerRadius
                 button.addTarget(self, action: #selector(buttonPressed(sender:)), for: .touchDown)
                 button.addTarget(self, action: #selector(buttonReleased(sender:)), for: .touchUpInside)
@@ -401,47 +401,18 @@ extension GameViewController: CLLocationManagerDelegate {
                     delay: 0.0,
                     options: [],
                     animations: {
-                        button.setTitleColor(self.defaultNumbersColor, for: .normal)
+                        button.setTitleColor(self.textColor, for: .normal)
                 })
             } else {
-                button.setTitleColor(self.defaultNumbersColor, for: .normal)
+                button.setTitleColor(self.textColor, for: .normal)
             }
         })
     }
-    
-    // MARK: - Results view
-    
-    func showResults(time: Double, maxNumber: Int, level: Int) {
-        resultsView.titleLabel.text = time < 60.0 ? "Excellent!" : "Almost there!"
-        resultsView.timeLabel.text = String(format: "%.02f", time)
-        self.view.bringSubviewToFront(resultsView)
-        UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: 0.15,
-            delay: 0.0,
-            options: [],
-            animations: {
-                self.resultsView.alpha = 1.0
-        })
-    }
-    
-    func hideResults() {
-        resultsView.titleLabel.text = nil
-        resultsView.timeLabel.text = nil
-        self.view.bringSubviewToFront(messageView)
-        UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: 0.15,
-            delay: 0.0,
-            options: [],
-            animations: {
-                self.resultsView.alpha = 0.0
-        })
-    }
-    
+        
     // MARK: - Message view
     
     func showMessage() {
-        self.view.bringSubviewToFront(messageView)
-        self.view.bringSubviewToFront(resultsView)
+        self.view.addSubview(messageView)
         UIViewPropertyAnimator.runningPropertyAnimator(
             withDuration: 0.1,
             delay: 0.0,
@@ -458,7 +429,9 @@ extension GameViewController: CLLocationManagerDelegate {
             options: [],
             animations: {
                 self.messageView.alpha = 0.0
-        })
+        }) { (_) in
+            self.messageView.removeFromSuperview()
+        }
     }
     
     // MARK: - Location
@@ -495,7 +468,10 @@ extension GameViewController: CLLocationManagerDelegate {
     // MARK: - Helping Methods
     
     internal func startGame() {
-        hideResults()
+        if resultsIsShowing {
+            resultsView.hide()
+            resultsIsShowing = false
+        }
         showNumbers(animated: true)
         game.startGame()
         gameFinished = false
@@ -539,7 +515,6 @@ extension GameViewController: CLLocationManagerDelegate {
             timer1.invalidate()
             timer2.invalidate()
             buttons.forEach { $0.titleLabel?.layer.removeAllAnimations() }
-            //buttonsNotAnimating = buttons
         }
         hideNumbers(animated: false)
         showMessage()

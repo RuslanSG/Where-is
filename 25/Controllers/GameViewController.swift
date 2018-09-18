@@ -9,6 +9,9 @@
 import UIKit
 import CoreLocation
 
+let UserInterfaceColorDidChangeNotification = "UserInterfaceColorDidChangeNotification"
+let UserInterfaceColorStateUserInfoKey = "UserInterfaceColorStateUserInfoKey"
+
 class GameViewController: UIViewController, SettingsTableViewControllerDelegate {
 
     @IBOutlet weak var stopButton: UIButton!
@@ -30,15 +33,13 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     }()
     
     lazy var resultsView: ResultsView = {
-        let blur = UIBlurEffect(style: .light)
-        let view = ResultsView(
-            frame: self.view.frame,
-            effect: blur,
-            userInterfaceColor: userInterfaceColor,
-            cornerRadius: cornerRadius,
-            fontsColor: darkMode ? numbersColors.darkMode : numbersColors.lightMode
-        )
-        view.alpha = 0.0
+        let view = ResultsView(frame: self.view.frame, darkMode: darkMode)
+        let textColor: UIColor = darkMode ? .white : .black
+        view.titleLabel.textColor = textColor
+        view.timeLabel.textColor = textColor
+        view.actionButton.alpha = 0.0
+        view.actionButton.backgroundColor = userInterfaceColor
+        view.actionButton.layer.cornerRadius = cornerRadius
         return view
     }()
     
@@ -71,16 +72,13 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     var gameFinished = false {
         didSet {
-            if gameFinished {
-                self.view.bringSubviewToFront(resultsView)
-            } else {
-                self.view.sendSubviewToBack(resultsView)
-            }
+            
             stopButton.isEnabled = !gameFinished
         }
     }
     
     var firstTimeAppeared = true
+    var resultsIsShowing = false
     
     var grid: Grid {
         return Grid(layout: .dimensions(rowCount: game.rows, columnCount: game.colums), frame: buttonsContainerView.bounds)
@@ -159,7 +157,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     var defaultCellsColor: UIColor {
         return darkMode ? cellsColors.darkMode : cellsColors.lightMode
     }
-    var defaultNumbersColor: UIColor {
+    var textColor: UIColor {
         return darkMode || game.colorfulCellsMode ? numbersColors.darkMode : numbersColors.lightMode
     }
     var mainViewColor: UIColor {
@@ -178,6 +176,11 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         didSet {
             stopButton.tintColor = userInterfaceColor
             settingsButton.tintColor = userInterfaceColor
+            
+            NotificationCenter.default.post(
+                name: Notification.Name(UserInterfaceColorDidChangeNotification),
+                object: userInterfaceColor
+            )
         }
     }
     
@@ -187,6 +190,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         set {
             userDefaults.set(newValue, forKey: darkModeKey)
             setupColors()
+            setNeedsStatusBarAppearanceUpdate()
         }
         get {
             return userDefaults.bool(forKey: darkModeKey)
@@ -229,6 +233,10 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         }
     }
     
+//    override var preferredStatusBarStyle: UIStatusBarStyle {
+//        return darkMode ? .lightContent : .default
+//    }
+    
     // MARK: - Location
     
     var currentLocation: CLLocationCoordinate2D? = nil {
@@ -249,6 +257,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         setupColors()
         prepareForNewGame()
         getUserLocation()
+//        setNeedsStatusBarAppearanceUpdate()
         
         NotificationCenter.default.addObserver(
             self,
@@ -262,6 +271,12 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             name: UIApplication.didBecomeActiveNotification,
             object: nil
         )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(darkModeStateChangedNotification(notification:)),
+            name: Notification.Name(DarkModeStateDidChangeNotification),
+            object: nil
+        )
     }
     
     // MARK: - Setup UI
@@ -271,17 +286,13 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         
         userInterfaceColor = randomColor
         
-        self.view.addSubview(resultsView)
         self.view.addSubview(feedbackView)
         self.view.addSubview(buttonsContainerView)
-        self.view.addSubview(messageView)
         
         addButtons(count: game.numbers.count)
         updateButtonsFrames()
         
         self.view.sendSubviewToBack(feedbackView)
-        self.view.sendSubviewToBack(resultsView)
-        self.view.bringSubviewToFront(messageView)
         
         let height = messageViewHeight
         if let button = buttons.first {
@@ -294,7 +305,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     func setupColors() {
         self.view.backgroundColor = mainViewColor
         removeNumberColors(animated: false)
-        //UIApplication.shared.statusBarStyle = darkMode ? .lightContent : .default
+        UIApplication.shared.statusBarStyle = darkMode ? .lightContent : .default
         userInterfaceColor = randomColor
         
         buttons.forEach { (button) in
@@ -310,13 +321,8 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
                 button.backgroundColor = defaultCellsColor
             }
         }
-
-        resultsView.effect = darkMode ? UIBlurEffect(style: .dark) : UIBlurEffect(style: .light)
-        resultsView.userInterfaceColor = userInterfaceColor
-        resultsView.fontsColor = darkMode ? numbersColors.darkMode : numbersColors.lightMode
         
-        messageView.label.textColor = defaultNumbersColor
-        messageView.effect = darkMode ? UIBlurEffect(style: .dark) : UIBlurEffect(style: .light)
+        messageView.label.textColor = textColor
     }
     
     // MARK: - Actions
@@ -334,10 +340,12 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         if selectedNumberIsRight && sender.tag == game.maxNumber {
             // User tapped the last number
             game.finishGame()
-            showResults(time: game.elapsedTime, maxNumber: game.maxNumber, level: game.level - 1)
+            prepareForNewGame()
+            self.view.addSubview(resultsView)
+            resultsView.show(withTime: game.elapsedTime, style: darkMode ? .dark : .light)
+            resultsIsShowing = true
             feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .success)
             uncompressButton(sender)
-            prepareForNewGame()
             return
         }
         if selectedNumberIsRight {
@@ -383,9 +391,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     }
     
     @IBAction func settingsButtonPressed(sender: UIButton) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8, execute: {
-             self.prepareForNewGame()
-        })
+        self.prepareForNewGame()
     }
     
     @objc private func messageViewTapped(sender: UITapGestureRecognizer) {
@@ -410,8 +416,8 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         } else {
             shuffleCellsColors(animated: false)
         }
-        buttons.forEach { $0.setTitleColor(defaultNumbersColor, for: .normal) }
-        messageView.label.textColor = defaultNumbersColor
+        buttons.forEach { $0.setTitleColor(textColor, for: .normal) }
+        messageView.label.textColor = textColor
         prepareForNewGame()
     }
     
@@ -430,15 +436,8 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         messageView.center = buttonsContainerView.center
     }
     
-    
-    func darkModeStateChanged(to state: Bool) {
-        darkMode = state
-        prepareForNewGame()
-    }
-    
     func automaticDarkModeStateChanged(to state: Bool) {
         automaticDarkMode = state
-        prepareForNewGame()
     }
     
     // MARK: - Segue
@@ -455,7 +454,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         }
     }
     
-    // MARK: - Notification
+    // MARK: - Notifications
     
     @objc private func willResignActive() {
         if let buttonToUncompress = lastPressedButton {
@@ -463,11 +462,17 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         }
         prepareForNewGame()
     }
+    
     @objc private func didBecomeActive() {
         if !firstTimeAppeared && automaticDarkMode {
             setDarkModeByCurrentTime()
         }
         firstTimeAppeared = false
+    }
+    
+    @objc func darkModeStateChangedNotification(notification: Notification) {
+        darkMode = notification.userInfo?[DarkModeStateUserInfoKey] as! Bool
+        prepareForNewGame()
     }
         
 }

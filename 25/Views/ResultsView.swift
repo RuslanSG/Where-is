@@ -10,15 +10,13 @@ import UIKit
 
 class ResultsView: UIVisualEffectView {
 
-    var userInterfaceColor: UIColor!
-    var cornerRadius: CGFloat!
-    var fontsColor: UIColor! {
+    private var darkMode: Bool! {
         didSet {
-            titleLabel.textColor = fontsColor
-            timeLabel.textColor = fontsColor
+            setupColors()
         }
     }
-    
+    private var blur = UIBlurEffect()
+
     // MARK: - Subviews
     
     let titleLabel: UILabel = {
@@ -40,47 +38,92 @@ class ResultsView: UIVisualEffectView {
     
     lazy var actionButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = userInterfaceColor
-        button.layer.cornerRadius = cornerRadius
         button.setTitle("New Game", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15.0)
         button.addTarget(self, action: #selector(hide), for: .touchUpInside)
+        button.addTarget(self, action: #selector(actionButtonPressed), for: .touchDown)
         return button
     }()
     
     // MARK: - Actions
     
-    @objc private func hide() {
-        titleLabel.text = nil
-        timeLabel.text = nil
+    public func show(withTime time: Double, style: UIBlurEffect.Style) {
         UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: 0.15,
+            withDuration: 0.3,
             delay: 0.0,
             options: [],
             animations: {
-                self.alpha = 0.0
+                self.effect = self.blur
+        }) { (_) in
+            self.titleLabel.text = time < 60.0 ? "Excellent!" : "Almost there!"
+            self.timeLabel.text = String(format: "%.02f", time)
+            UIViewPropertyAnimator.runningPropertyAnimator(
+                withDuration: 0.3,
+                delay: 0.0,
+                options: [],
+                animations: {
+                    self.contentView.subviews.forEach { $0.alpha = 1.0 }
+            })
+        }
+    }
+    
+    @objc public func hide() {
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: 0.3,
+            delay: 0.0,
+            options: [],
+            animations: {
+                self.effect = nil
+                self.contentView.subviews.forEach { $0.alpha = 0.0 }
+        }) { (_) in
+            self.actionButton.alpha = 0.0
+            self.removeFromSuperview()
+        }
+    }
+    
+    @objc private func actionButtonPressed() {
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: 0.03,
+            delay: 0.0,
+            options: [],
+            animations: {
+                self.actionButton.alpha = 0.2
         })
+        
     }
     
     // MARK: - Initialization
-    
-    public init(frame: CGRect, effect: UIVisualEffect?, userInterfaceColor: UIColor, cornerRadius: CGFloat, fontsColor: UIColor) {
-        super.init(effect: effect)
+        
+    public init(frame: CGRect, darkMode: Bool) {
+        super.init(effect: nil)
+        
         self.frame = frame
-        self.userInterfaceColor = userInterfaceColor
-        self.cornerRadius = cornerRadius
-        self.fontsColor = fontsColor
+        self.darkMode = darkMode
         setupInputComponents()
+        setupColors()
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(darkModeStateChanged(notification:)),
+            name: Notification.Name(DarkModeStateDidChangeNotification),
+            object: nil
+        )
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - DarkModeStateChangedNotification
+    
+    @objc private func darkModeStateChanged(notification: Notification) {
+        darkMode = notification.userInfo?[DarkModeStateUserInfoKey] as? Bool
+    }
+    
     // MARK: - Helping Methods
     
-    func setupInputComponents() {
+    private func setupInputComponents() {
         self.contentView.addSubview(titleLabel)
         self.contentView.addSubview(timeLabel)
         self.contentView.addSubview(actionButton)
@@ -91,6 +134,18 @@ class ResultsView: UIVisualEffectView {
         let currentDeviceIsIPhoneX = UIScreen.main.nativeBounds.height == 2436
         self.contentView.addConstraintsWithFormat(format: "H:|-10-[v0]-10-|", views: actionButton)
         self.contentView.addConstraintsWithFormat(format: currentDeviceIsIPhoneX ? "V:[v0(50)]-76-|" : "V:[v0(50)]-42-|", views: actionButton)
+    }
+    
+    private func setupColors() {
+        if darkMode {
+            blur = UIBlurEffect(style: .dark)
+            titleLabel.textColor = .white
+            timeLabel.textColor = .white
+        } else {
+            blur = UIBlurEffect(style: .light)
+            titleLabel.textColor = .black
+            timeLabel.textColor = .black
+        }
     }
     
 }

@@ -13,10 +13,12 @@ protocol SettingsTableViewControllerDelegate {
     func colorfulNumbersModeStateChanged(to state: Bool)
     func colorfulCellsModeStateChanged(to state: Bool)
     func maxNumberChanged(to maxNumber: Int)
-    func darkModeStateChanged(to state: Bool)
     func automaticDarkModeStateChanged(to state: Bool)
 
 }
+
+let DarkModeStateDidChangeNotification = "DarkModeStateDidChangeNotification"
+let DarkModeStateUserInfoKey = "DarkModeStateUserInfoKey"
 
 class SettingsTableViewController: UITableViewController {
    
@@ -55,7 +57,9 @@ class SettingsTableViewController: UITableViewController {
     
     var darkMode: Bool! {
         didSet {
-            setupComponents(darkMode: darkMode)
+            setupComponents()
+            darkModeSwitcher.setOn(darkMode, animated: true)
+//            setNeedsStatusBarAppearanceUpdate()
         }
     }
     
@@ -65,11 +69,14 @@ class SettingsTableViewController: UITableViewController {
         didSet {
             if let isDay = isDay, automaticDarkMode {
                 darkMode = !isDay
-                automaticDarkModeSwitcher.setOn(automaticDarkMode, animated: false)
                 darkModeSwitcher.isEnabled = !automaticDarkMode
             }
         }
     }
+    
+//    override var preferredStatusBarStyle : UIStatusBarStyle {
+//        return darkMode ? .lightContent : .default
+//    }
     
     private let cellsColor                  = (darkMode: #colorLiteral(red: 0.1098039216, green: 0.1098039216, blue: 0.1176470588, alpha: 1), lightMode: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
     private let tableViewBackgroundColor    = (darkMode: #colorLiteral(red: 0.09019607843, green: 0.09019607843, blue: 0.09019607843, alpha: 1), lightMode: #colorLiteral(red: 0.9411764706, green: 0.937254902, blue: 0.9607843137, alpha: 1))
@@ -78,8 +85,21 @@ class SettingsTableViewController: UITableViewController {
     
     // MARK: - Lifecycle
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(userInterfaceColorDidChangeNotification(notification:)),
+            name: Notification.Name(UserInterfaceColorDidChangeNotification),
+            object: nil
+        )
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        setupComponents()
         
         doneButton.tintColor = userInterfaceColor
         switchers.forEach { $0.onTintColor = userInterfaceColor }
@@ -208,18 +228,26 @@ class SettingsTableViewController: UITableViewController {
     
     @IBAction func darkModeSwitcherValueChanged(_ sender: UISwitch) {
         darkMode = sender.isOn
-        delegate?.darkModeStateChanged(to: sender.isOn)
+        postDarkModeStateChangedNotification()
     }
     
     @IBAction func automaticDarkModeSwitcherValueChanged(_ sender: UISwitch) {
         automaticDarkMode = sender.isOn
         darkModeSwitcher.isEnabled = !sender.isOn
         delegate?.automaticDarkModeStateChanged(to: sender.isOn)
+        postDarkModeStateChangedNotification()
+    }
+    
+    // MARK: - Notifications
+    
+    @objc private func userInterfaceColorDidChangeNotification(notification: Notification) {
+        userInterfaceColor = notification.object as? UIColor
+        setupUserInterfaceColor(with: userInterfaceColor)
     }
     
     // MARK: - Helping Methods
     
-    private func setupComponents(darkMode: Bool) {
+    @objc private func setupComponents() {
         if darkMode {
             navigationController?.navigationBar.barStyle = .black
             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
@@ -245,6 +273,27 @@ class SettingsTableViewController: UITableViewController {
                 label.textColor = .black
             }
         }
+    }
+    
+    private func setupUserInterfaceColor(with color: UIColor) {
+        self.switchers.forEach { $0.onTintColor = color }
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: 0.3,
+            delay: 0.0,
+            options: [],
+            animations: {
+                self.levelStepper.tintColor = color
+                self.maxNumberStepper.tintColor = color
+                self.doneButton.tintColor = color
+        })
+    }
+    
+    private func postDarkModeStateChangedNotification() {
+        NotificationCenter.default.post(
+            name: Notification.Name(DarkModeStateDidChangeNotification),
+            object: nil,
+            userInfo: [DarkModeStateUserInfoKey: darkMode]
+        )
     }
     
 }
