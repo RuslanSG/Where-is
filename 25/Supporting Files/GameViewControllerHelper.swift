@@ -12,23 +12,6 @@ import CoreLocation
 
 extension GameViewController: CLLocationManagerDelegate {
     
-    var cornerRadius: CGFloat {
-        if  self.view.traitCollection.horizontalSizeClass == .regular,
-            self.view.traitCollection.verticalSizeClass == .regular {
-            return 12.0
-        } else {
-            return 7.0
-        }
-    }
-    
-    var numbersFontSize: CGFloat {
-        return self.view.bounds.width / 10
-    }
-    
-    var gridInset: CGFloat {
-        return self.view.bounds.width / 200
-    }
-    
     var buttonsContainerViewFrame: CGRect {
         let screenHeight = UIScreen.main.bounds.height
         let screenWidth = UIScreen.main.bounds.width
@@ -36,20 +19,20 @@ extension GameViewController: CLLocationManagerDelegate {
         
         let bottomGap = screenHeight - stopButton.frame.maxY
         
-        let minY = staturBarHeight + gridInset
-        let maxY = screenHeight - stopButton.frame.height - bottomGap - gridInset
+        let minY = staturBarHeight + appearance.gridInset
+        let maxY = screenHeight - stopButton.frame.height - bottomGap - appearance.gridInset
         let maxAlllowedHeight = maxY - minY
         
         let expectedHeight = screenWidth / CGFloat(game.colums) * CGFloat(game.rows)
         let expectedMinY = screenHeight / 2 - expectedHeight / 2
         let expectedMaxY = screenHeight / 2 + expectedHeight / 2
         
-        let width = screenWidth - gridInset * 2
+        let width = screenWidth - appearance.gridInset * 2
         var height: CGFloat {
             return expectedHeight < maxAlllowedHeight ? expectedHeight : maxAlllowedHeight
         }
         
-        let x = gridInset
+        let x = appearance.gridInset
         var y: CGFloat {
             if expectedHeight < maxAlllowedHeight {
                 if expectedMinY < minY && expectedMaxY < maxY {
@@ -77,7 +60,7 @@ extension GameViewController: CLLocationManagerDelegate {
     func updateButtonsFrames() {
         for i in buttons.indices {
             let button = buttons[i]
-            if let viewFrame = grid[i]?.insetBy(dx: gridInset, dy: gridInset) {
+            if let viewFrame = grid[i]?.insetBy(dx: appearance.gridInset, dy: appearance.gridInset) {
                 button.frame = viewFrame
             }
         }
@@ -106,11 +89,11 @@ extension GameViewController: CLLocationManagerDelegate {
         for _ in 0..<count {
             let button: UIButton = {
                 let button = UIButton(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
-                button.titleLabel?.font = UIFont.systemFont(ofSize: numbersFontSize)
+                button.titleLabel?.font = UIFont.systemFont(ofSize: appearance.numbersFontSize)
                 button.titleLabel?.alpha = 0.0
-                button.backgroundColor = game.colorfulCellsMode ? randomColor : defaultCellsColor
-                button.setTitleColor(textColor, for: .normal)
-                button.layer.cornerRadius = cornerRadius
+                button.backgroundColor = game.colorfulCellsMode ? appearance.randomColor : appearance.defaultCellsColor
+                button.setTitleColor(appearance.textColor, for: .normal)
+                button.layer.cornerRadius = appearance.cornerRadius
                 button.addTarget(self, action: #selector(buttonPressed(sender:)), for: .touchDown)
                 button.addTarget(self, action: #selector(buttonReleased(sender:)), for: .touchUpInside)
                 button.addTarget(self, action: #selector(buttonReleased(sender:)), for: .touchUpOutside)
@@ -138,10 +121,10 @@ extension GameViewController: CLLocationManagerDelegate {
         buttonFrameWidth = button.frame.width
         buttonFrameHeight = button.frame.height
         
-        let newButtonFrameX = button.frame.minX + button.frame.width * CGFloat(1 - cellCompressionRatio) / 2
-        let newButtonFrameY = button.frame.minY + button.frame.height * CGFloat(1 - cellCompressionRatio) / 2
-        let newButtonFrameWidth = button.frame.width * CGFloat(cellCompressionRatio)
-        let newButtonFrameHeight = button.frame.height * CGFloat(cellCompressionRatio)
+        let newButtonFrameX = button.frame.minX + button.frame.width * CGFloat(1 - appearance.cellCompressionRatio) / 2
+        let newButtonFrameY = button.frame.minY + button.frame.height * CGFloat(1 - appearance.cellCompressionRatio) / 2
+        let newButtonFrameWidth = button.frame.width * CGFloat(appearance.cellCompressionRatio)
+        let newButtonFrameHeight = button.frame.height * CGFloat(appearance.cellCompressionRatio)
         
         UIViewPropertyAnimator.runningPropertyAnimator(
             withDuration: 0.05,
@@ -340,16 +323,16 @@ extension GameViewController: CLLocationManagerDelegate {
                     delay: 0.0,
                     options: [],
                     animations: {
-                        button.backgroundColor = self.randomColor
+                        button.backgroundColor = self.appearance.randomColor
                 })
             } else {
-                button.backgroundColor = randomColor
+                button.backgroundColor = appearance.randomColor
             }
         })
     }
     
     func shuffleNumbersColors(animated: Bool) {
-        let colorSet = currentColorSet.map { darkMode ? $0.dark : $0.light }
+        let colorSet = appearance.currentColorSet.map { appearance.darkMode ? $0.dark : $0.light }
         buttons.forEach({ (button) in
             if animated {
                 UIViewPropertyAnimator.runningPropertyAnimator(
@@ -377,16 +360,16 @@ extension GameViewController: CLLocationManagerDelegate {
                     delay: 0.0,
                     options: [],
                     animations: {
-                        button.backgroundColor = self.defaultCellsColor
+                        button.backgroundColor = self.appearance.defaultCellsColor
                 })
             } else {
-                button.backgroundColor = defaultCellsColor
+                button.backgroundColor = appearance.defaultCellsColor
             }
         })
     }
     
     func winkCellColor(at button: UIButton) {
-        let colorSet = currentColorSet.map { darkMode ? $0.dark : $0.light }
+        let colorSet = appearance.currentColorSet.map { appearance.darkMode ? $0.dark : $0.light }
         UIViewPropertyAnimator.runningPropertyAnimator(
             withDuration: 0.5,
             delay: 0.0,
@@ -406,43 +389,12 @@ extension GameViewController: CLLocationManagerDelegate {
                     delay: 0.0,
                     options: [],
                     animations: {
-                        button.setTitleColor(self.textColor, for: .normal)
+                        button.setTitleColor(self.appearance.textColor, for: .normal)
                 })
             } else {
-                button.setTitleColor(self.textColor, for: .normal)
+                button.setTitleColor(self.appearance.textColor, for: .normal)
             }
         })
-    }
-    
-    // MARK: - Location
-    
-    func getUserLocation() {
-        self.locationManager.requestWhenInUseAuthorization()
-        if CLLocationManager.locationServicesEnabled() {
-            locationManager.delegate = self
-            locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
-            locationManager.startUpdatingLocation()
-        }
-    }
-    
-    // MARK: - CLLocationManagerDelegate
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if currentLocation == nil {
-            guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
-            currentLocation = CLLocationCoordinate2D(latitude: locValue.latitude, longitude: locValue.longitude)
-        }
-    }
-    
-    // MARK: - Sunrise/Sunset Time Info
-    
-    internal func getSunTimeInfo(with location: CLLocationCoordinate2D) {
-        guard let solar = Solar(coordinate: location) else { return }
-        let sunrise = calendar.date(byAdding: .hour, value: 3, to: solar.sunrise!)!
-        let sunset = calendar.date(byAdding: .hour, value: 3, to: solar.sunset!)!
-        self.sunrise = sunrise
-        self.sunset = sunset
-        
     }
     
     // MARK: - Helping Methods
@@ -545,17 +497,6 @@ extension GameViewController: CLLocationManagerDelegate {
         if cellPart == .color {
             let button = buttons[buttons.count.arc4random]
             winkCellColor(at: button)
-        }
-    }
-    
-    func setDarkModeByCurrentTime() {
-        if let isDay = isDay {
-            darkMode = !isDay
-            NotificationCenter.default.post(
-                name: Notification.Name(DarkModeStateDidChangeNotification),
-                object: nil,
-                userInfo: [DarkModeStateUserInfoKey: darkMode]
-            )
         }
     }
     
