@@ -48,7 +48,7 @@ class ResultsView: UIVisualEffectView {
     
     // MARK: - Actions
     
-    public func show(withTime time: Double, style: UIBlurEffect.Style) {
+    public func show(withTime time: Double) {
         UIViewPropertyAnimator.runningPropertyAnimator(
             withDuration: 0.3,
             delay: 0.0,
@@ -118,7 +118,10 @@ class ResultsView: UIVisualEffectView {
     // MARK: - DarkModeStateChangedNotification
     
     @objc private func darkModeStateChanged(notification: Notification) {
-        darkMode = notification.userInfo?[DarkModeStateUserInfoKey] as? Bool
+        let darkModeNewState = notification.userInfo?[DarkModeStateUserInfoKey] as? Bool
+        if darkMode != darkModeNewState {
+            darkMode = darkModeNewState
+        }
     }
     
     // MARK: - Helping Methods

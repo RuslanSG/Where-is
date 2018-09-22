@@ -11,7 +11,7 @@ import UIKit
 class MessageView: UIVisualEffectView {
 
     let label = UILabel()
-    private var blur = UIBlurEffect() {
+    private var blur: UIBlurEffect! {
         didSet {
             self.effect = blur
         }
@@ -23,8 +23,10 @@ class MessageView: UIVisualEffectView {
         }
     }
     
-    override init(effect: UIVisualEffect?) {
-        super.init(effect: effect)
+    init(style: UIBlurEffect.Style) {
+        super.init(effect: nil)
+        
+        self.blur = UIBlurEffect(style: style)
                 
         contentView.addSubview(label)
         contentView.addConstraintsWithFormat(format: "H:|[v0]|", views: label)
@@ -36,6 +38,7 @@ class MessageView: UIVisualEffectView {
         label.textAlignment = .center
         label.isOpaque = false
         label.isUserInteractionEnabled = true
+        label.alpha = 0.0
         
         NotificationCenter.default.addObserver(
             self,
@@ -49,10 +52,39 @@ class MessageView: UIVisualEffectView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Actions
+    
+    public func show() {
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: 0.15,
+            delay: 0.0,
+            options: [],
+            animations: {
+                self.effect = self.blur
+                self.label.alpha = 1.0
+        })
+    }
+    
+    @objc public func hide() {
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: 0.15,
+            delay: 0.0,
+            options: [],
+            animations: {
+                self.effect = nil
+                self.label.alpha = 0.0
+        }) { (_) in
+            self.removeFromSuperview()
+        }
+    }
+    
     // MARK: - DarkModeStateChangedNotification
     
     @objc private func darkModeStateChanged(notification: Notification) {
-        darkMode = notification.userInfo?[DarkModeStateUserInfoKey] as? Bool
+        let darkModeNewState = notification.userInfo?[DarkModeStateUserInfoKey] as? Bool
+        if darkMode != darkModeNewState {
+            darkMode = darkModeNewState
+        }
     }
     
     // MARK: - Helping Methods

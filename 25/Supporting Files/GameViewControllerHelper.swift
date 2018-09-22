@@ -258,8 +258,11 @@ extension GameViewController: CLLocationManagerDelegate {
     }
     
     func winkNumber(at button: UIButton) {
+        let duration = 1.0
+        let delay = 0.9
+        
         UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: 0.5,
+            withDuration: duration / 2,
             delay: 0.0,
             options: [],
             animations: {
@@ -267,15 +270,17 @@ extension GameViewController: CLLocationManagerDelegate {
         }) { (_) in
             if self.game.inGame {
                 UIViewPropertyAnimator.runningPropertyAnimator(
-                    withDuration: 0.5,
-                    delay: 0.9,
+                    withDuration: duration / 2,
+                    delay: delay,
                     options: [],
                     animations: {
                         button.titleLabel?.alpha = 1.0
-                }, completion: { (_) in
-                    self.buttonsNotAnimating.append(button)
                 })
             }
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration + delay) {
+            self.buttonsNotAnimating.append(button)
         }
     }
     
@@ -318,7 +323,7 @@ extension GameViewController: CLLocationManagerDelegate {
                 }
             }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
                 self.buttonsNotAnimating.append(button1)
                 self.buttonsNotAnimating.append(button2)
             }
@@ -408,31 +413,6 @@ extension GameViewController: CLLocationManagerDelegate {
             }
         })
     }
-        
-    // MARK: - Message view
-    
-    func showMessage() {
-        self.view.addSubview(messageView)
-        UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: 0.1,
-            delay: 0.0,
-            options: [],
-            animations: {
-                self.messageView.alpha = 1.0
-        })
-    }
-    
-    func hideMessage() {
-        UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: 0.1,
-            delay: 0.0,
-            options: [],
-            animations: {
-                self.messageView.alpha = 0.0
-        }) { (_) in
-            self.messageView.removeFromSuperview()
-        }
-    }
     
     // MARK: - Location
     
@@ -468,6 +448,7 @@ extension GameViewController: CLLocationManagerDelegate {
     // MARK: - Helping Methods
     
     internal func startGame() {
+        print(buttonsNotAnimating.count)
         if resultsIsShowing {
             resultsView.hide()
             resultsIsShowing = false
@@ -507,17 +488,20 @@ extension GameViewController: CLLocationManagerDelegate {
         }
     }
     
-    func prepareForNewGame(hideMessageLabel: Bool = true) {
+    func prepareForNewGame() {
         game.newGame()
         setNumbers()
         gameFinished = true
+        //buttonsNotAnimating = buttons
         if game.winkNumbersMode || game.winkColorsMode || game.swapNumbersMode {
             timer1.invalidate()
             timer2.invalidate()
             buttons.forEach { $0.titleLabel?.layer.removeAllAnimations() }
         }
         hideNumbers(animated: false)
-        showMessage()
+        self.view.addSubview(messageView)
+        self.view.bringSubviewToFront(resultsView)
+        messageView.show()
     }
     
     func getAnotherColor(for button: UIButton, from colorSet: [UIColor]) -> UIColor? {
@@ -567,6 +551,11 @@ extension GameViewController: CLLocationManagerDelegate {
     func setDarkModeByCurrentTime() {
         if let isDay = isDay {
             darkMode = !isDay
+            NotificationCenter.default.post(
+                name: Notification.Name(DarkModeStateDidChangeNotification),
+                object: nil,
+                userInfo: [DarkModeStateUserInfoKey: darkMode]
+            )
         }
     }
     
