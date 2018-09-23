@@ -10,15 +10,28 @@ import Foundation
 
 // MARK: - Notifications
 
-let DarkModeStateDidChangeNotification = "DarkModeStateDidChangeNotification"
-let DarkModeStateUserInfoKey = "DarkModeStateUserInfoKey"
-
-let UserInterfaceColorDidChangeNotification = "UserInterfaceColorDidChangeNotification"
-let UserInterfaceColorUserInfoKey = "UserInterfaceColorUserInfoKey"
+public enum NotificationName: String {
+    case darkModeStateDidChange = "DarkModeStateDidChangeNotification"
+    case userInterfaceColorDidChange = "UserInterfaceColorDidChangeNotification"
+}
 
 // MARK: - User Defaults
 
-let DarkModeUserDefaultsKey = "darkMode"
-let AutomaticDarkModeUserDefaultsKey = "automaticDarkModeKey"
-let SunriseUserDefaultsKey = "sunrise"
-let SunsetUserDefaultsKey = "sunset"
+public enum UserDefaultsKey: String {
+    case darkMode = "darkModeUserDefaultsKey"
+    case automaticDarkMode = "automaticDarkModeKey"
+    case sunrise = "sunriseUserDefaultsKey"
+    case sunset = "sunsetUserDefaultsKey"
+}
+
+// MARK: - User Info
+
+public enum UserInfoKey: String {
+    case cellsNotAnimating = "cellsNotAnimatingUserInfoKey"
+    case game = "gameUserInfoKey"
+    case appearance = "appearanceUserInfoKey"
+    case darkModeState = "DarkModeStateUserInfoKey"
+    case userInterfaceColor = "UserInterfaceColorUserInfoKey"
+}
+
+

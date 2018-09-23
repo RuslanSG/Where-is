@@ -29,7 +29,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     }()
     
     lazy var resultsView: ResultsView = {
-        let view = ResultsView(frame: self.view.frame, darkMode: appearance.darkMode)
+        let view = ResultsView(frame: self.view.frame, appearance: appearance)
         let textColor: UIColor = appearance.darkMode ? .white : .black
         view.titleLabel.textColor = textColor
         view.timeLabel.textColor = textColor
@@ -40,11 +40,9 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     }()
     
     lazy var messageView: MessageView = {
-        let tapRecogrizer = UITapGestureRecognizer(target: self, action: #selector(messageViewTapped(sender:)))
-        let view = MessageView(style: appearance.darkMode ? .dark : .light)
+        let view = MessageView(appearanceInfo: appearance)
         view.layer.cornerRadius = appearance.cornerRadius
         view.clipsToBounds = true
-        view.addGestureRecognizer(tapRecogrizer)
         return view
     }()
         
@@ -52,66 +50,39 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     internal lazy var appearance = Appearance(view: self.view)
     internal lazy var automaticDarkMode = AutomaticDarkMode(for: appearance)
-    var game = Game() {
-        didSet {
-            print("didSet")
-        }
-    }
-    
-    var gameFinished = false {
-        didSet {
-            
-            stopButton.isEnabled = !gameFinished
-        }
-    }
+    internal var game = Game()
+    internal let feedbackGenerator = FeedbackGenerator()
     
     var firstTimeAppeared = true
     var resultsIsShowing = false
     
     var grid: Grid {
-        return Grid(layout: .dimensions(rowCount: game.rows, columnCount: game.colums), frame: buttonsContainerView.bounds)
+        return Grid(
+            layout: .dimensions(
+                rowCount: game.rows,
+                columnCount: game.colums
+            ),
+            frame: buttonsContainerView.bounds
+        )
     }
         
     var timer1 = Timer()
     var timer2 = Timer()
     
-    let feedbackGenerator = FeedbackGenerator()
-    
-    private var messageViewHeight: CGFloat {
-        if let buttonHeight = buttonHeight {
-            let height = buttons.count % 10 == 0 ? buttonHeight * 2 + appearance.gridInset * 2 : buttonHeight
-            return height
-        }
-        return 0.0
-    }
-    
-    private var messageViewWidth: CGFloat {
-        if let button = buttons.first {
-            let width = button.bounds.width * 3 + appearance.gridInset * 4
-            return width
-        }
-        return 0.0
-    }
-    
     // MARK: - Buttons
     
-    var buttons = [UIButton]() {
+    var cells = [Cell]() {
         didSet {
             buttonsContainerView.frame = buttonsContainerViewFrame
-            buttonsNotAnimating = buttons
+            cellsNotAnimating = cells
         }
     }
     
-    lazy var buttonsNotAnimating = buttons
-    private var lastPressedButton: UIButton!
+    lazy var cellsNotAnimating = cells
+    private var lastPressedCell: Cell!
     
-    var buttonFrameX: CGFloat?
-    var buttonFrameY: CGFloat?
-    var buttonFrameHeight: CGFloat?
-    var buttonFrameWidth: CGFloat?
-    
-    private var buttonHeight: CGFloat? {
-        if let button = buttons.first {
+    internal var buttonHeight: CGFloat? {
+        if let button = cells.first {
             return button.bounds.height
         }
         return 0.0
@@ -145,7 +116,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(darkModeStateChangedNotification(notification:)),
-            name: Notification.Name(DarkModeStateDidChangeNotification),
+            name: Notification.Name(NotificationName.darkModeStateDidChange.rawValue),
             object: nil
         )
     }
@@ -160,49 +131,28 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         self.view.addSubview(feedbackView)
         self.view.addSubview(buttonsContainerView)
         
-        addButtons(count: game.numbers.count)
+        addCells(count: game.numbers.count)
         updateButtonsFrames()
         
         self.view.sendSubviewToBack(feedbackView)
         
-        let height = messageViewHeight
-        if let button = buttons.first {
-            let width = button.bounds.width * 3 + appearance.gridInset * 4
-            messageView.frame = CGRect(x: 0.0, y: 0.0, width: width, height: height)
-            messageView.center = buttonsContainerView.center
-        }
+        messageView.frame = CGRect(x: 0.0, y: 0.0, width: messageViewWidth, height: messageViewHeight)
+        messageView.center = buttonsContainerView.center
     }
     
     func setupColors() {
         self.view.backgroundColor = appearance.mainViewColor
         stopButton.tintColor = appearance.userInterfaceColor
         settingsButton.tintColor = appearance.userInterfaceColor
-        removeNumberColors(animated: false)
         UIApplication.shared.statusBarStyle = appearance.darkMode ? .lightContent : .default
-        
-        buttons.forEach { (button) in
-            if game.colorfulCellsMode {
-                appearance.currentColorSet.forEach { (color) in
-                    if appearance.darkMode, button.backgroundColor == color.light {
-                        button.backgroundColor = color.dark
-                    } else if !appearance.darkMode, button.backgroundColor == color.dark {
-                        button.backgroundColor = color.light
-                    }
-                }
-            } else {
-                button.backgroundColor = appearance.defaultCellsColor
-            }
-        }
-        
-        messageView.label.textColor = appearance.textColor
     }
     
     // MARK: - Actions
     
-    @objc func buttonPressed(sender: UIButton) {
-        lastPressedButton = sender
-        compressButton(sender)
-        if gameFinished {
+    @objc func cellPressed(sender: Cell) {
+        lastPressedCell = sender
+        sender.compress()
+        if !game.inGame {
             startGame()
             messageView.hide()
             feedbackGenerator.playImpactHapticFeedback(needsToPrepare: true, style: .medium)
@@ -214,7 +164,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             game.finishGame()
             let time = game.elapsedTime
             feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .success)
-            uncompressButton(sender)
+            sender.uncompress()
             prepareForNewGame()
             self.view.addSubview(resultsView)
             resultsView.show(withTime: time ?? 0.0)
@@ -233,30 +183,17 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         if game.shuffleNumbersMode {
             game.shuffleNumbers()
             updateNumbers(animated: true)
-        } else {
-            if !game.winkNumbersMode {
-                sender.titleLabel?.alpha = 0.2
-            }
         }
         if game.shuffleColorsMode {
-            shuffleCellsColors(animated: true)
+            cells.forEach { $0.updateBackgroundColor(animated: true) }
             if game.colorfulNumbersMode {
-                shuffleNumbersColors(animated: true)
+                cells.forEach { $0.updateNumberColor(animated: true) }
             }
         }
     }
     
-    @objc func buttonReleased(sender: UIButton) {
-        if !gameFinished, !game.shuffleNumbersMode, !game.winkNumbersMode {
-            UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: 0.3,
-                delay: 0.0,
-                options: [],
-                animations: {
-                    sender.titleLabel?.alpha = 1.0
-            })
-        }
-        uncompressButton(sender)
+    @objc func cellReleased(sender: Cell) {
+        sender.uncompress()
     }
     
     @IBAction func stopButtonPressed(sender: UIButton) {
@@ -267,40 +204,24 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         self.prepareForNewGame()
     }
     
-    @objc private func messageViewTapped(sender: UITapGestureRecognizer) {
-        startGame()
-        messageView.hide()
-        feedbackGenerator.playImpactHapticFeedback(needsToPrepare: true, style: .medium)
-    }
-    
     // MARK: - SettingsTableViewControllerDelegate
     
-    func colorfulNumbersModeStateChanged(to state: Bool) {
-        if state == false {
-            removeNumberColors(animated: false)
-        }
-        prepareForNewGame()
-    }
-    
     func colorfulCellsModeStateChanged(to state: Bool) {
-        if state == false {
-            removeCellColors(animated: false)
-            removeNumberColors(animated: false)
+        cells.forEach { $0.updateBackgroundColor(animated: true) }
+        if state == true {
+            messageView.label.textColor = .white
         } else {
-            shuffleCellsColors(animated: false)
+            messageView.label.textColor = .black
         }
-        buttons.forEach { $0.setTitleColor(appearance.textColor, for: .normal) }
-        messageView.label.textColor = appearance.textColor
-        prepareForNewGame()
     }
     
     func maxNumberChanged(to maxNumber: Int) {
-        if buttons.count < maxNumber {
+        if cells.count < maxNumber {
             game.rows += 1
-            addButtons(count: maxNumber - buttons.count)
+            addCells(count: maxNumber - cells.count)
         } else {
             game.rows -= 1
-            removeButtons(count: buttons.count - maxNumber)
+            removeButtons(count: cells.count - maxNumber)
         }
         
         updateButtonsFrames()
@@ -324,8 +245,8 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     // MARK: - Notifications
     
     @objc private func willResignActive() {
-        if let buttonToUncompress = lastPressedButton {
-            uncompressButton(buttonToUncompress)
+        if let cellToUncompress = lastPressedCell {
+            cellToUncompress.uncompress()
         }
         prepareForNewGame()
     }

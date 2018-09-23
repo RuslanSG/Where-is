@@ -15,13 +15,6 @@ class Appearance {
     
     init(view: UIView? = nil) {
         self.view = view
-        
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(darkModeStateChangedNotification(notification:)),
-            name: Notification.Name(DarkModeStateDidChangeNotification),
-            object: nil
-        )
     }
     
     // MARK: - Game View Controller
@@ -57,28 +50,34 @@ class Appearance {
     
     // MARK: Sizes
     
-    var cornerRadius: CGFloat {
+    public var cornerRadius: CGFloat {
         if let view = self.view {
-            return view.bounds.width / 100
+            if view.traitCollection.horizontalSizeClass == .regular,
+               view.traitCollection.verticalSizeClass == .regular {
+                return 12.0
+            } else {
+                return 7.0
+            }
+        } else {
+            return 0.0
         }
-        return 0.0
     }
     
-    var numbersFontSize: CGFloat {
+    public var numbersFontSize: CGFloat {
         if let view = self.view {
             return view.bounds.width / 10
         }
         return 0.0
     }
     
-    var gridInset: CGFloat {
+    public var gridInset: CGFloat {
         if let view = self.view {
             return view.bounds.width / 200
         }
         return 0.0
     }
     
-    let cellCompressionRatio = 0.90
+    public let cellCompressionRatio = 0.90
     
     // MARK: - Settings View Comtroller
     
@@ -91,27 +90,41 @@ class Appearance {
     
     // MARK: - Dark Mode
     
+    var i = 1
+    
     public var darkMode: Bool {
         set {
-            UserDefaults.standard.set(newValue, forKey: DarkModeUserDefaultsKey)
+            UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.darkMode.rawValue)
+            NotificationCenter.default.post(
+                name: Notification.Name(NotificationName.darkModeStateDidChange.rawValue),
+                object: nil,
+                userInfo: [UserInfoKey.darkModeState.rawValue: newValue]
+            )
         }
         get {
-            return UserDefaults.standard.bool(forKey: DarkModeUserDefaultsKey)
+            return UserDefaults.standard.bool(forKey: UserDefaultsKey.darkMode.rawValue)
         }
     }
     
-    // MARK: - Notifications
+    // MARK: - Helping Methods
     
-    @objc func darkModeStateChangedNotification(notification: Notification) {
-        let darkModeNewState = notification.userInfo?[DarkModeStateUserInfoKey] as! Bool
-        if darkMode != darkModeNewState {
-            darkMode = darkModeNewState
+    public func getAnotherColor(for cell: UIView) -> UIColor? {
+        let cellColor = cell.backgroundColor
+        var allColors = currentColorSet.map { darkMode ? $0.dark : $0.light }
+        if let cellColor = cellColor {
+            let index = allColors.index(of: cellColor)
+            if let index = index {
+                allColors.remove(at: index)
+                let otherColors = allColors
+                return otherColors[otherColors.count.arc4random]
+            }
         }
+        return nil
     }
     
 }
 
-
+// Other colors
 
 //private let colorSetsR = [[(light: #colorLiteral(red: 0.06666666667, green: 0.4666666667, blue: 0.7215686275, alpha: 1), dark: #colorLiteral(red: 0.03137254902, green: 0.3058823529, blue: 0.4941176471, alpha: 1)),
 //                           (light: #colorLiteral(red: 0.09803921569, green: 0.6588235294, blue: 0.6117647059, alpha: 1), dark: #colorLiteral(red: 0.06666666667, green: 0.4823529412, blue: 0.462745098, alpha: 1)),

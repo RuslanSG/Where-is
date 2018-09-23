@@ -25,7 +25,7 @@
 		2AAC1633213C04210042D4A1 /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AAC1632213C04210042D4A1 /* ResultsView.swift */; };
 		2ACDF75C213D5B43004FEA1B /* FeedbackGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ACDF75B213D5B43004FEA1B /* FeedbackGenerator.swift */; };
 		2ACDF75E213F35B9004FEA1B /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ACDF75D213F35B9004FEA1B /* MessageView.swift */; };
-		2AEEA946215284FA00AC7896 /* CellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEEA945215284FA00AC7896 /* CellView.swift */; };
+		2AEEA946215284FA00AC7896 /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEEA945215284FA00AC7896 /* Cell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,7 +49,7 @@
 		2AAC1632213C04210042D4A1 /* ResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsView.swift; sourceTree = "<group>"; };
 		2ACDF75B213D5B43004FEA1B /* FeedbackGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackGenerator.swift; sourceTree = "<group>"; };
 		2ACDF75D213F35B9004FEA1B /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
-		2AEEA945215284FA00AC7896 /* CellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellView.swift; sourceTree = "<group>"; };
+		2AEEA945215284FA00AC7896 /* Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,7 +116,7 @@
 			children = (
 				2AAC1632213C04210042D4A1 /* ResultsView.swift */,
 				2ACDF75D213F35B9004FEA1B /* MessageView.swift */,
-				2AEEA945215284FA00AC7896 /* CellView.swift */,
+				2AEEA945215284FA00AC7896 /* Cell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -217,7 +217,7 @@
 				2A237940214C5CF00008FC2A /* Solar.swift in Sources */,
 				2A237942214E6E8A0008FC2A /* Appearance.swift in Sources */,
 				2AAC1610212D94D00042D4A1 /* GameViewControllerHelper.swift in Sources */,
-				2AEEA946215284FA00AC7896 /* CellView.swift in Sources */,
+				2AEEA946215284FA00AC7896 /* Cell.swift in Sources */,
 				2A93C30A215677C6006BB32B /* Strings.swift in Sources */,
 				2A118DCA211A1BD50059E252 /* Utilities.swift in Sources */,
 				2A118DB4211A132F0059E252 /* AppDelegate.swift in Sources */,

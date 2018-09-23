@@ -17,33 +17,20 @@ class MessageView: UIVisualEffectView {
         }
     }
     
-    private var darkMode: Bool! {
-        didSet {
-            setupColors()
-        }
-    }
+    private var appearanceInfo = Appearance()
     
-    init(style: UIBlurEffect.Style) {
+    init(appearanceInfo: Appearance) {
         super.init(effect: nil)
         
-        self.blur = UIBlurEffect(style: style)
-                
-        contentView.addSubview(label)
-        contentView.addConstraintsWithFormat(format: "H:|[v0]|", views: label)
-        contentView.addConstraintsWithFormat(format: "V:|[v0]|", views: label)
+        self.blur = UIBlurEffect(style: appearanceInfo.darkMode ? .dark : .light)
+        self.appearanceInfo = appearanceInfo
         
-        label.text = "Start"
-        label.font = UIFont.systemFont(ofSize: 30.0)
-        label.adjustsFontSizeToFitWidth = true
-        label.textAlignment = .center
-        label.isOpaque = false
-        label.isUserInteractionEnabled = true
-        label.alpha = 0.0
+        setupInputComponents()
         
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(darkModeStateChanged(notification:)),
-            name: Notification.Name(DarkModeStateDidChangeNotification),
+            name: Notification.Name(NotificationName.darkModeStateDidChange.rawValue),
             object: nil
         )
     }
@@ -56,7 +43,7 @@ class MessageView: UIVisualEffectView {
     
     public func show() {
         UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: 0.15,
+            withDuration: 0.4,
             delay: 0.0,
             options: [],
             animations: {
@@ -78,24 +65,38 @@ class MessageView: UIVisualEffectView {
         }
     }
     
-    // MARK: - DarkModeStateChangedNotification
+    // MARK: - Notifications
     
     @objc private func darkModeStateChanged(notification: Notification) {
-        let darkModeNewState = notification.userInfo?[DarkModeStateUserInfoKey] as? Bool
-        if darkMode != darkModeNewState {
-            darkMode = darkModeNewState
-        }
+        setupColors()
     }
     
     // MARK: - Helping Methods
     
+    private func setupInputComponents() {
+        self.isUserInteractionEnabled = false
+        
+        contentView.addSubview(label)
+        contentView.addConstraintsWithFormat(format: "H:|[v0]|", views: label)
+        contentView.addConstraintsWithFormat(format: "V:|[v0]|", views: label)
+        
+        label.text = "Start"
+        label.textColor = appearanceInfo.textColor
+        label.font = UIFont.systemFont(ofSize: appearanceInfo.numbersFontSize)
+        label.adjustsFontSizeToFitWidth = true
+        label.textAlignment = .center
+        label.isOpaque = false
+        label.isUserInteractionEnabled = true
+        label.alpha = 0.0
+    }
+    
     private func setupColors() {
-        if darkMode {
+        if appearanceInfo.darkMode {
             blur = UIBlurEffect(style: .dark)
-            label.textColor = .white
+            label.textColor = appearanceInfo.textColor
         } else {
             blur = UIBlurEffect(style: .light)
-            label.textColor = .black
+            label.textColor = appearanceInfo.textColor
         }
     }
 }

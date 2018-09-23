@@ -10,11 +10,7 @@ import UIKit
 
 class ResultsView: UIVisualEffectView {
 
-    private var darkMode: Bool! {
-        didSet {
-            setupColors()
-        }
-    }
+    private var appearance = Appearance()
     private var blur = UIBlurEffect()
 
     // MARK: - Subviews
@@ -95,18 +91,18 @@ class ResultsView: UIVisualEffectView {
     
     // MARK: - Initialization
         
-    public init(frame: CGRect, darkMode: Bool) {
+    public init(frame: CGRect, appearance: Appearance) {
         super.init(effect: nil)
         
         self.frame = frame
-        self.darkMode = darkMode
+        self.appearance = appearance
         setupInputComponents()
         setupColors()
         
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(darkModeStateChanged(notification:)),
-            name: Notification.Name(DarkModeStateDidChangeNotification),
+            name: Notification.Name(NotificationName.darkModeStateDidChange.rawValue),
             object: nil
         )
     }
@@ -118,10 +114,7 @@ class ResultsView: UIVisualEffectView {
     // MARK: - DarkModeStateChangedNotification
     
     @objc private func darkModeStateChanged(notification: Notification) {
-        let darkModeNewState = notification.userInfo?[DarkModeStateUserInfoKey] as? Bool
-        if darkMode != darkModeNewState {
-            darkMode = darkModeNewState
-        }
+        setupColors()
     }
     
     // MARK: - Helping Methods
@@ -140,7 +133,7 @@ class ResultsView: UIVisualEffectView {
     }
     
     private func setupColors() {
-        if darkMode {
+        if appearance.darkMode {
             blur = UIBlurEffect(style: .dark)
             titleLabel.textColor = .white
             timeLabel.textColor = .white

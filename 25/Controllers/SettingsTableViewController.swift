@@ -10,7 +10,6 @@ import UIKit
 
 protocol SettingsTableViewControllerDelegate {
     
-    func colorfulNumbersModeStateChanged(to state: Bool)
     func colorfulCellsModeStateChanged(to state: Bool)
     func maxNumberChanged(to maxNumber: Int)
 
@@ -62,13 +61,13 @@ class SettingsTableViewController: UITableViewController {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(userInterfaceColorDidChangeNotification(notification:)),
-            name: Notification.Name(UserInterfaceColorDidChangeNotification),
+            name: Notification.Name(NotificationName.userInterfaceColorDidChange.rawValue),
             object: nil
         )
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(darkModeStateChangedNotification(notification:)),
-            name: Notification.Name(DarkModeStateDidChangeNotification),
+            name: Notification.Name(NotificationName.darkModeStateDidChange.rawValue),
             object: nil
         )
     }
@@ -149,7 +148,6 @@ class SettingsTableViewController: UITableViewController {
     
     @IBAction func colorfulNumbersModeSwitcherValueChanged(_ sender: UISwitch) {
         game.colorfulNumbersMode = sender.isOn
-        delegate?.colorfulNumbersModeStateChanged(to: sender.isOn)
     }
     
     @IBAction func winkNumbersModeSwitcherValueChanged(_ sender: UISwitch) {
@@ -205,7 +203,6 @@ class SettingsTableViewController: UITableViewController {
     
     @IBAction func darkModeSwitcherValueChanged(_ sender: UISwitch) {
         appearance.darkMode = sender.isOn
-        postDarkModeStateChangedNotification()
     }
     
     @IBAction func automaticDarkModeSwitcherValueChanged(_ sender: UISwitch) {
@@ -215,7 +212,6 @@ class SettingsTableViewController: UITableViewController {
         }
         automaticDarkMode.isOn = sender.isOn
         darkModeSwitcher.isEnabled = !sender.isOn
-        postDarkModeStateChangedNotification()
     }
     
     // MARK: - Notifications
@@ -226,9 +222,7 @@ class SettingsTableViewController: UITableViewController {
     }
     
     @objc func darkModeStateChangedNotification(notification: Notification) {
-        let darkModeNewState = notification.userInfo?[DarkModeStateUserInfoKey] as! Bool
         setupComponents()
-        darkModeSwitcher.setOn(darkModeNewState, animated: true)
     }
     
     // MARK: - Helping Methods
@@ -272,14 +266,6 @@ class SettingsTableViewController: UITableViewController {
                 self.maxNumberStepper.tintColor = color
                 self.doneButton.tintColor = color
         })
-    }
-    
-    private func postDarkModeStateChangedNotification() {
-        NotificationCenter.default.post(
-            name: Notification.Name(DarkModeStateDidChangeNotification),
-            object: nil,
-            userInfo: [DarkModeStateUserInfoKey: appearance.darkMode]
-        )
     }
     
 }

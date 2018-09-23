@@ -55,13 +55,29 @@ extension GameViewController: CLLocationManagerDelegate {
         )
     }
     
+    internal var messageViewWidth: CGFloat {
+        if let button = cells.first {
+            let width = button.bounds.width * 3 - appearance.gridInset * 2
+            return width
+        }
+        return 0.0
+    }
+    
+    internal var messageViewHeight: CGFloat {
+        if let buttonHeight = buttonHeight {
+            let height = cells.count % 10 == 0 ? buttonHeight * 2 - appearance.gridInset * 2 : buttonHeight - appearance.gridInset * 2
+            return height
+        }
+        return 0.0
+    }
+    
     // MARK: - Cells
     
     func updateButtonsFrames() {
-        for i in buttons.indices {
-            let button = buttons[i]
-            if let viewFrame = grid[i]?.insetBy(dx: appearance.gridInset, dy: appearance.gridInset) {
-                button.frame = viewFrame
+        for i in cells.indices {
+            let button = cells[i]
+            if let buttonFrame = grid[i] {
+                button.frame = buttonFrame
             }
         }
     }
@@ -84,200 +100,68 @@ extension GameViewController: CLLocationManagerDelegate {
         }
     }
     
-    func addButtons(count: Int) {
+    func addCells(count: Int) {
         assert(count % 5 == 0, "Reason: invalid number of buttons to add. Provide a multiple of five number.")
         for _ in 0..<count {
-            let button: UIButton = {
-                let button = UIButton(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
-                button.titleLabel?.font = UIFont.systemFont(ofSize: appearance.numbersFontSize)
-                button.titleLabel?.alpha = 0.0
-                button.backgroundColor = game.colorfulCellsMode ? appearance.randomColor : appearance.defaultCellsColor
-                button.setTitleColor(appearance.textColor, for: .normal)
-                button.layer.cornerRadius = appearance.cornerRadius
-                button.addTarget(self, action: #selector(buttonPressed(sender:)), for: .touchDown)
-                button.addTarget(self, action: #selector(buttonReleased(sender:)), for: .touchUpInside)
-                button.addTarget(self, action: #selector(buttonReleased(sender:)), for: .touchUpOutside)
-                return button
+            let cell: Cell = {
+                let userInfo: [UserInfoKey : Any] = [UserInfoKey.cellsNotAnimating: cellsNotAnimating,
+                                                     UserInfoKey.game:                game,
+                                                     UserInfoKey.appearance:          appearance]
+                let cell = Cell(
+                    frame: CGRect(x: 0, y: 0, width: 0, height: 0),
+                    userInfo: userInfo
+                )
+                cell.addTarget(self, action: #selector(cellPressed(sender:)), for: .touchDown)
+                cell.addTarget(self, action: #selector(cellReleased(sender:)), for: .touchUpInside)
+                cell.addTarget(self, action: #selector(cellReleased(sender:)), for: .touchUpOutside)
+                return cell
             }()
-            buttons.append(button)
-            buttonsContainerView.addSubview(button)
+            cells.append(cell)
+            buttonsContainerView.addSubview(cell)
         }
     }
     
     func removeButtons(count: Int) {
         assert(count % 5 == 0, "Reason: invalid number of buttons to remove. Provide a multiple of five number.")
         for _ in 0..<count {
-            let lastButton = buttons.last
+            let lastButton = cells.last
             if let lastButton = lastButton {
                 lastButton.removeFromSuperview()
             }
-            buttons.removeLast()
+            cells.removeLast()
         }
     }
-    
-    func compressButton(_ button: UIButton) {
-        buttonFrameX = button.frame.minX
-        buttonFrameY = button.frame.minY
-        buttonFrameWidth = button.frame.width
-        buttonFrameHeight = button.frame.height
-        
-        let newButtonFrameX = button.frame.minX + button.frame.width * CGFloat(1 - appearance.cellCompressionRatio) / 2
-        let newButtonFrameY = button.frame.minY + button.frame.height * CGFloat(1 - appearance.cellCompressionRatio) / 2
-        let newButtonFrameWidth = button.frame.width * CGFloat(appearance.cellCompressionRatio)
-        let newButtonFrameHeight = button.frame.height * CGFloat(appearance.cellCompressionRatio)
-        
-        UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: 0.05,
-            delay: 0.0,
-            options: [],
-            animations: {
-                button.frame = CGRect(
-                    x: newButtonFrameX,
-                    y: newButtonFrameY,
-                    width: newButtonFrameWidth,
-                    height: newButtonFrameHeight
-                )
-        })
-    }
-    
-    func uncompressButton(_ button: UIButton) {
-        if let buttonFrameX = self.buttonFrameX,
-            let buttonFrameY = self.buttonFrameY,
-            let buttonFrameWidth = self.buttonFrameWidth,
-            let buttonFrameHeight = self.buttonFrameHeight {
-            UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: 0.3,
-                delay: 0.0,
-                options: [],
-                animations: {
-                    button.frame = CGRect(
-                        x: buttonFrameX,
-                        y: buttonFrameY,
-                        width: buttonFrameWidth,
-                        height: buttonFrameHeight
-                    )
-                    button.titleLabel?.alpha = 1.0
-            })
-            self.buttonFrameX = nil
-            self.buttonFrameY = nil
-            self.buttonFrameWidth = nil
-            self.buttonFrameHeight = nil
-        }
-    }
-    
-    
     
     // MARK: - Numbers
     
-    func showNumbers(animated: Bool) {
-        buttons.forEach({ (button) in
-            button.isEnabled = true
-            if animated {
-                UIViewPropertyAnimator.runningPropertyAnimator(
-                    withDuration: 0.2,
-                    delay: 0.0,
-                    options: [],
-                    animations: {
-                        button.titleLabel?.alpha = 1.0
-                })
-            } else {
-                button.titleLabel?.alpha = 1.0
-            }
-        })
-    }
-    
-    func hideNumbers(animated: Bool) {
-        buttons.forEach({ (button) in
-            if animated {
-                UIViewPropertyAnimator.runningPropertyAnimator(
-                    withDuration: 0.2,
-                    delay: 0.0,
-                    options: [],
-                    animations: {
-                        button.titleLabel?.alpha = 0.0
-                })
-            } else {
-                button.titleLabel?.alpha = 0.0
-            }
-        })
-    }
-    
     func setNumbers() {
-        for i in buttons.indices {
+        for i in cells.indices {
             let number = game.numbers[i]
-            let button = buttons[i]
-            button.setTitle(String(number), for: .normal)
-            button.tag = number
+            let cell = cells[i]
+            cell.setTitle(String(number), for: .normal)
+            cell.tag = number
         }
     }
     
     func updateNumbers(animated: Bool) {
-        for i in buttons.indices {
+        for i in cells.indices {
             let number = game.numbers[i]
-            let button = buttons[i]
-            if animated && buttonsNotAnimating.contains(button) {
-                UIViewPropertyAnimator.runningPropertyAnimator(
-                    withDuration: 0.1,
-                    delay: 0.0,
-                    options: [],
-                    animations: {
-                        button.titleLabel?.alpha = 0.0
-                }) { (position) in
-                    button.setTitle(String(number), for: .normal)
-                    button.tag = number
-                    UIViewPropertyAnimator.runningPropertyAnimator(
-                        withDuration: 0.1,
-                        delay: 0.0,
-                        options: [],
-                        animations: {
-                            button.titleLabel?.alpha = 1.0
-                    })
-                }
-            } else {
-                button.setTitle(String(number), for: .normal)
-                button.tag = number
-            }
-        }
-    }
-    
-    func winkNumber(at button: UIButton) {
-        let duration = 1.0
-        let delay = 0.9
-        
-        UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: duration / 2,
-            delay: 0.0,
-            options: [],
-            animations: {
-                button.titleLabel?.alpha = 0.0
-        }) { (_) in
-            if self.game.inGame {
-                UIViewPropertyAnimator.runningPropertyAnimator(
-                    withDuration: duration / 2,
-                    delay: delay,
-                    options: [],
-                    animations: {
-                        button.titleLabel?.alpha = 1.0
-                })
-            }
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + duration + delay) {
-            self.buttonsNotAnimating.append(button)
+            let cell = cells[i]
+            cell.updateNumber(to: number, animated: cellsNotAnimating.contains(cell))
         }
     }
     
     func swapNumbers(animated: Bool) {
-        let button1 = buttonsNotAnimating[buttonsNotAnimating.count.arc4random]
-        guard let index1 = buttonsNotAnimating.index(of: button1) else { return }
-        buttonsNotAnimating.remove(at: index1)
+        let cell1 = cellsNotAnimating[cellsNotAnimating.count.arc4random]
+        guard let index1 = cellsNotAnimating.index(of: cell1) else { return }
+        cellsNotAnimating.remove(at: index1)
         
-        let button2 = buttonsNotAnimating[buttonsNotAnimating.count.arc4random]
-        guard let index2 = buttonsNotAnimating.index(of: button2) else { return }
-        buttonsNotAnimating.remove(at: index2)
+        let cell2 = cellsNotAnimating[cellsNotAnimating.count.arc4random]
+        guard let index2 = cellsNotAnimating.index(of: cell2) else { return }
+        cellsNotAnimating.remove(at: index2)
         
-        let number1 = button1.tag
-        let number2 = button2.tag
+        let number1 = cell1.tag
+        let number2 = cell2.tag
         
         let duration = 1.0
         
@@ -287,137 +171,84 @@ extension GameViewController: CLLocationManagerDelegate {
                 delay: 0.0,
                 options: [],
                 animations: {
-                    button1.titleLabel?.alpha = 0.0
-                    button2.titleLabel?.alpha = 0.0
+                    cell1.titleLabel?.alpha = 0.0
+                    cell2.titleLabel?.alpha = 0.0
             }) { (position) in
                 if self.game.inGame {
-                    button1.setTitle(String(number2), for: .normal)
-                    button2.setTitle(String(number1), for: .normal)
-                    button1.tag = number2
-                    button2.tag = number1
+                    cell1.setTitle(String(number2), for: .normal)
+                    cell2.setTitle(String(number1), for: .normal)
+                    cell1.tag = number2
+                    cell2.tag = number1
                     UIViewPropertyAnimator.runningPropertyAnimator(
                         withDuration: duration / 2,
                         delay: 0.0,
                         options: [],
                         animations: {
-                            button1.titleLabel?.alpha = 1.0
-                            button2.titleLabel?.alpha = 1.0
+                            cell1.titleLabel?.alpha = 1.0
+                            cell2.titleLabel?.alpha = 1.0
                     })
                 }
             }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-                self.buttonsNotAnimating.append(button1)
-                self.buttonsNotAnimating.append(button2)
+                self.cellsNotAnimating.append(cell1)
+                self.cellsNotAnimating.append(cell2)
             }
         }
     }
     
+    internal func winkNumber(at cell: Cell) {
+        let duration = 1.0
+        let delay = 1.0
+        
+        cell.winkNumber(duration: duration, delay: delay)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration + delay) {
+            self.cellsNotAnimating.append(cell)
+        }
+        
+    }
+    
     // MARK: - Colors
     
-    func shuffleCellsColors(animated: Bool) {
-        buttons.forEach({ (button) in
-            if animated {
-                UIViewPropertyAnimator.runningPropertyAnimator(
-                    withDuration: 0.1,
-                    delay: 0.0,
-                    options: [],
-                    animations: {
-                        button.backgroundColor = self.appearance.randomColor
-                })
-            } else {
-                button.backgroundColor = appearance.randomColor
-            }
-        })
-    }
-    
-    func shuffleNumbersColors(animated: Bool) {
-        let colorSet = appearance.currentColorSet.map { appearance.darkMode ? $0.dark : $0.light }
-        buttons.forEach({ (button) in
-            if animated {
-                UIViewPropertyAnimator.runningPropertyAnimator(
-                    withDuration: 0.1,
-                    delay: 0.0,
-                    options: [],
-                    animations: {
-                        if let color = self.getAnotherColor(for: button, from: colorSet) {
-                            button.setTitleColor(color, for: .normal)
-                        }
-                })
-            } else {
-                if let color = self.getAnotherColor(for: button, from: colorSet) {
-                    button.setTitleColor(color, for: .normal)
-                }
-            }
-        })
-    }
-    
     func removeCellColors(animated: Bool) {
-        buttons.forEach({ (button) in
-            if animated {
-                UIViewPropertyAnimator.runningPropertyAnimator(
-                    withDuration: 0.1,
-                    delay: 0.0,
-                    options: [],
-                    animations: {
-                        button.backgroundColor = self.appearance.defaultCellsColor
-                })
-            } else {
-                button.backgroundColor = appearance.defaultCellsColor
-            }
-        })
-    }
-    
-    func winkCellColor(at button: UIButton) {
-        let colorSet = appearance.currentColorSet.map { appearance.darkMode ? $0.dark : $0.light }
-        UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: 0.5,
-            delay: 0.0,
-            options: [],
-            animations: {
-                if let color = self.getAnotherColor(for: button, from: colorSet) {
-                    button.backgroundColor = color
-                }
+        cells.forEach({ (cell) in
+            cell.updateBackgroundColor(animated: animated, to: appearance.defaultCellsColor)
         })
     }
     
     func removeNumberColors(animated: Bool) {
-        buttons.forEach({ (button) in
-            if animated {
-                UIViewPropertyAnimator.runningPropertyAnimator(
-                    withDuration: 0.1,
-                    delay: 0.0,
-                    options: [],
-                    animations: {
-                        button.setTitleColor(self.appearance.textColor, for: .normal)
-                })
-            } else {
-                button.setTitleColor(self.appearance.textColor, for: .normal)
-            }
+        cells.forEach({ (cell) in
+            cell.updateNumberColor(animated: false)
         })
+    }
+    
+    func winkCellColor(at cell: Cell) {
+        if let color = appearance.getAnotherColor(for: cell) {
+            cell.updateBackgroundColor(animated: true, to: color)
+        }
     }
     
     // MARK: - Helping Methods
     
     internal func startGame() {
-        print(buttonsNotAnimating.count)
         if resultsIsShowing {
             resultsView.hide()
             resultsIsShowing = false
         }
-        showNumbers(animated: true)
+        
+        for cell in cells {
+            cell.updateBackgroundColor(animated: false)
+            cell.updateNumberColor(animated: false)
+            cell.showNumber(animated: true)
+        }
+        
+        stopButton.isEnabled = true
+        
         game.startGame()
-        gameFinished = false
         
         feedbackGenerator.impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
         feedbackGenerator.impactFeedbackGenerator?.prepare()
-        
-        if game.colorfulCellsMode {
-            shuffleCellsColors(animated: true)
-        }
-        if game.colorfulNumbersMode {
-            shuffleNumbersColors(animated: true)
-        }
         
         if game.winkNumbersMode {
             timer1 = Timer.scheduledTimer(
@@ -428,7 +259,6 @@ extension GameViewController: CLLocationManagerDelegate {
                 repeats: true
             )
         }
-        
         if game.swapNumbersMode {
             timer2 = Timer.scheduledTimer(
                 timeInterval: TimeInterval(5.0 / Double(game.maxNumber)),
@@ -443,35 +273,16 @@ extension GameViewController: CLLocationManagerDelegate {
     func prepareForNewGame() {
         game.newGame()
         setNumbers()
-        gameFinished = true
-        //buttonsNotAnimating = buttons
+        stopButton.isEnabled = false
         if game.winkNumbersMode || game.winkColorsMode || game.swapNumbersMode {
             timer1.invalidate()
             timer2.invalidate()
-            buttons.forEach { $0.titleLabel?.layer.removeAllAnimations() }
+            cells.forEach { $0.titleLabel?.layer.removeAllAnimations() }
         }
-        hideNumbers(animated: false)
+        cells.forEach { $0.hideNumber(animated: false) }
         self.view.addSubview(messageView)
         self.view.bringSubviewToFront(resultsView)
         messageView.show()
-    }
-    
-    func getAnotherColor(for button: UIButton, from colorSet: [UIColor]) -> UIColor? {
-        let buttonColor = button.backgroundColor
-        var otherColors = colorSet
-        if let buttonColor = buttonColor {
-            let index = otherColors.index(of: buttonColor)
-            if let index = index {
-                otherColors.remove(at: index)
-                return otherColors[otherColors.count.arc4random]
-            }
-        }
-        return nil
-    }
-    
-    enum CellPart {
-        case number
-        case color
     }
     
     @objc func timerSceduled() {
@@ -486,17 +297,23 @@ extension GameViewController: CLLocationManagerDelegate {
         }
     }
     
+    enum CellPart {
+        case number
+        case color
+    }
+    
     func wink(_ cellPart: CellPart) {
         if cellPart == .number {
-            let button = buttonsNotAnimating[buttonsNotAnimating.count.arc4random]
-            if let index = buttonsNotAnimating.index(of: button) {
-                buttonsNotAnimating.remove(at: index)
+            print(cellsNotAnimating.count)
+            let cell = cellsNotAnimating[cellsNotAnimating.count.arc4random]
+            if let index = cellsNotAnimating.index(of: cell) {
+                cellsNotAnimating.remove(at: index)
             }
-            winkNumber(at: button)
+            winkNumber(at: cell)
         }
         if cellPart == .color {
-            let button = buttons[buttons.count.arc4random]
-            winkCellColor(at: button)
+            let cell = cells[cells.count.arc4random]
+            winkCellColor(at: cell)
         }
     }
     

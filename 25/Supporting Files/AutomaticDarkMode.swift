@@ -18,28 +18,28 @@ class AutomaticDarkMode: NSObject, CLLocationManagerDelegate {
 
     var isOn: Bool {
         set {
-            UserDefaults.standard.set(newValue, forKey: AutomaticDarkModeUserDefaultsKey)
+            UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.automaticDarkMode.rawValue)
         }
         get {
-            return UserDefaults.standard.bool(forKey: AutomaticDarkModeUserDefaultsKey)
+            return UserDefaults.standard.bool(forKey: UserDefaultsKey.automaticDarkMode.rawValue)
         }
     }
     
     public var sunrise: Date? {
         set {
-            userDefaults.set(newValue, forKey: SunriseUserDefaultsKey)
+            userDefaults.set(newValue, forKey: UserDefaultsKey.sunrise.rawValue)
         }
         get {
-            return userDefaults.value(forKey: SunriseUserDefaultsKey) as? Date
+            return userDefaults.value(forKey: UserDefaultsKey.sunrise.rawValue) as? Date
         }
     }
     
     public var sunset: Date? {
         set {
-            userDefaults.set(newValue, forKey: SunsetUserDefaultsKey)
+            userDefaults.set(newValue, forKey: UserDefaultsKey.sunset.rawValue)
         }
         get {
-            return userDefaults.value(forKey: SunsetUserDefaultsKey) as? Date
+            return userDefaults.value(forKey:  UserDefaultsKey.sunset.rawValue) as? Date
         }
     }
     
@@ -106,11 +106,6 @@ class AutomaticDarkMode: NSObject, CLLocationManagerDelegate {
     func setDarkModeByCurrentTime() {
         if let isDay = isDay {
             appearance.darkMode = !isDay
-            NotificationCenter.default.post(
-                name: Notification.Name(DarkModeStateDidChangeNotification),
-                object: nil,
-                userInfo: [DarkModeStateUserInfoKey: appearance.darkMode]
-            )
         }
     }
     
