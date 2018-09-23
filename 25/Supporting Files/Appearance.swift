@@ -108,18 +108,27 @@ class Appearance {
     
     // MARK: - Helping Methods
     
-    public func getAnotherColor(for cell: UIView) -> UIColor? {
-        let cellColor = cell.backgroundColor
+    public func getAnotherColor(for color: UIColor) -> UIColor? {
         var allColors = currentColorSet.map { darkMode ? $0.dark : $0.light }
-        if let cellColor = cellColor {
-            let index = allColors.index(of: cellColor)
-            if let index = index {
-                allColors.remove(at: index)
-                let otherColors = allColors
-                return otherColors[otherColors.count.arc4random]
-            }
+        let index = allColors.index(of: color)
+        if let index = index {
+            allColors.remove(at: index)
+            let otherColors = allColors
+            return otherColors[otherColors.count.arc4random]
         }
         return nil
+    }
+    
+    public func switchColorForAnotherScheme(_ currentColor: UIColor) -> UIColor? {
+        var newColor: UIColor? = nil
+        currentColorSet.forEach { (color) in
+            if darkMode, currentColor == color.light {
+                newColor = color.dark
+            } else if !darkMode, currentColor == color.dark {
+                newColor = color.light
+            }
+        }
+        return newColor
     }
     
 }

@@ -168,15 +168,11 @@ class SettingsTableViewController: UITableViewController {
             if shuffleColorsModeSwitcher.isOn {
                 shuffleColorsModeSwitcher.setOn(false, animated: true)
             }
-//            if winkColorsModeSwitcher.isOn {
-//                winkColorsModeSwitcher.setOn(false, animated: true)
-//            }
             if colorfulNumbersModeSwitcher.isOn {
                 colorfulNumbersModeSwitcher.setOn(false, animated: true)
             }
         }
         shuffleColorsModeSwitcher.isEnabled = sender.isOn
-//        winkColorsModeSwitcher.isEnabled = sender.isOn
         colorfulNumbersModeSwitcher.isEnabled = sender.isOn
     }
     

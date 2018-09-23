@@ -40,7 +40,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     }()
     
     lazy var messageView: MessageView = {
-        let view = MessageView(appearanceInfo: appearance)
+        let view = MessageView(appearanceInfo: appearance, gameInfo: game)
         view.layer.cornerRadius = appearance.cornerRadius
         view.clipsToBounds = true
         return view
@@ -211,7 +211,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         if state == true {
             messageView.label.textColor = .white
         } else {
-            messageView.label.textColor = .black
+            messageView.label.textColor = appearance.textColor
         }
     }
     

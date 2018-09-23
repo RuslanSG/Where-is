@@ -51,6 +51,12 @@ extension UIDevice {
         case iPhone6SPlus   = "iPhone 6S Plus"
         case iPhone7        = "iPhone 7"
         case iPhone7Plus    = "iPhone 7 Plus"
+        case iPhone8        = "iPhone 8"
+        case iPhone8Plus    = "iPhone 8 Plus"
+        case iPhoneX        = "iPhone X"
+        case iPhoneXS       = "iPhone XS"
+        case iPhoneXSMax    = "iPhone XS Max"
+        case iPhoneXR       = "iPhone XR"
     }
     
     var platform: DevicePlatform {

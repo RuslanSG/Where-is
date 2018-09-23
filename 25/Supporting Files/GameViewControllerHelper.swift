@@ -224,7 +224,8 @@ extension GameViewController: CLLocationManagerDelegate {
     }
     
     func winkCellColor(at cell: Cell) {
-        if let color = appearance.getAnotherColor(for: cell) {
+        guard let currentColor = cell.backgroundColor else { return }
+        if let color = appearance.getAnotherColor(for: currentColor) {
             cell.updateBackgroundColor(animated: true, to: color)
         }
     }

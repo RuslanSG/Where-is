@@ -213,7 +213,8 @@ class Cell: UIButton {
         let colorChanger = {
             var newColor = UIColor()
             if self.game.colorfulNumbersMode, self.game.colorfulCellsMode {
-                if let anotherColor = self.appearance.getAnotherColor(for: self.cellView) {
+                if  let color = self.cellView.backgroundColor,
+                    let anotherColor = self.appearance.getAnotherColor(for: color) {
                     newColor = anotherColor
                 }
             } else if self.game.colorfulCellsMode {
@@ -266,15 +267,22 @@ class Cell: UIButton {
     }
     
     private func setupColors() {
+        guard let currentColor = self.backgroundColor else { return }
+        
         let cellColor = game.colorfulCellsMode ? appearance.randomColor : appearance.defaultCellsColor
-        let numberColor = game.colorfulNumbersMode ? appearance.getAnotherColor(for: self) : appearance.textColor
+        let numberColor = game.colorfulNumbersMode ? appearance.getAnotherColor(for: currentColor) : appearance.textColor
         
         self.setTitleColor(numberColor, for: .normal)
         self.cellView.backgroundColor = cellColor
     }
     
     private func updateColors() {
-        updateBackgroundColor(animated: true)
+        if game.colorfulCellsMode {
+            guard let currentColor = cellView.backgroundColor else { return }
+            cellView.backgroundColor = appearance.switchColorForAnotherScheme(currentColor)
+        } else {
+            updateBackgroundColor(animated: true)
+        }
         updateNumberColor(animated: true)
     }
     

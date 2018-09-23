@@ -18,12 +18,14 @@ class MessageView: UIVisualEffectView {
     }
     
     private var appearanceInfo = Appearance()
+    private var gameInfo = Game()
     
-    init(appearanceInfo: Appearance) {
+    init(appearanceInfo: Appearance, gameInfo: Game) {
         super.init(effect: nil)
         
         self.blur = UIBlurEffect(style: appearanceInfo.darkMode ? .dark : .light)
         self.appearanceInfo = appearanceInfo
+        self.gameInfo = gameInfo
         
         setupInputComponents()
         
@@ -96,7 +98,11 @@ class MessageView: UIVisualEffectView {
             label.textColor = appearanceInfo.textColor
         } else {
             blur = UIBlurEffect(style: .light)
-            label.textColor = appearanceInfo.textColor
+            if gameInfo.colorfulCellsMode {
+                label.textColor = .white
+            } else {
+                label.textColor = appearanceInfo.textColor
+            }
         }
     }
 }
