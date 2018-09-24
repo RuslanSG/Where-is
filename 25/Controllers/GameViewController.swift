@@ -116,6 +116,16 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         )
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        let firstLaunch = true //!UserDefaults.standard.bool(forKey: UserDefaultsKey.notFirstLaunch.rawValue)
+        if firstLaunch {
+            showGreetingsViewController()
+            UserDefaults.standard.set(true, forKey: UserDefaultsKey.notFirstLaunch.rawValue)
+        }
+    }
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -259,6 +269,14 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     @objc func darkModeStateChangedNotification(notification: Notification) {
         setupColors()
+    }
+    
+    // MARK: - Helping methods
+    
+    private func showGreetingsViewController() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let greetingsVC = storyboard.instantiateViewController(withIdentifier: "GreetingsViewController")
+        self.present(greetingsVC, animated: true, completion: nil)
     }
         
 }

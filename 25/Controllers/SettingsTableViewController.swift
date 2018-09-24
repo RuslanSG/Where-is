@@ -228,26 +228,33 @@ class SettingsTableViewController: UITableViewController {
     // MARK: - Helping Methods
     
     @objc private func setupColors(animated: Bool) {
-        let colorChanger = {
+        let duration = 0.3
+        
+        let animatedColorChanger = {
             if let currentColor = self.doneButton.tintColor {
                 self.doneButton.tintColor = self.appearance.switchColorForAnotherScheme(currentColor)
             }
             self.tableView.backgroundColor = self.appearance.darkMode ? self.appearance.tableViewBackgroundColor.darkMode : self.appearance.tableViewBackgroundColor.lightMode
             self.tableView.separatorColor = self.appearance.darkMode ? self.appearance.tableViewSeparatorColor.darkMode : self.appearance.tableViewSeparatorColor.lightMode
 
-            
-            
             self.steppers.forEach { $0.tintColor = self.appearance.userInterfaceColor }
-            self.labels.forEach { $0.textColor = self.appearance.darkMode ? .white : .black }
             self.cells.forEach { $0.backgroundColor = self.appearance.darkMode ? self.appearance.cellsColor.darkMode : self.appearance.cellsColor.lightMode }
             
-            for switcher in self.switchers {
-                switcher.tintColor = self.appearance.darkMode ? self.appearance.swithersTintColor.darkMode : self.appearance.swithersTintColor.lightMode
-                switcher.onTintColor = self.appearance.userInterfaceColor
-            }
         }
         
-        let duration = 0.2
+        let colorChanger = {
+            DispatchQueue.main.asyncAfter(deadline: .now() + duration / 2) {
+                self.navigationController?.navigationBar.barStyle = self.appearance.darkMode ? .black : .default
+                self.navigationController?.navigationBar.titleTextAttributes =
+                    [NSAttributedString.Key.foregroundColor : (self.appearance.darkMode ? UIColor.white : UIColor.black)]
+                self.labels.forEach { $0.textColor = self.appearance.darkMode ? .white : .black }
+                
+                for switcher in self.switchers {
+                    switcher.tintColor = self.appearance.darkMode ? self.appearance.swithersTintColor.darkMode : self.appearance.swithersTintColor.lightMode
+                    switcher.onTintColor = self.appearance.userInterfaceColor
+                }
+            }
+        }
         
         if animated {
             UIViewPropertyAnimator.runningPropertyAnimator(
@@ -255,33 +262,15 @@ class SettingsTableViewController: UITableViewController {
                 delay: 0.0,
                 options: [],
                 animations: {
-                    colorChanger()
+                    animatedColorChanger()
             })
+            colorChanger()
         } else {
+            animatedColorChanger()
             colorChanger()
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + duration / 2) {
-            self.navigationController?.navigationBar.barStyle = self.appearance.darkMode ? .black : .default
-            self.navigationController?.navigationBar.titleTextAttributes =
-                [NSAttributedString.Key.foregroundColor : (self.appearance.darkMode ? UIColor.white : UIColor.black)]
-        }
         
-
-        
-        
-//        doneButton.tintColor = appearance.switchColorForAnotherScheme(appearance.userInterfaceColor)
-//        navigationController?.navigationBar.barStyle = appearance.darkMode ? .black : .default
-//        tableView.backgroundColor = appearance.darkMode ? appearance.tableViewBackgroundColor.darkMode : appearance.tableViewBackgroundColor.lightMode
-//        tableView.separatorColor = appearance.darkMode ? appearance.tableViewSeparatorColor.darkMode : appearance.tableViewSeparatorColor.lightMode
-//        navigationController?.navigationBar.titleTextAttributes =
-//            [NSAttributedString.Key.foregroundColor : (appearance.darkMode ? UIColor.white : UIColor.black)]
-//
-//
-//        switchers.forEach { $0.onTintColor = appearance.userInterfaceColor }
-//        steppers.forEach { $0.tintColor = appearance.userInterfaceColor }
-//        labels.forEach { $0.textColor = appearance.darkMode ? .black : .white }
-//        cells.forEach { $0.backgroundColor = appearance.darkMode ? appearance.cellsColor.darkMode : appearance.cellsColor.lightMode }
         
     }
     

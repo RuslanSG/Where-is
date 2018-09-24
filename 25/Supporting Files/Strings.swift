@@ -22,6 +22,7 @@ public enum UserDefaultsKey: String {
     case automaticDarkMode = "automaticDarkModeKey"
     case sunrise = "sunriseUserDefaultsKey"
     case sunset = "sunsetUserDefaultsKey"
+    case notFirstLaunch = "notFirstLaunch"
 }
 
 // MARK: - User Info
