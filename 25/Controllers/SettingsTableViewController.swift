@@ -20,6 +20,7 @@ class SettingsTableViewController: UITableViewController {
     @IBOutlet var switchers: [UISwitch]!
     @IBOutlet var labels: [UILabel]!
     @IBOutlet var cells: [UITableViewCell]!
+    @IBOutlet var steppers: [UIStepper]!
     
     @IBOutlet weak var doneButton: UIBarButtonItem!
     
@@ -60,14 +61,14 @@ class SettingsTableViewController: UITableViewController {
 
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(userInterfaceColorDidChangeNotification(notification:)),
-            name: Notification.Name(NotificationName.userInterfaceColorDidChange.rawValue),
+            selector: #selector(darkModeStateChangedNotification(notification:)),
+            name: Notification.Name(NotificationName.darkModeStateDidChange.rawValue),
             object: nil
         )
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(darkModeStateChangedNotification(notification:)),
-            name: Notification.Name(NotificationName.darkModeStateDidChange.rawValue),
+            selector: #selector(didBecomeActive),
+            name: UIApplication.didBecomeActiveNotification,
             object: nil
         )
     }
@@ -75,7 +76,7 @@ class SettingsTableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        setupComponents()
+        setupColors(animated: false)
         
         doneButton.tintColor = appearance.userInterfaceColor
         switchers.forEach { $0.onTintColor = appearance.userInterfaceColor }
@@ -134,6 +135,10 @@ class SettingsTableViewController: UITableViewController {
         appearance.darkMode ? cells.forEach { $0.backgroundColor = appearance.cellsColor.darkMode } :
                               cells.forEach { $0.backgroundColor = appearance.cellsColor.lightMode }
         
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
         
     // MARK: - Actions
@@ -204,64 +209,82 @@ class SettingsTableViewController: UITableViewController {
     @IBAction func automaticDarkModeSwitcherValueChanged(_ sender: UISwitch) {
         if let isDay = automaticDarkMode.isDay, sender.isOn == true {
             appearance.darkMode = !isDay
-            darkModeSwitcher.isEnabled = true
         }
         automaticDarkMode.isOn = sender.isOn
         darkModeSwitcher.isEnabled = !sender.isOn
+        darkModeSwitcher.setOn(appearance.darkMode, animated: true)
     }
     
     // MARK: - Notifications
     
-    @objc private func userInterfaceColorDidChangeNotification(notification: Notification) {
-//        appearance.userInterfaceColor = notification.object as? UIColor
-//        setupUserInterfaceColor(with: appearance.userInterfaceColor)
+    @objc func darkModeStateChangedNotification(notification: Notification) {
+        setupColors(animated: true)
     }
     
-    @objc func darkModeStateChangedNotification(notification: Notification) {
-        setupComponents()
+    @objc private func didBecomeActive() {
+        automaticDarkMode.setDarkModeByCurrentTime()
     }
     
     // MARK: - Helping Methods
     
-    @objc private func setupComponents() {
-        if appearance.darkMode {
-            navigationController?.navigationBar.barStyle = .black
-            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
-            tableView.backgroundColor = appearance.tableViewBackgroundColor.darkMode
-            cells.forEach { $0.backgroundColor = appearance.cellsColor.darkMode }
-            tableView.separatorColor = appearance.tableViewSeparatorColor.darkMode
-            switchers.forEach { (switcher) in
-                switcher.tintColor = appearance.swithersTintColor.darkMode
+    @objc private func setupColors(animated: Bool) {
+        let colorChanger = {
+            if let currentColor = self.doneButton.tintColor {
+                self.doneButton.tintColor = self.appearance.switchColorForAnotherScheme(currentColor)
             }
-            labels.forEach { (label) in
-                label.textColor = .white
-            }
-        } else {
-            navigationController?.navigationBar.barStyle = .default
-            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
-            tableView.backgroundColor = appearance.tableViewBackgroundColor.lightMode
-            cells.forEach { $0.backgroundColor = appearance.cellsColor.lightMode }
-            tableView.separatorColor = appearance.tableViewSeparatorColor.lightMode
-            switchers.forEach { (switcher) in
-                switcher.tintColor = appearance.swithersTintColor.lightMode
-            }
-            labels.forEach { (label) in
-                label.textColor = .black
+            self.tableView.backgroundColor = self.appearance.darkMode ? self.appearance.tableViewBackgroundColor.darkMode : self.appearance.tableViewBackgroundColor.lightMode
+            self.tableView.separatorColor = self.appearance.darkMode ? self.appearance.tableViewSeparatorColor.darkMode : self.appearance.tableViewSeparatorColor.lightMode
+
+            
+            
+            self.steppers.forEach { $0.tintColor = self.appearance.userInterfaceColor }
+            self.labels.forEach { $0.textColor = self.appearance.darkMode ? .white : .black }
+            self.cells.forEach { $0.backgroundColor = self.appearance.darkMode ? self.appearance.cellsColor.darkMode : self.appearance.cellsColor.lightMode }
+            
+            for switcher in self.switchers {
+                switcher.tintColor = self.appearance.darkMode ? self.appearance.swithersTintColor.darkMode : self.appearance.swithersTintColor.lightMode
+                switcher.onTintColor = self.appearance.userInterfaceColor
             }
         }
+        
+        let duration = 0.2
+        
+        if animated {
+            UIViewPropertyAnimator.runningPropertyAnimator(
+                withDuration: duration,
+                delay: 0.0,
+                options: [],
+                animations: {
+                    colorChanger()
+            })
+        } else {
+            colorChanger()
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration / 2) {
+            self.navigationController?.navigationBar.barStyle = self.appearance.darkMode ? .black : .default
+            self.navigationController?.navigationBar.titleTextAttributes =
+                [NSAttributedString.Key.foregroundColor : (self.appearance.darkMode ? UIColor.white : UIColor.black)]
+        }
+        
+
+        
+        
+//        doneButton.tintColor = appearance.switchColorForAnotherScheme(appearance.userInterfaceColor)
+//        navigationController?.navigationBar.barStyle = appearance.darkMode ? .black : .default
+//        tableView.backgroundColor = appearance.darkMode ? appearance.tableViewBackgroundColor.darkMode : appearance.tableViewBackgroundColor.lightMode
+//        tableView.separatorColor = appearance.darkMode ? appearance.tableViewSeparatorColor.darkMode : appearance.tableViewSeparatorColor.lightMode
+//        navigationController?.navigationBar.titleTextAttributes =
+//            [NSAttributedString.Key.foregroundColor : (appearance.darkMode ? UIColor.white : UIColor.black)]
+//
+//
+//        switchers.forEach { $0.onTintColor = appearance.userInterfaceColor }
+//        steppers.forEach { $0.tintColor = appearance.userInterfaceColor }
+//        labels.forEach { $0.textColor = appearance.darkMode ? .black : .white }
+//        cells.forEach { $0.backgroundColor = appearance.darkMode ? appearance.cellsColor.darkMode : appearance.cellsColor.lightMode }
+        
     }
     
-    private func setupUserInterfaceColor(with color: UIColor) {
-        self.switchers.forEach { $0.onTintColor = color }
-        UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: 0.3,
-            delay: 0.0,
-            options: [],
-            animations: {
-                self.levelStepper.tintColor = color
-                self.maxNumberStepper.tintColor = color
-                self.doneButton.tintColor = color
-        })
-    }
+
     
 }

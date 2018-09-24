@@ -53,6 +53,10 @@ class Cell: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     // MARK: - Cell
     
     public func compress() {

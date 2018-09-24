@@ -88,10 +88,6 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         return 0.0
     }
     
-//    override var preferredStatusBarStyle: UIStatusBarStyle {
-//        return darkMode ? .lightContent : .default
-//    }
-    
     // MARK: - View Controller Lifecycle
     
     override func viewDidLoad() {
@@ -99,7 +95,6 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         setupColors()
         prepareForNewGame()
         automaticDarkMode.getUserLocation()
-//        setNeedsStatusBarAppearanceUpdate()
         
         NotificationCenter.default.addObserver(
             self,
@@ -119,6 +114,10 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             name: Notification.Name(NotificationName.darkModeStateDidChange.rawValue),
             object: nil
         )
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     // MARK: - Setup UI

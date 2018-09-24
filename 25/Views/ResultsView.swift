@@ -111,6 +111,10 @@ class ResultsView: UIVisualEffectView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     // MARK: - DarkModeStateChangedNotification
     
     @objc private func darkModeStateChanged(notification: Notification) {

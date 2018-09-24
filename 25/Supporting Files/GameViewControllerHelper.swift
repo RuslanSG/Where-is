@@ -56,16 +56,17 @@ extension GameViewController: CLLocationManagerDelegate {
     }
     
     internal var messageViewWidth: CGFloat {
-        if let button = cells.first {
-            let width = button.bounds.width * 3 - appearance.gridInset * 2
+        if let cell = cells.first {
+            let width = cell.bounds.width * 3 - appearance.gridInset
             return width
         }
         return 0.0
     }
     
     internal var messageViewHeight: CGFloat {
-        if let buttonHeight = buttonHeight {
-            let height = cells.count % 10 == 0 ? buttonHeight * 2 - appearance.gridInset * 2 : buttonHeight - appearance.gridInset * 2
+        if let cellHeight = buttonHeight {
+            let height = cells.count % 10 == 0 ? cellHeight * 2 - appearance.gridInset :
+                                                 cellHeight - appearance.gridInset
             return height
         }
         return 0.0
