@@ -35,4 +35,9 @@ public enum UserInfoKey: String {
     case userInterfaceColor = "UserInterfaceColorUserInfoKey"
 }
 
+// MARK: - View Controllers Identifiers
 
+public enum ViewControllerIdentifier: String {
+    case greetingsPVC = "greetingsPVC"
+    case greetingsVC = "greetingsVC"
+}

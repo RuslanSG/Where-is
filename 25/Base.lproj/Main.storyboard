@@ -496,29 +496,28 @@
             </objects>
             <point key="canvasLocation" x="1952.8" y="133.5832083958021"/>
         </scene>
+        <!--Greetings Page View Controller-->
+        <scene sceneID="4v4-wU-OXN">
+            <objects>
+                <pageViewController storyboardIdentifier="greetingsPVC" autoresizesArchivedViewToFullSize="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="6BS-WZ-RYs" customClass="GreetingsPageViewController" customModule="_5" customModuleProvider="target" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PbN-d7-rqP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="137" y="832"/>
+        </scene>
         <!--Greeting View Controller-->
         <scene sceneID="yAG-7T-nse">
             <objects>
-                <viewController storyboardIdentifier="GreetingsViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="M2Y-W5-kZ4" customClass="GreetingViewController" customModule="_5" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="greetingsVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="M2Y-W5-kZ4" customClass="GreetingViewController" customModule="_5" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="N9k-Gx-LPz">
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Hello!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4oG-KS-elh">
-                                <rect key="frame" x="58" y="80" width="147" height="72"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="60"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" red="0.99607843139999996" green="0.20000000000000001" blue="0.2784313725" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="V2X-1E-bgN"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lLe-Ik-JsE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2907" y="127"/>
+            <point key="canvasLocation" x="1062" y="832"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="I89-kt-H4U">
@@ -537,6 +536,21 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3C8-i2-66P" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1062" y="134"/>
+        </scene>
+        <!--Greeting View Controller-->
+        <scene sceneID="vwx-FZ-jlT">
+            <objects>
+                <viewController storyboardIdentifier="greetingsVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="de2-Dq-byd" customClass="GreetingViewController" customModule="_5" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="YaG-H7-0Wq">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.99607843139999996" green="0.20000000000000001" blue="0.2784313725" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <viewLayoutGuide key="safeArea" id="oD1-vp-DaK"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Gps-z5-wdJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1952" y="832"/>
         </scene>
     </scenes>
 </document>

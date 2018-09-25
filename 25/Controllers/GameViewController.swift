@@ -275,7 +275,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     private func showGreetingsViewController() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let greetingsVC = storyboard.instantiateViewController(withIdentifier: "GreetingsViewController")
+        let greetingsVC = storyboard.instantiateViewController(withIdentifier: ViewControllerIdentifier.greetingsPVC.rawValue)
         self.present(greetingsVC, animated: true, completion: nil)
     }
         
