@@ -83,35 +83,11 @@ extension GameViewController: CLLocationManagerDelegate {
         }
     }
     
-    func feedbackSelection(isRight: Bool) {
-        UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: 0.1,
-            delay: 0.0,
-            options: [],
-            animations: {
-                self.feedbackView.backgroundColor = #colorLiteral(red: 0.9215686275, green: 0.1490196078, blue: 0.1215686275, alpha: 1)
-        }) { (position) in
-            UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: 0.1,
-                delay: 0.0,
-                options: [],
-                animations: {
-                    self.feedbackView.backgroundColor = .clear
-            })
-        }
-    }
-    
     func addCells(count: Int) {
         assert(count % 5 == 0, "Reason: invalid number of buttons to add. Provide a multiple of five number.")
         for _ in 0..<count {
             let cell: Cell = {
-                let userInfo: [UserInfoKey : Any] = [UserInfoKey.cellsNotAnimating: cellsNotAnimating,
-                                                     UserInfoKey.game:                game,
-                                                     UserInfoKey.appearance:          appearance]
-                let cell = Cell(
-                    frame: CGRect(x: 0, y: 0, width: 0, height: 0),
-                    userInfo: userInfo
-                )
+                let cell = Cell(frame: CGRect(x: 0, y: 0, width: 0, height: 0), appearance: appearance)
                 cell.addTarget(self, action: #selector(cellPressed(sender:)), for: .touchDown)
                 cell.addTarget(self, action: #selector(cellReleased(sender:)), for: .touchUpInside)
                 cell.addTarget(self, action: #selector(cellReleased(sender:)), for: .touchUpOutside)

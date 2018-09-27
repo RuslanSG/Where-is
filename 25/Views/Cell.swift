@@ -14,8 +14,6 @@ class Cell: UIButton {
     private var appearance = Appearance()
     private var game = Game()
     
-    private var userInfo = [UserInfoKey: Any]()
-    
     private var buttonFrameX: CGFloat?
     private var buttonFrameY: CGFloat?
     private var buttonFrameHeight: CGFloat?
@@ -31,12 +29,10 @@ class Cell: UIButton {
     
     // MARK: - Initialization
     
-    public init(frame: CGRect, userInfo: [UserInfoKey: Any]) {
+    public init(frame: CGRect, appearance: Appearance) {
         super.init(frame: frame)
         
-        self.appearance = userInfo[UserInfoKey.appearance] as! Appearance
-        self.game = userInfo[UserInfoKey.game] as! Game
-        self.userInfo = userInfo
+        self.appearance = appearance
         
         setupInputComponents()
         setupColors()

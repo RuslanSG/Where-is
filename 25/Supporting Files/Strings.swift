@@ -38,6 +38,10 @@ public enum UserInfoKey: String {
 // MARK: - View Controllers Identifiers
 
 public enum ViewControllerIdentifier: String {
-    case greetingsPVC = "greetingsPVC"
-    case greetingsVC = "greetingsVC"
+    case rootViewController = "rootViewController"
+    case greetingsViewController = "greetingsViewController"
+    case sensViewController = "sensViewController"
+    case tutorialViewController = "tutorialViewController"
+    case remindersViewController = "remindersViewController"
+    case darkModeViewController = "darkModeViewController"
 }

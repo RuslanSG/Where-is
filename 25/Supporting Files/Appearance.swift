@@ -29,6 +29,8 @@ class Appearance {
                                         (light: #colorLiteral(red: 0.9215686275, green: 0.1490196078, blue: 0.1215686275, alpha: 1), dark: #colorLiteral(red: 0.599486165, green: 0.08605109967, blue: 0.05797519395, alpha: 1)),
                                         (light: #colorLiteral(red: 0.7882352941, green: 0.1843137255, blue: 0.4823529412, alpha: 1), dark: #colorLiteral(red: 0.5, green: 0.1014612427, blue: 0.3135548154, alpha: 1))]]
     
+    public let highlightedCellColor = #colorLiteral(red: 0, green: 0.4793452024, blue: 0.9990863204, alpha: 1)
+    
     public var defaultCellsColor: UIColor {
         return darkMode ? defaultCellsColors.darkMode : defaultCellsColors.lightMode
     }
@@ -78,6 +80,8 @@ class Appearance {
     }
     
     public let cellCompressionRatio = 0.90
+    
+    public let statusBarHeight = UIApplication.shared.statusBarFrame.height
     
     // MARK: - Settings View Comtroller
     

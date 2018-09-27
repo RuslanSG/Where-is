@@ -108,3 +108,24 @@ extension UIView {
                                                       views: viewsDictionary))
     }
 }
+
+extension UILabel {
+    func changeTextWithAnimation(to newText: String) {
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: 0.2,
+            delay: 0.0,
+            options: .curveEaseOut,
+            animations: {
+                self.alpha = 0.0
+        }) { (_) in
+            self.text = newText
+            UIViewPropertyAnimator.runningPropertyAnimator(
+                withDuration: 0.2,
+                delay: 0.0,
+                options: .curveEaseOut,
+                animations: {
+                    self.alpha = 1.0
+            })
+        }
+    }
+}

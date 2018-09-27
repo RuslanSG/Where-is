@@ -15,12 +15,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     // MARK: -
     
-    lazy var feedbackView: UIView = {
-        let view = UIView(frame: self.view.frame)
-        view.backgroundColor = .clear
-        view.alpha = 0.25
-        return view
-    }()
+    lazy var feedbackView = FeedbackView(frame: self.view.frame)
     
     lazy var buttonsContainerView: UIView = {
         let view = UIView()
@@ -185,7 +180,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             feedbackGenerator.playImpactHapticFeedback(needsToPrepare: true, style: .medium)
         } else {
             // User tapped the wrong number
-            feedbackSelection(isRight: false)
+            feedbackView.feedbackSelection(isRight: false)
             feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .error)
         }
         game.numberSelected(sender.tag)
@@ -242,12 +237,15 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     // MARK: - Segue
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if  let nav = segue.destination as? UINavigationController,
-            let svc = nav.topViewController as? SettingsTableViewController {
+        if segue.destination.isKind(of: SettingsTableViewController.self) {
+            let svc = segue.destination as! SettingsTableViewController
             svc.delegate = self
             svc.game = game
             svc.appearance = appearance
             svc.automaticDarkMode = automaticDarkMode
+        } else if segue.destination.isKind(of: RootViewController.self) {
+            let rvc = segue.destination as! RootViewController
+            rvc.game = game
         }
     }
     
@@ -274,9 +272,10 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     // MARK: - Helping methods
     
     private func showGreetingsViewController() {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let greetingsVC = storyboard.instantiateViewController(withIdentifier: ViewControllerIdentifier.greetingsPVC.rawValue)
-        self.present(greetingsVC, animated: true, completion: nil)
+        //let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        self.performSegue(withIdentifier: "showGrettings", sender: nil)
+//        let greetingsVC = storyboard.instantiateViewController(withIdentifier: ViewControllerIdentifier.rootViewController.rawValue)
+//        self.present(greetingsVC, animated: true, completion: nil)
     }
         
 }
