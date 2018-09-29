@@ -89,9 +89,9 @@ class Cell: UIButton {
             let buttonFrameWidth = self.buttonFrameWidth,
             let buttonFrameHeight = self.buttonFrameHeight {
             UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: 0.3,
+                withDuration: 0.4,
                 delay: 0.0,
-                options: [],
+                options: .curveEaseOut,
                 animations: {
                     self.frame = CGRect(
                         x: buttonFrameX,

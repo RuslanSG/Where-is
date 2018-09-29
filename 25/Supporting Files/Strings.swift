@@ -44,4 +44,5 @@ public enum ViewControllerIdentifier: String {
     case tutorialViewController = "tutorialViewController"
     case remindersViewController = "remindersViewController"
     case darkModeViewController = "darkModeViewController"
+    case welcomeViewController = "welcomeViewController"
 }

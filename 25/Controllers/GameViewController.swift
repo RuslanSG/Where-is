@@ -237,8 +237,9 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     // MARK: - Segue
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.destination.isKind(of: SettingsTableViewController.self) {
-            let svc = segue.destination as! SettingsTableViewController
+        if segue.destination.isKind(of: UINavigationController.self) {
+            let nvc = segue.destination as! UINavigationController
+            let svc = nvc.topViewController as! SettingsTableViewController
             svc.delegate = self
             svc.game = game
             svc.appearance = appearance

@@ -19,19 +19,24 @@ class RootViewController: UIViewController {
         let tutorialViewController = self.newViewConrtoller(withIdentifier: ViewControllerIdentifier.tutorialViewController.rawValue) as! TutorialViewController
         let remindersViewContoller = self.newViewConrtoller(withIdentifier: ViewControllerIdentifier.remindersViewController.rawValue)
         let darkModeViewContoller = self.newViewConrtoller(withIdentifier: ViewControllerIdentifier.darkModeViewController.rawValue)
+        let welcomeViewController = self.newViewConrtoller(withIdentifier: ViewControllerIdentifier.welcomeViewController.rawValue)
                 
         return [greetingsViewController,
                 sensViewController,
                 tutorialViewController,
                 remindersViewContoller,
-                darkModeViewContoller]
+                darkModeViewContoller,
+                welcomeViewController]
     }()
+    
+    private lazy var visibleViewController = orderedViewControllers.first!
     
     private lazy var nextButton: UIButton = {
         let button = UIButton()
         let rightArrow = UIImage(named: "arrow_right")
-        button.setTitle("Далее ", for: .normal)
+        button.setTitle("Далее", for: .normal)
         button.setImage(rightArrow, for: .normal)
+        button.imageView?.contentMode = .scaleAspectFit
         button.semanticContentAttribute = .forceRightToLeft
         button.setTitleColor(#colorLiteral(red: 0, green: 0.4793452024, blue: 0.9990863204, alpha: 1), for: .normal)
         button.addTarget(self, action: #selector(nextButtonPressed(_:)), for: .touchUpInside)
@@ -41,13 +46,22 @@ class RootViewController: UIViewController {
     private lazy var backButton: UIButton = {
         let button = UIButton()
         let leftArrow = UIImage(named: "arrow_left")
-        button.setTitle(" Назад", for: .normal)
+        button.setTitle("Назад", for: .normal)
         button.setImage(leftArrow, for: .normal)
+        button.imageView?.contentMode = .scaleAspectFit
         button.setTitleColor(#colorLiteral(red: 0, green: 0.4793452024, blue: 0.9990863204, alpha: 1), for: .normal)
         button.addTarget(self, action: #selector(backButtonPressed(_:)), for: .touchUpInside)
         button.alpha = 0.0
         button.isEnabled = false
         return button
+    }()
+    
+    private lazy var pageNumberLabel: UILabel = {
+        let label = UILabel()
+        let indexOfVisiblePage = orderedViewControllers.index(of: visibleViewController) ?? 0
+        label.text = "\(indexOfVisiblePage + 1) из \(orderedViewControllers.count)"
+        label.font = UIFont.boldSystemFont(ofSize: 17.0)
+        return label
     }()
     
     // MARK: - Lifecycle
@@ -56,6 +70,7 @@ class RootViewController: UIViewController {
         super.viewDidLoad()
         
         setupInputComponents()
+        visibleViewController = orderedViewControllers.first!
     }
     
     // MARK: - Actions
@@ -75,6 +90,8 @@ class RootViewController: UIViewController {
             completion: nil
         )
         setupControlButtons(to: nextViewController)
+        visibleViewController = nextViewController
+        updatePageLabel(currentPage: visibleViewController)
     }
     
     @objc private func backButtonPressed(_ sender: UIButton) {
@@ -92,6 +109,8 @@ class RootViewController: UIViewController {
             completion: nil
         )
         setupControlButtons(to: previousViewController)
+        visibleViewController = previousViewController
+        updatePageLabel(currentPage: visibleViewController)
     }
     
     // MARK: - Helping Methods
@@ -125,14 +144,21 @@ class RootViewController: UIViewController {
         
         self.view.addSubview(nextButton)
         self.view.addSubview(backButton)
+        self.view.addSubview(pageNumberLabel)
         
         let statusBarHeight = UIApplication.shared.statusBarFrame.height
+        let inset: CGFloat = 5.0
+        let height = 22.0
+        let width = 80.0
         
-        self.view.addConstraintsWithFormat(format: "H:[v0(70)]-10-|", views: nextButton)
-        self.view.addConstraintsWithFormat(format: "V:|-\(statusBarHeight)-[v0(40)]", views: nextButton)
+        self.view.addConstraintsWithFormat(format: "H:[v0(\(width))]-\(inset)-|", views: nextButton)
+        self.view.addConstraintsWithFormat(format: "V:|-\(statusBarHeight + inset)-[v0(\(height))]", views: nextButton)
         
-        self.view.addConstraintsWithFormat(format: "H:|-10-[v0(70)]", views: backButton)
-        self.view.addConstraintsWithFormat(format: "V:|-\(statusBarHeight)-[v0(40)]", views: backButton)
+        self.view.addConstraintsWithFormat(format: "H:|-\(inset)-[v0(\(width))]", views: backButton)
+        self.view.addConstraintsWithFormat(format: "V:|-\(statusBarHeight + inset)-[v0(\(height))]", views: backButton)
+        
+        self.pageNumberLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        self.view.addConstraintsWithFormat(format: "V:|-\(statusBarHeight + inset)-[v0(\(height))]", views: pageNumberLabel)
     }
     
     private func newViewConrtoller(withIdentifier identifier: String) -> UIViewController {
@@ -154,6 +180,11 @@ class RootViewController: UIViewController {
         },
             completion: nil
         )
+    }
+    
+    private func updatePageLabel(currentPage: UIViewController) {
+        let indexOfVisiblePage = orderedViewControllers.index(of: currentPage) ?? 0
+        pageNumberLabel.text = "\(indexOfVisiblePage + 1) из \(orderedViewControllers.count)"
     }
 
 }

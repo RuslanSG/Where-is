@@ -296,13 +296,13 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="e2E-Tq-oia">
-                                                    <rect key="frame" x="266" y="7.5" width="94" height="29"/>
+                                                    <rect key="frame" x="211" y="7.5" width="94" height="29"/>
                                                     <connections>
                                                         <action selector="levelStepperValueChanged:" destination="3hQ-19-uEL" eventType="valueChanged" id="84T-dJ-onU"/>
                                                     </connections>
                                                 </stepper>
                                                 <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QWE-vK-WKH">
-                                                    <rect key="frame" x="206" y="11.5" width="50" height="21"/>
+                                                    <rect key="frame" x="151" y="11.5" width="50" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="50" id="88g-Wi-bqv"/>
                                                     </constraints>
@@ -337,13 +337,13 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="8Xu-fM-NhZ">
-                                                    <rect key="frame" x="266" y="7.5" width="94" height="29"/>
+                                                    <rect key="frame" x="211" y="7.5" width="94" height="29"/>
                                                     <connections>
                                                         <action selector="maxNumberStepperValueChanged:" destination="3hQ-19-uEL" eventType="valueChanged" id="bWg-Jw-MgC"/>
                                                     </connections>
                                                 </stepper>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EtJ-9Z-T6v">
-                                                    <rect key="frame" x="206" y="11.5" width="50" height="21"/>
+                                                    <rect key="frame" x="151" y="11.5" width="50" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="50" id="0aC-Z9-BXf"/>
                                                     </constraints>
@@ -382,7 +382,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="MXe-5e-7Cz">
-                                                    <rect key="frame" x="311" y="6.5" width="51" height="31"/>
+                                                    <rect key="frame" x="256" y="6.5" width="51" height="31"/>
                                                     <connections>
                                                         <action selector="darkModeSwitcherValueChanged:" destination="3hQ-19-uEL" eventType="valueChanged" id="BFQ-tX-7y7"/>
                                                     </connections>
@@ -411,7 +411,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="46j-2m-qoC">
-                                                    <rect key="frame" x="311" y="6.5" width="51" height="31"/>
+                                                    <rect key="frame" x="256" y="6.5" width="51" height="31"/>
                                                     <connections>
                                                         <action selector="automaticDarkModeSwitcherValueChanged:" destination="3hQ-19-uEL" eventType="valueChanged" id="YnQ-gm-mz8"/>
                                                     </connections>
@@ -517,9 +517,14 @@
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cpy-fS-EAu">
                                 <rect key="frame" x="13" y="115" width="294" height="453"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <mutableString key="text">Приветствую и добро пожаловать! Большое спасибо за проявленный интерес.   Выставляю на Ваш суд свою новую игру. Я сейчас активно занимаюсь ее созданием, и мне никак не обойтись без Вашей помощи.   План такой: сейчас в игре представлен начальный набор уровней, который я составил исходя из своих личных ощущений и результатов игры. Теперь мне интересно как с ними сможете справиться Вы.   После каждой игры мне будут автоматически присылаться результаты, а я исходя из них буду точнее настраивать сложность каждого уровня. Таким образом мы очень быстро сможем создать действительно интересный и качественный продукт.   Так что играйте в свое удовольствие, ни в чем себя не ограничивайте. Я буду очень рад, если Вам понравится.  Если у Вас есть какие-либо предложения или комментарии — буду рад пообщаться (ссылки в настройках игры).  Приятной игры :)</mutableString>
+                                <string key="text">Приветствую и добро пожаловать! Большое спасибо за проявленный интерес.   Выставляю на Ваш суд свою новую игру. Я сейчас активно занимаюсь ее созданием, и мне никак не обойтись без Вашей помощи.   План такой: сейчас в игре представлен начальный набор уровней, который я составил исходя из своих личных ощущений и результатов игры. Теперь мне интересно как с ними сможете справиться Вы.   После каждой игры мне будут автоматически присылаться результаты, а я исходя из них буду точнее настраивать сложность каждого уровня. Таким образом мы очень быстро сможем создать действительно интересный и качественный продукт.   Так что играйте в свое удовольствие, ни в чем себя не ограничивайте. Я буду очень рад, если Вам понравится.  Если у Вас есть какие-либо предложения или комментарии — буду рад пообщаться (ссылки в настройках игры).  Приятной игры :)</string>
                                 <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="self.contentOffset">
+                                        <integer key="value" value="0"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </textView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -584,9 +589,14 @@
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sVp-lT-pqV">
                                 <rect key="frame" x="13" y="115" width="294" height="168"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <mutableString key="text">За основу взята разработка немецкого психиатра и психотерапевта Вальтера Шульте.   Простейшая таблица Шульте представляет собой квадратный листок бумаги шириной с книжную страницу, условно разделенный на 25 одинаковых квадратных ячеек (5 рядов и 5 столбцов), в которые шрифтом обычного книжного размера беспорядочно вписаны числа от 1 до 25.   Необходимо найти каждое число в порядке возрастания. Упражнения с таблицами позволяют улучшить периферическое зрительное восприятие, что важно, например, для скорочтения.</mutableString>
+                                <string key="text">За основу взята разработка немецкого психиатра и психотерапевта Вальтера Шульте.   Простейшая таблица Шульте представляет собой квадратный листок бумаги шириной с книжную страницу, условно разделенный на 25 одинаковых квадратных ячеек (5 рядов и 5 столбцов), в которые шрифтом обычного книжного размера беспорядочно вписаны числа от 1 до 25.   Необходимо найти каждое число в порядке возрастания. Упражнения с таблицами позволяют улучшить периферическое зрительное восприятие, что важно, например, для скорочтения.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="self.contentOffset">
+                                        <integer key="value" value="0"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </textView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -716,25 +726,12 @@
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="self.contentOffset">
+                                        <integer key="value" value="0"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </textView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A4D-SP-99c">
-                                <rect key="frame" x="16" y="211" width="291" height="337"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Emt-eL-HPV">
-                                        <rect key="frame" x="0.0" y="23" width="291" height="291"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="Emt-eL-HPV" secondAttribute="height" multiplier="1:1" id="fYj-ug-tMr"/>
-                                        </constraints>
-                                    </view>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstItem="Emt-eL-HPV" firstAttribute="width" secondItem="A4D-SP-99c" secondAttribute="width" id="4hW-6T-u6x"/>
-                                    <constraint firstItem="Emt-eL-HPV" firstAttribute="centerY" secondItem="A4D-SP-99c" secondAttribute="centerY" id="G7Q-7d-E6P"/>
-                                    <constraint firstItem="Emt-eL-HPV" firstAttribute="centerX" secondItem="A4D-SP-99c" secondAttribute="centerX" id="foD-0K-ktc"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -742,11 +739,7 @@
                             <constraint firstItem="hNN-Ox-mVI" firstAttribute="leading" secondItem="ZhE-v0-uem" secondAttribute="leading" constant="13" id="3k7-Gl-Mb6"/>
                             <constraint firstItem="Jx8-dr-KBC" firstAttribute="leading" secondItem="ZhE-v0-uem" secondAttribute="leading" constant="16" id="6fU-vl-L5l"/>
                             <constraint firstItem="ZhE-v0-uem" firstAttribute="trailing" secondItem="hNN-Ox-mVI" secondAttribute="trailing" constant="13" id="GSc-a2-oti"/>
-                            <constraint firstItem="A4D-SP-99c" firstAttribute="leading" secondItem="ZhE-v0-uem" secondAttribute="leading" constant="16" id="QsR-sG-9S5"/>
-                            <constraint firstItem="A4D-SP-99c" firstAttribute="top" secondItem="hNN-Ox-mVI" secondAttribute="bottom" constant="20" id="Vk3-8D-H2A"/>
                             <constraint firstItem="hNN-Ox-mVI" firstAttribute="top" secondItem="Jx8-dr-KBC" secondAttribute="bottom" constant="15" id="etg-JR-9re"/>
-                            <constraint firstItem="ZhE-v0-uem" firstAttribute="bottom" secondItem="A4D-SP-99c" secondAttribute="bottom" constant="20" id="gpu-5w-o9A"/>
-                            <constraint firstItem="ZhE-v0-uem" firstAttribute="trailing" secondItem="A4D-SP-99c" secondAttribute="trailing" constant="13" id="oQa-u8-MvO"/>
                             <constraint firstItem="ZhE-v0-uem" firstAttribute="trailing" secondItem="Jx8-dr-KBC" secondAttribute="trailing" constant="16" id="pXn-bm-h1h"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="ZhE-v0-uem"/>
@@ -781,36 +774,19 @@
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="self.contentOffset">
+                                        <integer key="value" value="0"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </textView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KFk-I7-jBN">
-                                <rect key="frame" x="16" y="211" width="291" height="337"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WkI-fo-cpW">
-                                        <rect key="frame" x="0.0" y="23" width="291" height="291"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="WkI-fo-cpW" secondAttribute="height" multiplier="1:1" id="SMd-Rn-r91"/>
-                                        </constraints>
-                                    </view>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstItem="WkI-fo-cpW" firstAttribute="centerX" secondItem="KFk-I7-jBN" secondAttribute="centerX" id="29x-Go-DGx"/>
-                                    <constraint firstItem="WkI-fo-cpW" firstAttribute="centerY" secondItem="KFk-I7-jBN" secondAttribute="centerY" id="4ub-gP-fmx"/>
-                                    <constraint firstItem="WkI-fo-cpW" firstAttribute="width" secondItem="KFk-I7-jBN" secondAttribute="width" id="Cfh-8R-9Db"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="2LS-ZD-086" firstAttribute="bottom" secondItem="KFk-I7-jBN" secondAttribute="bottom" constant="20" id="BQ5-WL-Vfm"/>
                             <constraint firstItem="2LS-ZD-086" firstAttribute="trailing" secondItem="KW3-22-P4i" secondAttribute="trailing" constant="16" id="JYP-HT-VQT"/>
                             <constraint firstItem="hHc-LB-PII" firstAttribute="leading" secondItem="2LS-ZD-086" secondAttribute="leading" constant="13" id="N22-sY-OIc"/>
                             <constraint firstItem="hHc-LB-PII" firstAttribute="top" secondItem="KW3-22-P4i" secondAttribute="bottom" constant="15" id="N8i-sr-4Gw"/>
-                            <constraint firstItem="2LS-ZD-086" firstAttribute="trailing" secondItem="KFk-I7-jBN" secondAttribute="trailing" constant="13" id="R3h-MF-aMg"/>
                             <constraint firstItem="KW3-22-P4i" firstAttribute="top" secondItem="2LS-ZD-086" secondAttribute="top" constant="40" id="TlV-g3-rkY"/>
-                            <constraint firstItem="KFk-I7-jBN" firstAttribute="leading" secondItem="2LS-ZD-086" secondAttribute="leading" constant="16" id="VkQ-EE-oys"/>
-                            <constraint firstItem="KFk-I7-jBN" firstAttribute="top" secondItem="hHc-LB-PII" secondAttribute="bottom" constant="20" id="grw-Zs-Afi"/>
                             <constraint firstItem="KW3-22-P4i" firstAttribute="leading" secondItem="2LS-ZD-086" secondAttribute="leading" constant="16" id="kq3-hA-EvH"/>
                             <constraint firstItem="2LS-ZD-086" firstAttribute="trailing" secondItem="hHc-LB-PII" secondAttribute="trailing" constant="13" id="rDH-Fe-cs7"/>
                         </constraints>
@@ -819,7 +795,64 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jgj-78-PDf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4714" y="831"/>
+            <point key="canvasLocation" x="4761" y="829"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="8Mk-Zs-771">
+            <objects>
+                <viewController storyboardIdentifier="welcomeViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="pty-op-9F4" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="NOS-bU-MMU">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Where is?!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="ZH4-6J-bB5">
+                                <rect key="frame" x="16" y="213" width="288" height="42"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="42" id="YWP-uJ-yvf"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="50"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hto-JK-rrS">
+                                <rect key="frame" x="16" y="506" width="288" height="42"/>
+                                <color key="backgroundColor" red="0.1481618583" green="0.52966481450000003" blue="0.98237007860000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="42" id="SMH-4t-hn3"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <state key="normal" title="Начать игру">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Добро пожаловать!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="MWR-IR-CHB">
+                                <rect key="frame" x="16" y="264" width="288" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="EeX-aQ-1VG"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="thin" pointSize="40"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="ZH4-6J-bB5" firstAttribute="centerY" secondItem="NOS-bU-MMU" secondAttribute="centerY" constant="-50" id="4JY-UC-Ec2"/>
+                            <constraint firstItem="oJ8-XF-ety" firstAttribute="trailing" secondItem="ZH4-6J-bB5" secondAttribute="trailing" constant="16" id="UWi-3o-2Su"/>
+                            <constraint firstItem="Hto-JK-rrS" firstAttribute="leading" secondItem="oJ8-XF-ety" secondAttribute="leading" constant="16" id="XQc-TL-3Rv"/>
+                            <constraint firstItem="MWR-IR-CHB" firstAttribute="leading" secondItem="oJ8-XF-ety" secondAttribute="leading" constant="16" id="ZTr-fu-d2S"/>
+                            <constraint firstItem="oJ8-XF-ety" firstAttribute="bottom" secondItem="Hto-JK-rrS" secondAttribute="bottom" constant="20" id="dTY-gw-yod"/>
+                            <constraint firstItem="oJ8-XF-ety" firstAttribute="trailing" secondItem="MWR-IR-CHB" secondAttribute="trailing" constant="16" id="p5t-14-Vcy"/>
+                            <constraint firstItem="MWR-IR-CHB" firstAttribute="centerY" secondItem="NOS-bU-MMU" secondAttribute="centerY" id="wEp-K1-WAS"/>
+                            <constraint firstItem="oJ8-XF-ety" firstAttribute="trailing" secondItem="Hto-JK-rrS" secondAttribute="trailing" constant="16" id="wTF-z2-kJg"/>
+                            <constraint firstItem="ZH4-6J-bB5" firstAttribute="leading" secondItem="oJ8-XF-ety" secondAttribute="leading" constant="16" id="yRJ-bA-v3R"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="oJ8-XF-ety"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6Jl-CF-SZN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5723" y="831"/>
         </scene>
     </scenes>
     <resources>

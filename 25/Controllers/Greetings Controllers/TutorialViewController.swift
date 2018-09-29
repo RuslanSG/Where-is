@@ -157,7 +157,10 @@ class TutorialViewController: UIViewController {
     private func lastCellTapped(_ cell: Cell) {
         game.finishGame()
         feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .success)
-        cells.forEach { $0.hideNumber(animated: true) }
+        cells.forEach {
+            $0.hideNumber(animated: true)
+            $0.isUserInteractionEnabled = false
+        }
         nextCellToTap?.updateBackgroundColor(animated: true, to: appearance.defaultCellsColor)
         titleLabel.changeTextWithAnimation(to: "Отлично!")
         detaillabel.changeTextWithAnimation(to: "Все очень просто! Этот принцип будет сохраняться во всех Ваших последующих играх.")
