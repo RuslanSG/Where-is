@@ -102,7 +102,7 @@ class ResultsView: UIVisualEffectView {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(darkModeStateChanged(notification:)),
-            name: Notification.Name(NotificationName.darkModeStateDidChange.rawValue),
+            name: Notification.Name(StringKeys.NotificationName.darkModeStateDidChange.rawValue),
             object: nil
         )
     }

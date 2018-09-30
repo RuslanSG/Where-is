@@ -99,17 +99,17 @@ class Appearance {
     public var darkMode: Bool {
         set {
             if darkMode != newValue {
-                UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.darkMode.rawValue)
+                UserDefaults.standard.set(newValue, forKey: StringKeys.UserDefaultsKey.darkMode.rawValue)
                 userInterfaceColor = switchColorForAnotherScheme(userInterfaceColor) ?? .blue
                 NotificationCenter.default.post(
-                    name: Notification.Name(NotificationName.darkModeStateDidChange.rawValue),
+                    name: Notification.Name(StringKeys.NotificationName.darkModeStateDidChange.rawValue),
                     object: nil,
-                    userInfo: [UserInfoKey.darkModeState.rawValue: newValue]
+                    userInfo: [StringKeys.UserInfoKey.darkModeState.rawValue: newValue]
                 )
             }
         }
         get {
-            return UserDefaults.standard.bool(forKey: UserDefaultsKey.darkMode.rawValue)
+            return UserDefaults.standard.bool(forKey: StringKeys.UserDefaultsKey.darkMode.rawValue)
         }
     }
     

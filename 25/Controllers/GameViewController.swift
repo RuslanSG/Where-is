@@ -106,7 +106,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(darkModeStateChangedNotification(notification:)),
-            name: Notification.Name(NotificationName.darkModeStateDidChange.rawValue),
+            name: Notification.Name(StringKeys.NotificationName.darkModeStateDidChange.rawValue),
             object: nil
         )
     }
@@ -117,7 +117,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         let firstLaunch = true //!UserDefaults.standard.bool(forKey: UserDefaultsKey.notFirstLaunch.rawValue)
         if firstLaunch {
             showGreetingsViewController()
-            UserDefaults.standard.set(true, forKey: UserDefaultsKey.notFirstLaunch.rawValue)
+            UserDefaults.standard.set(true, forKey: StringKeys.UserDefaultsKey.notFirstLaunch.rawValue)
         }
     }
     

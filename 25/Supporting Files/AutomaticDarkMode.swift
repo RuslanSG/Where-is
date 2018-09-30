@@ -10,7 +10,7 @@ import Foundation
 import CoreLocation
 
 class AutomaticDarkMode: NSObject, CLLocationManagerDelegate {
-    
+
     private let userDefaults = UserDefaults.standard
     public let calendar = Calendar.current
     let locationManager = CLLocationManager()
@@ -18,28 +18,28 @@ class AutomaticDarkMode: NSObject, CLLocationManagerDelegate {
 
     var isOn: Bool {
         set {
-            UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.automaticDarkMode.rawValue)
+            UserDefaults.standard.set(newValue, forKey: StringKeys.UserDefaultsKey.automaticDarkMode.rawValue)
         }
         get {
-            return UserDefaults.standard.bool(forKey: UserDefaultsKey.automaticDarkMode.rawValue)
+            return UserDefaults.standard.bool(forKey: StringKeys.UserDefaultsKey.automaticDarkMode.rawValue)
         }
     }
     
     public var sunrise: Date? {
         set {
-            userDefaults.set(newValue, forKey: UserDefaultsKey.sunrise.rawValue)
+            userDefaults.set(newValue, forKey: StringKeys.UserDefaultsKey.sunrise.rawValue)
         }
         get {
-            return userDefaults.value(forKey: UserDefaultsKey.sunrise.rawValue) as? Date
+            return userDefaults.value(forKey: StringKeys.UserDefaultsKey.sunrise.rawValue) as? Date
         }
     }
     
     public var sunset: Date? {
         set {
-            userDefaults.set(newValue, forKey: UserDefaultsKey.sunset.rawValue)
+            userDefaults.set(newValue, forKey: StringKeys.UserDefaultsKey.sunset.rawValue)
         }
         get {
-            return userDefaults.value(forKey:  UserDefaultsKey.sunset.rawValue) as? Date
+            return userDefaults.value(forKey:  StringKeys.UserDefaultsKey.sunset.rawValue) as? Date
         }
     }
     

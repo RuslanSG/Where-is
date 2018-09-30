@@ -8,18 +8,21 @@
 
 import UIKit
 
-class RootViewController: UIViewController {
+class RootViewController: UIViewController, WelcomeViewControllerDelegate {
 
     var pageViewController: UIPageViewController?
     var game: Game!
     
     private lazy var orderedViewControllers: [UIViewController] = {
-        let greetingsViewController = self.newViewConrtoller(withIdentifier: ViewControllerIdentifier.greetingsViewController.rawValue)
-        let sensViewController = self.newViewConrtoller(withIdentifier: ViewControllerIdentifier.sensViewController.rawValue)
-        let tutorialViewController = self.newViewConrtoller(withIdentifier: ViewControllerIdentifier.tutorialViewController.rawValue) as! TutorialViewController
-        let remindersViewContoller = self.newViewConrtoller(withIdentifier: ViewControllerIdentifier.remindersViewController.rawValue)
-        let darkModeViewContoller = self.newViewConrtoller(withIdentifier: ViewControllerIdentifier.darkModeViewController.rawValue)
-        let welcomeViewController = self.newViewConrtoller(withIdentifier: ViewControllerIdentifier.welcomeViewController.rawValue)
+        let greetingsViewController = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.greetingsViewController.rawValue)
+        let sensViewController = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.sensViewController.rawValue)
+        let tutorialViewController = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.tutorialViewController.rawValue) as! TutorialViewController
+        let remindersViewContoller = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.remindersViewController.rawValue) as! RemindersViewController
+        let darkModeViewContoller = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.darkModeViewController.rawValue) as! DarkModeViewController
+        let welcomeViewController = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.welcomeViewController.rawValue) as! WelcomeViewController
+        
+        tutorialViewController.game = game
+        welcomeViewController.delegate = self
                 
         return [greetingsViewController,
                 sensViewController,
@@ -113,6 +116,12 @@ class RootViewController: UIViewController {
         updatePageLabel(currentPage: visibleViewController)
     }
     
+    // MARK: - WelcomeViewControllerDelegate
+    
+    func doneButtonPressed() {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
     // MARK: - Helping Methods
     
     private func setupInputComponents() {
@@ -136,7 +145,7 @@ class RootViewController: UIViewController {
         
         var pageViewRect = self.view.bounds
         if UIDevice.current.userInterfaceIdiom == .pad {
-            pageViewRect = pageViewRect.insetBy(dx: 200.0, dy: 200.0)
+            pageViewRect = pageViewRect.insetBy(dx: 100.0, dy: 100.0)
         }
         self.pageViewController!.view.frame = pageViewRect
         
