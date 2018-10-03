@@ -86,8 +86,12 @@ extension GameViewController: CLLocationManagerDelegate {
     func addCells(count: Int) {
         assert(count % 5 == 0, "Reason: invalid number of buttons to add. Provide a multiple of five number.")
         for _ in 0..<count {
-            let cell: Cell = {
-                let cell = Cell(frame: CGRect(x: 0, y: 0, width: 0, height: 0), appearance: appearance)
+            let cell: CellView = {
+                let cell = CellView(
+                    frame: CGRect(x: 0, y: 0, width: 0, height: 0),
+                    appearance: appearance,
+                    game: game
+                )
                 cell.addTarget(self, action: #selector(cellPressed(sender:)), for: .touchDown)
                 cell.addTarget(self, action: #selector(cellReleased(sender:)), for: .touchUpInside)
                 cell.addTarget(self, action: #selector(cellReleased(sender:)), for: .touchUpOutside)
@@ -174,7 +178,7 @@ extension GameViewController: CLLocationManagerDelegate {
         }
     }
     
-    internal func winkNumber(at cell: Cell) {
+    internal func winkNumber(at cell: CellView) {
         let duration = 1.0
         let delay = 1.0
         
@@ -200,7 +204,7 @@ extension GameViewController: CLLocationManagerDelegate {
         })
     }
     
-    func winkCellColor(at cell: Cell) {
+    func winkCellColor(at cell: CellView) {
         guard let currentColor = cell.backgroundColor else { return }
         if let color = appearance.getAnotherColor(for: currentColor) {
             cell.updateBackgroundColor(animated: true, to: color)

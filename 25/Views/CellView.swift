@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Cell: UIButton {
+class CellView: UIButton {
     public var number: Int!
     
     private var appearance = Appearance()
@@ -29,10 +29,11 @@ class Cell: UIButton {
     
     // MARK: - Initialization
     
-    public init(frame: CGRect, appearance: Appearance) {
+    public init(frame: CGRect, appearance: Appearance, game: Game) {
         super.init(frame: frame)
         
         self.appearance = appearance
+        self.game = game
         
         setupInputComponents()
         setupColors()

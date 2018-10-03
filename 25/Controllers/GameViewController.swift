@@ -66,7 +66,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     // MARK: - Buttons
     
-    var cells = [Cell]() {
+    var cells = [CellView]() {
         didSet {
             buttonsContainerView.frame = buttonsContainerViewFrame
             cellsNotAnimating = cells
@@ -74,7 +74,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     }
     
     lazy var cellsNotAnimating = cells
-    private var lastPressedCell: Cell!
+    private var lastPressedCell: CellView!
     
     internal var buttonHeight: CGFloat? {
         if let button = cells.first {
@@ -114,7 +114,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        let firstLaunch = true //!UserDefaults.standard.bool(forKey: UserDefaultsKey.notFirstLaunch.rawValue)
+        let firstLaunch = false //!UserDefaults.standard.bool(forKey: UserDefaultsKey.notFirstLaunch.rawValue)
         if firstLaunch {
             showGreetingsViewController()
             UserDefaults.standard.set(true, forKey: StringKeys.UserDefaultsKey.notFirstLaunch.rawValue)
@@ -153,7 +153,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     // MARK: - Actions
     
-    @objc func cellPressed(sender: Cell) {
+    @objc func cellPressed(sender: CellView) {
         lastPressedCell = sender
         sender.compress()
         if !game.inGame {
@@ -196,7 +196,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         }
     }
     
-    @objc func cellReleased(sender: Cell) {
+    @objc func cellReleased(sender: CellView) {
         sender.uncompress()
     }
     

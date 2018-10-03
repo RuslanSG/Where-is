@@ -14,13 +14,13 @@ class TutorialViewController: UIViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var detaillabel: UILabel!
     
-    private var cells = [Cell]()
+    private var cells = [CellView]()
     private let feedbackGenerator = FeedbackGenerator()
     private lazy var feedbackView = FeedbackView(frame: self.view.frame)
     private lazy var appearance = Appearance(view: self.view)
     
-    private var nextCellToTap: Cell?
-    private var lastTappedCell: Cell?
+    private var nextCellToTap: CellView?
+    private var lastTappedCell: CellView?
     
     public var game: Game!
     private var firstTimeAppeared = true
@@ -60,7 +60,7 @@ class TutorialViewController: UIViewController {
     
     // MARK: - Actions
     
-    @objc func cellPressed(sender: Cell) {
+    @objc func cellPressed(sender: CellView) {
         sender.compress()
         let selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
         if selectedNumberIsRight && sender.tag == game.maxNumber {
@@ -82,7 +82,7 @@ class TutorialViewController: UIViewController {
         }
     }
     
-    @objc func cellReleased(sender: Cell) {
+    @objc func cellReleased(sender: CellView) {
         sender.uncompress()
         if game.inGame {
             UIViewPropertyAnimator.runningPropertyAnimator(
@@ -101,8 +101,12 @@ class TutorialViewController: UIViewController {
         assert(count % 5 == 0, "Reason: invalid number of buttons to add. Provide a multiple of five number.")
         for i in 0..<count {
             if let cellFrame = grid[i] {
-                let cell: Cell = {
-                    let cell = Cell(frame: cellFrame, appearance: appearance)
+                let cell: CellView = {
+                    let cell = CellView(
+                        frame: cellFrame,
+                        appearance: appearance,
+                        game: game
+                    )
                     cell.addTarget(self, action: #selector(cellPressed(sender:)), for: .touchDown)
                     cell.addTarget(self, action: #selector(cellReleased(sender:)), for: .touchUpInside)
                     cell.addTarget(self, action: #selector(cellReleased(sender:)), for: .touchUpOutside)
@@ -145,7 +149,7 @@ class TutorialViewController: UIViewController {
         }
     }
     
-    private func getNextCellToTap() -> Cell? {
+    private func getNextCellToTap() -> CellView? {
         for cell in cells {
             if cell.tag == game.nextNumberToTap {
                 return cell
@@ -154,7 +158,7 @@ class TutorialViewController: UIViewController {
         return nil
     }
     
-    private func lastCellTapped(_ cell: Cell) {
+    private func lastCellTapped(_ cell: CellView) {
         game.finishGame()
         feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .success)
         cells.forEach {
