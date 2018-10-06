@@ -17,17 +17,17 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     lazy var feedbackView = FeedbackView(frame: self.view.frame)
     
-    lazy var buttonsContainerView: UIView = {
+    lazy var cellsContainerView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
         return view
     }()
     
     lazy var resultsView: ResultsView = {
-        let view = ResultsView(frame: self.view.frame, appearance: appearance)
-        let textColor: UIColor = appearance.darkMode ? .white : .black
-        view.titleLabel.textColor = textColor
-        view.timeLabel.textColor = textColor
+        let view = ResultsView(frame: self.view.frame)
+        view.blur = appearance.blur
+        view.titleLabel.textColor = appearance.textColor
+        view.timeLabel.textColor = appearance.textColor
         view.actionButton.alpha = 0.0
         view.actionButton.backgroundColor = appearance.userInterfaceColor
         view.actionButton.layer.cornerRadius = appearance.cornerRadius
@@ -35,21 +35,29 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     }()
     
     lazy var messageView: MessageView = {
-        let view = MessageView(appearanceInfo: appearance, gameInfo: game)
+        let view = MessageView()
+        view.blur = appearance.blur
         view.layer.cornerRadius = appearance.cornerRadius
         view.clipsToBounds = true
+        view.label.textColor = appearance.textColor
+        view.label.font = UIFont.systemFont(ofSize: appearance.numbersFontSize)
+        view.frame.size = CGSize(width: messageViewWidth, height: messageViewHeight)
+        view.center = cellsContainerView.center
         return view
     }()
-        
+    
     // MARK: -
     
-    internal lazy var appearance = Appearance(view: self.view)
+    internal lazy var appearance = Appearance()
     internal lazy var automaticDarkMode = AutomaticDarkMode(for: appearance)
     internal var game = Game()
+    
     internal let feedbackGenerator = FeedbackGenerator()
     
     var firstTimeAppeared = true
     var resultsIsShowing = false
+    
+    private var selectedNumberIsRight: Bool?
     
     var grid: Grid {
         return Grid(
@@ -57,7 +65,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
                 rowCount: game.rows,
                 columnCount: game.colums
             ),
-            frame: buttonsContainerView.bounds
+            frame: cellsContainerView.bounds
         )
     }
         
@@ -68,7 +76,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     var cells = [CellView]() {
         didSet {
-            buttonsContainerView.frame = buttonsContainerViewFrame
+            cellsContainerView.frame = buttonsContainerViewFrame
             cellsNotAnimating = cells
         }
     }
@@ -106,7 +114,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(darkModeStateChangedNotification(notification:)),
-            name: Notification.Name(StringKeys.NotificationName.darkModeStateDidChange.rawValue),
+            name: Notification.Name.DarkModeStateDidChange,
             object: nil
         )
     }
@@ -117,7 +125,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         let firstLaunch = false //!UserDefaults.standard.bool(forKey: UserDefaultsKey.notFirstLaunch.rawValue)
         if firstLaunch {
             showGreetingsViewController()
-            UserDefaults.standard.set(true, forKey: StringKeys.UserDefaultsKey.notFirstLaunch.rawValue)
+            UserDefaults.standard.set(true, forKey: StringKeys.UserDefaultsKey.NotFirstLaunch)
         }
     }
     
@@ -127,39 +135,53 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     // MARK: - Setup UI
     
-    func setupInputComponents() {
+    internal func setupInputComponents() {
         self.view.layoutSubviews()
-        
-        appearance.userInterfaceColor = appearance.randomColor
-        
+                
         self.view.addSubview(feedbackView)
-        self.view.addSubview(buttonsContainerView)
+        self.view.addSubview(cellsContainerView)
         
         addCells(count: game.numbers.count)
-        updateButtonsFrames()
         
         self.view.sendSubviewToBack(feedbackView)
-        
-        messageView.frame = CGRect(x: 0.0, y: 0.0, width: messageViewWidth, height: messageViewHeight)
-        messageView.center = buttonsContainerView.center
     }
     
-    func setupColors() {
+    internal func setupColors() {
+        // Background color
         self.view.backgroundColor = appearance.mainViewColor
+        
+        // Control buttons color
         stopButton.tintColor = appearance.userInterfaceColor
         settingsButton.tintColor = appearance.userInterfaceColor
+        
+        // Status bar color
         UIApplication.shared.statusBarStyle = appearance.darkMode ? .lightContent : .default
+        
+        // Result view color
+        resultsView.blur = appearance.blur
+        resultsView.titleLabel.textColor = appearance.textColor
+        resultsView.timeLabel.textColor = appearance.textColor
+        resultsView.actionButton.backgroundColor = appearance.userInterfaceColor
+        
+        // Message view color
+        messageView.blur = appearance.blur
+        messageView.effect = appearance.blur
+        messageView.label.textColor = game.colorfulCellsMode ? .white : appearance.textColor
+        
+        // Cells color
+        updateCellsColorsFromModel()
     }
     
     // MARK: - Actions
     
     @objc func cellPressed(sender: CellView) {
         lastPressedCell = sender
-        sender.compress()
+        sender.compress(numberFeedback: !game.winkNumbersMode && !game.shuffleNumbersMode)
         if !game.inGame {
             startGame()
             messageView.hide()
-            feedbackGenerator.playImpactHapticFeedback(needsToPrepare: true, style: .medium)
+            feedbackGenerator.playSelectionHapticFeedback()
+            self.selectedNumberIsRight = true
             return
         }
         let selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
@@ -177,7 +199,8 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         }
         if selectedNumberIsRight {
             // User tapped the right number
-            feedbackGenerator.playImpactHapticFeedback(needsToPrepare: true, style: .medium)
+            feedbackGenerator.playSelectionHapticFeedback()
+            self.selectedNumberIsRight = true
         } else {
             // User tapped the wrong number
             feedbackView.feedbackSelection(isRight: false)
@@ -189,15 +212,16 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             updateNumbers(animated: true)
         }
         if game.shuffleColorsMode {
-            cells.forEach { $0.updateBackgroundColor(animated: true) }
-            if game.colorfulNumbersMode {
-                cells.forEach { $0.updateNumberColor(animated: true) }
-            }
+            updateCellsColorsFromModel()
         }
     }
     
     @objc func cellReleased(sender: CellView) {
         sender.uncompress()
+        if let selectedNumberIsRight = self.selectedNumberIsRight, selectedNumberIsRight == true {
+            feedbackGenerator.playSelectionHapticFeedback()
+            self.selectedNumberIsRight = nil
+        }
     }
     
     @IBAction func stopButtonPressed(sender: UIButton) {
@@ -211,11 +235,10 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     // MARK: - SettingsTableViewControllerDelegate
     
     func colorfulCellsModeStateChanged(to state: Bool) {
-        cells.forEach { $0.updateBackgroundColor(animated: true) }
-        if state == true {
-            messageView.label.textColor = .white
-        } else {
-            messageView.label.textColor = appearance.textColor
+        messageView.label.textColor = state ? .white : .black
+        for cell in cells {
+            let newCellBackgroundColor = state ? appearance.randomColor : appearance.defaultCellsColor
+            cell.setBackgroundColor(to: newCellBackgroundColor, animated: true)
         }
     }
     
@@ -225,13 +248,13 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             addCells(count: maxNumber - cells.count)
         } else {
             game.rows -= 1
-            removeButtons(count: cells.count - maxNumber)
+            removeCells(count: cells.count - maxNumber)
         }
         
-        updateButtonsFrames()
+        updateCellFrames()
         prepareForNewGame()
         messageView.frame = CGRect(x: 0.0, y: 0.0, width: messageViewWidth, height: messageViewHeight)
-        messageView.center = buttonsContainerView.center
+        messageView.center = cellsContainerView.center
     }
     
     // MARK: - Segue
@@ -273,10 +296,8 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     // MARK: - Helping methods
     
     private func showGreetingsViewController() {
-        //let storyboard = UIStoryboard(name: "Main", bundle: nil)
         self.performSegue(withIdentifier: "showGrettings", sender: nil)
-//        let greetingsVC = storyboard.instantiateViewController(withIdentifier: ViewControllerIdentifier.rootViewController.rawValue)
-//        self.present(greetingsVC, animated: true, completion: nil)
+        #warning ("Move identifier to the constants")
     }
         
 }

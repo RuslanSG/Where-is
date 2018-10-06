@@ -11,38 +11,16 @@ import UIKit
 class MessageView: UIVisualEffectView {
 
     let label = UILabel()
-    private var blur: UIBlurEffect! {
-        didSet {
-            self.effect = blur
-        }
-    }
+    var blur = UIBlurEffect()
     
-    private var appearanceInfo = Appearance()
-    private var gameInfo = Game()
-    
-    init(appearanceInfo: Appearance, gameInfo: Game) {
+    init() {
         super.init(effect: nil)
-        
-        self.blur = UIBlurEffect(style: appearanceInfo.darkMode ? .dark : .light)
-        self.appearanceInfo = appearanceInfo
-        self.gameInfo = gameInfo
-        
+
         setupInputComponents()
-        
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(darkModeStateChanged(notification:)),
-            name: Notification.Name(StringKeys.NotificationName.darkModeStateDidChange.rawValue),
-            object: nil
-        )
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
     }
     
     // MARK: - Actions
@@ -71,42 +49,20 @@ class MessageView: UIVisualEffectView {
         }
     }
     
-    // MARK: - Notifications
-    
-    @objc private func darkModeStateChanged(notification: Notification) {
-        setupColors()
-    }
-    
     // MARK: - Helping Methods
     
     private func setupInputComponents() {
         self.isUserInteractionEnabled = false
         
-        contentView.addSubview(label)
-        contentView.addConstraintsWithFormat(format: "H:|[v0]|", views: label)
-        contentView.addConstraintsWithFormat(format: "V:|[v0]|", views: label)
-        
-        label.text = "Start"
-        label.textColor = appearanceInfo.textColor
-        label.font = UIFont.systemFont(ofSize: appearanceInfo.numbersFontSize)
+        label.text = "Старт"
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
-        label.isOpaque = false
         label.isUserInteractionEnabled = true
         label.alpha = 0.0
+        
+        contentView.addSubview(label)
+        contentView.addConstraintsWithFormat(format: "H:|-10-[v0]-10-|", views: label)
+        contentView.addConstraintsWithFormat(format: "V:|[v0]|", views: label)
     }
     
-    private func setupColors() {
-        if appearanceInfo.darkMode {
-            blur = UIBlurEffect(style: .dark)
-            label.textColor = appearanceInfo.textColor
-        } else {
-            blur = UIBlurEffect(style: .light)
-            if gameInfo.colorfulCellsMode {
-                label.textColor = .white
-            } else {
-                label.textColor = appearanceInfo.textColor
-            }
-        }
-    }
 }

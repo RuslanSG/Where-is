@@ -9,19 +9,18 @@
 import UIKit
 
 class RootViewController: UIViewController, WelcomeViewControllerDelegate {
-
+    
     var pageViewController: UIPageViewController?
     var game: Game!
     
     private lazy var orderedViewControllers: [UIViewController] = {
-        let greetingsViewController = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.greetingsViewController.rawValue)
-        let sensViewController = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.sensViewController.rawValue)
-        let tutorialViewController = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.tutorialViewController.rawValue) as! TutorialViewController
-        let remindersViewContoller = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.remindersViewController.rawValue) as! RemindersViewController
-        let darkModeViewContoller = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.darkModeViewController.rawValue) as! DarkModeViewController
-        let welcomeViewController = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.welcomeViewController.rawValue) as! WelcomeViewController
+        let greetingsViewController = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.GreetingsViewController)
+        let sensViewController = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.SensViewController)
+        let tutorialViewController = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.TutorialViewController) as! TutorialViewController
+        let remindersViewContoller = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.RemindersViewController) as! RemindersViewController
+        let darkModeViewContoller = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.DarkModeViewController) as! DarkModeViewController
+        let welcomeViewController = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.WelcomeViewController) as! WelcomeViewController
         
-        tutorialViewController.game = game
         welcomeViewController.delegate = self
                 
         return [greetingsViewController,

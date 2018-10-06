@@ -74,11 +74,11 @@ extension GameViewController: CLLocationManagerDelegate {
     
     // MARK: - Cells
     
-    func updateButtonsFrames() {
+    func updateCellFrames() {
         for i in cells.indices {
-            let button = cells[i]
-            if let buttonFrame = grid[i] {
-                button.frame = buttonFrame
+            let cell = cells[i]
+            if let cellFrame = grid[i] {
+                cell.frame = cellFrame
             }
         }
     }
@@ -87,27 +87,30 @@ extension GameViewController: CLLocationManagerDelegate {
         assert(count % 5 == 0, "Reason: invalid number of buttons to add. Provide a multiple of five number.")
         for _ in 0..<count {
             let cell: CellView = {
-                let cell = CellView(
-                    frame: CGRect(x: 0, y: 0, width: 0, height: 0),
-                    appearance: appearance,
-                    game: game
-                )
+                let cell = CellView(frame: CGRect.zero, inset: appearance.gridInset)
+                let backgroundColor = self.game.colorfulCellsMode ? appearance.randomColor : appearance.defaultCellsColor
+                guard let numberColor = self.game.colorfulNumbersMode ? appearance.getAnotherColor(for: backgroundColor) : appearance.defaultNumbersColor else { return CellView() }
+                cell.setBackgroundColor(to: backgroundColor, animated: false)
+                cell.setNumberColor(to: numberColor, animated: false)
+                cell.setCornerRadius(to: appearance.cornerRadius)
+                cell.titleLabel?.font = UIFont.systemFont(ofSize: appearance.numbersFontSize)
                 cell.addTarget(self, action: #selector(cellPressed(sender:)), for: .touchDown)
                 cell.addTarget(self, action: #selector(cellReleased(sender:)), for: .touchUpInside)
                 cell.addTarget(self, action: #selector(cellReleased(sender:)), for: .touchUpOutside)
                 return cell
             }()
             cells.append(cell)
-            buttonsContainerView.addSubview(cell)
+            cellsContainerView.addSubview(cell)
         }
+        updateCellFrames()
     }
     
-    func removeButtons(count: Int) {
+    func removeCells(count: Int) {
         assert(count % 5 == 0, "Reason: invalid number of buttons to remove. Provide a multiple of five number.")
         for _ in 0..<count {
-            let lastButton = cells.last
-            if let lastButton = lastButton {
-                lastButton.removeFromSuperview()
+            let lastCell = cells.last
+            if let lastCell = lastCell {
+                lastCell.removeFromSuperview()
             }
             cells.removeLast()
         }
@@ -128,7 +131,7 @@ extension GameViewController: CLLocationManagerDelegate {
         for i in cells.indices {
             let number = game.numbers[i]
             let cell = cells[i]
-            cell.updateNumber(to: number, animated: cellsNotAnimating.contains(cell))
+            cell.setNumber(to: number, animated: cellsNotAnimating.contains(cell))
         }
     }
     
@@ -178,9 +181,14 @@ extension GameViewController: CLLocationManagerDelegate {
         }
     }
     
-    internal func winkNumber(at cell: CellView) {
+    internal func winkRandomNumber() {
         let duration = 1.0
         let delay = 1.0
+        
+        let cell = cellsNotAnimating[cellsNotAnimating.count.arc4random]
+        if let index = cellsNotAnimating.index(of: cell) {
+            cellsNotAnimating.remove(at: index)
+        }
         
         cell.winkNumber(duration: duration, delay: delay)
         
@@ -192,45 +200,54 @@ extension GameViewController: CLLocationManagerDelegate {
     
     // MARK: - Colors
     
-    func removeCellColors(animated: Bool) {
+    func setCellsColorsToDefault(animated: Bool) {
         cells.forEach({ (cell) in
-            cell.updateBackgroundColor(animated: animated, to: appearance.defaultCellsColor)
+            cell.setBackgroundColor(to: appearance.defaultCellsColor, animated: animated)
         })
     }
     
-    func removeNumberColors(animated: Bool) {
+    func setNumbersColorsToDefault(animated: Bool) {
         cells.forEach({ (cell) in
-            cell.updateNumberColor(animated: false)
+            cell.setNumberColor(to: appearance.defaultNumbersColor, animated: animated)
         })
     }
     
-    func winkCellColor(at cell: CellView) {
-        guard let currentColor = cell.backgroundColor else { return }
-        if let color = appearance.getAnotherColor(for: currentColor) {
-            cell.updateBackgroundColor(animated: true, to: color)
+    func updateCellsColorsFromModel() {
+        for cell in cells {
+            let cellBackgroundColor = game.colorfulCellsMode ? appearance.randomColor : appearance.defaultCellsColor
+            guard let cellNumberColor: UIColor = {
+                if game.colorfulNumbersMode {
+                    return appearance.getAnotherColor(for: cellBackgroundColor)
+                } else if game.colorfulCellsMode {
+                    return .white
+                } else {
+                    return appearance.defaultNumbersColor
+                }
+                }() else { return }
+            
+            cell.setBackgroundColor(to: cellBackgroundColor, animated: true)
+            cell.setNumberColor(to: cellNumberColor, animated: true)
         }
     }
     
     // MARK: - Helping Methods
     
     internal func startGame() {
+        UIApplication.shared.isStatusBarHidden = true
+        
         if resultsIsShowing {
             resultsView.hide()
             resultsIsShowing = false
         }
         
-        for cell in cells {
-            cell.updateBackgroundColor(animated: false)
-            cell.updateNumberColor(animated: false)
-            cell.showNumber(animated: true)
+        if game.colorfulCellsMode {
+            updateCellsColorsFromModel()
         }
         
         stopButton.isEnabled = true
+        cells.forEach { $0.showNumber(animated: true) }
         
         game.startGame()
-        
-        feedbackGenerator.impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
-        feedbackGenerator.impactFeedbackGenerator?.prepare()
         
         if game.winkNumbersMode {
             timer1 = Timer.scheduledTimer(
@@ -253,10 +270,11 @@ extension GameViewController: CLLocationManagerDelegate {
     }
     
     func prepareForNewGame() {
+        UIApplication.shared.isStatusBarHidden = false
         game.newGame()
         setNumbers()
         stopButton.isEnabled = false
-        if game.winkNumbersMode || game.winkColorsMode || game.swapNumbersMode {
+        if game.winkNumbersMode || game.swapNumbersMode {
             timer1.invalidate()
             timer2.invalidate()
             cells.forEach { $0.titleLabel?.layer.removeAllAnimations() }
@@ -269,10 +287,7 @@ extension GameViewController: CLLocationManagerDelegate {
     
     @objc func timerSceduled() {
         if game.winkNumbersMode {
-            wink(.number)
-        }
-        if game.winkColorsMode {
-            wink(.color)
+            winkRandomNumber()
         }
         if game.swapNumbersMode {
             swapNumbers(animated: true)
@@ -282,21 +297,6 @@ extension GameViewController: CLLocationManagerDelegate {
     enum CellPart {
         case number
         case color
-    }
-    
-    func wink(_ cellPart: CellPart) {
-        if cellPart == .number {
-            print(cellsNotAnimating.count)
-            let cell = cellsNotAnimating[cellsNotAnimating.count.arc4random]
-            if let index = cellsNotAnimating.index(of: cell) {
-                cellsNotAnimating.remove(at: index)
-            }
-            winkNumber(at: cell)
-        }
-        if cellPart == .color {
-            let cell = cells[cells.count.arc4random]
-            winkCellColor(at: cell)
-        }
     }
     
 }

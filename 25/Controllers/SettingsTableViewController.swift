@@ -62,7 +62,7 @@ class SettingsTableViewController: UITableViewController {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(darkModeStateChangedNotification(notification:)),
-            name: Notification.Name(StringKeys.NotificationName.darkModeStateDidChange.rawValue),
+            name: Notification.Name.DarkModeStateDidChange,
             object: nil
         )
         NotificationCenter.default.addObserver(
@@ -131,10 +131,6 @@ class SettingsTableViewController: UITableViewController {
         darkModeSwitcher.isEnabled = !automaticDarkMode.isOn
         
         automaticDarkModeSwitcher.setOn(automaticDarkMode.isOn, animated: false)
-        
-        appearance.darkMode ? cells.forEach { $0.backgroundColor = appearance.cellsColor.darkMode } :
-                              cells.forEach { $0.backgroundColor = appearance.cellsColor.lightMode }
-        
     }
     
     deinit {
@@ -234,11 +230,11 @@ class SettingsTableViewController: UITableViewController {
             if let currentColor = self.doneButton.tintColor {
                 self.doneButton.tintColor = self.appearance.switchColorForAnotherScheme(currentColor)
             }
-            self.tableView.backgroundColor = self.appearance.darkMode ? self.appearance.tableViewBackgroundColor.darkMode : self.appearance.tableViewBackgroundColor.lightMode
-            self.tableView.separatorColor = self.appearance.darkMode ? self.appearance.tableViewSeparatorColor.darkMode : self.appearance.tableViewSeparatorColor.lightMode
+            self.tableView.backgroundColor = self.appearance.tableViewBackgroundColor
+            self.tableView.separatorColor = self.appearance.tableViewSeparatorColor
 
             self.steppers.forEach { $0.tintColor = self.appearance.userInterfaceColor }
-            self.cells.forEach { $0.backgroundColor = self.appearance.darkMode ? self.appearance.cellsColor.darkMode : self.appearance.cellsColor.lightMode }
+            self.cells.forEach { $0.backgroundColor = self.appearance.tableViewCellColor }
             
         }
         
@@ -250,7 +246,7 @@ class SettingsTableViewController: UITableViewController {
                 self.labels.forEach { $0.textColor = self.appearance.darkMode ? .white : .black }
                 
                 for switcher in self.switchers {
-                    switcher.tintColor = self.appearance.darkMode ? self.appearance.swithersTintColor.darkMode : self.appearance.swithersTintColor.lightMode
+                    switcher.tintColor = self.appearance.switcherTintColor
                     switcher.onTintColor = self.appearance.userInterfaceColor
                 }
             }

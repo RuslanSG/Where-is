@@ -17,7 +17,7 @@ class TutorialViewController: UIViewController {
     private var cells = [CellView]()
     private let feedbackGenerator = FeedbackGenerator()
     private lazy var feedbackView = FeedbackView(frame: self.view.frame)
-    private lazy var appearance = Appearance(view: self.view)
+    private lazy var appearance = Appearance()
     
     private var nextCellToTap: CellView?
     private var lastTappedCell: CellView?
@@ -61,7 +61,7 @@ class TutorialViewController: UIViewController {
     // MARK: - Actions
     
     @objc func cellPressed(sender: CellView) {
-        sender.compress()
+        sender.compress(numberFeedback: !self.game.winkNumbersMode)
         let selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
         if selectedNumberIsRight && sender.tag == game.maxNumber {
             // User tapped the last number
@@ -84,15 +84,6 @@ class TutorialViewController: UIViewController {
     
     @objc func cellReleased(sender: CellView) {
         sender.uncompress()
-        if game.inGame {
-            UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: 0.3,
-                delay: 0.0,
-                options: .curveLinear,
-                animations: {
-                    sender.titleLabel?.alpha = 1.0
-            })
-        }
     }
     
     // MARK: - Helping Methods
@@ -102,11 +93,7 @@ class TutorialViewController: UIViewController {
         for i in 0..<count {
             if let cellFrame = grid[i] {
                 let cell: CellView = {
-                    let cell = CellView(
-                        frame: cellFrame,
-                        appearance: appearance,
-                        game: game
-                    )
+                    let cell = CellView(frame: cellFrame)
                     cell.addTarget(self, action: #selector(cellPressed(sender:)), for: .touchDown)
                     cell.addTarget(self, action: #selector(cellReleased(sender:)), for: .touchUpInside)
                     cell.addTarget(self, action: #selector(cellReleased(sender:)), for: .touchUpOutside)
@@ -142,9 +129,9 @@ class TutorialViewController: UIViewController {
     private func highlightRightCell() {
         for cell in cells {
             if cell == lastTappedCell {
-                cell.updateBackgroundColor(animated: true, to: appearance.defaultCellsColor)
+                cell.setBackgroundColor(to: appearance.defaultCellsColor, animated: true)
             } else if let cellToHighlight = self.nextCellToTap, cell == nextCellToTap {
-                cellToHighlight.updateBackgroundColor(animated: true, to: appearance.highlightedCellColor)
+                cellToHighlight.setBackgroundColor(to: appearance.highlightedCellColor, animated: true)
             }
         }
     }
@@ -165,7 +152,7 @@ class TutorialViewController: UIViewController {
             $0.hideNumber(animated: true)
             $0.isUserInteractionEnabled = false
         }
-        nextCellToTap?.updateBackgroundColor(animated: true, to: appearance.defaultCellsColor)
+        nextCellToTap?.setBackgroundColor(to: appearance.defaultCellsColor, animated: true)
         titleLabel.changeTextWithAnimation(to: "Отлично!")
         detaillabel.changeTextWithAnimation(to: "Все очень просто! Этот принцип будет сохраняться во всех Ваших последующих играх.")
         cell.uncompress()

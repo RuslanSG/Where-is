@@ -9,43 +9,27 @@
 import Foundation
 
 struct StringKeys {
-    // MARK: - Notifications
-    
-    public enum NotificationName: String {
-        case darkModeStateDidChange = "DarkModeStateDidChangeNotification"
-        case userInterfaceColorDidChange = "UserInterfaceColorDidChangeNotification"
-    }
     
     // MARK: - User Defaults
     
-    public enum UserDefaultsKey: String {
-        case darkMode = "darkModeUserDefaultsKey"
-        case automaticDarkMode = "automaticDarkModeKey"
-        case sunrise = "sunriseUserDefaultsKey"
-        case sunset = "sunsetUserDefaultsKey"
-        case notFirstLaunch = "notFirstLaunch"
-    }
-    
-    // MARK: - User Info
-    
-    public enum UserInfoKey: String {
-        case cellsNotAnimating = "cellsNotAnimatingUserInfoKey"
-        case game = "gameUserInfoKey"
-        case appearance = "appearanceUserInfoKey"
-        case darkModeState = "DarkModeStateUserInfoKey"
-        case userInterfaceColor = "UserInterfaceColorUserInfoKey"
+    public enum UserDefaultsKey {
+        static let DarkMode: String = "darkModeUserDefaultsKey"
+        static let AutomaticDarkMode: String = "automaticDarkModeKey"
+        static let Sunrise: String = "sunriseUserDefaultsKey"
+        static let Sunset: String = "sunsetUserDefaultsKey"
+        static let NotFirstLaunch: String = "notFirstLaunch"
     }
     
     // MARK: - View Controllers Identifiers
     
-    public enum ViewControllerIdentifier: String {
-        case rootViewController = "rootViewController"
-        case greetingsViewController = "greetingsViewController"
-        case sensViewController = "sensViewController"
-        case tutorialViewController = "tutorialViewController"
-        case remindersViewController = "remindersViewController"
-        case darkModeViewController = "darkModeViewController"
-        case welcomeViewController = "welcomeViewController"
+    public enum ViewControllerIdentifier {
+        static let RootViewController: String = "rootViewController"
+        static let GreetingsViewController: String = "greetingsViewController"
+        static let SensViewController: String = "sensViewController"
+        static let TutorialViewController: String = "tutorialViewController"
+        static let RemindersViewController: String = "remindersViewController"
+        static let DarkModeViewController: String = "darkModeViewController"
+        static let WelcomeViewController: String = "welcomeViewController"
     }
 }
 

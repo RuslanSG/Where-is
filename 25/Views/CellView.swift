@@ -9,39 +9,45 @@
 import UIKit
 
 class CellView: UIButton {
-    public var number: Int!
     
-    private var appearance = Appearance()
-    private var game = Game()
+    private enum ViewConstants {
+        static let CompressionRatio: CGFloat = 0.90
+    }
+    
+    var number = "?"
+    var inset: CGFloat = 0.0
     
     private var buttonFrameX: CGFloat?
     private var buttonFrameY: CGFloat?
     private var buttonFrameHeight: CGFloat?
     private var buttonFrameWidth: CGFloat?
+    
+    private var numberFeedback = true
+    private var showNumber = true
 
     private lazy var cellView: UIView = {
         let view = UIView()
-        view.backgroundColor = game.colorfulCellsMode ? appearance.randomColor : appearance.defaultCellsColor
-        view.layer.cornerRadius = appearance.cornerRadius
         view.isUserInteractionEnabled = false
         return view
     }()
     
     // MARK: - Initialization
     
-    public init(frame: CGRect, appearance: Appearance, game: Game) {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    
+    init(frame: CGRect, inset: CGFloat) {
         super.init(frame: frame)
         
-        self.appearance = appearance
-        self.game = game
+        self.inset = inset
         
         setupInputComponents()
-        setupColors()
-        
+
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(darkModeStateChanged(notification:)),
-            name: Notification.Name(StringKeys.NotificationName.darkModeStateDidChange.rawValue),
+            selector: #selector(inGameStateDidChange(notification:)),
+            name: Notification.Name.InGameStateDidChange,
             object: nil
         )
     }
@@ -54,22 +60,41 @@ class CellView: UIButton {
         NotificationCenter.default.removeObserver(self)
     }
     
+    // MARK: - Notifications
+    
+    @objc private func inGameStateDidChange(notification: Notification) {
+        if let userInfo = notification.userInfo, let showNumber = userInfo[Notification.UserInfoKey.InGame] as? Bool {
+            self.showNumber = showNumber
+        }
+    }
+    
+}
+
+extension CellView {
+    
     // MARK: - Cell
     
-    public func compress() {
+    func compress(numberFeedback: Bool) {
+        self.numberFeedback = numberFeedback
+        
         buttonFrameX = self.frame.minX
         buttonFrameY = self.frame.minY
         buttonFrameWidth = self.frame.width
         buttonFrameHeight = self.frame.height
         
-        let newButtonFrameX = self.frame.minX + self.frame.width * CGFloat(1 - appearance.cellCompressionRatio) / 2
-        let newButtonFrameY = self.frame.minY + self.frame.height * CGFloat(1 - appearance.cellCompressionRatio) / 2
-        let newButtonFrameWidth = self.frame.width * CGFloat(appearance.cellCompressionRatio)
-        let newButtonFrameHeight = self.frame.height * CGFloat(appearance.cellCompressionRatio)
+        let compressionRatio = ViewConstants.CompressionRatio
+        
+        let newButtonFrameX = self.frame.minX + self.frame.width * CGFloat(1 - compressionRatio) / 2
+        let newButtonFrameY = self.frame.minY + self.frame.height * CGFloat(1 - compressionRatio) / 2
+        let newButtonFrameWidth = self.frame.width * CGFloat(compressionRatio)
+        let newButtonFrameHeight = self.frame.height * CGFloat(compressionRatio)
+        
+        let duration: Double = 0.05
+        let delay: Double = 0.0
         
         UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: 0.05,
-            delay: 0.0,
+            withDuration: duration,
+            delay: delay,
             options: [],
             animations: {
                 self.frame = CGRect(
@@ -78,20 +103,23 @@ class CellView: UIButton {
                     width: newButtonFrameWidth,
                     height: newButtonFrameHeight
                 )
-                if !self.game.winkNumbersMode {
+                if self.numberFeedback {
                     self.titleLabel?.alpha = 0.2
                 }
         })
     }
     
-    public func uncompress() {
+    func uncompress() {
+        let duration: Double = 0.4
+        let delay: Double = 0.0
+        
         if let buttonFrameX = self.buttonFrameX,
             let buttonFrameY = self.buttonFrameY,
             let buttonFrameWidth = self.buttonFrameWidth,
             let buttonFrameHeight = self.buttonFrameHeight {
             UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: 0.4,
-                delay: 0.0,
+                withDuration: duration,
+                delay: delay,
                 options: .curveEaseOut,
                 animations: {
                     self.frame = CGRect(
@@ -100,7 +128,7 @@ class CellView: UIButton {
                         width: buttonFrameWidth,
                         height: buttonFrameHeight
                     )
-                    if self.game.inGame, !self.game.shuffleNumbersMode, !self.game.winkNumbersMode {
+                    if self.numberFeedback {
                         self.titleLabel?.alpha = 1.0
                     }
             })
@@ -111,38 +139,40 @@ class CellView: UIButton {
         }
     }
     
-    public func updateBackgroundColor(animated: Bool, to color: UIColor? = nil) {
-        let colorChanger = {
-            if let color = color {
-                self.cellView.backgroundColor = color
-            } else {
-                self.cellView.backgroundColor = self.game.colorfulCellsMode ? self.appearance.randomColor :
-                                                                              self.appearance.defaultCellsColor
-            }
-        }
+    func setBackgroundColor(to color: UIColor, animated: Bool) {
+        let duration: Double = 0.1
+        let delay: Double = 0.0
         
         if animated {
             UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: 0.1,
-                delay: 0.0,
+                withDuration: duration,
+                delay: delay,
                 options: [],
                 animations: {
-                    colorChanger()
+                    self.cellView.backgroundColor = color
             })
         } else {
-            colorChanger()
+            self.cellView.backgroundColor = color
         }
+    }
+    
+    func setCornerRadius(to cornerRadius: CGFloat) {
+        self.cellView.layer.cornerRadius = cornerRadius
     }
     
     // MARK: - Number
     
-    public func showNumber(animated: Bool) {
+    func showNumber(animated: Bool) {
         self.isEnabled = true
+        
+        let duration: Double = 0.2
+        let delay: Double = 0.0
+        
         if animated {
             UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: 0.2,
-                delay: 0.0,
-                options: [],
+                withDuration: duration,
+                delay: delay,
+                options: .curveEaseOut,
                 animations: {
                     self.titleLabel?.alpha = 1.0
             })
@@ -151,12 +181,15 @@ class CellView: UIButton {
         }
     }
     
-    public func hideNumber(animated: Bool) {
+    func hideNumber(animated: Bool) {
+        let duration: Double = 0.2
+        let delay: Double = 0.0
+        
         if animated {
             UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: 0.2,
-                delay: 0.0,
-                options: [],
+                withDuration: duration,
+                delay: delay,
+                options: .curveEaseIn,
                 animations: {
                     self.titleLabel?.alpha = 0.0
             })
@@ -165,19 +198,24 @@ class CellView: UIButton {
         }
     }
     
-    public func winkNumber(duration: Double, delay: Double) {
+    func winkNumber(duration: Double, delay: Double) {
+        let durationIn: Double = duration / 2
+        let durationOut: Double = duration / 2
+        let delayIn: Double = 0.0
+        let delayOut: Double = delay
+        
         UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: duration / 2,
-            delay: 0.0,
-            options: [],
+            withDuration: durationIn,
+            delay: delayIn,
+            options: .curveEaseIn,
             animations: {
                 self.titleLabel?.alpha = 0.0
         }) { (_) in
-            if self.game.inGame {
+            if self.showNumber {
                 UIViewPropertyAnimator.runningPropertyAnimator(
-                    withDuration: duration / 2,
-                    delay: delay,
-                    options: [],
+                    withDuration: durationOut,
+                    delay: delayOut,
+                    options: .curveEaseOut,
                     animations: {
                         self.titleLabel?.alpha = 1.0
                 })
@@ -185,21 +223,26 @@ class CellView: UIButton {
         }
     }
     
-    public func updateNumber(to number: Int, animated: Bool) {
+    func setNumber(to number: Int, animated: Bool) {
+        let durationIn: Double = 0.1
+        let durationOut: Double = 0.1
+        let delayIn: Double = 0.0
+        let delayOut: Double = 0.0
+        
         if animated {
             UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: 0.1,
-                delay: 0.0,
-                options: [],
+                withDuration: durationIn,
+                delay: delayIn,
+                options: .curveEaseIn,
                 animations: {
                     self.titleLabel?.alpha = 0.0
             }) { (position) in
                 self.setTitle(String(number), for: .normal)
                 self.tag = number
                 UIViewPropertyAnimator.runningPropertyAnimator(
-                    withDuration: 0.1,
-                    delay: 0.0,
-                    options: [],
+                    withDuration: durationOut,
+                    delay: delayOut,
+                    options: .curveEaseOut,
                     animations: {
                         self.titleLabel?.alpha = 1.0
                 })
@@ -210,52 +253,50 @@ class CellView: UIButton {
         }
     }
     
-    public func updateNumberColor(animated: Bool) {
-        let colorChanger = {
-            var newColor = UIColor()
-            if self.game.colorfulNumbersMode, self.game.colorfulCellsMode {
-                if  let color = self.cellView.backgroundColor,
-                    let anotherColor = self.appearance.getAnotherColor(for: color) {
-                    newColor = anotherColor
-                }
-            } else if self.game.colorfulCellsMode {
-                newColor = .white
-            } else {
-                newColor = self.appearance.textColor
-            }
-            self.setTitleColor(newColor, for: .normal)
-        }
+    func setNumberColor(to color: UIColor, animated: Bool) {
+//        let colorChanger = {
+//            var newColor = UIColor()
+//            if self.game.colorfulNumbersMode, self.game.colorfulCellsMode {
+//                if  let color = self.cellView.backgroundColor,
+//                    let anotherColor = self.appearance.getAnotherColor(for: color) {
+//                    newColor = anotherColor
+//                }
+//            } else if self.game.colorfulCellsMode {
+//                newColor = .white
+//            } else {
+//                newColor = self.appearance.textColor
+//            }
+//            self.setTitleColor(newColor, for: .normal)
+//        }
+        
+        let duration: Double = 0.1
+        let delay: Double = 0.0
         
         if animated {
             UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: 0.1,
-                delay: 0.0,
-                options: [],
+                withDuration: duration,
+                delay: delay,
+                options: .curveEaseInOut,
                 animations: {
-                    colorChanger()
+                    self.setTitleColor(color, for: .normal)
             })
         } else {
-            colorChanger()
+            self.setTitleColor(color, for: .normal)
         }
     }
-    
-    // MARK: - Notifications
-    
-    @objc private func darkModeStateChanged(notification: Notification) {
-        updateColors()
-    }
+}
 
+extension CellView {
     // MARK: - Helping Methods
     
     private func setupInputComponents() {
         self.addSubview(cellView)
         
         self.backgroundColor = .clear
-        self.titleLabel?.font = UIFont.systemFont(ofSize: appearance.numbersFontSize)
         self.titleLabel?.textAlignment = .center
         self.titleLabel?.alpha = 0.0
         
-        let inset = appearance.gridInset
+        self.cellView.translatesAutoresizingMaskIntoConstraints = false
         
         self.addConstraintsWithFormat(
             format: "H:|-\(inset)-[v0]-\(inset)-|",
@@ -265,26 +306,6 @@ class CellView: UIButton {
             format: "V:|-\(inset)-[v0]-\(inset)-|",
             views: cellView
         )
-    }
-    
-    private func setupColors() {
-        guard let currentColor = self.backgroundColor else { return }
-        
-        let cellColor = game.colorfulCellsMode ? appearance.randomColor : appearance.defaultCellsColor
-        let numberColor = game.colorfulNumbersMode ? appearance.getAnotherColor(for: currentColor) : appearance.textColor
-        
-        self.setTitleColor(numberColor, for: .normal)
-        self.cellView.backgroundColor = cellColor
-    }
-    
-    private func updateColors() {
-        if game.colorfulCellsMode {
-            guard let currentColor = cellView.backgroundColor else { return }
-            cellView.backgroundColor = appearance.switchColorForAnotherScheme(currentColor)
-        } else {
-            updateBackgroundColor(animated: true)
-        }
-        updateNumberColor(animated: true)
     }
     
 }

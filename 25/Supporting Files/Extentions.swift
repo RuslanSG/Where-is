@@ -129,3 +129,20 @@ extension UILabel {
         }
     }
 }
+
+extension Notification.Name {
+    static let DarkModeStateDidChange = Notification.Name("DarkModeStateDidChangeNotification")
+    static let UserInterfaceColorDidChange = Notification.Name("UserInterfaceColorDidChangeNotification")
+    static let InGameStateDidChange = Notification.Name("UserInterfaceColorDidChangeNotification")
+}
+
+extension Notification {
+    enum UserInfoKey {
+        static let CellsNotAnimating: String = "CellsNotAnimatingUserInfoKey"
+        static let Game: String = "GameUserInfoKey"
+        static let Appearance: String = "AppearanceUserInfoKey"
+        static let DarkModeState: String = "DarkModeStateUserInfoKey"
+        static let UserInterfaceColor: String = "UserInterfaceColorUserInfoKey"
+        static let InGame: String = "InGameUserInfoKey"
+    }
+}
