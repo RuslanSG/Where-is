@@ -9,12 +9,12 @@
 import Foundation
 import CoreLocation
 
-final class Daytime: NSObject, CLLocationManagerDelegate {
+final class Daytime {
     
     private let userDefaults = UserDefaults.standard
     private let calendar = Calendar.current
-    private let locationManager = CLLocationManager()
     private let secondsFromGMT = TimeZone.autoupdatingCurrent.secondsFromGMT()
+    private let locationManager = LocationManager()
     
     var sunriseTime: Date? {
         set {
@@ -45,10 +45,22 @@ final class Daytime: NSObject, CLLocationManagerDelegate {
     
     // MARK: - Initialization
     
-    override init() {
-        super.init()
-        
-        self.getUserLocation()
+    init() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(userLocationDidUpdate(_:)),
+            name: Notification.Name.UserLocationDidUpdate,
+            object: nil
+        )
+    }
+    
+    // MARK: - Notifications
+    
+    @objc func userLocationDidUpdate(_ notification: Notification) {
+        guard let userInfo = notification.userInfo else { return }
+        if let location = userInfo[Notification.UserInfoKey.UserLocation] as? CLLocationCoordinate2D {
+            self.getSunTimeInfo(with: location)
+        }
     }
     
     // MARK: - Sunrise/Sunset Time Info
@@ -59,38 +71,6 @@ final class Daytime: NSObject, CLLocationManagerDelegate {
         let sunsetTime = calendar.date(byAdding: .second, value: secondsFromGMT, to: solar.sunset!)!
         self.sunriseTime = sunriseTime
         self.sunsetTime = sunsetTime
-    }
-    
-    // MARK: - Location
-    
-    private var currentLocation: CLLocationCoordinate2D? = nil {
-        didSet {
-            if currentLocation != nil {
-                getSunTimeInfo(with: currentLocation!)
-            }
-        }
-    }
-    
-    private func getUserLocation() {
-        self.locationManager.requestWhenInUseAuthorization()
-        if CLLocationManager.locationServicesEnabled() {
-            self.locationManager.delegate = self
-            self.locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
-            self.locationManager.startUpdatingLocation()
-        }
-    }
-    
-    // MARK: - CLLocationManagerDelegate
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if currentLocation == nil {
-            guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
-            currentLocation = CLLocationCoordinate2D(latitude: locValue.latitude, longitude: locValue.longitude)
-        }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print(error.localizedDescription)
     }
     
 }

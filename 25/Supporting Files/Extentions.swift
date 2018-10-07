@@ -134,6 +134,7 @@ extension Notification.Name {
     static let DarkModeStateDidChange = Notification.Name("DarkModeStateDidChangeNotification")
     static let UserInterfaceColorDidChange = Notification.Name("UserInterfaceColorDidChangeNotification")
     static let InGameStateDidChange = Notification.Name("UserInterfaceColorDidChangeNotification")
+    static let UserLocationDidUpdate = Notification.Name("UserLocationDidUpdateNotification")
 }
 
 extension Notification {
@@ -144,6 +145,7 @@ extension Notification {
         static let DarkModeState: String = "DarkModeStateUserInfoKey"
         static let UserInterfaceColor: String = "UserInterfaceColorUserInfoKey"
         static let InGame: String = "InGameUserInfoKey"
+        static let UserLocation: String = "UserLocationUserInfoKey"
     }
 }
 

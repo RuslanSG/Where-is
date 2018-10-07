@@ -9,7 +9,7 @@
 import UIKit
 import AudioToolbox.AudioServices
 
-class FeedbackGenerator {
+final class FeedbackGenerator {
     
     private let feedbackGenerator: (
         notification: UINotificationFeedbackGenerator,
