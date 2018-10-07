@@ -29,7 +29,7 @@ final class LocationManager: NSObject, CLLocationManagerDelegate {
                 let geoCoder = CLGeocoder()
                 let location = CLLocation(latitude: currentLocation!.latitude, longitude: currentLocation!.longitude)
                 geoCoder.reverseGeocodeLocation(location) { (placemarks, error) in
-                    var cityName = ""
+                    var cityName = "Нет инфорации о местоположении"
                     var placeMark: CLPlacemark!
                     placeMark = placemarks?[0]
                     if let city = placeMark.subAdministrativeArea {
