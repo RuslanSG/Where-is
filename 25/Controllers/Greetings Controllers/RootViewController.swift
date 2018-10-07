@@ -11,7 +11,7 @@ import UIKit
 class RootViewController: UIViewController, WelcomeViewControllerDelegate {
     
     var pageViewController: UIPageViewController?
-    var game: Game!
+    var appearance: Appearance!
     
     private lazy var orderedViewControllers: [UIViewController] = {
         let greetingsViewController = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.GreetingsViewController)
@@ -22,6 +22,8 @@ class RootViewController: UIViewController, WelcomeViewControllerDelegate {
         let welcomeViewController = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.WelcomeViewController) as! WelcomeViewController
         
         welcomeViewController.delegate = self
+        darkModeViewContoller.appearance = appearance
+        welcomeViewController.appearance = appearance
                 
         return [greetingsViewController,
                 sensViewController,
@@ -73,6 +75,12 @@ class RootViewController: UIViewController, WelcomeViewControllerDelegate {
         
         setupInputComponents()
         visibleViewController = orderedViewControllers.first!
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(darkModeStateChangedNotification(_:)),
+            name: Notification.Name.DarkModeStateDidChange,
+            object: nil
+        )
     }
     
     // MARK: - Actions
@@ -119,6 +127,23 @@ class RootViewController: UIViewController, WelcomeViewControllerDelegate {
     
     func doneButtonPressed() {
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    // MARK: - Notifications
+    
+    @objc func darkModeStateChangedNotification(_ notification: Notification) {
+        let duration = 0.6
+        let delay = 0.0
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: duration,
+            delay: delay,
+            options: .curveEaseInOut,
+            animations: {
+                self.pageNumberLabel.textColor = self.appearance.textColor
+                self.view.backgroundColor = self.appearance.mainViewColor
+        })
+        
+        
     }
     
     // MARK: - Helping Methods

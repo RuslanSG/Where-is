@@ -26,11 +26,24 @@ final class LocationManager: NSObject, CLLocationManagerDelegate {
     private var currentLocation: CLLocationCoordinate2D? = nil {
         didSet {
             if currentLocation != nil {
-                NotificationCenter.default.post(
-                    name: Notification.Name.UserLocationDidUpdate,
-                    object: nil,
-                    userInfo: [Notification.UserInfoKey.UserLocation : currentLocation!]
-                )
+                let geoCoder = CLGeocoder()
+                let location = CLLocation(latitude: currentLocation!.latitude, longitude: currentLocation!.longitude)
+                geoCoder.reverseGeocodeLocation(location) { (placemarks, error) in
+                    var cityName = ""
+                    var placeMark: CLPlacemark!
+                    placeMark = placemarks?[0]
+                    if let city = placeMark.subAdministrativeArea {
+                        cityName = city
+                    }
+                    NotificationCenter.default.post(
+                        name: Notification.Name.UserLocationDidUpdate,
+                        object: nil,
+                        userInfo: [Notification.UserInfoKey.UserLocation : self.currentLocation!,
+                                   Notification.UserInfoKey.CityName     : cityName]
+                    )
+                }
+                
+                
             }
         }
     }

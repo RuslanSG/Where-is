@@ -114,7 +114,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        let firstLaunch = false //!UserDefaults.standard.bool(forKey: UserDefaultsKey.notFirstLaunch.rawValue)
+        let firstLaunch = !UserDefaults.standard.bool(forKey: UserDefaults.Key.NotFirstLaunch)
         if firstLaunch {
             showGreetingsViewController()
             UserDefaults.standard.set(true, forKey: UserDefaults.Key.NotFirstLaunch)
@@ -145,10 +145,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         // Control buttons color
         stopButton.tintColor = appearance.userInterfaceColor
         settingsButton.tintColor = appearance.userInterfaceColor
-        
-        // Status bar color
-        UIApplication.shared.statusBarStyle = appearance.darkMode ? .lightContent : .default
-        
+                
         // Result view color
         resultsView.blur = appearance.blur
         resultsView.titleLabel.textColor = appearance.textColor
@@ -260,7 +257,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             svc.appearance = appearance
         } else if segue.destination.isKind(of: RootViewController.self) {
             let rvc = segue.destination as! RootViewController
-            rvc.game = game
+            rvc.appearance = appearance
         }
     }
     

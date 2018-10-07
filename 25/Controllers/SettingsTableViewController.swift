@@ -210,52 +210,24 @@ class SettingsTableViewController: UITableViewController {
     // MARK: - Helping Methods
     
     @objc private func setupColors(animated: Bool) {
-        let duration = 0.3
-        
-        let animatedColorChanger = {
-            if let currentColor = self.doneButton.tintColor {
-                self.doneButton.tintColor = self.appearance.switchColorForAnotherScheme(currentColor)
-            }
-            self.tableView.backgroundColor = self.appearance.tableViewBackgroundColor
-            self.tableView.separatorColor = self.appearance.tableViewSeparatorColor
-
-            self.steppers.forEach { $0.tintColor = self.appearance.userInterfaceColor }
-            self.cells.forEach { $0.backgroundColor = self.appearance.tableViewCellColor }
-            
+        if let currentColor = self.doneButton.tintColor {
+            self.doneButton.tintColor = self.appearance.switchColorForAnotherScheme(currentColor)
         }
+        self.tableView.backgroundColor = self.appearance.tableViewBackgroundColor
+        self.tableView.separatorColor = self.appearance.tableViewSeparatorColor
         
-        let colorChanger = {
-            DispatchQueue.main.asyncAfter(deadline: .now() + duration / 2) {
-                self.navigationController?.navigationBar.barStyle = self.appearance.darkMode ? .black : .default
-                self.navigationController?.navigationBar.titleTextAttributes =
-                    [NSAttributedString.Key.foregroundColor : (self.appearance.darkMode ? UIColor.white : UIColor.black)]
-                self.labels.forEach { $0.textColor = self.appearance.darkMode ? .white : .black }
-                
-                for switcher in self.switchers {
-                    switcher.tintColor = self.appearance.switcherTintColor
-                    switcher.onTintColor = self.appearance.userInterfaceColor
-                }
-            }
+        self.steppers.forEach { $0.tintColor = self.appearance.userInterfaceColor }
+        self.cells.forEach { $0.backgroundColor = self.appearance.tableViewCellColor }
+        
+        self.navigationController?.navigationBar.barStyle = self.appearance.darkMode ? .black : .default
+        self.navigationController?.navigationBar.titleTextAttributes =
+            [NSAttributedString.Key.foregroundColor : (self.appearance.darkMode ? UIColor.white : UIColor.black)]
+        self.labels.forEach { $0.textColor = self.appearance.darkMode ? .white : .black }
+        
+        for switcher in self.switchers {
+            switcher.tintColor = self.appearance.switcherTintColor
+            switcher.onTintColor = self.appearance.userInterfaceColor
         }
-        
-        if animated {
-            UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: duration,
-                delay: 0.0,
-                options: [],
-                animations: {
-                    animatedColorChanger()
-            })
-            colorChanger()
-        } else {
-            animatedColorChanger()
-            colorChanger()
-        }
-        
-        
-        
     }
-    
 
-    
 }

@@ -146,6 +146,7 @@ extension Notification {
         static let UserInterfaceColor: String = "UserInterfaceColorUserInfoKey"
         static let InGame: String = "InGameUserInfoKey"
         static let UserLocation: String = "UserLocationUserInfoKey"
+        static let CityName: String = "CityNameUserInfoKey"
     }
 }
 

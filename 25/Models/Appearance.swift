@@ -119,6 +119,7 @@ class Appearance {
             if darkMode != newValue {
                 UserDefaults.standard.set(newValue, forKey: UserDefaults.Key.DarkMode)
                 userInterfaceColor = switchColorForAnotherScheme(userInterfaceColor) ?? .blue
+                UIApplication.shared.statusBarStyle = darkMode ? .lightContent : .default
                 NotificationCenter.default.post(
                     name: Notification.Name.DarkModeStateDidChange,
                     object: nil,
@@ -131,11 +132,16 @@ class Appearance {
         }
     }
     
+    private var locationManager: LocationManager?
+    
     var automaticDarkMode: Bool {
         set {
             if automaticDarkMode != newValue {
-                if newValue == true, let isDay = daytime.isDay {
-                    darkMode = !isDay
+                if newValue == true {
+                    locationManager = LocationManager()
+                    if let isDay = daytime.isDay {
+                        darkMode = !isDay
+                    }
                 }
                 UserDefaults.standard.set(newValue, forKey: UserDefaults.Key.AutomaticDarkMode)
             }
@@ -145,7 +151,7 @@ class Appearance {
         }
     }
     
-    // MARK: -Initialization
+    // MARK: - Initialization
     
     init() {
         NotificationCenter.default.addObserver(

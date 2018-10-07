@@ -14,7 +14,6 @@ final class Daytime {
     private let userDefaults = UserDefaults.standard
     private let calendar = Calendar.current
     private let secondsFromGMT = TimeZone.autoupdatingCurrent.secondsFromGMT()
-    private let locationManager = LocationManager()
     
     var sunriseTime: Date? {
         set {

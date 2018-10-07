@@ -376,13 +376,13 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Темный режим" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d64-jR-bAW">
-                                                    <rect key="frame" x="19" y="15.5" width="122" height="21"/>
+                                                    <rect key="frame" x="19" y="11.5" width="122" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="MXe-5e-7Cz">
-                                                    <rect key="frame" x="311" y="10.5" width="51" height="31"/>
+                                                    <rect key="frame" x="311" y="6.5" width="51" height="31"/>
                                                     <connections>
                                                         <action selector="darkModeSwitcherValueChanged:" destination="3hQ-19-uEL" eventType="valueChanged" id="BFQ-tX-7y7"/>
                                                     </connections>
@@ -405,13 +405,13 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Автоматически" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u7g-WF-Od3">
-                                                    <rect key="frame" x="19" y="15.5" width="124" height="21"/>
+                                                    <rect key="frame" x="19" y="11.5" width="124" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="46j-2m-qoC">
-                                                    <rect key="frame" x="311" y="10.5" width="51" height="31"/>
+                                                    <rect key="frame" x="311" y="6.5" width="51" height="31"/>
                                                     <connections>
                                                         <action selector="automaticDarkModeSwitcherValueChanged:" destination="3hQ-19-uEL" eventType="valueChanged" id="YnQ-gm-mz8"/>
                                                     </connections>
@@ -666,10 +666,10 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ne1-OU-c6u">
-                                <rect key="frame" x="16" y="191" width="346" height="456"/>
+                                <rect key="frame" x="2" y="191" width="371" height="456"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pBi-mz-966">
-                                        <rect key="frame" x="0.0" y="55" width="346" height="346"/>
+                                        <rect key="frame" x="0.0" y="42.5" width="371" height="371"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="pBi-mz-966" secondAttribute="height" multiplier="1:1" id="xSI-MQ-Nnb"/>
                                         </constraints>
@@ -695,14 +695,14 @@
                         <constraints>
                             <constraint firstItem="PCl-4P-UIJ" firstAttribute="top" secondItem="GkE-9R-cWc" secondAttribute="top" constant="40" id="FOL-eF-uyc"/>
                             <constraint firstItem="pjS-oa-48R" firstAttribute="top" secondItem="PCl-4P-UIJ" secondAttribute="bottom" constant="15" id="GM9-E0-WeI"/>
-                            <constraint firstItem="GkE-9R-cWc" firstAttribute="trailing" secondItem="ne1-OU-c6u" secondAttribute="trailing" constant="13" id="Y89-Cn-CKi"/>
+                            <constraint firstItem="GkE-9R-cWc" firstAttribute="trailing" secondItem="ne1-OU-c6u" secondAttribute="trailing" constant="2" id="Y89-Cn-CKi"/>
                             <constraint firstItem="GkE-9R-cWc" firstAttribute="bottom" secondItem="ne1-OU-c6u" secondAttribute="bottom" constant="20" id="bn7-Lg-WKI"/>
                             <constraint firstItem="PCl-4P-UIJ" firstAttribute="leading" secondItem="GkE-9R-cWc" secondAttribute="leading" constant="16" id="fKJ-0p-itU"/>
                             <constraint firstItem="ne1-OU-c6u" firstAttribute="top" secondItem="pjS-oa-48R" secondAttribute="bottom" constant="15" id="px0-cL-dWX"/>
                             <constraint firstItem="GkE-9R-cWc" firstAttribute="trailing" secondItem="pjS-oa-48R" secondAttribute="trailing" constant="16" id="unj-Q2-Bsu"/>
                             <constraint firstItem="GkE-9R-cWc" firstAttribute="trailing" secondItem="PCl-4P-UIJ" secondAttribute="trailing" constant="16" id="wd8-5L-uOc"/>
                             <constraint firstItem="pjS-oa-48R" firstAttribute="leading" secondItem="GkE-9R-cWc" secondAttribute="leading" constant="16" id="wp2-pg-y3J"/>
-                            <constraint firstItem="ne1-OU-c6u" firstAttribute="leading" secondItem="GkE-9R-cWc" secondAttribute="leading" constant="16" id="zbl-cu-hzs"/>
+                            <constraint firstItem="ne1-OU-c6u" firstAttribute="leading" secondItem="GkE-9R-cWc" secondAttribute="leading" constant="2" id="zbl-cu-hzs"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="GkE-9R-cWc"/>
                     </view>
@@ -763,7 +763,7 @@
                                 </constraints>
                             </view>
                             <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="OfY-0A-dKV">
-                                <rect key="frame" x="0.0" y="277" width="375" height="216"/>
+                                <rect key="frame" x="0.0" y="276.5" width="375" height="216"/>
                                 <date key="date" timeIntervalSinceReferenceDate="559940276.38905799">
                                     <!--2018-09-29 18:57:56 +0000-->
                                 </date>
@@ -810,7 +810,7 @@
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="g3i-Lc-SOm">
                                 <rect key="frame" x="16" y="115" width="343" height="325"/>
-                                <mutableString key="text">Игра автоматически будет переходить в темный режим после захода солнца. Это поможет снизить нагрузку на Ваши глаза.   Для определения времени восхода и заката необходима информация о Вашем текущем местоположении. Эта информация не будет использована ни в каких иных целях. Вы можете в любой момент отключить эту функцию в настройках.  Информация о текущем местоположении хранится исключительно внутри устройства и не отправляется на внешние сервера.</mutableString>
+                                <string key="text">Игра автоматически будет переходить в темный режим после захода солнца. Это поможет снизить нагрузку на Ваши глаза.   Для определения времени восхода и заката необходима информация о Вашем текущем местоположении. Эта информация не будет использована ни в каких иных целях. Вы можете в любой момент отключить эту функцию в настройках.  Информация о текущем местоположении хранится исключительно внутри устройства и не отправляется на внешние сервера.</string>
                                 <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -854,20 +854,20 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="6:53" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="xJL-fm-aX7">
-                                        <rect key="frame" x="95" y="9.5" width="36" height="21"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="—" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="xJL-fm-aX7">
+                                        <rect key="frame" x="95" y="9.5" width="17" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="18:50" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="NSO-oN-Pk6">
-                                        <rect key="frame" x="315.5" y="9.5" width="43.5" height="21"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="—" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="NSO-oN-Pk6">
+                                        <rect key="frame" x="342" y="9.5" width="17" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Закат:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="eOD-sp-31n">
-                                        <rect key="frame" x="249.5" y="9.5" width="50" height="21"/>
+                                        <rect key="frame" x="276" y="9.5" width="50" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -895,8 +895,8 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Харьков" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="MCH-Dz-W43">
-                                        <rect key="frame" x="293" y="9.5" width="66" height="21"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="—" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="MCH-Dz-W43">
+                                        <rect key="frame" x="342" y="9.5" width="17" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                         <nil key="highlightedColor"/>
@@ -934,9 +934,20 @@
                         <viewLayoutGuide key="safeArea" id="2LS-ZD-086"/>
                     </view>
                     <connections>
-                        <outlet property="locationLabel" destination="MCH-Dz-W43" id="cCQ-AF-qb4"/>
+                        <outlet property="locationCityLabel" destination="MCH-Dz-W43" id="cCQ-AF-qb4"/>
                         <outlet property="sunriseTimeLabel" destination="xJL-fm-aX7" id="068-tE-Nvw"/>
                         <outlet property="sunsetTimeLabel" destination="NSO-oN-Pk6" id="Co5-9N-5Xw"/>
+                        <outlet property="switcher" destination="q2p-hk-6la" id="Tkw-3D-hmP"/>
+                        <outletCollection property="labels" destination="KW3-22-P4i" collectionClass="NSMutableArray" id="TLh-FY-TbJ"/>
+                        <outletCollection property="labels" destination="g3i-Lc-SOm" collectionClass="NSMutableArray" id="rFr-zU-ZGO"/>
+                        <outletCollection property="labels" destination="RIG-nn-iXN" collectionClass="NSMutableArray" id="wg6-Rf-j4d"/>
+                        <outletCollection property="labels" destination="Exl-8U-S3X" collectionClass="NSMutableArray" id="hKi-Ch-cKs"/>
+                        <outletCollection property="labels" destination="bGc-2Q-fAR" collectionClass="NSMutableArray" id="cTa-Yv-juw"/>
+                        <outletCollection property="labels" destination="eOD-sp-31n" collectionClass="NSMutableArray" id="fjb-y2-9mo"/>
+                        <outletCollection property="views" destination="RDk-sl-Kuw" collectionClass="NSMutableArray" id="fYC-pl-mKX"/>
+                        <outletCollection property="views" destination="NiW-Zs-rbd" collectionClass="NSMutableArray" id="Kdc-I8-UVh"/>
+                        <outletCollection property="views" destination="ldS-a5-8Ge" collectionClass="NSMutableArray" id="ajg-Yt-l7M"/>
+                        <outletCollection property="views" destination="yET-Lo-oDK" collectionClass="NSMutableArray" id="2gj-1x-7eL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jgj-78-PDf" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1009,6 +1020,10 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="oJ8-XF-ety"/>
                     </view>
+                    <connections>
+                        <outletCollection property="labels" destination="ZH4-6J-bB5" collectionClass="NSMutableArray" id="Zyx-2V-N87"/>
+                        <outletCollection property="labels" destination="MWR-IR-CHB" collectionClass="NSMutableArray" id="hdR-3d-FBC"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Jl-CF-SZN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

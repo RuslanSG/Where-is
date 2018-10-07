@@ -22,7 +22,7 @@ class TutorialViewController: UIViewController {
     private var nextCellToTap: CellView?
     private var lastTappedCell: CellView?
     
-    public var game: Game!
+    private var game = Game()
     private var firstTimeAppeared = true
     
     private var grid: Grid {
@@ -35,21 +35,28 @@ class TutorialViewController: UIViewController {
         )
     }
     
+    // MARK - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let parent = self.parent as? UIPageViewController, let root = parent.parent as? RootViewController {
-            self.game = root.game
-        }
-        
-        self.view.addSubview(feedbackView)
-        self.view.sendSubviewToBack(feedbackView)
+        setupInputComponents()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+    }
+    
+    // MARK: - Setuping
+    
+    private func setupInputComponents() {
+        self.view.addSubview(feedbackView)
+        self.view.sendSubviewToBack(feedbackView)
+        
         if firstTimeAppeared {
             addCells(count: 25)
+            updateCellFrames()
             setNumbers()
             game.startGame()
             nextCellToTap = getNextCellToTap()
@@ -61,13 +68,14 @@ class TutorialViewController: UIViewController {
     // MARK: - Actions
     
     @objc func cellPressed(sender: CellView) {
-        sender.compress(numberFeedback: !self.game.winkNumbersMode)
         let selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
         if selectedNumberIsRight && sender.tag == game.maxNumber {
             // User tapped the last number
+            sender.compress(numberFeedback: false)
             lastCellTapped(sender)
             return
         }
+        sender.compress(numberFeedback: true)
         game.numberSelected(sender.tag)
         if selectedNumberIsRight {
             // User tapped the right number
@@ -90,22 +98,24 @@ class TutorialViewController: UIViewController {
     
     private func addCells(count: Int) {
         assert(count % 5 == 0, "Reason: invalid number of buttons to add. Provide a multiple of five number.")
-        for i in 0..<count {
-            if let cellFrame = grid[i] {
-                let cell: CellView = {
-                    let cell = CellView(frame: cellFrame)
-                    cell.addTarget(self, action: #selector(cellPressed(sender:)), for: .touchDown)
-                    cell.addTarget(self, action: #selector(cellReleased(sender:)), for: .touchUpInside)
-                    cell.addTarget(self, action: #selector(cellReleased(sender:)), for: .touchUpOutside)
-                    return cell
-                }()
-                cell.showNumber(animated: false)
-                cell.alpha = 0.0
-                cells.append(cell)
-                cellsContainerView.addSubview(cell)
-            } else {
-                print("Error: unable to get cell's frame")
-            }
+        for _ in 0..<count {
+            let cell: CellView = {
+                let cell = CellView(frame: CGRect.zero, inset: appearance.gridInset)
+                let backgroundColor = appearance.defaultCellsColor
+                let numberColor = appearance.defaultNumbersColor
+                cell.setBackgroundColor(to: backgroundColor, animated: false)
+                cell.setNumberColor(to: numberColor, animated: false)
+                cell.setCornerRadius(to: appearance.cornerRadius)
+                cell.titleLabel?.font = UIFont.systemFont(ofSize: appearance.numbersFontSize)
+                cell.addTarget(self, action: #selector(cellPressed(sender:)), for: .touchDown)
+                cell.addTarget(self, action: #selector(cellReleased(sender:)), for: .touchUpInside)
+                cell.addTarget(self, action: #selector(cellReleased(sender:)), for: .touchUpOutside)
+                return cell
+            }()
+            cell.showNumber(animated: false)
+            cell.alpha = 0.0
+            cells.append(cell)
+            cellsContainerView.addSubview(cell)
         }
         
         UIViewPropertyAnimator.runningPropertyAnimator(
@@ -115,6 +125,15 @@ class TutorialViewController: UIViewController {
             animations: {
                 self.cells.forEach { $0.alpha = 1.0 }
         })
+    }
+    
+    private func updateCellFrames() {
+        for i in cells.indices {
+            let cell = cells[i]
+            if let cellFrame = grid[i] {
+                cell.frame = cellFrame
+            }
+        }
     }
     
     private func setNumbers() {
@@ -157,4 +176,5 @@ class TutorialViewController: UIViewController {
         detaillabel.changeTextWithAnimation(to: "Все очень просто! Этот принцип будет сохраняться во всех Ваших последующих играх.")
         cell.uncompress()
     }
+
 }
