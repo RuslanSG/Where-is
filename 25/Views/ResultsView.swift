@@ -20,6 +20,7 @@ class ResultsView: UIVisualEffectView {
         let label = UILabel()
         label.textAlignment = .center
         label.font = UIFont(name: label.font.fontName, size: 45)
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
@@ -111,7 +112,7 @@ class ResultsView: UIVisualEffectView {
         self.contentView.addSubview(actionButton)
         
         self.contentView.addConstraintsWithFormat(format: "H:|-30-[v0]-30-|", views: titleLabel)
-        self.contentView.addConstraintsWithFormat(format: "V:|-100-[v0(35)]", views: titleLabel)
+        self.contentView.addConstraintsWithFormat(format: "V:|-100-[v0(50)]", views: titleLabel)
         
         let currentDeviceIsIPhoneX = UIScreen.main.nativeBounds.height == 2436
         self.contentView.addConstraintsWithFormat(format: "H:|-10-[v0]-10-|", views: actionButton)

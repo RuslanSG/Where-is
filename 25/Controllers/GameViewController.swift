@@ -49,7 +49,6 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     // MARK: -
     
     internal lazy var appearance = Appearance()
-    internal lazy var automaticDarkMode = AutomaticDarkMode(for: appearance)
     internal var game = Game()
     
     internal let feedbackGenerator = FeedbackGenerator()
@@ -97,18 +96,11 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         setupInputComponents()
         setupColors()
         prepareForNewGame()
-        automaticDarkMode.getUserLocation()
         
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(willResignActive),
             name: UIApplication.willResignActiveNotification,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(didBecomeActive),
-            name: UIApplication.didBecomeActiveNotification,
             object: nil
         )
         NotificationCenter.default.addObserver(
@@ -125,7 +117,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         let firstLaunch = false //!UserDefaults.standard.bool(forKey: UserDefaultsKey.notFirstLaunch.rawValue)
         if firstLaunch {
             showGreetingsViewController()
-            UserDefaults.standard.set(true, forKey: StringKeys.UserDefaultsKey.NotFirstLaunch)
+            UserDefaults.standard.set(true, forKey: UserDefaults.Key.NotFirstLaunch)
         }
     }
     
@@ -266,7 +258,6 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             svc.delegate = self
             svc.game = game
             svc.appearance = appearance
-            svc.automaticDarkMode = automaticDarkMode
         } else if segue.destination.isKind(of: RootViewController.self) {
             let rvc = segue.destination as! RootViewController
             rvc.game = game
@@ -280,13 +271,6 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
             cellToUncompress.uncompress()
         }
         prepareForNewGame()
-    }
-    
-    @objc private func didBecomeActive() {
-        if !firstTimeAppeared && automaticDarkMode.isOn {
-            automaticDarkMode.setDarkModeByCurrentTime()
-        }
-        firstTimeAppeared = false
     }
     
     @objc func darkModeStateChangedNotification(notification: Notification) {

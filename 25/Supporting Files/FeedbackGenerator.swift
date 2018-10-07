@@ -11,8 +11,14 @@ import AudioToolbox.AudioServices
 
 class FeedbackGenerator {
     
-    private let feedbackGenerator: (notification: UINotificationFeedbackGenerator, impact: (light: UIImpactFeedbackGenerator, medium: UIImpactFeedbackGenerator, heavy: UIImpactFeedbackGenerator), selection: UISelectionFeedbackGenerator) = {
-        return (notification: UINotificationFeedbackGenerator(), impact: (light: UIImpactFeedbackGenerator(style: .light), medium: UIImpactFeedbackGenerator(style: .medium), heavy: UIImpactFeedbackGenerator(style: .heavy)), selection: UISelectionFeedbackGenerator())
+    private let feedbackGenerator: (
+        notification: UINotificationFeedbackGenerator,
+        impact: (light: UIImpactFeedbackGenerator, medium: UIImpactFeedbackGenerator, heavy: UIImpactFeedbackGenerator),
+        selection: UISelectionFeedbackGenerator) = {
+        return (
+            notification: UINotificationFeedbackGenerator(),
+            impact: (light: UIImpactFeedbackGenerator(style: .light), medium: UIImpactFeedbackGenerator(style: .medium), heavy: UIImpactFeedbackGenerator(style: .heavy)),
+            selection: UISelectionFeedbackGenerator())
     }()
     
     func playNotificationHapticFeedback(notificationFeedbackType: UINotificationFeedbackGenerator.FeedbackType) {

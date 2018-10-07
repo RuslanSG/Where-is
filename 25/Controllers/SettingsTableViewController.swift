@@ -48,7 +48,6 @@ class SettingsTableViewController: UITableViewController {
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     var appearance: Appearance!
-    var automaticDarkMode: AutomaticDarkMode!
     
 //    override var preferredStatusBarStyle : UIStatusBarStyle {
 //        return darkMode ? .lightContent : .default
@@ -63,12 +62,6 @@ class SettingsTableViewController: UITableViewController {
             self,
             selector: #selector(darkModeStateChangedNotification(notification:)),
             name: Notification.Name.DarkModeStateDidChange,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(didBecomeActive),
-            name: UIApplication.didBecomeActiveNotification,
             object: nil
         )
     }
@@ -128,9 +121,9 @@ class SettingsTableViewController: UITableViewController {
         maxNumberStepper.tintColor = appearance.userInterfaceColor
         
         darkModeSwitcher.setOn(appearance.darkMode, animated: false)
-        darkModeSwitcher.isEnabled = !automaticDarkMode.isOn
+        darkModeSwitcher.isEnabled = !appearance.automaticDarkMode
         
-        automaticDarkModeSwitcher.setOn(automaticDarkMode.isOn, animated: false)
+        automaticDarkModeSwitcher.setOn(appearance.automaticDarkMode, animated: false)
     }
     
     deinit {
@@ -203,10 +196,7 @@ class SettingsTableViewController: UITableViewController {
     }
     
     @IBAction func automaticDarkModeSwitcherValueChanged(_ sender: UISwitch) {
-        if let isDay = automaticDarkMode.isDay, sender.isOn == true {
-            appearance.darkMode = !isDay
-        }
-        automaticDarkMode.isOn = sender.isOn
+        appearance.automaticDarkMode = sender.isOn
         darkModeSwitcher.isEnabled = !sender.isOn
         darkModeSwitcher.setOn(appearance.darkMode, animated: true)
     }
@@ -215,10 +205,6 @@ class SettingsTableViewController: UITableViewController {
     
     @objc func darkModeStateChangedNotification(notification: Notification) {
         setupColors(animated: true)
-    }
-    
-    @objc private func didBecomeActive() {
-        automaticDarkMode.setDarkModeByCurrentTime()
     }
     
     // MARK: - Helping Methods

@@ -10,18 +10,9 @@ import Foundation
 
 struct StringKeys {
     
-    // MARK: - User Defaults
-    
-    public enum UserDefaultsKey {
-        static let DarkMode: String = "darkModeUserDefaultsKey"
-        static let AutomaticDarkMode: String = "automaticDarkModeKey"
-        static let Sunrise: String = "sunriseUserDefaultsKey"
-        static let Sunset: String = "sunsetUserDefaultsKey"
-        static let NotFirstLaunch: String = "notFirstLaunch"
-    }
-    
     // MARK: - View Controllers Identifiers
     
+    #warning ("Move it!")
     public enum ViewControllerIdentifier {
         static let RootViewController: String = "rootViewController"
         static let GreetingsViewController: String = "greetingsViewController"
@@ -31,5 +22,6 @@ struct StringKeys {
         static let DarkModeViewController: String = "darkModeViewController"
         static let WelcomeViewController: String = "welcomeViewController"
     }
+    
 }
 

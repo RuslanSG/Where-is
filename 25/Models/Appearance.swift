@@ -25,13 +25,13 @@ class Appearance {
                                            (light: #colorLiteral(red: 0.9215686275, green: 0.1490196078, blue: 0.1215686275, alpha: 1), dark: #colorLiteral(red: 0.599486165, green: 0.08605109967, blue: 0.05797519395, alpha: 1)),
                                            (light: #colorLiteral(red: 0.7882352941, green: 0.1843137255, blue: 0.4823529412, alpha: 1), dark: #colorLiteral(red: 0.5, green: 0.1014612427, blue: 0.3135548154, alpha: 1))]
         
-        static let ColdColorSet         = [(light: #colorLiteral(red: 0.06666666667, green: 0.4666666667, blue: 0.7215686275, alpha: 1), dark: #colorLiteral(red: 0.03137254902, green: 0.3058823529, blue: 0.4941176471, alpha: 1)),
-                                           (light: #colorLiteral(red: 0.09803921569, green: 0.6588235294, blue: 0.6117647059, alpha: 1), dark: #colorLiteral(red: 0.06666666667, green: 0.4823529412, blue: 0.462745098, alpha: 1)),
-                                           (light: #colorLiteral(red: 0.1607843137, green: 0.6862745098, blue: 0.1137254902, alpha: 1), dark: #colorLiteral(red: 0.05098039216, green: 0.4392156863, blue: 0.05882352941, alpha: 1))]
+        static let ColdColorSet         = [(light: #colorLiteral(red: 0.0753807204, green: 0.5323839309, blue: 0.8270968635, alpha: 1), dark: #colorLiteral(red: 0.03137254902, green: 0.3058823529, blue: 0.4941176471, alpha: 1)),
+                                           (light: #colorLiteral(red: 0.115697119, green: 0.801768485, blue: 0.7491685864, alpha: 1), dark: #colorLiteral(red: 0.06666666667, green: 0.4823529412, blue: 0.462745098, alpha: 1)),
+                                           (light: #colorLiteral(red: 0.1858646345, green: 0.8335619463, blue: 0.1354265822, alpha: 1), dark: #colorLiteral(red: 0.05098039216, green: 0.4392156863, blue: 0.05882352941, alpha: 1))]
         
-        static let MarshColorSet        = [(light: #colorLiteral(red: 0.370555222, green: 0.3705646992, blue: 0.3705595732, alpha: 1), dark: #colorLiteral(red: 0.3025199942, green: 0.301058545, blue: 0.3039814435, alpha: 1)),
-                                           (light: #colorLiteral(red: 0.5787474513, green: 0.3215198815, blue: 0, alpha: 1), dark: #colorLiteral(red: 0.4634119638, green: 0.2628604885, blue: 0.05822089579, alpha: 1)),
-                                           (light: #colorLiteral(red: 0.5738074183, green: 0.5655357838, blue: 0, alpha: 1), dark: #colorLiteral(red: 0.4723546985, green: 0.4624517336, blue: 0.09191328908, alpha: 1))]
+        static let MarshColorSet        = [(light: #colorLiteral(red: 0.4950980392, green: 0.5, blue: 0.5, alpha: 1), dark: #colorLiteral(red: 0.3025199942, green: 0.301058545, blue: 0.3039814435, alpha: 1)),
+                                           (light: #colorLiteral(red: 0.7636895516, green: 0.425539325, blue: 0.001579808332, alpha: 1), dark: #colorLiteral(red: 0.4634119638, green: 0.2628604885, blue: 0.05822089579, alpha: 1)),
+                                           (light: #colorLiteral(red: 0.7855380655, green: 0.774261208, blue: 0.004961143352, alpha: 1), dark: #colorLiteral(red: 0.4723546985, green: 0.4624517336, blue: 0.09191328908, alpha: 1))]
         
         static let TableViewCellColor         = (darkMode: #colorLiteral(red: 0.1098039216, green: 0.1098039216, blue: 0.1176470588, alpha: 1), lightMode: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
         static let TableViewBackgroundColor   = (darkMode: #colorLiteral(red: 0.09019607843, green: 0.09019607843, blue: 0.09019607843, alpha: 1), lightMode: #colorLiteral(red: 0.9411764706, green: 0.937254902, blue: 0.9607843137, alpha: 1))
@@ -39,7 +39,7 @@ class Appearance {
         static let SwitherTintColor           = (darkMode: #colorLiteral(red: 0.262745098, green: 0.2588235294, blue: 0.2705882353, alpha: 1), lightMode: #colorLiteral(red: 0.8980392157, green: 0.8980392157, blue: 0.8980392157, alpha: 1))
     }
     
-    private let colorSets = [Colors.WarmColorSet, Colors.ColdColorSet, Colors.MarshColorSet]
+    private let colorSets = [Colors.ColdColorSet]
     private lazy var currentColorSet = colorSets[colorSets.count.arc4random]
     
     var defaultCellsColor: UIColor {
@@ -107,17 +107,17 @@ class Appearance {
     var gridInset: CGFloat {
         return UIScreen.main.bounds.width / 200
     }
-    
-    let cellCompressionRatio = 0.90
-    
+        
     let statusBarHeight = UIApplication.shared.statusBarFrame.height
     
     // MARK: - Dark Mode
     
+    private let daytime = Daytime()
+    
     var darkMode: Bool {
         set {
             if darkMode != newValue {
-                UserDefaults.standard.set(newValue, forKey: StringKeys.UserDefaultsKey.DarkMode)
+                UserDefaults.standard.set(newValue, forKey: UserDefaults.Key.DarkMode)
                 userInterfaceColor = switchColorForAnotherScheme(userInterfaceColor) ?? .blue
                 NotificationCenter.default.post(
                     name: Notification.Name.DarkModeStateDidChange,
@@ -127,11 +127,42 @@ class Appearance {
             }
         }
         get {
-            return UserDefaults.standard.bool(forKey: StringKeys.UserDefaultsKey.DarkMode)
+            return UserDefaults.standard.bool(forKey: UserDefaults.Key.DarkMode)
         }
     }
     
-    // MARK: -
+    var automaticDarkMode: Bool {
+        set {
+            if automaticDarkMode != newValue {
+                if newValue == true, let isDay = daytime.isDay {
+                    darkMode = !isDay
+                }
+                UserDefaults.standard.set(newValue, forKey: UserDefaults.Key.AutomaticDarkMode)
+            }
+        }
+        get {
+            return UserDefaults.standard.bool(forKey: UserDefaults.Key.AutomaticDarkMode)
+        }
+    }
+    
+    // MARK: -Initialization
+    
+    init() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(didBecomeActive),
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil
+        )
+    }
+    
+    // MARK: - Notifications
+    
+    @objc private func didBecomeActive() {
+        if let isDay = daytime.isDay {
+            darkMode = !isDay
+        }
+    }
     
 }
 

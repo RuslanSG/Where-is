@@ -146,3 +146,13 @@ extension Notification {
         static let InGame: String = "InGameUserInfoKey"
     }
 }
+
+extension UserDefaults {
+    enum Key {
+        static let DarkMode: String = "DarkModeUserDefaultsKey"
+        static let AutomaticDarkMode: String = "AutomaticDarkModeKey"
+        static let Sunrise: String = "SunriseUserDefaultsKey"
+        static let Sunset: String = "SunsetUserDefaultsKey"
+        static let NotFirstLaunch: String = "NotFirstLaunch"
+    }
+}
