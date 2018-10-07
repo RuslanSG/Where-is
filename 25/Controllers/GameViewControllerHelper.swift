@@ -233,7 +233,7 @@ extension GameViewController: CLLocationManagerDelegate {
     // MARK: - Helping Methods
     
     internal func startGame() {
-        UIApplication.shared.isStatusBarHidden = true
+        self.statusBarIsHidden = true
         
         if resultsIsShowing {
             resultsView.hide()
@@ -270,18 +270,23 @@ extension GameViewController: CLLocationManagerDelegate {
     }
     
     func prepareForNewGame() {
-        UIApplication.shared.isStatusBarHidden = false
+        self.statusBarIsHidden = false
+        
         game.newGame()
         setNumbers()
         stopButton.isEnabled = false
+        
         if game.winkNumbersMode || game.swapNumbersMode {
             timer1.invalidate()
             timer2.invalidate()
             cells.forEach { $0.titleLabel?.layer.removeAllAnimations() }
         }
+        
         cells.forEach { $0.hideNumber(animated: false) }
+        
         self.view.addSubview(messageView)
         self.view.bringSubviewToFront(resultsView)
+        
         messageView.show()
     }
     

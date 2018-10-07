@@ -145,7 +145,10 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         // Control buttons color
         stopButton.tintColor = appearance.userInterfaceColor
         settingsButton.tintColor = appearance.userInterfaceColor
-                
+        
+        // Status bar color
+        self.setNeedsStatusBarAppearanceUpdate()
+        
         // Result view color
         resultsView.blur = appearance.blur
         resultsView.titleLabel.textColor = appearance.textColor
@@ -159,6 +162,28 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         
         // Cells color
         updateCellsColorsFromModel()
+    }
+    
+    // MARK: - Status Bar
+    
+    var statusBarIsHidden: Bool = false {
+        didSet {
+            UIView.animate(withDuration: 0.2) { () -> Void in
+                self.setNeedsStatusBarAppearanceUpdate()
+            }
+        }
+    }
+    
+    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+        return .fade
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return appearance.darkMode ? .lightContent : .default
+    }
+    
+    override var prefersStatusBarHidden: Bool {
+        return statusBarIsHidden
     }
     
     // MARK: - Actions
