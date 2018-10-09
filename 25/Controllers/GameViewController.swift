@@ -192,6 +192,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         lastPressedCell = sender
         sender.compress(numberFeedback: !game.winkNumbersMode && !game.shuffleNumbersMode)
         if !game.inGame {
+            // User started the game
             startGame()
             messageView.hide()
             feedbackGenerator.playSelectionHapticFeedback()

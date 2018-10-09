@@ -750,6 +750,9 @@
                                     </label>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="mSs-kz-9IN">
                                         <rect key="frame" x="310" y="4.6666666666666572" width="51" height="31"/>
+                                        <connections>
+                                            <action selector="switcherValueChanged:" destination="d4k-jr-AQp" eventType="valueChanged" id="lwD-MV-vY1"/>
+                                        </connections>
                                     </switch>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -762,12 +765,6 @@
                                     <constraint firstAttribute="trailing" secondItem="mSs-kz-9IN" secondAttribute="trailing" constant="16" id="tlS-Ib-SgB"/>
                                 </constraints>
                             </view>
-                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="OfY-0A-dKV">
-                                <rect key="frame" x="0.0" y="300.33333333333331" width="375" height="215.99999999999994"/>
-                                <date key="date" timeIntervalSinceReferenceDate="559940276.38905799">
-                                    <!--2018-09-29 18:57:56 +0000-->
-                                </date>
-                            </datePicker>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -776,13 +773,10 @@
                             <constraint firstItem="ZhE-v0-uem" firstAttribute="trailing" secondItem="fRm-wq-tGW" secondAttribute="trailing" constant="16" id="GVH-j6-gbX"/>
                             <constraint firstItem="fRm-wq-tGW" firstAttribute="leading" secondItem="ZhE-v0-uem" secondAttribute="leading" constant="16" id="KxJ-Nr-n86"/>
                             <constraint firstItem="ZhE-v0-uem" firstAttribute="trailing" secondItem="yU9-zA-JJt" secondAttribute="trailing" id="LUI-kf-rtY"/>
-                            <constraint firstItem="OfY-0A-dKV" firstAttribute="top" secondItem="yU9-zA-JJt" secondAttribute="bottom" constant="20" id="Txz-Bl-HhM"/>
                             <constraint firstItem="yU9-zA-JJt" firstAttribute="top" secondItem="fRm-wq-tGW" secondAttribute="bottom" constant="20" id="WxC-OS-38I"/>
-                            <constraint firstItem="OfY-0A-dKV" firstAttribute="leading" secondItem="ZhE-v0-uem" secondAttribute="leading" id="ZV1-96-Kfz"/>
                             <constraint firstItem="ZhE-v0-uem" firstAttribute="trailing" secondItem="Jx8-dr-KBC" secondAttribute="trailing" constant="16" id="pXn-bm-h1h"/>
                             <constraint firstItem="fRm-wq-tGW" firstAttribute="top" secondItem="Jx8-dr-KBC" secondAttribute="bottom" constant="15" id="y0a-5p-FhR"/>
                             <constraint firstItem="yU9-zA-JJt" firstAttribute="leading" secondItem="ZhE-v0-uem" secondAttribute="leading" id="y6d-Cz-VMn"/>
-                            <constraint firstItem="OfY-0A-dKV" firstAttribute="trailing" secondItem="ZhE-v0-uem" secondAttribute="trailing" id="z2x-be-6vA"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="ZhE-v0-uem"/>
                     </view>

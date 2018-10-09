@@ -82,7 +82,7 @@ class TutorialViewController: UIViewController {
             lastTappedCell = sender
             nextCellToTap = getNextCellToTap()
             highlightRightCell()
-            feedbackGenerator.playImpactHapticFeedback(needsToPrepare: true, style: .medium)
+            feedbackGenerator.playSelectionHapticFeedback()
         } else {
             // User tapped the wrong number
             feedbackView.feedbackSelection(isRight: false)
@@ -92,6 +92,7 @@ class TutorialViewController: UIViewController {
     
     @objc func cellReleased(sender: CellView) {
         sender.uncompress()
+        feedbackGenerator.playSelectionHapticFeedback()
     }
     
     // MARK: - Helping Methods
