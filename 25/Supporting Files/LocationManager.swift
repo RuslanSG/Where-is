@@ -11,44 +11,34 @@ import CoreLocation
 
 final class LocationManager: NSObject, CLLocationManagerDelegate {
     
-    private let locationManager = CLLocationManager()
-
-    // MARK: - Initialization
-    
-    override init() {
-        super.init()
-        
-        getUserLocation()
-    }
-    
     // MARK: - Location
+    
+    private let locationManager = CLLocationManager()
     
     private var currentLocation: CLLocationCoordinate2D? = nil {
         didSet {
-            if currentLocation != nil {
-                let geoCoder = CLGeocoder()
-                let location = CLLocation(latitude: currentLocation!.latitude, longitude: currentLocation!.longitude)
-                geoCoder.reverseGeocodeLocation(location) { (placemarks, error) in
-                    var cityName = "Нет инфорации о местоположении"
-                    var placeMark: CLPlacemark!
-                    placeMark = placemarks?[0]
-                    if let city = placeMark.subAdministrativeArea {
-                        cityName = city
-                    }
-                    NotificationCenter.default.post(
-                        name: Notification.Name.UserLocationDidUpdate,
-                        object: nil,
-                        userInfo: [Notification.UserInfoKey.UserLocation : self.currentLocation!,
-                                   Notification.UserInfoKey.CityName     : cityName]
-                    )
+            guard (currentLocation != nil) else { return }
+            let geoCoder = CLGeocoder()
+            let location = CLLocation(latitude: currentLocation!.latitude, longitude: currentLocation!.longitude)
+            geoCoder.reverseGeocodeLocation(location) { (placemarks, error) in
+                var cityName = "Нет инфорации о местоположении"
+                var placeMark: CLPlacemark!
+                placeMark = placemarks?[0]
+                if let city = placeMark.subAdministrativeArea {
+                    cityName = city
                 }
-                
-                
+                NotificationCenter.default.post(
+                    name: Notification.Name.UserLocationDidUpdate,
+                    object: nil,
+                    userInfo: [Notification.UserInfoKey.UserLocation : self.currentLocation!,
+                               Notification.UserInfoKey.CityName     : cityName]
+                )
             }
         }
     }
     
-    private func getUserLocation() {
+    func getUserLocation() {
+        self.currentLocation = nil
         self.locationManager.requestWhenInUseAuthorization()
         if CLLocationManager.locationServicesEnabled() {
             self.locationManager.delegate = self
@@ -63,6 +53,8 @@ final class LocationManager: NSObject, CLLocationManagerDelegate {
         if currentLocation == nil {
             guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
             currentLocation = CLLocationCoordinate2D(latitude: locValue.latitude, longitude: locValue.longitude)
+        } else {
+            self.locationManager.stopUpdatingLocation()
         }
     }
     

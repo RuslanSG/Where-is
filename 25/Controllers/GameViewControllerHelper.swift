@@ -131,7 +131,7 @@ extension GameViewController: CLLocationManagerDelegate {
         for i in cells.indices {
             let number = game.numbers[i]
             let cell = cells[i]
-            cell.setNumber(to: number, animated: cellsNotAnimating.contains(cell))
+            cell.setNumber(number, animated: cellsNotAnimating.contains(cell))
         }
     }
     
@@ -223,7 +223,7 @@ extension GameViewController: CLLocationManagerDelegate {
                 } else {
                     return appearance.defaultNumbersColor
                 }
-                }() else { return }
+            }() else { return }
             
             cell.setBackgroundColor(to: cellBackgroundColor, animated: true)
             cell.setNumberColor(to: cellNumberColor, animated: true)
@@ -234,6 +234,7 @@ extension GameViewController: CLLocationManagerDelegate {
     
     internal func startGame() {
         self.statusBarIsHidden = true
+        self.settingsButton.hide(animated: true)
         
         if resultsIsShowing {
             resultsView.hide()
@@ -271,6 +272,7 @@ extension GameViewController: CLLocationManagerDelegate {
     
     func prepareForNewGame() {
         self.statusBarIsHidden = false
+        self.settingsButton.show(animated: true)
         
         game.newGame()
         setNumbers()

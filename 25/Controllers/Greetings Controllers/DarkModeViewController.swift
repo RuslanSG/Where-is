@@ -98,9 +98,9 @@ class DarkModeViewController: UIViewController {
         dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
         let sunriseTimeString = dateFormatter.string(from: sunriseTime)
         let sunsetTimeString = dateFormatter.string(from: sunsetTime)
-        sunriseTimeLabel.changeTextWithAnimation(to: sunriseTimeString)
-        sunsetTimeLabel.changeTextWithAnimation(to: sunsetTimeString)
-        locationCityLabel.changeTextWithAnimation(to: self.cityName)
+        sunriseTimeLabel.setText(sunriseTimeString, animated: true)
+        sunsetTimeLabel.setText(sunsetTimeString, animated: true)
+        locationCityLabel.setText(self.cityName, animated: true)
     }
 
 }

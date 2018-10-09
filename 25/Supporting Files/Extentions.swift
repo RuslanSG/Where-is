@@ -101,7 +101,6 @@ extension UIView {
             viewsDictionary[key] = view
             view.translatesAutoresizingMaskIntoConstraints = false
         }
-        
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: format,
                                                       options: NSLayoutConstraint.FormatOptions(),
                                                       metrics: nil,
@@ -110,22 +109,66 @@ extension UIView {
 }
 
 extension UILabel {
-    func changeTextWithAnimation(to newText: String) {
-        UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: 0.2,
-            delay: 0.0,
-            options: .curveEaseOut,
-            animations: {
-                self.alpha = 0.0
-        }) { (_) in
-            self.text = newText
+    func setText(_ text: String, animated: Bool) {
+        if animated {
+            let durationIn = 0.2
+            let durationOut = 0.2
+            let delayIn = 0.0
+            let delayOut = 0.0
             UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: 0.2,
-                delay: 0.0,
-                options: .curveEaseOut,
+                withDuration: durationIn,
+                delay: delayIn,
+                options: .curveEaseIn,
+                animations: {
+                    self.alpha = 0.0
+            }) { (_) in
+                self.text = text
+                UIViewPropertyAnimator.runningPropertyAnimator(
+                    withDuration: durationOut,
+                    delay: delayOut,
+                    options: .curveEaseOut,
+                    animations: {
+                        self.alpha = 1.0
+                })
+            }
+        } else {
+            self.text = text
+        }
+    }
+}
+
+extension UIButton {
+    func show(animated: Bool) {
+        self.isEnabled = true
+        if animated {
+            let duration = 0.2
+            let delay = 0.0
+            UIViewPropertyAnimator.runningPropertyAnimator(
+                withDuration: duration,
+                delay: delay,
+                options: .curveEaseIn,
                 animations: {
                     self.alpha = 1.0
             })
+        } else {
+            self.alpha = 1.0
+        }
+    }
+    
+    func hide(animated: Bool) {
+        self.isEnabled = false
+        if animated {
+            let duration = 0.2
+            let delay = 0.0
+            UIViewPropertyAnimator.runningPropertyAnimator(
+                withDuration: duration,
+                delay: delay,
+                options: .curveEaseIn,
+                animations: {
+                    self.alpha = 0.0
+            })
+        } else {
+            self.alpha = 0.0
         }
     }
 }

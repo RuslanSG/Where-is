@@ -25,9 +25,9 @@ class Appearance {
                                            (light: #colorLiteral(red: 0.9215686275, green: 0.1490196078, blue: 0.1215686275, alpha: 1), dark: #colorLiteral(red: 0.599486165, green: 0.08605109967, blue: 0.05797519395, alpha: 1)),
                                            (light: #colorLiteral(red: 0.7882352941, green: 0.1843137255, blue: 0.4823529412, alpha: 1), dark: #colorLiteral(red: 0.5, green: 0.1014612427, blue: 0.3135548154, alpha: 1))]
         
-        static let ColdColorSet         = [(light: #colorLiteral(red: 0.0753807204, green: 0.5323839309, blue: 0.8270968635, alpha: 1), dark: #colorLiteral(red: 0.03137254902, green: 0.3058823529, blue: 0.4941176471, alpha: 1)),
-                                           (light: #colorLiteral(red: 0.115697119, green: 0.801768485, blue: 0.7491685864, alpha: 1), dark: #colorLiteral(red: 0.06666666667, green: 0.4823529412, blue: 0.462745098, alpha: 1)),
-                                           (light: #colorLiteral(red: 0.1858646345, green: 0.8335619463, blue: 0.1354265822, alpha: 1), dark: #colorLiteral(red: 0.05098039216, green: 0.4392156863, blue: 0.05882352941, alpha: 1))]
+        static let ColdColorSet         = [(light: #colorLiteral(red: 0.0753807204, green: 0.5323839309, blue: 0.8270968635, alpha: 1), dark: #colorLiteral(red: 0.03121459476, green: 0.3908795805, blue: 0.6474528311, alpha: 1)),
+                                           (light: #colorLiteral(red: 0.115697119, green: 0.801768485, blue: 0.7491685864, alpha: 1), dark: #colorLiteral(red: 0.07841828977, green: 0.6176836836, blue: 0.6003320337, alpha: 1)),
+                                           (light: #colorLiteral(red: 0.1858646345, green: 0.8335619463, blue: 0.1354265822, alpha: 1), dark: #colorLiteral(red: 0.07263445024, green: 0.611725204, blue: 0.09308076372, alpha: 1))]
         
         static let MarshColorSet        = [(light: #colorLiteral(red: 0.4950980392, green: 0.5, blue: 0.5, alpha: 1), dark: #colorLiteral(red: 0.3025199942, green: 0.301058545, blue: 0.3039814435, alpha: 1)),
                                            (light: #colorLiteral(red: 0.7636895516, green: 0.425539325, blue: 0.001579808332, alpha: 1), dark: #colorLiteral(red: 0.4634119638, green: 0.2628604885, blue: 0.05822089579, alpha: 1)),
@@ -119,7 +119,6 @@ class Appearance {
             if darkMode != newValue {
                 UserDefaults.standard.set(newValue, forKey: UserDefaults.Key.DarkMode)
                 userInterfaceColor = switchColorForAnotherScheme(userInterfaceColor) ?? .blue
-                UIApplication.shared.statusBarStyle = darkMode ? .lightContent : .default
                 NotificationCenter.default.post(
                     name: Notification.Name.DarkModeStateDidChange,
                     object: nil,
@@ -132,16 +131,16 @@ class Appearance {
         }
     }
     
-    private var locationManager: LocationManager?
+    private var locationManager = LocationManager()
     
     var automaticDarkMode: Bool {
         set {
             if automaticDarkMode != newValue {
                 if newValue == true {
-                    locationManager = LocationManager()
-                    if let isDay = daytime.isDay {
-                        darkMode = !isDay
-                    }
+                    locationManager.getUserLocation()
+//                    if let isDay = daytime.isDay {
+//                        darkMode = !isDay
+//                    }
                 }
                 UserDefaults.standard.set(newValue, forKey: UserDefaults.Key.AutomaticDarkMode)
             }
@@ -160,12 +159,25 @@ class Appearance {
             name: UIApplication.didBecomeActiveNotification,
             object: nil
         )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(userLocationDidUpdate(_:)),
+            name: Notification.Name.UserLocationDidUpdate,
+            object: nil
+        )
     }
     
     // MARK: - Notifications
     
     @objc private func didBecomeActive() {
-        if let isDay = daytime.isDay {
+        if automaticDarkMode {
+            locationManager.getUserLocation()
+        }
+    }
+    
+    @objc private func userLocationDidUpdate(_ notification: Notification) {
+        if automaticDarkMode {
+            guard let isDay = daytime.isDay else { return }
             darkMode = !isDay
         }
     }
@@ -173,6 +185,7 @@ class Appearance {
 }
 
 extension Appearance {
+    
     // MARK: - Helping Methods
     
     func getAnotherColor(for color: UIColor) -> UIColor? {

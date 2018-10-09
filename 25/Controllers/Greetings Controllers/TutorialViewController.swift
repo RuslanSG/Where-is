@@ -172,8 +172,9 @@ class TutorialViewController: UIViewController {
             $0.isUserInteractionEnabled = false
         }
         nextCellToTap?.setBackgroundColor(to: appearance.defaultCellsColor, animated: true)
-        titleLabel.changeTextWithAnimation(to: "Отлично!")
-        detaillabel.changeTextWithAnimation(to: "Все очень просто! Этот принцип будет сохраняться во всех Ваших последующих играх.")
+        titleLabel.setText("Отлично!", animated: true)
+        detaillabel.setText("Все очень просто! Этот принцип будет сохраняться во всех Ваших последующих играх.",
+                               animated: true)
         cell.uncompress()
     }
 

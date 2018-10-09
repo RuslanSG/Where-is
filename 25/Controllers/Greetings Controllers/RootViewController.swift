@@ -142,8 +142,13 @@ class RootViewController: UIViewController, WelcomeViewControllerDelegate {
                 self.pageNumberLabel.textColor = self.appearance.textColor
                 self.view.backgroundColor = self.appearance.mainViewColor
         })
-        
-        
+        self.setNeedsStatusBarAppearanceUpdate()
+    }
+    
+    // MARK: - Status Bar
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return appearance.darkMode ? .lightContent : .default
     }
     
     // MARK: - Helping Methods

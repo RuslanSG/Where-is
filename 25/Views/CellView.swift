@@ -17,10 +17,10 @@ class CellView: UIButton {
     var number = "?"
     var inset: CGFloat = 0.0
     
-    private var buttonFrameX: CGFloat?
-    private var buttonFrameY: CGFloat?
-    private var buttonFrameHeight: CGFloat?
-    private var buttonFrameWidth: CGFloat?
+    private var cellFrameX: CGFloat?
+    private var cellFrameY: CGFloat?
+    private var cellFrameHeight: CGFloat?
+    private var cellFrameWidth: CGFloat?
     
     private var numberFeedback = true
     private var showNumber = true
@@ -77,17 +77,17 @@ extension CellView {
     func compress(numberFeedback: Bool) {
         self.numberFeedback = numberFeedback
         
-        buttonFrameX = self.frame.minX
-        buttonFrameY = self.frame.minY
-        buttonFrameWidth = self.frame.width
-        buttonFrameHeight = self.frame.height
+        cellFrameX = self.frame.minX
+        cellFrameY = self.frame.minY
+        cellFrameWidth = self.frame.width
+        cellFrameHeight = self.frame.height
         
         let compressionRatio = ViewConstants.CompressionRatio
         
-        let newButtonFrameX = self.frame.minX + self.frame.width * CGFloat(1 - compressionRatio) / 2
-        let newButtonFrameY = self.frame.minY + self.frame.height * CGFloat(1 - compressionRatio) / 2
-        let newButtonFrameWidth = self.frame.width * CGFloat(compressionRatio)
-        let newButtonFrameHeight = self.frame.height * CGFloat(compressionRatio)
+        let newCellFrameX = self.frame.minX + self.frame.width * CGFloat(1 - compressionRatio) / 2
+        let newCellFrameY = self.frame.minY + self.frame.height * CGFloat(1 - compressionRatio) / 2
+        let newCellFrameWidth = self.frame.width * CGFloat(compressionRatio)
+        let newCellFrameHeight = self.frame.height * CGFloat(compressionRatio)
         
         let duration: Double = 0.05
         let delay: Double = 0.0
@@ -98,10 +98,10 @@ extension CellView {
             options: [],
             animations: {
                 self.frame = CGRect(
-                    x: newButtonFrameX,
-                    y: newButtonFrameY,
-                    width: newButtonFrameWidth,
-                    height: newButtonFrameHeight
+                    x: newCellFrameX,
+                    y: newCellFrameY,
+                    width: newCellFrameWidth,
+                    height: newCellFrameHeight
                 )
                 if self.numberFeedback {
                     self.titleLabel?.alpha = 0.2
@@ -113,29 +113,29 @@ extension CellView {
         let duration: Double = 0.4
         let delay: Double = 0.0
         
-        if let buttonFrameX = self.buttonFrameX,
-            let buttonFrameY = self.buttonFrameY,
-            let buttonFrameWidth = self.buttonFrameWidth,
-            let buttonFrameHeight = self.buttonFrameHeight {
+        if  let cellFrameX = self.cellFrameX,
+            let cellFrameY = self.cellFrameY,
+            let cellFrameWidth = self.cellFrameWidth,
+            let cellFrameHeight = self.cellFrameHeight {
             UIViewPropertyAnimator.runningPropertyAnimator(
                 withDuration: duration,
                 delay: delay,
                 options: .curveEaseOut,
                 animations: {
                     self.frame = CGRect(
-                        x: buttonFrameX,
-                        y: buttonFrameY,
-                        width: buttonFrameWidth,
-                        height: buttonFrameHeight
+                        x: cellFrameX,
+                        y: cellFrameY,
+                        width: cellFrameWidth,
+                        height: cellFrameHeight
                     )
                     if self.numberFeedback {
                         self.titleLabel?.alpha = 1.0
                     }
             })
-            self.buttonFrameX = nil
-            self.buttonFrameY = nil
-            self.buttonFrameWidth = nil
-            self.buttonFrameHeight = nil
+            self.cellFrameX = nil
+            self.cellFrameY = nil
+            self.cellFrameWidth = nil
+            self.cellFrameHeight = nil
         }
     }
     
@@ -163,7 +163,7 @@ extension CellView {
     // MARK: - Number
     
     func showNumber(animated: Bool) {
-        self.isEnabled = true
+        self.isUserInteractionEnabled = true
         
         let duration: Double = 0.2
         let delay: Double = 0.0
@@ -172,7 +172,7 @@ extension CellView {
             UIViewPropertyAnimator.runningPropertyAnimator(
                 withDuration: duration,
                 delay: delay,
-                options: .curveEaseOut,
+                options: .curveEaseIn,
                 animations: {
                     self.titleLabel?.alpha = 1.0
             })
@@ -223,9 +223,9 @@ extension CellView {
         }
     }
     
-    func setNumber(to number: Int, animated: Bool) {
+    func setNumber(_ number: Int, animated: Bool) {
         let durationIn: Double = 0.1
-        let durationOut: Double = 0.1
+        let durationOut: Double = 0.35
         let delayIn: Double = 0.0
         let delayOut: Double = 0.0
         
@@ -254,21 +254,6 @@ extension CellView {
     }
     
     func setNumberColor(to color: UIColor, animated: Bool) {
-//        let colorChanger = {
-//            var newColor = UIColor()
-//            if self.game.colorfulNumbersMode, self.game.colorfulCellsMode {
-//                if  let color = self.cellView.backgroundColor,
-//                    let anotherColor = self.appearance.getAnotherColor(for: color) {
-//                    newColor = anotherColor
-//                }
-//            } else if self.game.colorfulCellsMode {
-//                newColor = .white
-//            } else {
-//                newColor = self.appearance.textColor
-//            }
-//            self.setTitleColor(newColor, for: .normal)
-//        }
-        
         let duration: Double = 0.1
         let delay: Double = 0.0
         

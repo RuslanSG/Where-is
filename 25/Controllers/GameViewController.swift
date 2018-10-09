@@ -249,11 +249,8 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     // MARK: - SettingsTableViewControllerDelegate
     
     func colorfulCellsModeStateChanged(to state: Bool) {
-        messageView.label.textColor = state ? .white : .black
-        for cell in cells {
-            let newCellBackgroundColor = state ? appearance.randomColor : appearance.defaultCellsColor
-            cell.setBackgroundColor(to: newCellBackgroundColor, animated: true)
-        }
+        messageView.label.textColor = state ? .white : appearance.textColor
+        updateCellsColorsFromModel()
     }
     
     func maxNumberChanged(to maxNumber: Int) {
