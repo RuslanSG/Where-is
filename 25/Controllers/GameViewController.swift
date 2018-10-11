@@ -8,7 +8,7 @@
 
 import UIKit
 
-class GameViewController: UIViewController, SettingsTableViewControllerDelegate {
+class GameViewController: UIViewController, GameDelegate {
 
     @IBOutlet weak var stopButton: UIButton!
     @IBOutlet weak var settingsButton: UIButton!
@@ -49,7 +49,11 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     // MARK: -
     
     internal lazy var appearance = Appearance()
-    internal var game = Game()
+    internal lazy var game: Game = {
+        let game = Game()
+        game.delegate = self
+        return game
+    }()
     
     internal let feedbackGenerator = FeedbackGenerator()
     
@@ -96,7 +100,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         setupInputComponents()
         setupColors()
         prepareForNewGame()
-        
+            
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(willResignActive),
@@ -224,7 +228,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         game.numberSelected(sender.tag)
         if game.shuffleNumbersMode {
             game.shuffleNumbers()
-            updateNumbers(animated: true)
+            setNumbers(animated: true)
         }
         if game.shuffleColorsMode {
             updateCellsColorsFromModel()
@@ -247,7 +251,7 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         self.prepareForNewGame()
     }
     
-    // MARK: - SettingsTableViewControllerDelegate
+    // MARK: - GameDelegate
     
     func colorfulCellsModeStateChanged(to state: Bool) {
         messageView.label.textColor = state ? .white : appearance.textColor
@@ -256,10 +260,8 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
     
     func maxNumberChanged(to maxNumber: Int) {
         if cells.count < maxNumber {
-            game.rows += 1
             addCells(count: maxNumber - cells.count)
         } else {
-            game.rows -= 1
             removeCells(count: cells.count - maxNumber)
         }
         
@@ -275,7 +277,6 @@ class GameViewController: UIViewController, SettingsTableViewControllerDelegate 
         if segue.destination.isKind(of: UINavigationController.self) {
             let nvc = segue.destination as! UINavigationController
             let svc = nvc.topViewController as! SettingsTableViewController
-            svc.delegate = self
             svc.game = game
             svc.appearance = appearance
         } else if segue.destination.isKind(of: RootViewController.self) {

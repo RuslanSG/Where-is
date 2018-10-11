@@ -223,7 +223,7 @@ extension CellView {
         }
     }
     
-    func setNumber(_ number: Int, animated: Bool) {
+    func setNumber(_ number: Int, hide: Bool, animated: Bool) {
         let durationIn: Double = 0.1
         let durationOut: Double = 0.35
         let delayIn: Double = 0.0
@@ -239,17 +239,21 @@ extension CellView {
             }) { (position) in
                 self.setTitle(String(number), for: .normal)
                 self.tag = number
-                UIViewPropertyAnimator.runningPropertyAnimator(
-                    withDuration: durationOut,
-                    delay: delayOut,
-                    options: .curveEaseOut,
-                    animations: {
-                        self.titleLabel?.alpha = 1.0
-                })
+                if !hide {
+                    UIViewPropertyAnimator.runningPropertyAnimator(
+                        withDuration: durationOut,
+                        delay: delayOut,
+                        options: .curveEaseOut,
+                        animations: {
+                            self.titleLabel?.alpha = 1.0
+                    })
+                }
+                
             }
         } else {
             self.setTitle(String(number), for: .normal)
             self.tag = number
+            self.titleLabel?.alpha = hide ? 0.0 : 1.0
         }
     }
     

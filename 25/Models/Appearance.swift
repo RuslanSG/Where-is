@@ -138,9 +138,9 @@ class Appearance {
             if automaticDarkMode != newValue {
                 if newValue == true {
                     locationManager.getUserLocation()
-//                    if let isDay = daytime.isDay {
-//                        darkMode = !isDay
-//                    }
+                    if let isDay = daytime.isDay {
+                        darkMode = !isDay
+                    }
                 }
                 UserDefaults.standard.set(newValue, forKey: UserDefaults.Key.AutomaticDarkMode)
             }
@@ -171,7 +171,8 @@ class Appearance {
     
     @objc private func didBecomeActive() {
         if automaticDarkMode {
-            locationManager.getUserLocation()
+            guard let isDay = daytime.isDay else { return }
+            darkMode = !isDay
         }
     }
     

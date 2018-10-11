@@ -199,6 +199,13 @@ extension UserDefaults {
         static let AutomaticDarkMode: String = "AutomaticDarkModeKey"
         static let Sunrise: String = "SunriseUserDefaultsKey"
         static let Sunset: String = "SunsetUserDefaultsKey"
-        static let NotFirstLaunch: String = "NotFirstLaunch"
+        static let NotFirstLaunch: String = "NotFirstLaunchUserDefaultsKey"
+        static let Level: String = "LevelUserDefaultsKey"
+    }
+}
+
+extension Date {
+    var time: Time {
+        return Time(self)
     }
 }

@@ -36,7 +36,7 @@ final class Daytime {
     var isDay: Bool? {
         if let sunrise = self.sunriseTime, let sunset = self.sunsetTime {
             let currentTime = calendar.date(byAdding: .second, value: secondsFromGMT, to: Date())!
-            return currentTime > sunrise && currentTime < sunset
+            return currentTime.time > sunrise.time && currentTime.time < sunset.time
         } else {
             return nil
         }

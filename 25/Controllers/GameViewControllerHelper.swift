@@ -118,20 +118,15 @@ extension GameViewController: CLLocationManagerDelegate {
     
     // MARK: - Numbers
     
-    func setNumbers() {
+    func setNumbers(animated: Bool, hide: Bool = false) {
         for i in cells.indices {
             let number = game.numbers[i]
             let cell = cells[i]
-            cell.setTitle(String(number), for: .normal)
-            cell.tag = number
-        }
-    }
-    
-    func updateNumbers(animated: Bool) {
-        for i in cells.indices {
-            let number = game.numbers[i]
-            let cell = cells[i]
-            cell.setNumber(number, animated: cellsNotAnimating.contains(cell))
+            cell.setNumber(
+                number,
+                hide: hide,
+                animated: cellsNotAnimating.contains(cell)
+            )
         }
     }
     
@@ -148,11 +143,13 @@ extension GameViewController: CLLocationManagerDelegate {
         let number2 = cell2.tag
         
         let duration = 1.0
+        let delayIn = 0.0
+        let delayOut = 0.0
         
         if animated {
             UIViewPropertyAnimator.runningPropertyAnimator(
                 withDuration: duration / 2,
-                delay: 0.0,
+                delay: delayIn,
                 options: [],
                 animations: {
                     cell1.titleLabel?.alpha = 0.0
@@ -165,7 +162,7 @@ extension GameViewController: CLLocationManagerDelegate {
                     cell2.tag = number1
                     UIViewPropertyAnimator.runningPropertyAnimator(
                         withDuration: duration / 2,
-                        delay: 0.0,
+                        delay: delayOut,
                         options: [],
                         animations: {
                             cell1.titleLabel?.alpha = 1.0
@@ -275,7 +272,7 @@ extension GameViewController: CLLocationManagerDelegate {
         self.settingsButton.show(animated: true)
         
         game.newGame()
-        setNumbers()
+        setNumbers(animated: false, hide: true)
         stopButton.isEnabled = false
         
         if game.winkNumbersMode || game.swapNumbersMode {
