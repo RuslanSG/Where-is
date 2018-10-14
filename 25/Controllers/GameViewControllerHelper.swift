@@ -118,16 +118,20 @@ extension GameViewController: CLLocationManagerDelegate {
     
     // MARK: - Numbers
     
-    func setNumbers(animated: Bool, hide: Bool = false) {
+    func setNumbers(animated: Bool, hidden: Bool = false) {
         for i in cells.indices {
             let number = game.numbers[i]
             let cell = cells[i]
             cell.setNumber(
                 number,
-                hide: hide,
-                animated: cellsNotAnimating.contains(cell)
+                hidden: hidden,
+                animated: animated
             )
         }
+    }
+    
+    func showNumbers(animated: Bool) {
+        cells.forEach { $0.showNumber(animated: animated) }
     }
     
     func swapNumbers(animated: Bool) {
@@ -243,7 +247,7 @@ extension GameViewController: CLLocationManagerDelegate {
         }
         
         stopButton.isEnabled = true
-        cells.forEach { $0.showNumber(animated: true) }
+        showNumbers(animated: true)
         
         game.startGame()
         
@@ -271,16 +275,16 @@ extension GameViewController: CLLocationManagerDelegate {
         self.statusBarIsHidden = false
         self.settingsButton.show(animated: true)
         
-        game.newGame()
-        setNumbers(animated: false, hide: true)
-        stopButton.isEnabled = false
-        
         if game.winkNumbersMode || game.swapNumbersMode {
             timer1.invalidate()
             timer2.invalidate()
             cells.forEach { $0.titleLabel?.layer.removeAllAnimations() }
         }
         
+        game.newGame()
+        setNumbers(animated: false, hidden: true)
+        stopButton.isEnabled = false
+                
         cells.forEach { $0.hideNumber(animated: false) }
         
         self.view.addSubview(messageView)

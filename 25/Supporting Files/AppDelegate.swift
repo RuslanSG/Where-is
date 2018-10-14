@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import UserNotifications
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -29,6 +30,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.makeKeyAndVisible()
         
         UIView.appearance().isExclusiveTouch = true
+        
+        FirebaseApp.configure()
         
         return true
     }
@@ -109,6 +112,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         let token = tokenParts.joined()
+        Analytics.logEvent("device_token", parameters: ["token" : NSString(string: token)])
         print("Device Token: \(token)")
     }
     

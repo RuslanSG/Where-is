@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Firebase
 
 protocol GameDelegate {
     
@@ -28,7 +29,7 @@ class Game {
     private let levelsWithWinkNumbersMode = [8, 13, 16, 17, 18, 19]
     private let levelsWithSwapNumbersMode = [5]
     private let levelsWithColorfulCellsMode = [2, 3, 4, 7, 8, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19]
-    private let levelsWithShuffleColorsMode = [2, 3, 4, 8, 9, 10, 13, 14, 15, 16, 17, 18, 19]
+    private let levelsWithShuffleColorsMode = [3, 4, 8, 9, 10, 13, 14, 15, 16, 17, 18, 19]
    
     private let levelsWith25 = [1, 2, 3, 4, 5, 8, 13]
     private let levelsWith30 = [6, 7, 9, 10, 16, 17]
@@ -153,9 +154,7 @@ class Game {
         inGame = false
         let finishTime = Date.timeIntervalSinceReferenceDate
         elapsedTime = finishTime - startTime
-        if elapsedTime <= 60.0 {
-            level += 1
-        }
+        Analytics.logEvent("level_\(level)", parameters: ["time" : NSNumber(floatLiteral: elapsedTime)])
     }
     
     func newGame() {
@@ -167,6 +166,10 @@ class Game {
     
     func shuffleNumbers() {
         numbers.shuffle()
+    }
+    
+    func levelUp() {
+        level += 1
     }
     
     // MARK: - Initialization

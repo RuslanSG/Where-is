@@ -19,6 +19,7 @@
 		2A237940214C5CF00008FC2A /* Solar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A23793F214C5CF00008FC2A /* Solar.swift */; };
 		2A237942214E6E8A0008FC2A /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A237941214E6E8A0008FC2A /* Appearance.swift */; };
 		2A45DAB6216FC17E00FCB89C /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A45DAB5216FC17E00FCB89C /* Time.swift */; };
+		2A45DAB8216FCBA800FCB89C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2A45DAB7216FCBA800FCB89C /* GoogleService-Info.plist */; };
 		2A8C933D212197F70068F98E /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8C933C212197F70068F98E /* SettingsTableViewController.swift */; };
 		2A93C30A215677C6006BB32B /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A93C309215677C6006BB32B /* Strings.swift */; };
 		2AA03497215A84F100026648 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA03496215A84F100026648 /* RootViewController.swift */; };
@@ -26,14 +27,15 @@
 		2AA4BD49215D6F10005C8D32 /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA4BD48215D6F10005C8D32 /* FeedbackView.swift */; };
 		2AAC1610212D94D00042D4A1 /* GameViewControllerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AAC160F212D94D00042D4A1 /* GameViewControllerHelper.swift */; };
 		2AAC1633213C04210042D4A1 /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AAC1632213C04210042D4A1 /* ResultsView.swift */; };
-		2AC2C4E5215FFB6900B07769 /* RemindersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC2C4E4215FFB6900B07769 /* RemindersViewController.swift */; };
-		2AC2C4E7215FFB7500B07769 /* DarkModeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC2C4E6215FFB7500B07769 /* DarkModeViewController.swift */; };
+		2AC2C4E5215FFB6900B07769 /* RemindersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC2C4E4215FFB6900B07769 /* RemindersTableViewController.swift */; };
+		2AC2C4E7215FFB7500B07769 /* DarkModeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC2C4E6215FFB7500B07769 /* DarkModeTableViewController.swift */; };
 		2AC2C4E9215FFB8300B07769 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC2C4E8215FFB8300B07769 /* WelcomeViewController.swift */; };
 		2ACDF75C213D5B43004FEA1B /* FeedbackGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ACDF75B213D5B43004FEA1B /* FeedbackGenerator.swift */; };
 		2ACDF75E213F35B9004FEA1B /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ACDF75D213F35B9004FEA1B /* MessageView.swift */; };
 		2AEEA946215284FA00AC7896 /* CellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEEA945215284FA00AC7896 /* CellView.swift */; };
 		2AF5792D216A36D900EB0423 /* Daytime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF5792C216A36D900EB0423 /* Daytime.swift */; };
 		2AF5792F216A4DC400EB0423 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF5792E216A4DC400EB0423 /* LocationManager.swift */; };
+		7F705113E96C575DDF0B29E6 /* Pods_25.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69C4B541956BA2E70DD7D54D /* Pods_25.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +54,7 @@
 		2A23793F214C5CF00008FC2A /* Solar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Solar.swift; sourceTree = "<group>"; };
 		2A237941214E6E8A0008FC2A /* Appearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; };
 		2A45DAB5216FC17E00FCB89C /* Time.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Time.swift; sourceTree = "<group>"; };
+		2A45DAB7216FCBA800FCB89C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2A8C933C212197F70068F98E /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		2A93C309215677C6006BB32B /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		2AA03496215A84F100026648 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
@@ -59,14 +62,17 @@
 		2AA4BD48215D6F10005C8D32 /* FeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackView.swift; sourceTree = "<group>"; };
 		2AAC160F212D94D00042D4A1 /* GameViewControllerHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewControllerHelper.swift; sourceTree = "<group>"; };
 		2AAC1632213C04210042D4A1 /* ResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsView.swift; sourceTree = "<group>"; };
-		2AC2C4E4215FFB6900B07769 /* RemindersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersViewController.swift; sourceTree = "<group>"; };
-		2AC2C4E6215FFB7500B07769 /* DarkModeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkModeViewController.swift; sourceTree = "<group>"; };
+		2AC2C4E4215FFB6900B07769 /* RemindersTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersTableViewController.swift; sourceTree = "<group>"; };
+		2AC2C4E6215FFB7500B07769 /* DarkModeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkModeTableViewController.swift; sourceTree = "<group>"; };
 		2AC2C4E8215FFB8300B07769 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		2ACDF75B213D5B43004FEA1B /* FeedbackGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackGenerator.swift; sourceTree = "<group>"; };
 		2ACDF75D213F35B9004FEA1B /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
 		2AEEA945215284FA00AC7896 /* CellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellView.swift; sourceTree = "<group>"; };
 		2AF5792C216A36D900EB0423 /* Daytime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Daytime.swift; sourceTree = "<group>"; };
 		2AF5792E216A4DC400EB0423 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		5CA357FDB184547893460637 /* Pods-25.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-25.release.xcconfig"; path = "Pods/Target Support Files/Pods-25/Pods-25.release.xcconfig"; sourceTree = "<group>"; };
+		69C4B541956BA2E70DD7D54D /* Pods_25.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_25.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		88725F259EA3F250A806BD5E /* Pods-25.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-25.debug.xcconfig"; path = "Pods/Target Support Files/Pods-25/Pods-25.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7F705113E96C575DDF0B29E6 /* Pods_25.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,6 +92,8 @@
 			children = (
 				2A118DB2211A132F0059E252 /* 25 */,
 				2A118DB1211A132F0059E252 /* Products */,
+				2FC3AAF029933E8E0930FFF5 /* Pods */,
+				5914BF3D0020C3A72BA00621 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -107,6 +116,7 @@
 				2A118DC8211A13450059E252 /* Supporting Files */,
 				2A118DC2211A13300059E252 /* Info.plist */,
 				2A118DBA211A132F0059E252 /* _5.xcdatamodeld */,
+				2A45DAB7216FCBA800FCB89C /* GoogleService-Info.plist */,
 			);
 			path = 25;
 			sourceTree = "<group>";
@@ -165,11 +175,28 @@
 			children = (
 				2AA03496215A84F100026648 /* RootViewController.swift */,
 				2AA4BD46215D67BF005C8D32 /* TutorialViewController.swift */,
-				2AC2C4E4215FFB6900B07769 /* RemindersViewController.swift */,
-				2AC2C4E6215FFB7500B07769 /* DarkModeViewController.swift */,
+				2AC2C4E4215FFB6900B07769 /* RemindersTableViewController.swift */,
+				2AC2C4E6215FFB7500B07769 /* DarkModeTableViewController.swift */,
 				2AC2C4E8215FFB8300B07769 /* WelcomeViewController.swift */,
 			);
 			path = "Greetings Controllers";
+			sourceTree = "<group>";
+		};
+		2FC3AAF029933E8E0930FFF5 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				88725F259EA3F250A806BD5E /* Pods-25.debug.xcconfig */,
+				5CA357FDB184547893460637 /* Pods-25.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		5914BF3D0020C3A72BA00621 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				69C4B541956BA2E70DD7D54D /* Pods_25.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -179,9 +206,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2A118DC5211A13300059E252 /* Build configuration list for PBXNativeTarget "25" */;
 			buildPhases = (
+				BB488A342765A0A1D8BFE30A /* [CP] Check Pods Manifest.lock */,
 				2A118DAC211A132F0059E252 /* Sources */,
 				2A118DAD211A132F0059E252 /* Frameworks */,
 				2A118DAE211A132F0059E252 /* Resources */,
+				DD48E2F73A1E77E5C7D8B70E /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -238,11 +267,61 @@
 			files = (
 				2A118DC1211A13300059E252 /* LaunchScreen.storyboard in Resources */,
 				2A118DBE211A13300059E252 /* Assets.xcassets in Resources */,
+				2A45DAB8216FCBA800FCB89C /* GoogleService-Info.plist in Resources */,
 				2A118DB9211A132F0059E252 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		BB488A342765A0A1D8BFE30A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-25-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DD48E2F73A1E77E5C7D8B70E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-25/Pods-25-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-25/Pods-25-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		2A118DAC211A132F0059E252 /* Sources */ = {
@@ -252,7 +331,7 @@
 				2AA03497215A84F100026648 /* RootViewController.swift in Sources */,
 				2AA4BD47215D67BF005C8D32 /* TutorialViewController.swift in Sources */,
 				2A118DBC211A132F0059E252 /* _5.xcdatamodeld in Sources */,
-				2AC2C4E5215FFB6900B07769 /* RemindersViewController.swift in Sources */,
+				2AC2C4E5215FFB6900B07769 /* RemindersTableViewController.swift in Sources */,
 				2AAC1633213C04210042D4A1 /* ResultsView.swift in Sources */,
 				2A118DB6211A132F0059E252 /* GameViewController.swift in Sources */,
 				2A237940214C5CF00008FC2A /* Solar.swift in Sources */,
@@ -266,7 +345,7 @@
 				2AC2C4E9215FFB8300B07769 /* WelcomeViewController.swift in Sources */,
 				2A118DCA211A1BD50059E252 /* Extentions.swift in Sources */,
 				2AF5792D216A36D900EB0423 /* Daytime.swift in Sources */,
-				2AC2C4E7215FFB7500B07769 /* DarkModeViewController.swift in Sources */,
+				2AC2C4E7215FFB7500B07769 /* DarkModeTableViewController.swift in Sources */,
 				2A118DB4211A132F0059E252 /* AppDelegate.swift in Sources */,
 				2ACDF75E213F35B9004FEA1B /* MessageView.swift in Sources */,
 				2A118DCC211AEB2A0059E252 /* Game.swift in Sources */,
@@ -414,6 +493,7 @@
 		};
 		2A118DC6211A13300059E252 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 88725F259EA3F250A806BD5E /* Pods-25.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = 25/25.entitlements;
@@ -434,6 +514,7 @@
 		};
 		2A118DC7211A13300059E252 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5CA357FDB184547893460637 /* Pods-25.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = 25/25.entitlements;

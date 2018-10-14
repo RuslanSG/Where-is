@@ -100,7 +100,7 @@ class GameViewController: UIViewController, GameDelegate {
         setupInputComponents()
         setupColors()
         prepareForNewGame()
-            
+        
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(willResignActive),
@@ -194,7 +194,7 @@ class GameViewController: UIViewController, GameDelegate {
     
     @objc func cellPressed(sender: CellView) {
         lastPressedCell = sender
-        sender.compress(numberFeedback: !game.winkNumbersMode && !game.shuffleNumbersMode)
+        sender.compress(numberFeedback: !game.winkNumbersMode && !game.shuffleNumbersMode && !game.swapNumbersMode)
         if !game.inGame {
             // User started the game
             startGame()
@@ -207,13 +207,17 @@ class GameViewController: UIViewController, GameDelegate {
         if selectedNumberIsRight && sender.tag == game.maxNumber {
             // User tapped the last number
             game.finishGame()
+            
             let time = game.elapsedTime
-            feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .success)
-            sender.uncompress()
-            prepareForNewGame()
             self.view.addSubview(resultsView)
             resultsView.show(withTime: time ?? 0.0)
             resultsIsShowing = true
+            
+            feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .success)
+            sender.uncompress()
+            
+            game.levelUp()
+            prepareForNewGame()
             return
         }
         if selectedNumberIsRight {
@@ -264,9 +268,8 @@ class GameViewController: UIViewController, GameDelegate {
         } else {
             removeCells(count: cells.count - maxNumber)
         }
-        
         updateCellFrames()
-        prepareForNewGame()
+        setNumbers(animated: false, hidden: true)
         messageView.frame = CGRect(x: 0.0, y: 0.0, width: messageViewWidth, height: messageViewHeight)
         messageView.center = cellsContainerView.center
     }

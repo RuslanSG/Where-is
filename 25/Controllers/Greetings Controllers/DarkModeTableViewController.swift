@@ -12,10 +12,12 @@ protocol DarkModeViewControllerDelegate {
     func automaticDarkModeStateChanged(to state: Bool)
 }
 
-class DarkModeViewController: UIViewController {
+class DarkModeTableViewController: UITableViewController {
     
     @IBOutlet var labels: [UILabel]!
-    @IBOutlet var views: [UIView]!
+    @IBOutlet var cells: [UITableViewCell]!
+    
+    @IBOutlet var darkerCells: [UITableViewCell]!
     
     @IBOutlet weak var sunriseTimeLabel: UILabel!
     @IBOutlet weak var sunsetTimeLabel: UILabel!
@@ -33,6 +35,8 @@ class DarkModeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.tableView.tableFooterView = UIView()
 
         NotificationCenter.default.addObserver(
             self,
@@ -81,11 +85,15 @@ class DarkModeViewController: UIViewController {
                 options: .curveEaseInOut,
                 animations: {
                     self.labels.forEach { $0.textColor = self.appearance.textColor }
-                    self.views.forEach { $0.backgroundColor = self.appearance.mainViewColor }
+                    self.cells.forEach { $0.backgroundColor = self.appearance.tableViewCellColor }
+                    self.darkerCells.forEach { $0.backgroundColor = self.appearance.tableViewBackgroundColor }
+                    self.tableView.backgroundColor = self.appearance.tableViewBackgroundColor
+                    self.tableView.tableFooterView?.backgroundColor = self.appearance.tableViewBackgroundColor
             })
             
             DispatchQueue.main.asyncAfter(deadline: .now() + duration / 2) {
                 self.switcher.tintColor = self.appearance.switcherTintColor
+                self.tableView.separatorColor = self.appearance.tableViewSeparatorColor
             }
         }
     }

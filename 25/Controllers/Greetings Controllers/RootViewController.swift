@@ -17,8 +17,8 @@ class RootViewController: UIViewController, WelcomeViewControllerDelegate {
         let greetingsViewController = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.GreetingsViewController)
         let sensViewController = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.SensViewController)
         let tutorialViewController = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.TutorialViewController) as! TutorialViewController
-        let remindersViewContoller = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.RemindersViewController) as! RemindersViewController
-        let darkModeViewContoller = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.DarkModeViewController) as! DarkModeViewController
+        let remindersViewContoller = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.RemindersViewController) as! RemindersTableViewController
+        let darkModeViewContoller = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.DarkModeViewController) as! DarkModeTableViewController
         let welcomeViewController = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.WelcomeViewController) as! WelcomeViewController
         
         welcomeViewController.delegate = self
@@ -34,6 +34,22 @@ class RootViewController: UIViewController, WelcomeViewControllerDelegate {
     }()
     
     private lazy var visibleViewController = orderedViewControllers.first!
+    
+    private let topBarView: UIView = {
+        let x = UIScreen.main.bounds.minX
+        let y = UIScreen.main.bounds.minY
+        let width = UIScreen.main.bounds.width
+        let height = UIApplication.shared.statusBarFrame.height + 40
+        let view = UIView(frame: CGRect(
+            x: x,
+            y: y,
+            width: width,
+            height: height)
+        )
+        view.alpha = 0.95
+        view.backgroundColor = .white
+        return view
+    }()
     
     private lazy var nextButton: UIButton = {
         let button = UIButton()
@@ -141,6 +157,7 @@ class RootViewController: UIViewController, WelcomeViewControllerDelegate {
             animations: {
                 self.pageNumberLabel.textColor = self.appearance.textColor
                 self.view.backgroundColor = self.appearance.mainViewColor
+                self.topBarView.backgroundColor = self.appearance.mainViewColor
         })
         self.setNeedsStatusBarAppearanceUpdate()
     }
@@ -180,6 +197,7 @@ class RootViewController: UIViewController, WelcomeViewControllerDelegate {
         
         self.pageViewController!.didMove(toParent: self)
         
+        self.view.addSubview(topBarView)
         self.view.addSubview(nextButton)
         self.view.addSubview(backButton)
         self.view.addSubview(pageNumberLabel)

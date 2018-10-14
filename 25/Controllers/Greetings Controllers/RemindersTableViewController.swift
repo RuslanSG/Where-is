@@ -9,7 +9,14 @@
 import UIKit
 import UserNotifications
 
-class RemindersViewController: UIViewController {
+class RemindersTableViewController: UITableViewController {
+    
+    // MARK: - Lifecycle
+    
+    override func viewDidLoad() {
+        self.tableView.tableFooterView = UIView()
+    }
+    
     
     // MARK: - Actions
     

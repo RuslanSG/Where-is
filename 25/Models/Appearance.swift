@@ -11,7 +11,6 @@ import UIKit
 
 class Appearance {
     
-    // MARK: - Game View Controller
     // MARK: Colors
     
     private enum Colors {
@@ -182,6 +181,8 @@ class Appearance {
             darkMode = !isDay
         }
     }
+    
+    // MARK: - 
     
 }
 

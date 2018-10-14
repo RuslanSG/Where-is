@@ -37,15 +37,10 @@ class TutorialViewController: UIViewController {
     
     // MARK - Lifecycle
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        setupInputComponents()
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        setupInputComponents()
     }
     
     // MARK: - Setuping

@@ -36,7 +36,7 @@ class SettingsTableViewController: UITableViewController {
         super.viewDidLoad()
         
         setupInputComponents()
-        setupColors(animated: false)
+        setupColors()
 
         NotificationCenter.default.addObserver(
             self,
@@ -53,9 +53,6 @@ class SettingsTableViewController: UITableViewController {
     // MARK: - Setup UI
     
     private func setupInputComponents() {
-        doneButton.tintColor = appearance.userInterfaceColor
-        switchers.forEach { $0.onTintColor = appearance.userInterfaceColor }
-        
         levelLabel.text = String(game.level)
         
         levelStepper.maximumValue = Double(game.maxLevel)
@@ -70,10 +67,8 @@ class SettingsTableViewController: UITableViewController {
         automaticDarkModeSwitcher.setOn(appearance.automaticDarkMode, animated: false)
     }
     
-    @objc private func setupColors(animated: Bool) {
-        if let currentColor = self.doneButton.tintColor {
-            self.doneButton.tintColor = self.appearance.switchColorForAnotherScheme(currentColor)
-        }
+    @objc private func setupColors() {
+        self.doneButton.tintColor = self.appearance.userInterfaceColor
         self.tableView.backgroundColor = self.appearance.tableViewBackgroundColor
         self.tableView.separatorColor = self.appearance.tableViewSeparatorColor
         
@@ -118,8 +113,10 @@ class SettingsTableViewController: UITableViewController {
     // MARK: - Notifications
     
     @objc func darkModeStateChangedNotification(notification: Notification) {
-        setupColors(animated: true)
         darkModeSwitcher.setOn(appearance.darkMode, animated: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.setupColors()
+        }
     }
 
 }
