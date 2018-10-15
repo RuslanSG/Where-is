@@ -43,6 +43,10 @@ class GameViewController: UIViewController, GameDelegate {
         view.label.font = UIFont.systemFont(ofSize: appearance.numbersFontSize)
         view.frame.size = CGSize(width: messageViewWidth, height: messageViewHeight)
         view.center = cellsContainerView.center
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(startGame))
+        view.addGestureRecognizer(tap)
+        
         return view
     }()
     
@@ -60,7 +64,7 @@ class GameViewController: UIViewController, GameDelegate {
     var firstTimeAppeared = true
     var resultsIsShowing = false
     
-    private var selectedNumberIsRight: Bool?
+    internal var selectedNumberIsRight: Bool?
     
     var grid: Grid {
         return Grid(
@@ -195,14 +199,6 @@ class GameViewController: UIViewController, GameDelegate {
     @objc func cellPressed(sender: CellView) {
         lastPressedCell = sender
         sender.compress(numberFeedback: !game.winkNumbersMode && !game.shuffleNumbersMode && !game.swapNumbersMode)
-        if !game.inGame {
-            // User started the game
-            startGame()
-            messageView.hide()
-            feedbackGenerator.playSelectionHapticFeedback()
-            self.selectedNumberIsRight = true
-            return
-        }
         let selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
         if selectedNumberIsRight && sender.tag == game.maxNumber {
             // User tapped the last number
@@ -270,7 +266,7 @@ class GameViewController: UIViewController, GameDelegate {
         }
         updateCellFrames()
         setNumbers(animated: false, hidden: true)
-        messageView.frame = CGRect(x: 0.0, y: 0.0, width: messageViewWidth, height: messageViewHeight)
+        messageView.bounds.size = CGSize(width: messageViewWidth, height: messageViewHeight)
         messageView.center = cellsContainerView.center
     }
     
@@ -305,7 +301,6 @@ class GameViewController: UIViewController, GameDelegate {
     
     private func showGreetingsViewController() {
         self.performSegue(withIdentifier: "showGrettings", sender: nil)
-        #warning ("Move identifier to the constants")
     }
         
 }

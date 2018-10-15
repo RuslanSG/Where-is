@@ -13,13 +13,22 @@ class RootViewController: UIViewController, WelcomeViewControllerDelegate {
     var pageViewController: UIPageViewController?
     var appearance: Appearance!
     
+    private enum ViewControllerIdentifier {
+        static let GreetingsViewController: String = "greetingsViewController"
+        static let SensViewController: String = "sensViewController"
+        static let TutorialViewController: String = "tutorialViewController"
+        static let RemindersViewController: String = "remindersViewController"
+        static let DarkModeViewController: String = "darkModeViewController"
+        static let WelcomeViewController: String = "welcomeViewController"
+    }
+    
     private lazy var orderedViewControllers: [UIViewController] = {
-        let greetingsViewController = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.GreetingsViewController)
-        let sensViewController = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.SensViewController)
-        let tutorialViewController = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.TutorialViewController) as! TutorialViewController
-        let remindersViewContoller = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.RemindersViewController) as! RemindersTableViewController
-        let darkModeViewContoller = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.DarkModeViewController) as! DarkModeTableViewController
-        let welcomeViewController = self.newViewConrtoller(withIdentifier: StringKeys.ViewControllerIdentifier.WelcomeViewController) as! WelcomeViewController
+        let greetingsViewController = self.newViewConrtoller(withIdentifier: ViewControllerIdentifier.GreetingsViewController)
+        let sensViewController = self.newViewConrtoller(withIdentifier: ViewControllerIdentifier.SensViewController)
+        let tutorialViewController = self.newViewConrtoller(withIdentifier: ViewControllerIdentifier.TutorialViewController) as! TutorialViewController
+        let remindersViewContoller = self.newViewConrtoller(withIdentifier: ViewControllerIdentifier.RemindersViewController) as! RemindersTableViewController
+        let darkModeViewContoller = self.newViewConrtoller(withIdentifier: ViewControllerIdentifier.DarkModeViewController) as! DarkModeTableViewController
+        let welcomeViewController = self.newViewConrtoller(withIdentifier: ViewControllerIdentifier.WelcomeViewController) as! WelcomeViewController
         
         welcomeViewController.delegate = self
         darkModeViewContoller.appearance = appearance

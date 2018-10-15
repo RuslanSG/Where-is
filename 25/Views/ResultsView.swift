@@ -114,10 +114,9 @@ class ResultsView: UIVisualEffectView {
         self.contentView.addConstraintsWithFormat(format: "H:|-30-[v0]-30-|", views: titleLabel)
         self.contentView.addConstraintsWithFormat(format: "V:|-100-[v0(50)]", views: titleLabel)
         
-        let currentDeviceIsIPhoneX = UIScreen.main.nativeBounds.height == 2436
+        let currentDeviceIsIPhoneX = UIDevice.current.platform == .iPhoneX || UIDevice.current.platform == .iPhoneXR || UIDevice.current.platform == .iPhoneXS || UIDevice.current.platform == .iPhoneXSMax
         self.contentView.addConstraintsWithFormat(format: "H:|-10-[v0]-10-|", views: actionButton)
         self.contentView.addConstraintsWithFormat(format: currentDeviceIsIPhoneX ? "V:[v0(50)]-76-|" : "V:[v0(50)]-42-|", views: actionButton)
-        #warning ("Change currentDeviceIsIPhoneX variable")
     }
     
 }

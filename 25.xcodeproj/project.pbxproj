@@ -21,7 +21,6 @@
 		2A45DAB6216FC17E00FCB89C /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A45DAB5216FC17E00FCB89C /* Time.swift */; };
 		2A45DAB8216FCBA800FCB89C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2A45DAB7216FCBA800FCB89C /* GoogleService-Info.plist */; };
 		2A8C933D212197F70068F98E /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8C933C212197F70068F98E /* SettingsTableViewController.swift */; };
-		2A93C30A215677C6006BB32B /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A93C309215677C6006BB32B /* Strings.swift */; };
 		2AA03497215A84F100026648 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA03496215A84F100026648 /* RootViewController.swift */; };
 		2AA4BD47215D67BF005C8D32 /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA4BD46215D67BF005C8D32 /* TutorialViewController.swift */; };
 		2AA4BD49215D6F10005C8D32 /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA4BD48215D6F10005C8D32 /* FeedbackView.swift */; };
@@ -56,7 +55,6 @@
 		2A45DAB5216FC17E00FCB89C /* Time.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Time.swift; sourceTree = "<group>"; };
 		2A45DAB7216FCBA800FCB89C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2A8C933C212197F70068F98E /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
-		2A93C309215677C6006BB32B /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		2AA03496215A84F100026648 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		2AA4BD46215D67BF005C8D32 /* TutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
 		2AA4BD48215D6F10005C8D32 /* FeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackView.swift; sourceTree = "<group>"; };
@@ -129,7 +127,6 @@
 				2A45DAB5216FC17E00FCB89C /* Time.swift */,
 				2AF5792E216A4DC400EB0423 /* LocationManager.swift */,
 				2ACDF75B213D5B43004FEA1B /* FeedbackGenerator.swift */,
-				2A93C309215677C6006BB32B /* Strings.swift */,
 				2A118DCD211AEC100059E252 /* Grid.swift */,
 				2A23793F214C5CF00008FC2A /* Solar.swift */,
 				2A118DC9211A1BD50059E252 /* Extentions.swift */,
@@ -341,7 +338,6 @@
 				2AAC1610212D94D00042D4A1 /* GameViewControllerHelper.swift in Sources */,
 				2AEEA946215284FA00AC7896 /* CellView.swift in Sources */,
 				2A45DAB6216FC17E00FCB89C /* Time.swift in Sources */,
-				2A93C30A215677C6006BB32B /* Strings.swift in Sources */,
 				2AC2C4E9215FFB8300B07769 /* WelcomeViewController.swift in Sources */,
 				2A118DCA211A1BD50059E252 /* Extentions.swift in Sources */,
 				2AF5792D216A36D900EB0423 /* Daytime.swift in Sources */,

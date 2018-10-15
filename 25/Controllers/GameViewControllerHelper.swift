@@ -57,7 +57,7 @@ extension GameViewController: CLLocationManagerDelegate {
     
     internal var messageViewWidth: CGFloat {
         if let cell = cells.first {
-            let width = cell.bounds.width * 3 - appearance.gridInset * 2
+            let width = cell.bounds.width * 3 - appearance.gridInset * 2 + 1
             return width
         }
         return 0.0
@@ -65,8 +65,8 @@ extension GameViewController: CLLocationManagerDelegate {
     
     internal var messageViewHeight: CGFloat {
         if let cellHeight = buttonHeight {
-            let height = cells.count % 10 == 0 ? cellHeight * 2 - appearance.gridInset * 2 :
-                                                 cellHeight - appearance.gridInset * 2
+            let height = cells.count % 10 == 0 ? cellHeight * 2 - appearance.gridInset * 2 + 1 :
+                                                 cellHeight - appearance.gridInset * 2 + 1
             return height
         }
         return 0.0
@@ -128,10 +128,6 @@ extension GameViewController: CLLocationManagerDelegate {
                 animated: animated
             )
         }
-    }
-    
-    func showNumbers(animated: Bool) {
-        cells.forEach { $0.showNumber(animated: animated) }
     }
     
     func swapNumbers(animated: Bool) {
@@ -233,7 +229,11 @@ extension GameViewController: CLLocationManagerDelegate {
     
     // MARK: - Helping Methods
     
-    internal func startGame() {
+    @objc internal func startGame() {
+        messageView.hide()
+        feedbackGenerator.playSelectionHapticFeedback()
+        
+        self.selectedNumberIsRight = true
         self.statusBarIsHidden = true
         self.settingsButton.hide(animated: true)
         
@@ -246,9 +246,12 @@ extension GameViewController: CLLocationManagerDelegate {
             updateCellsColorsFromModel()
         }
         
-        stopButton.isEnabled = true
-        showNumbers(animated: true)
+        for cell in cells {
+            cell.isEnabled = true
+            cell.showNumber(animated: true)
+        }
         
+        stopButton.isEnabled = true
         game.startGame()
         
         if game.winkNumbersMode {
@@ -284,9 +287,12 @@ extension GameViewController: CLLocationManagerDelegate {
         game.newGame()
         setNumbers(animated: false, hidden: true)
         stopButton.isEnabled = false
-                
-        cells.forEach { $0.hideNumber(animated: false) }
         
+        for cell in cells {
+            cell.hideNumber(animated: true)
+            cell.isEnabled = false
+        }
+                
         self.view.addSubview(messageView)
         self.view.bringSubviewToFront(resultsView)
         

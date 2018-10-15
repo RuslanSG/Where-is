@@ -52,12 +52,9 @@ class MessageView: UIVisualEffectView {
     // MARK: - Helping Methods
     
     private func setupInputComponents() {
-        self.isUserInteractionEnabled = false
-        
         label.text = "Старт"
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
-        label.isUserInteractionEnabled = true
         label.alpha = 0.0
         
         contentView.addSubview(label)

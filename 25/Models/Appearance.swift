@@ -24,7 +24,7 @@ class Appearance {
                                            (light: #colorLiteral(red: 0.9215686275, green: 0.1490196078, blue: 0.1215686275, alpha: 1), dark: #colorLiteral(red: 0.599486165, green: 0.08605109967, blue: 0.05797519395, alpha: 1)),
                                            (light: #colorLiteral(red: 0.7882352941, green: 0.1843137255, blue: 0.4823529412, alpha: 1), dark: #colorLiteral(red: 0.5, green: 0.1014612427, blue: 0.3135548154, alpha: 1))]
         
-        static let ColdColorSet         = [(light: #colorLiteral(red: 0.0753807204, green: 0.5323839309, blue: 0.8270968635, alpha: 1), dark: #colorLiteral(red: 0.03121459476, green: 0.3908795805, blue: 0.6474528311, alpha: 1)),
+        static let ColdColorSet         = [(light: #colorLiteral(red: 0.08718171773, green: 0.6335422193, blue: 1, alpha: 1), dark: #colorLiteral(red: 0.03121459476, green: 0.3908795805, blue: 0.6474528311, alpha: 1)),
                                            (light: #colorLiteral(red: 0.115697119, green: 0.801768485, blue: 0.7491685864, alpha: 1), dark: #colorLiteral(red: 0.07841828977, green: 0.6176836836, blue: 0.6003320337, alpha: 1)),
                                            (light: #colorLiteral(red: 0.1858646345, green: 0.8335619463, blue: 0.1354265822, alpha: 1), dark: #colorLiteral(red: 0.07263445024, green: 0.611725204, blue: 0.09308076372, alpha: 1))]
         

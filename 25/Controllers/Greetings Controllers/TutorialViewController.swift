@@ -35,6 +35,13 @@ class TutorialViewController: UIViewController {
         )
     }
     
+    private var numbersFontSize: CGFloat {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            return UIScreen.main.bounds.width / 15
+        }
+        return appearance.numbersFontSize
+    }
+    
     // MARK - Lifecycle
     
     override func viewDidAppear(_ animated: Bool) {
@@ -102,7 +109,7 @@ class TutorialViewController: UIViewController {
                 cell.setBackgroundColor(to: backgroundColor, animated: false)
                 cell.setNumberColor(to: numberColor, animated: false)
                 cell.setCornerRadius(to: appearance.cornerRadius)
-                cell.titleLabel?.font = UIFont.systemFont(ofSize: appearance.numbersFontSize)
+                cell.titleLabel?.font = UIFont.systemFont(ofSize: numbersFontSize)
                 cell.addTarget(self, action: #selector(cellPressed(sender:)), for: .touchDown)
                 cell.addTarget(self, action: #selector(cellReleased(sender:)), for: .touchUpInside)
                 cell.addTarget(self, action: #selector(cellReleased(sender:)), for: .touchUpOutside)
