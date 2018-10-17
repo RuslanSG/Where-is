@@ -223,6 +223,7 @@ extension UserDefaults {
         static let Sunset: String = "SunsetUserDefaultsKey"
         static let NotFirstLaunch: String = "NotFirstLaunchUserDefaultsKey"
         static let Level: String = "LevelUserDefaultsKey"
+        static let LevelChanger: String = "LevelChangerUserDefaultsKey"
     }
 }
 

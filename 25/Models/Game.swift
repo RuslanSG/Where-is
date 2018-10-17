@@ -40,6 +40,21 @@ class Game {
     let minLevel = 1
     let maxLevel = 30
     
+    private enum LevelChanger {
+        case up
+        case down
+    }
+    
+    private var needsToUpLevel: Bool {
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.Key.LevelChanger)
+        }
+        get {
+            guard let levelChanger = UserDefaults.standard.value(forKey: UserDefaults.Key.LevelChanger) as? Bool else { return true }
+            return levelChanger
+        }
+    }
+    
     var level: Int {
         didSet {
             let colorfulCellModeOldValue = levelsWithColorfulCellsMode.contains(oldValue)
@@ -169,8 +184,17 @@ class Game {
         numbers.shuffle()
     }
     
-    func levelUp() {
-        level += 1
+    func changeLevel() {
+        if self.level == maxLevel {
+            needsToUpLevel = false
+        } else if self.level == minLevel {
+            needsToUpLevel = true
+        }
+        if self.needsToUpLevel {
+            level += 1
+        } else {
+            level -= 1
+        }
     }
     
     // MARK: - Initialization

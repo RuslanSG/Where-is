@@ -197,10 +197,10 @@ class GameViewController: UIViewController, GameDelegate {
     // MARK: - Actions
     
     @objc func cellPressed(sender: CellView) {
-        lastPressedCell = sender
-        sender.compress(numberFeedback: !game.winkNumbersMode && !game.shuffleNumbersMode && !game.swapNumbersMode)
-        let selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
-        if selectedNumberIsRight && sender.tag == game.maxNumber {
+//        lastPressedCell = sender
+//        sender.compress(numberFeedback: !game.winkNumbersMode && !game.shuffleNumbersMode && !game.swapNumbersMode)
+//        let selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
+//        if selectedNumberIsRight && sender.tag == game.maxNumber {
             // User tapped the last number
             game.finishGame()
             
@@ -212,27 +212,27 @@ class GameViewController: UIViewController, GameDelegate {
             feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .success)
             sender.uncompress()
             
-            game.levelUp()
+            game.changeLevel()
             prepareForNewGame()
             return
-        }
-        if selectedNumberIsRight {
-            // User tapped the right number
-            feedbackGenerator.playSelectionHapticFeedback()
-            self.selectedNumberIsRight = true
-        } else {
-            // User tapped the wrong number
-            feedbackView.feedbackSelection(isRight: false)
-            feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .error)
-        }
-        game.numberSelected(sender.tag)
-        if game.shuffleNumbersMode {
-            game.shuffleNumbers()
-            setNumbers(animated: true)
-        }
-        if game.shuffleColorsMode {
-            updateCellsColorsFromModel()
-        }
+//        }
+//        if selectedNumberIsRight {
+//            // User tapped the right number
+//            feedbackGenerator.playSelectionHapticFeedback()
+//            self.selectedNumberIsRight = true
+//        } else {
+//            // User tapped the wrong number
+//            feedbackView.feedbackSelection(isRight: false)
+//            feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .error)
+//        }
+//        game.numberSelected(sender.tag)
+//        if game.shuffleNumbersMode {
+//            game.shuffleNumbers()
+//            setNumbers(animated: true)
+//        }
+//        if game.shuffleColorsMode {
+//            updateCellsColorsFromModel()
+//        }
     }
     
     @objc func cellReleased(sender: CellView) {
