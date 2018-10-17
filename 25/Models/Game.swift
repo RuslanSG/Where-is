@@ -24,20 +24,21 @@ class Game {
     
     // MARK: - Constants
     
-    private let levelsWithShuffleNumbersMode = [13, 17, 19]
-    private let levelsWithColorfulNumbersMode = [4, 8, 10, 13, 15, 16, 17, 18, 19]
-    private let levelsWithWinkNumbersMode = [8, 13, 16, 17, 18, 19]
-    private let levelsWithSwapNumbersMode = [5]
-    private let levelsWithColorfulCellsMode = [2, 3, 4, 7, 8, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19]
-    private let levelsWithShuffleColorsMode = [3, 4, 8, 9, 10, 13, 14, 15, 16, 17, 18, 19]
+    private let levelsWithColorfulCellsMode = [2, 3, 8, 9, 10, 15, 16, 17, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+    private let levelsWithShuffleColorsMode = [3, 9, 10, 16, 17, 23, 24, 25, 26, 27, 28, 29, 30]
+    private let levelsWithColorfulNumbersMode = [3, 9, 10, 16, 17, 23, 24, 25, 26, 27, 28, 29, 30]
+    
+    private let levelsWithWinkNumbersMode = [5, 9, 11, 16, 18, 24, 25, 26, 27, 28, 30]
+    private let levelsWithSwapNumbersMode = [4, 12, 19, 29]
+    private let levelsWithShuffleNumbersMode = [6, 13, 16, 20, 25, 27, 30]
    
-    private let levelsWith25 = [1, 2, 3, 4, 5, 8, 13]
-    private let levelsWith30 = [6, 7, 9, 10, 16, 17]
-    private let levelsWith35 = [11, 12, 14, 15, 18, 19]
-    private let levelsWith40 = [Int]()
+    private let levelsWith25 = [1, 2, 3, 4, 5, 6, 9, 16]
+    private let levelsWith30 = [7, 8, 10, 11, 12, 13, 24, 25]
+    private let levelsWith35 = [14, 15, 17, 18, 19, 20, 26, 27]
+    private let levelsWith40 = [21, 22, 23, 28, 29, 30]
     
     let minLevel = 1
-    let maxLevel = 19
+    let maxLevel = 30
     
     var level: Int {
         didSet {
