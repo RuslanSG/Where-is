@@ -31,6 +31,8 @@ class CellView: UIButton {
         return view
     }()
     
+    private var animator = UIViewPropertyAnimator()
+    
     // MARK: - Initialization
     
     override init(frame: CGRect) {
@@ -182,8 +184,8 @@ extension CellView {
     }
     
     func hideNumber(animated: Bool) {
-        let duration: Double = 0.2
-        let delay: Double = 0.0
+        let duration = 0.2
+        let delay = 0.0
         
         if animated {
             UIViewPropertyAnimator.runningPropertyAnimator(
@@ -198,58 +200,69 @@ extension CellView {
         }
     }
     
-    func winkNumber(duration: Double, delay: Double) {
-        let durationIn: Double = duration / 2
-        let durationOut: Double = duration / 2
-        let delayIn: Double = 0.0
-        let delayOut: Double = delay
+    func winkNumber(completion: (() -> Void)?) {
+        let duration = 0.4
+        let delay = 1.0
         
-        UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: durationIn,
-            delay: delayIn,
-            options: .curveEaseIn,
+        animator.stopAnimation(true)
+        animator = UIViewPropertyAnimator(
+            duration: duration,
+            curve: .easeIn,
             animations: {
                 self.titleLabel?.alpha = 0.0
-        }) { (_) in
-            if self.showNumber {
-                UIViewPropertyAnimator.runningPropertyAnimator(
-                    withDuration: durationOut,
-                    delay: delayOut,
-                    options: .curveEaseOut,
+        })
+        animator.addCompletion { (position) in
+            if position == .end && self.showNumber {
+                self.animator = UIViewPropertyAnimator(
+                    duration: duration,
+                    curve: .easeOut,
                     animations: {
                         self.titleLabel?.alpha = 1.0
                 })
+                self.animator.addCompletion({ (position) in
+                    if position == .end {
+                        guard let completion = completion else { return }
+                        completion()
+                    }
+                })
+                self.animator.startAnimation(afterDelay: delay)
+            } else {
+                guard let completion = completion else { return }
+                completion()
             }
         }
+        animator.startAnimation()
     }
     
     func setNumber(_ number: Int, hidden: Bool, animated: Bool) {
-        let durationIn: Double = 0.1
-        let durationOut: Double = 0.35
-        let delayIn: Double = 0.0
-        let delayOut: Double = 0.0
-                
+        
         if animated {
-            UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: durationIn,
-                delay: delayIn,
-                options: .curveEaseIn,
+            let durationIn = 0.1
+            let durationOut = 0.35
+            let delay = 0.0
+            
+            animator.stopAnimation(true)
+            animator = UIViewPropertyAnimator(
+                duration: durationIn,
+                curve: .easeIn,
                 animations: {
                     self.titleLabel?.alpha = 0.0
-            }) { (position) in
+            })
+            animator.addCompletion { (position) in
                 self.setTitle(String(number), for: .normal)
                 self.tag = number
-                if !hidden {
-                    UIViewPropertyAnimator.runningPropertyAnimator(
-                        withDuration: durationOut,
-                        delay: delayOut,
-                        options: .curveEaseOut,
+                if position == .end && !hidden {
+                    self.animator = UIViewPropertyAnimator(
+                        duration: durationOut,
+                        curve: .easeOut,
                         animations: {
                             self.titleLabel?.alpha = 1.0
                     })
+                    self.animator.startAnimation(afterDelay: delay)
                 }
             }
-        } else {
+            animator.startAnimation()
+        }  else {
             self.setTitle(String(number), for: .normal)
             self.tag = number
             self.titleLabel?.alpha = hidden ? 0.0 : 1.0

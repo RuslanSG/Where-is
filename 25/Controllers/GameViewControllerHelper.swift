@@ -154,7 +154,7 @@ extension GameViewController: CLLocationManagerDelegate {
                 animations: {
                     cell1.titleLabel?.alpha = 0.0
                     cell2.titleLabel?.alpha = 0.0
-            }) { (position) in
+            }) { (_) in
                 if self.game.inGame {
                     cell1.setTitle(String(number2), for: .normal)
                     cell2.setTitle(String(number1), for: .normal)
@@ -167,32 +167,28 @@ extension GameViewController: CLLocationManagerDelegate {
                         animations: {
                             cell1.titleLabel?.alpha = 1.0
                             cell2.titleLabel?.alpha = 1.0
-                    })
+                    }) { (_) in
+                        self.cellsNotAnimating.append(cell1)
+                        self.cellsNotAnimating.append(cell2)
+                    }
+                } else {
+                    self.cellsNotAnimating.append(cell1)
+                    self.cellsNotAnimating.append(cell2)
                 }
-            }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-                self.cellsNotAnimating.append(cell1)
-                self.cellsNotAnimating.append(cell2)
             }
         }
     }
     
     internal func winkRandomNumber() {
-        let duration = 1.0
-        let delay = 1.0
-        
         let cell = cellsNotAnimating[cellsNotAnimating.count.arc4random]
+        
         if let index = cellsNotAnimating.index(of: cell) {
             cellsNotAnimating.remove(at: index)
         }
         
-        cell.winkNumber(duration: duration, delay: delay)
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + duration + delay) {
+        cell.winkNumber {
             self.cellsNotAnimating.append(cell)
         }
-        
     }
     
     // MARK: - Colors

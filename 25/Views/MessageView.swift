@@ -25,28 +25,35 @@ class MessageView: UIVisualEffectView {
     
     // MARK: - Actions
     
-    public func show() {
-        UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: 0.4,
-            delay: 0.0,
-            options: [],
+    private var animator = UIViewPropertyAnimator()
+    
+    func show() {
+        let duration = 0.4
+        animator.stopAnimation(true)
+        animator = UIViewPropertyAnimator(
+            duration: duration,
+            curve: .easeOut,
             animations: {
                 self.effect = self.blur
                 self.label.alpha = 1.0
         })
+        animator.startAnimation()
     }
     
     @objc public func hide() {
-        UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: 0.15,
-            delay: 0.0,
-            options: [],
+        let duration = 0.15
+        animator.stopAnimation(true)
+        animator = UIViewPropertyAnimator(
+            duration: duration,
+            curve: .easeOut,
             animations: {
                 self.effect = nil
                 self.label.alpha = 0.0
-        }) { (_) in
+        })
+        animator.addCompletion { (_) in
             self.removeFromSuperview()
         }
+        animator.startAnimation()
     }
     
     // MARK: - Helping Methods
