@@ -13,14 +13,13 @@ import CoreLocation
 extension GameViewController: CLLocationManagerDelegate {
     
     var buttonsContainerViewFrame: CGRect {
+        #warning("Refactor this")
         let screenHeight = UIScreen.main.bounds.height
         let screenWidth = UIScreen.main.bounds.width
         let staturBarHeight = UIApplication.shared.statusBarFrame.height
         
-        let bottomGap = screenHeight - stopButton.frame.maxY
-        
         let minY = staturBarHeight + appearance.gridInset
-        let maxY = screenHeight - stopButton.frame.height - bottomGap - appearance.gridInset
+        let maxY = screenHeight - appearance.gridInset
         let maxAlllowedHeight = maxY - minY
         
         let expectedHeight = screenWidth / CGFloat(game.colums) * CGFloat(game.rows)
@@ -122,15 +121,19 @@ extension GameViewController: CLLocationManagerDelegate {
         for i in cells.indices {
             let number = game.numbers[i]
             let cell = cells[i]
+            let cellIsNotAnimating = cellsNotAnimating.contains(cell)
             cell.setNumber(
                 number,
                 hidden: hidden,
-                animated: animated
+                animated: animated ? cellIsNotAnimating : false
             )
         }
     }
     
     func swapNumbers(animated: Bool) {
+        if cellsNotAnimating.isEmpty { return }
+        
+        print(cellsNotAnimating.count)
         let cell1 = cellsNotAnimating[cellsNotAnimating.count.arc4random]
         guard let index1 = cellsNotAnimating.index(of: cell1) else { return }
         cellsNotAnimating.remove(at: index1)
@@ -180,6 +183,8 @@ extension GameViewController: CLLocationManagerDelegate {
     }
     
     internal func winkRandomNumber() {
+        if cellsNotAnimating.isEmpty { return }
+        
         let cell = cellsNotAnimating[cellsNotAnimating.count.arc4random]
         
         if let index = cellsNotAnimating.index(of: cell) {
@@ -223,15 +228,71 @@ extension GameViewController: CLLocationManagerDelegate {
         }
     }
     
+    // MARK: - Messages
+    
+    internal func showSwipeTips() {
+        self.view.addSubview(swipeUpMessageView)
+        self.view.addSubview(swipeDownMessageView)
+        
+        self.swipeUpMessageView.translatesAutoresizingMaskIntoConstraints = false
+        self.swipeDownMessageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let margins = self.view.layoutMarginsGuide
+        
+        // Swipe Up Tip View
+        self.swipeUpMessageView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        self.swipeUpMessageView.widthAnchor.constraint(lessThanOrEqualToConstant: 350).isActive = true
+        self.swipeUpMessageView.topAnchor.constraint(
+            greaterThanOrEqualTo: margins.topAnchor,
+            constant: 35.0
+        ).isActive = true
+        self.swipeUpMessageView.trailingAnchor.constraint(
+            greaterThanOrEqualTo: margins.trailingAnchor,
+            constant: 10.0
+        ).isActive = true
+        self.swipeUpMessageView.leadingAnchor.constraint(
+            greaterThanOrEqualTo: margins.leadingAnchor,
+            constant: 10.0
+        ).isActive = true
+        self.swipeUpMessageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+
+        // Swipe Down Tip View
+        self.swipeDownMessageView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        self.swipeDownMessageView.widthAnchor.constraint(lessThanOrEqualToConstant: 350).isActive = true
+        self.swipeDownMessageView.bottomAnchor.constraint(
+            greaterThanOrEqualTo: margins.bottomAnchor,
+            constant: -35.0
+        ).isActive = true
+        self.swipeDownMessageView.trailingAnchor.constraint(
+            greaterThanOrEqualTo: margins.trailingAnchor,
+            constant: 10.0
+        ).isActive = true
+        self.swipeDownMessageView.leadingAnchor.constraint(
+            greaterThanOrEqualTo: margins.leadingAnchor,
+            constant: 10.0
+        ).isActive = true
+        self.swipeDownMessageView.centerXAnchor.constraint(equalTo: margins.centerXAnchor).isActive = true
+        
+        self.swipeUpMessageView.show()
+        self.swipeDownMessageView.show()
+    }
+    
+    internal func hideSwipeTips() {
+        self.swipeUpMessageView.hide()
+        self.swipeDownMessageView.hide()
+    }
+    
     // MARK: - Helping Methods
     
     @objc internal func startGame() {
         messageView.hide()
+        if appearingCounter <= requiredNumberOfShowingSwipeTips {
+            self.hideSwipeTips()
+            appearingCounter += 1
+        }
         feedbackGenerator.playSelectionHapticFeedback()
         
-        self.selectedNumberIsRight = true
         self.statusBarIsHidden = true
-        self.settingsButton.hide(animated: true)
         
         if resultsIsShowing {
             resultsView.hide()
@@ -247,11 +308,10 @@ extension GameViewController: CLLocationManagerDelegate {
             cell.showNumber(animated: true)
         }
         
-        stopButton.isEnabled = true
         game.startGame()
         
         if game.winkNumbersMode {
-            timer1 = Timer.scheduledTimer(
+            winkNumberTimer = Timer.scheduledTimer(
                 timeInterval: TimeInterval(3.5 / Double(game.maxNumber)),
                 target: self,
                 selector: #selector(timerSceduled),
@@ -260,7 +320,7 @@ extension GameViewController: CLLocationManagerDelegate {
             )
         }
         if game.swapNumbersMode {
-            timer2 = Timer.scheduledTimer(
+            swapNumberTimer = Timer.scheduledTimer(
                 timeInterval: TimeInterval(5.0 / Double(game.maxNumber)),
                 target: self,
                 selector: #selector(timerSceduled),
@@ -271,28 +331,29 @@ extension GameViewController: CLLocationManagerDelegate {
     }
     
     func prepareForNewGame() {
-        self.statusBarIsHidden = false
-        self.settingsButton.show(animated: true)
+        winkNumberTimer.invalidate()
+        swapNumberTimer.invalidate()
         
-        if game.winkNumbersMode || game.swapNumbersMode {
-            timer1.invalidate()
-            timer2.invalidate()
-            cells.forEach { $0.titleLabel?.layer.removeAllAnimations() }
-        }
+        cells.forEach { $0.titleLabel?.layer.removeAllAnimations() }
         
         game.newGame()
         setNumbers(animated: false, hidden: true)
-        stopButton.isEnabled = false
         
         for cell in cells {
             cell.hideNumber(animated: true)
             cell.isEnabled = false
         }
-                
+        
+        if appearingCounter <= requiredNumberOfShowingSwipeTips {
+            self.showSwipeTips()
+        }
+        
         self.view.addSubview(messageView)
+        messageView.show()
+
         self.view.bringSubviewToFront(resultsView)
         
-        messageView.show()
+        self.statusBarIsHidden = false
     }
     
     @objc func timerSceduled() {
@@ -302,11 +363,6 @@ extension GameViewController: CLLocationManagerDelegate {
         if game.swapNumbersMode {
             swapNumbers(animated: true)
         }
-    }
-    
-    enum CellPart {
-        case number
-        case color
     }
     
 }

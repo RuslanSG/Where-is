@@ -9,9 +9,6 @@
 import UIKit
 
 class GameViewController: UIViewController, GameDelegate {
-
-    @IBOutlet weak var stopButton: UIButton!
-    @IBOutlet weak var settingsButton: UIButton!
     
     // MARK: -
     
@@ -41,6 +38,7 @@ class GameViewController: UIViewController, GameDelegate {
         view.clipsToBounds = true
         view.label.textColor = appearance.textColor
         view.label.font = UIFont.systemFont(ofSize: appearance.numbersFontSize)
+        view.label.text = "Старт"
         view.frame.size = CGSize(width: messageViewWidth, height: messageViewHeight)
         view.center = cellsContainerView.center
         
@@ -48,6 +46,40 @@ class GameViewController: UIViewController, GameDelegate {
         view.addGestureRecognizer(tap)
         
         return view
+    }()
+    
+    lazy var swipeUpMessageView: MessageView = {
+        let view = MessageView()
+        view.blur = appearance.blur
+        view.layer.cornerRadius = 15.0
+        view.clipsToBounds = true
+        view.label.text = "↑ Свайп вверх, чтобы открыть настройки"
+        view.label.textColor = appearance.textColor
+        view.label.font = UIFont.systemFont(ofSize: 15.0)
+        return view
+    }()
+    
+    lazy var swipeDownMessageView: MessageView = {
+        let view = MessageView()
+        view.blur = appearance.blur
+        view.layer.cornerRadius = 15.0
+        view.clipsToBounds = true
+        view.label.text = "↓ Свайп вниз, чтобы начать новую игру"
+        view.label.textColor = appearance.textColor
+        view.label.font = UIFont.systemFont(ofSize: 15.0)
+        return view
+    }()
+    
+    lazy var swipeUp: UISwipeGestureRecognizer = {
+        let swipe = UISwipeGestureRecognizer(target: self, action: #selector(userSwipedUp(_:)))
+        swipe.direction = .up
+        return swipe
+    }()
+    
+    lazy var swipeDown: UISwipeGestureRecognizer = {
+        let swipe = UISwipeGestureRecognizer(target: self, action: #selector(userSwipedDown(_:)))
+        swipe.direction = .down
+        return swipe
     }()
     
     // MARK: -
@@ -64,7 +96,18 @@ class GameViewController: UIViewController, GameDelegate {
     var firstTimeAppeared = true
     var resultsIsShowing = false
     
-    internal var selectedNumberIsRight: Bool?
+    internal let requiredNumberOfShowingSwipeTips = 5
+    internal var appearingCounter: Int {
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.Key.AppearingCount)
+        }
+        get {
+            guard let count = UserDefaults.standard.value(forKey: UserDefaults.Key.AppearingCount) as? Int else { return 1 }
+            return count
+        }
+    }
+    
+    internal var selectedNumberIsRight = true
     
     var grid: Grid {
         return Grid(
@@ -76,8 +119,8 @@ class GameViewController: UIViewController, GameDelegate {
         )
     }
         
-    var timer1 = Timer()
-    var timer2 = Timer()
+    var winkNumberTimer = Timer()
+    var swapNumberTimer = Timer()
     
     // MARK: - Buttons
     
@@ -89,6 +132,7 @@ class GameViewController: UIViewController, GameDelegate {
     }
     
     lazy var cellsNotAnimating = cells
+    
     private var lastPressedCell: CellView!
     
     internal var buttonHeight: CGFloat? {
@@ -104,6 +148,11 @@ class GameViewController: UIViewController, GameDelegate {
         setupInputComponents()
         setupColors()
         prepareForNewGame()
+        
+        if appearingCounter <= requiredNumberOfShowingSwipeTips {
+            swipeUpMessageView.show()
+            swipeDownMessageView.show()
+        }
         
         NotificationCenter.default.addObserver(
             self,
@@ -141,6 +190,9 @@ class GameViewController: UIViewController, GameDelegate {
         self.view.addSubview(feedbackView)
         self.view.addSubview(cellsContainerView)
         
+        self.view.addGestureRecognizer(swipeUp)
+        self.view.addGestureRecognizer(swipeDown)
+        
         addCells(count: game.numbers.count)
         
         self.view.sendSubviewToBack(feedbackView)
@@ -149,10 +201,6 @@ class GameViewController: UIViewController, GameDelegate {
     internal func setupColors() {
         // Background color
         self.view.backgroundColor = appearance.mainViewColor
-        
-        // Control buttons color
-        stopButton.tintColor = appearance.userInterfaceColor
-        settingsButton.tintColor = appearance.userInterfaceColor
         
         // Status bar color
         self.setNeedsStatusBarAppearanceUpdate()
@@ -167,6 +215,15 @@ class GameViewController: UIViewController, GameDelegate {
         messageView.blur = appearance.blur
         messageView.effect = appearance.blur
         messageView.label.textColor = game.colorfulCellsMode ? .white : appearance.textColor
+        
+        // Swipe tips color
+        swipeUpMessageView.blur = appearance.blur
+        swipeUpMessageView.effect = appearance.blur
+        swipeUpMessageView.label.textColor = game.colorfulCellsMode ? .white : appearance.textColor
+        
+        swipeDownMessageView.blur = appearance.blur
+        swipeDownMessageView.effect = appearance.blur
+        swipeDownMessageView.label.textColor = game.colorfulCellsMode ? .white : appearance.textColor
         
         // Cells color
         updateCellsColorsFromModel()
@@ -197,9 +254,10 @@ class GameViewController: UIViewController, GameDelegate {
     // MARK: - Actions
     
     @objc func cellPressed(sender: CellView) {
-        lastPressedCell = sender
+        self.lastPressedCell = sender
         sender.compress(numberFeedback: !game.winkNumbersMode && !game.shuffleNumbersMode && !game.swapNumbersMode)
-        let selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
+        self.selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
+
         if selectedNumberIsRight && sender.tag == game.maxNumber {
             // User tapped the last number
             game.finishGame()
@@ -216,38 +274,42 @@ class GameViewController: UIViewController, GameDelegate {
             prepareForNewGame()
             return
         }
-        if selectedNumberIsRight {
-            // User tapped the right number
+        
+        feedbackGenerator.playSelectionHapticFeedback()
+        game.numberSelected(sender.tag)
+    }
+    
+    @objc func cellReleased(sender: CellView) {
+        if self.selectedNumberIsRight {
             feedbackGenerator.playSelectionHapticFeedback()
-            self.selectedNumberIsRight = true
         } else {
             // User tapped the wrong number
             feedbackView.feedbackSelection(isRight: false)
             feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .error)
         }
-        game.numberSelected(sender.tag)
-        if game.shuffleNumbersMode {
-            game.shuffleNumbers()
-            setNumbers(animated: true)
+        if game.inGame {
+            if game.shuffleNumbersMode {
+                game.shuffleNumbers()
+                setNumbers(animated: true)
+            }
+            if game.shuffleColorsMode {
+                updateCellsColorsFromModel()
+            }
         }
-        if game.shuffleColorsMode {
-            updateCellsColorsFromModel()
-        }
-    }
-    
-    @objc func cellReleased(sender: CellView) {
         sender.uncompress()
-        if let selectedNumberIsRight = self.selectedNumberIsRight, selectedNumberIsRight == true {
-            feedbackGenerator.playSelectionHapticFeedback()
-            self.selectedNumberIsRight = nil
+    }
+    
+    @objc func userSwipedUp(_ sender: UISwipeGestureRecognizer) {
+        if let lastPressedCell = self.lastPressedCell {
+            lastPressedCell.uncompress(hiddenNumber: true)
         }
-    }
-    
-    @IBAction func stopButtonPressed(sender: UIButton) {
         prepareForNewGame()
+        self.performSegue(withIdentifier: "showSettings", sender: sender)
     }
     
-    @IBAction func settingsButtonPressed(sender: UIButton) {
+    @objc func userSwipedDown(_ sender: UISwipeGestureRecognizer) {
+        guard let lastPressedCell = self.lastPressedCell else { return }
+        lastPressedCell.uncompress(hiddenNumber: true)
         prepareForNewGame()
     }
     

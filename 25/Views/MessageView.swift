@@ -59,7 +59,6 @@ class MessageView: UIVisualEffectView {
     // MARK: - Helping Methods
     
     private func setupInputComponents() {
-        label.text = "Старт"
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
         label.alpha = 0.0

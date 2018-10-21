@@ -111,7 +111,7 @@ extension CellView {
         })
     }
     
-    func uncompress() {
+    func uncompress(hiddenNumber: Bool = false) {
         let duration: Double = 0.4
         let delay: Double = 0.0
         
@@ -130,7 +130,7 @@ extension CellView {
                         width: cellFrameWidth,
                         height: cellFrameHeight
                     )
-                    if self.numberFeedback {
+                    if self.numberFeedback && !hiddenNumber {
                         self.titleLabel?.alpha = 1.0
                     }
             })
@@ -201,7 +201,7 @@ extension CellView {
     }
     
     func winkNumber(completion: (() -> Void)?) {
-        let duration = 0.4
+        let duration = 0.6
         let delay = 1.0
         
         animator.stopAnimation(true)
@@ -235,34 +235,32 @@ extension CellView {
     }
     
     func setNumber(_ number: Int, hidden: Bool, animated: Bool) {
+        let durationIn: Double = 0.1
+        let durationOut: Double = 0.35
+        let delayIn: Double = 0.0
+        let delayOut: Double = 0.0
         
         if animated {
-            let durationIn = 0.1
-            let durationOut = 0.35
-            let delay = 0.0
-            
-            animator.stopAnimation(true)
-            animator = UIViewPropertyAnimator(
-                duration: durationIn,
-                curve: .easeIn,
+            UIViewPropertyAnimator.runningPropertyAnimator(
+                withDuration: durationIn,
+                delay: delayIn,
+                options: .curveEaseIn,
                 animations: {
                     self.titleLabel?.alpha = 0.0
-            })
-            animator.addCompletion { (position) in
+            }) { (position) in
                 self.setTitle(String(number), for: .normal)
                 self.tag = number
-                if position == .end && !hidden {
-                    self.animator = UIViewPropertyAnimator(
-                        duration: durationOut,
-                        curve: .easeOut,
+                if !hidden {
+                    UIViewPropertyAnimator.runningPropertyAnimator(
+                        withDuration: durationOut,
+                        delay: delayOut,
+                        options: .curveEaseOut,
                         animations: {
                             self.titleLabel?.alpha = 1.0
                     })
-                    self.animator.startAnimation(afterDelay: delay)
                 }
             }
-            animator.startAnimation()
-        }  else {
+        } else {
             self.setTitle(String(number), for: .normal)
             self.tag = number
             self.titleLabel?.alpha = hidden ? 0.0 : 1.0

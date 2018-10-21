@@ -224,6 +224,7 @@ extension UserDefaults {
         static let NotFirstLaunch: String = "NotFirstLaunchUserDefaultsKey"
         static let Level: String = "LevelUserDefaultsKey"
         static let LevelChanger: String = "LevelChangerUserDefaultsKey"
+        static let AppearingCount: String = "AppearingCountUserDefaultsKey"
     }
 }
 
