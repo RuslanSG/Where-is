@@ -10,6 +10,12 @@ import UIKit
 
 class GameViewController: UIViewController, GameDelegate {
     
+    internal enum Strings {
+        static let StartButtonText = "Старт"
+        static let SwipeUpTipLabelText = "↑ Смахните вверх, чтобы открыть настройки"
+        static let SwipeDownTipLabelText = "↓ Смахните вниз, чтобы начать новую игру"
+    }
+    
     // MARK: -
     
     lazy var feedbackView = FeedbackView(frame: self.view.frame)
@@ -38,7 +44,7 @@ class GameViewController: UIViewController, GameDelegate {
         view.clipsToBounds = true
         view.label.textColor = appearance.textColor
         view.label.font = UIFont.systemFont(ofSize: appearance.numbersFontSize)
-        view.label.text = "Старт"
+        view.label.text = Strings.StartButtonText
         view.frame.size = CGSize(width: messageViewWidth, height: messageViewHeight)
         view.center = cellsContainerView.center
         
@@ -48,26 +54,20 @@ class GameViewController: UIViewController, GameDelegate {
         return view
     }()
     
-    lazy var swipeUpMessageView: MessageView = {
-        let view = MessageView()
-        view.blur = appearance.blur
-        view.layer.cornerRadius = 15.0
-        view.clipsToBounds = true
-        view.label.text = "↑ Свайп вверх, чтобы открыть настройки"
-        view.label.textColor = appearance.textColor
-        view.label.font = UIFont.systemFont(ofSize: 15.0)
-        return view
-    }()
-    
-    lazy var swipeDownMessageView: MessageView = {
-        let view = MessageView()
-        view.blur = appearance.blur
-        view.layer.cornerRadius = 15.0
-        view.clipsToBounds = true
-        view.label.text = "↓ Свайп вниз, чтобы начать новую игру"
-        view.label.textColor = appearance.textColor
-        view.label.font = UIFont.systemFont(ofSize: 15.0)
-        return view
+    lazy var tipsLabel: UILabel? = {
+        if !needsToShowTips { return nil }
+        let height: CGFloat = 30.0
+        let label = UILabel(frame: CGRect(
+            x: UIScreen.main.bounds.maxX - height,
+            y: UIScreen.main.bounds.minY,
+            width: UIScreen.main.bounds.width,
+            height: height)
+        )
+        label.font = UIFont.boldSystemFont(ofSize: 15.0)
+        label.textAlignment = .center
+        label.isUserInteractionEnabled = false
+        label.adjustsFontSizeToFitWidth = true
+        return label
     }()
     
     lazy var swipeUp: UISwipeGestureRecognizer = {
@@ -96,13 +96,25 @@ class GameViewController: UIViewController, GameDelegate {
     var firstTimeAppeared = true
     var resultsIsShowing = false
     
-    internal let requiredNumberOfShowingSwipeTips = 5
-    internal var appearingCounter: Int {
+    internal let requiredNumberOfEvents = 3
+    private var needsToShowTips: Bool {
+        return showSettingsEventCounter <= requiredNumberOfEvents && stopGameEventConunter <= requiredNumberOfEvents
+    }
+    internal var showSettingsEventCounter: Int {
         set {
-            UserDefaults.standard.set(newValue, forKey: UserDefaults.Key.AppearingCount)
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.Key.ShowSettingsEventCount)
         }
         get {
-            guard let count = UserDefaults.standard.value(forKey: UserDefaults.Key.AppearingCount) as? Int else { return 1 }
+            guard let count = UserDefaults.standard.value(forKey: UserDefaults.Key.ShowSettingsEventCount) as? Int else { return 0 }
+            return count
+        }
+    }
+    internal var stopGameEventConunter: Int {
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.Key.StopGameEventCount)
+        }
+        get {
+            guard let count = UserDefaults.standard.value(forKey: UserDefaults.Key.StopGameEventCount) as? Int else { return 0 }
             return count
         }
     }
@@ -149,11 +161,6 @@ class GameViewController: UIViewController, GameDelegate {
         setupColors()
         prepareForNewGame()
         
-        if appearingCounter <= requiredNumberOfShowingSwipeTips {
-            swipeUpMessageView.show()
-            swipeDownMessageView.show()
-        }
-        
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(willResignActive),
@@ -185,8 +192,6 @@ class GameViewController: UIViewController, GameDelegate {
     // MARK: - Setup UI
     
     internal func setupInputComponents() {
-        self.view.layoutSubviews()
-                
         self.view.addSubview(feedbackView)
         self.view.addSubview(cellsContainerView)
         
@@ -195,7 +200,17 @@ class GameViewController: UIViewController, GameDelegate {
         
         addCells(count: game.numbers.count)
         
-        self.view.sendSubviewToBack(feedbackView)
+        if let tipsLabel = tipsLabel {
+            self.view.addSubview(tipsLabel)
+            // Tips label constraints
+            let margins = self.view.layoutMarginsGuide
+            tipsLabel.translatesAutoresizingMaskIntoConstraints = false
+            let trailingConstraint = tipsLabel.trailingAnchor.constraint(equalTo: margins.trailingAnchor)
+            let leadingConstraint = tipsLabel.leadingAnchor.constraint(equalTo: margins.leadingAnchor)
+            let bottomContstraint = tipsLabel.bottomAnchor.constraint(equalTo: margins.bottomAnchor, constant: -5.0)
+            let heightConstraint = tipsLabel.heightAnchor.constraint(equalToConstant: 30.0)
+            NSLayoutConstraint.activate([trailingConstraint, leadingConstraint, bottomContstraint, heightConstraint])
+        }
     }
     
     internal func setupColors() {
@@ -216,17 +231,11 @@ class GameViewController: UIViewController, GameDelegate {
         messageView.effect = appearance.blur
         messageView.label.textColor = game.colorfulCellsMode ? .white : appearance.textColor
         
-        // Swipe tips color
-        swipeUpMessageView.blur = appearance.blur
-        swipeUpMessageView.effect = appearance.blur
-        swipeUpMessageView.label.textColor = game.colorfulCellsMode ? .white : appearance.textColor
-        
-        swipeDownMessageView.blur = appearance.blur
-        swipeDownMessageView.effect = appearance.blur
-        swipeDownMessageView.label.textColor = game.colorfulCellsMode ? .white : appearance.textColor
-        
         // Cells color
         updateCellsColorsFromModel()
+        
+        // Tips label color
+        tipsLabel?.textColor = appearance.textColor
     }
     
     // MARK: - Status Bar
@@ -305,12 +314,13 @@ class GameViewController: UIViewController, GameDelegate {
         }
         prepareForNewGame()
         self.performSegue(withIdentifier: "showSettings", sender: sender)
+        showSettingsEventCounter += 1
     }
     
     @objc func userSwipedDown(_ sender: UISwipeGestureRecognizer) {
         guard let lastPressedCell = self.lastPressedCell else { return }
         lastPressedCell.uncompress(hiddenNumber: true)
-        prepareForNewGame()
+        stopGame()
     }
     
     // MARK: - GameDelegate

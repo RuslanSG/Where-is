@@ -24,6 +24,8 @@ class CellView: UIButton {
     
     private var numberFeedback = true
     private var showNumber = true
+    private var isWinking = false
+    private var isAnimating = false
 
     private lazy var cellView: UIView = {
         let view = UIView()
@@ -31,7 +33,7 @@ class CellView: UIButton {
         return view
     }()
     
-    private var animator = UIViewPropertyAnimator()
+    var animator = UIViewPropertyAnimator()
     
     // MARK: - Initialization
     
@@ -204,7 +206,6 @@ extension CellView {
         let duration = 0.6
         let delay = 1.0
         
-        animator.stopAnimation(true)
         animator = UIViewPropertyAnimator(
             duration: duration,
             curve: .easeIn,
@@ -212,7 +213,7 @@ extension CellView {
                 self.titleLabel?.alpha = 0.0
         })
         animator.addCompletion { (position) in
-            if position == .end && self.showNumber {
+            if position == .end {
                 self.animator = UIViewPropertyAnimator(
                     duration: duration,
                     curve: .easeOut,
@@ -221,26 +222,40 @@ extension CellView {
                 })
                 self.animator.addCompletion({ (position) in
                     if position == .end {
+                        self.isAnimating = false
+                        self.isWinking = false
                         guard let completion = completion else { return }
                         completion()
                     }
                 })
                 self.animator.startAnimation(afterDelay: delay)
             } else {
+                self.isAnimating = false
+                self.isWinking = false
                 guard let completion = completion else { return }
                 completion()
             }
         }
+        
+        animator.stopAnimation(true)
         animator.startAnimation()
+        isAnimating = true
+        isWinking = true
     }
     
-    func setNumber(_ number: Int, hidden: Bool, animated: Bool) {
-        let durationIn: Double = 0.1
-        let durationOut: Double = 0.35
-        let delayIn: Double = 0.0
-        let delayOut: Double = 0.0
-        
+    func setNumber(_ number: Int, alpha: CGFloat, hidden: Bool, animated: Bool) {
         if animated {
+            isAnimating = true
+            
+            let durationIn: Double = 0.1
+            let durationOut: Double = 0.35
+            let delayIn: Double = 0.0
+            let delayOut: Double = 0.0
+            
+            if self.isWinking && animator.state != .stopped {
+                animator.stopAnimation(false)
+            }
+            
             UIViewPropertyAnimator.runningPropertyAnimator(
                 withDuration: durationIn,
                 delay: delayIn,
@@ -256,14 +271,22 @@ extension CellView {
                         delay: delayOut,
                         options: .curveEaseOut,
                         animations: {
-                            self.titleLabel?.alpha = 1.0
-                    })
+                            self.titleLabel?.alpha = alpha
+                    }) { (position) in
+                        if position == .end {
+                            if self.isWinking && self.animator.state == .stopped {
+                                self.animator.finishAnimation(at: .end)
+                            } else {
+                                self.isAnimating = false
+                            }
+                        }
+                    }
                 }
             }
         } else {
             self.setTitle(String(number), for: .normal)
             self.tag = number
-            self.titleLabel?.alpha = hidden ? 0.0 : 1.0
+            self.titleLabel?.alpha = hidden ? 0.0 : alpha
         }
     }
     

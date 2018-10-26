@@ -131,7 +131,7 @@ extension UIView {
 }
 
 extension UILabel {
-    func setText(_ text: String, animated: Bool) {
+    func setText(_ text: String?, animated: Bool) {
         if animated {
             let durationIn = 0.2
             let durationOut = 0.2
@@ -225,6 +225,8 @@ extension UserDefaults {
         static let Level: String = "LevelUserDefaultsKey"
         static let LevelChanger: String = "LevelChangerUserDefaultsKey"
         static let AppearingCount: String = "AppearingCountUserDefaultsKey"
+        static let ShowSettingsEventCount: String = "ShowSettingsEventCountUserDefaultsKey"
+        static let StopGameEventCount: String = "StopGameEventCountUserDefaultsKey"
     }
 }
 

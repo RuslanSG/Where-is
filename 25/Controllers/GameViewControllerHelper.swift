@@ -13,13 +13,13 @@ import CoreLocation
 extension GameViewController: CLLocationManagerDelegate {
     
     var buttonsContainerViewFrame: CGRect {
-        #warning("Refactor this")
         let screenHeight = UIScreen.main.bounds.height
         let screenWidth = UIScreen.main.bounds.width
-        let staturBarHeight = UIApplication.shared.statusBarFrame.height
+        let statusBarHeight = UIApplication.shared.statusBarFrame.height
+        let bottomGap = tipsLabel?.frame.height ?? 0.0
         
-        let minY = staturBarHeight + appearance.gridInset
-        let maxY = screenHeight - appearance.gridInset
+        let minY = statusBarHeight + appearance.gridInset
+        let maxY = screenHeight - bottomGap - appearance.gridInset
         let maxAlllowedHeight = maxY - minY
         
         let expectedHeight = screenWidth / CGFloat(game.colums) * CGFloat(game.rows)
@@ -121,11 +121,11 @@ extension GameViewController: CLLocationManagerDelegate {
         for i in cells.indices {
             let number = game.numbers[i]
             let cell = cells[i]
-            let cellIsNotAnimating = cellsNotAnimating.contains(cell)
             cell.setNumber(
                 number,
+                alpha: cell.titleLabel?.alpha ?? 1.0,
                 hidden: hidden,
-                animated: animated ? cellIsNotAnimating : false
+                animated: true
             )
         }
     }
@@ -133,7 +133,6 @@ extension GameViewController: CLLocationManagerDelegate {
     func swapNumbers(animated: Bool) {
         if cellsNotAnimating.isEmpty { return }
         
-        print(cellsNotAnimating.count)
         let cell1 = cellsNotAnimating[cellsNotAnimating.count.arc4random]
         guard let index1 = cellsNotAnimating.index(of: cell1) else { return }
         cellsNotAnimating.remove(at: index1)
@@ -228,68 +227,14 @@ extension GameViewController: CLLocationManagerDelegate {
         }
     }
     
-    // MARK: - Messages
-    
-    internal func showSwipeTips() {
-        self.view.addSubview(swipeUpMessageView)
-        self.view.addSubview(swipeDownMessageView)
-        
-        self.swipeUpMessageView.translatesAutoresizingMaskIntoConstraints = false
-        self.swipeDownMessageView.translatesAutoresizingMaskIntoConstraints = false
-        
-        let margins = self.view.layoutMarginsGuide
-        
-        // Swipe Up Tip View
-        self.swipeUpMessageView.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        self.swipeUpMessageView.widthAnchor.constraint(lessThanOrEqualToConstant: 350).isActive = true
-        self.swipeUpMessageView.topAnchor.constraint(
-            greaterThanOrEqualTo: margins.topAnchor,
-            constant: 35.0
-        ).isActive = true
-        self.swipeUpMessageView.trailingAnchor.constraint(
-            greaterThanOrEqualTo: margins.trailingAnchor,
-            constant: 10.0
-        ).isActive = true
-        self.swipeUpMessageView.leadingAnchor.constraint(
-            greaterThanOrEqualTo: margins.leadingAnchor,
-            constant: 10.0
-        ).isActive = true
-        self.swipeUpMessageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-
-        // Swipe Down Tip View
-        self.swipeDownMessageView.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        self.swipeDownMessageView.widthAnchor.constraint(lessThanOrEqualToConstant: 350).isActive = true
-        self.swipeDownMessageView.bottomAnchor.constraint(
-            greaterThanOrEqualTo: margins.bottomAnchor,
-            constant: -35.0
-        ).isActive = true
-        self.swipeDownMessageView.trailingAnchor.constraint(
-            greaterThanOrEqualTo: margins.trailingAnchor,
-            constant: 10.0
-        ).isActive = true
-        self.swipeDownMessageView.leadingAnchor.constraint(
-            greaterThanOrEqualTo: margins.leadingAnchor,
-            constant: 10.0
-        ).isActive = true
-        self.swipeDownMessageView.centerXAnchor.constraint(equalTo: margins.centerXAnchor).isActive = true
-        
-        self.swipeUpMessageView.show()
-        self.swipeDownMessageView.show()
-    }
-    
-    internal func hideSwipeTips() {
-        self.swipeUpMessageView.hide()
-        self.swipeDownMessageView.hide()
-    }
-    
     // MARK: - Helping Methods
     
     @objc internal func startGame() {
         messageView.hide()
-        if appearingCounter <= requiredNumberOfShowingSwipeTips {
-            self.hideSwipeTips()
-            appearingCounter += 1
-        }
+        
+        let needsToShowTip = stopGameEventConunter <= requiredNumberOfEvents
+        tipsLabel?.setText(needsToShowTip ? Strings.SwipeDownTipLabelText : nil, animated: true)
+        
         feedbackGenerator.playSelectionHapticFeedback()
         
         self.statusBarIsHidden = true
@@ -330,11 +275,21 @@ extension GameViewController: CLLocationManagerDelegate {
         }
     }
     
+    func stopGame() {
+        stopGameEventConunter += 1
+        if game.winkNumbersMode { cellsNotAnimating = cells }
+        prepareForNewGame()
+    }
+    
     func prepareForNewGame() {
         winkNumberTimer.invalidate()
         swapNumberTimer.invalidate()
         
-        cells.forEach { $0.titleLabel?.layer.removeAllAnimations() }
+        cells.forEach { $0.animator.stopAnimation(true) }
+        
+        if game.swapNumbersMode {
+            cells.forEach { $0.titleLabel?.layer.removeAllAnimations() }
+        }
         
         game.newGame()
         setNumbers(animated: false, hidden: true)
@@ -344,9 +299,8 @@ extension GameViewController: CLLocationManagerDelegate {
             cell.isEnabled = false
         }
         
-        if appearingCounter <= requiredNumberOfShowingSwipeTips {
-            self.showSwipeTips()
-        }
+        let needsToShowTip = showSettingsEventCounter <= requiredNumberOfEvents
+        tipsLabel?.setText(needsToShowTip ? Strings.SwipeUpTipLabelText : nil, animated: true)
         
         self.view.addSubview(messageView)
         messageView.show()
