@@ -236,8 +236,6 @@ extension CellView {
                 completion()
             }
         }
-        
-        animator.stopAnimation(true)
         animator.startAnimation()
         isAnimating = true
         isWinking = true
@@ -252,7 +250,7 @@ extension CellView {
             let delayIn: Double = 0.0
             let delayOut: Double = 0.0
             
-            if self.isWinking && animator.state != .stopped {
+            if animator.state != .stopped {
                 animator.stopAnimation(false)
             }
             

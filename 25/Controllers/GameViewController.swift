@@ -283,7 +283,7 @@ class GameViewController: UIViewController, GameDelegate {
             prepareForNewGame()
             return
         }
-        
+
         feedbackGenerator.playSelectionHapticFeedback()
         game.numberSelected(sender.tag)
     }

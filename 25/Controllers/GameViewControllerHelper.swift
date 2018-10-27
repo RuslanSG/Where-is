@@ -285,11 +285,16 @@ extension GameViewController: CLLocationManagerDelegate {
         winkNumberTimer.invalidate()
         swapNumberTimer.invalidate()
         
-        cells.forEach { $0.animator.stopAnimation(true) }
-        
-        if game.swapNumbersMode {
-            cells.forEach { $0.titleLabel?.layer.removeAllAnimations() }
+        for cell in cells {
+            if cell.animator.state != .stopped {
+                cell.animator.stopAnimation(true)
+            } else {
+                cell.animator.finishAnimation(at: .end)
+            }
+            cell.titleLabel?.layer.removeAllAnimations()
         }
+        
+        print(cellsNotAnimating.count)
         
         game.newGame()
         setNumbers(animated: false, hidden: true)
