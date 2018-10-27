@@ -8,7 +8,7 @@
 
 import UIKit
 
-class GameViewController: UIViewController, GameDelegate {
+class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
     
     internal enum Strings {
         static let StartButtonText = "Старт"
@@ -34,6 +34,7 @@ class GameViewController: UIViewController, GameDelegate {
         view.actionButton.alpha = 0.0
         view.actionButton.backgroundColor = appearance.userInterfaceColor
         view.actionButton.layer.cornerRadius = appearance.cornerRadius
+        view.delegate = self
         return view
     }()
     
@@ -134,11 +135,10 @@ class GameViewController: UIViewController, GameDelegate {
     var winkNumberTimer = Timer()
     var swapNumberTimer = Timer()
     
-    // MARK: - Buttons
+    // MARK: - Cells
     
     var cells = [CellView]() {
         didSet {
-            cellsContainerView.frame = buttonsContainerViewFrame
             cellsNotAnimating = cells
         }
     }
@@ -199,6 +199,7 @@ class GameViewController: UIViewController, GameDelegate {
         self.view.addGestureRecognizer(swipeDown)
         
         addCells(count: game.numbers.count)
+        updateCellFrames(animated: false)
         
         if let tipsLabel = tipsLabel {
             self.view.addSubview(tipsLabel)
@@ -280,7 +281,7 @@ class GameViewController: UIViewController, GameDelegate {
             sender.uncompress()
             
             game.changeLevel()
-            prepareForNewGame()
+            stopAnimations()
             return
         }
 
@@ -325,21 +326,38 @@ class GameViewController: UIViewController, GameDelegate {
     
     // MARK: - GameDelegate
     
+    private var needsToUpdateCellColors = false
+    private var needsToUpdateCellsCount = false
+    
     func colorfulCellsModeStateChanged(to state: Bool) {
-        messageView.label.textColor = state ? .white : appearance.textColor
-        updateCellsColorsFromModel()
+        if resultsIsShowing {
+            needsToUpdateCellColors = true
+        } else {
+            prepareForColorfulCellsMode()
+        }
     }
     
     func maxNumberChanged(to maxNumber: Int) {
-        if cells.count < maxNumber {
-            addCells(count: maxNumber - cells.count)
+        if resultsIsShowing {
+            needsToUpdateCellsCount = true
         } else {
-            removeCells(count: cells.count - maxNumber)
+            updateCellsCount(animated: false)
         }
-        updateCellFrames()
-        setNumbers(animated: false, hidden: true)
-        messageView.bounds.size = CGSize(width: messageViewWidth, height: messageViewHeight)
-        messageView.center = cellsContainerView.center
+    }
+    
+    // MARK: - RelusltsViewDelegate
+    
+    func doneButtonPressed(_ sender: UIButton) {
+        resultsIsShowing = false
+        if needsToUpdateCellColors {
+            needsToUpdateCellColors = false
+            prepareForColorfulCellsMode()
+        }
+        if needsToUpdateCellsCount {
+            needsToUpdateCellsCount = false
+            updateCellsCount(animated: true)
+        }
+        prepareForNewGame()
     }
     
     // MARK: - Segue

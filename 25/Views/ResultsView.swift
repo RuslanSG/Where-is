@@ -8,7 +8,13 @@
 
 import UIKit
 
+protocol ResultsViewDelegate {
+    func doneButtonPressed(_ sender: UIButton)
+}
+
 class ResultsView: UIVisualEffectView {
+    
+    var delegate: ResultsViewDelegate?
     
     var blur = UIBlurEffect()
     
@@ -40,7 +46,7 @@ class ResultsView: UIVisualEffectView {
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17.0)
         button.addTarget(self, action: #selector(hide), for: .touchUpInside)
-        button.addTarget(self, action: #selector(actionButtonPressed), for: .touchDown)
+        button.addTarget(self, action: #selector(actionButtonPressed(_:)), for: .touchDown)
         return button
     }()
     
@@ -80,7 +86,8 @@ class ResultsView: UIVisualEffectView {
         }
     }
     
-    @objc private func actionButtonPressed() {
+    @objc private func actionButtonPressed(_ sender: UIButton) {
+        delegate?.doneButtonPressed(sender)
         UIViewPropertyAnimator.runningPropertyAnimator(
             withDuration: 0.03,
             delay: 0.0,
@@ -88,7 +95,6 @@ class ResultsView: UIVisualEffectView {
             animations: {
                 self.actionButton.alpha = 0.2
         })
-        
     }
     
     // MARK: - Initialization

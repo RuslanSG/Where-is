@@ -26,7 +26,7 @@ class CellView: UIButton {
     private var showNumber = true
     private var isWinking = false
     private var isAnimating = false
-
+    
     private lazy var cellView: UIView = {
         let view = UIView()
         view.isUserInteractionEnabled = false
@@ -205,7 +205,7 @@ extension CellView {
     func winkNumber(completion: (() -> Void)?) {
         let duration = 0.6
         let delay = 1.0
-        
+                
         animator = UIViewPropertyAnimator(
             duration: duration,
             curve: .easeIn,
@@ -229,11 +229,6 @@ extension CellView {
                     }
                 })
                 self.animator.startAnimation(afterDelay: delay)
-            } else {
-                self.isAnimating = false
-                self.isWinking = false
-                guard let completion = completion else { return }
-                completion()
             }
         }
         animator.startAnimation()

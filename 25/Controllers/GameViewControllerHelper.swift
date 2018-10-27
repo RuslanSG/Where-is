@@ -12,7 +12,7 @@ import CoreLocation
 
 extension GameViewController: CLLocationManagerDelegate {
     
-    var buttonsContainerViewFrame: CGRect {
+    var cellsContainerViewFrame: CGRect {
         let screenHeight = UIScreen.main.bounds.height
         let screenWidth = UIScreen.main.bounds.width
         let statusBarHeight = UIApplication.shared.statusBarFrame.height
@@ -73,12 +73,53 @@ extension GameViewController: CLLocationManagerDelegate {
     
     // MARK: - Cells
     
-    func updateCellFrames() {
+    func updateCellFrames(animated: Bool) {
+        updateCellContainerViewFrame(animated: animated)
         for i in cells.indices {
             let cell = cells[i]
             if let cellFrame = grid[i] {
-                cell.frame = cellFrame
+                if animated {
+                    UIViewPropertyAnimator.runningPropertyAnimator(
+                        withDuration: 0.2,
+                        delay: 0.0,
+                        options: .curveEaseInOut,
+                        animations: {
+                            cell.frame = cellFrame
+                    }) { (position) in
+                        if position == .end {
+                            if cell.alpha < 1.0 {
+                                UIViewPropertyAnimator.runningPropertyAnimator(
+                                    withDuration: 0.7,
+                                    delay: 0.0,
+                                    options: .curveEaseInOut,
+                                    animations: {
+                                        cell.alpha = 1.0
+                                })
+                            }
+                        }
+                    }
+                } else {
+                    cell.frame = cellFrame
+                    if cell.alpha < 1.0 {
+                        cell.alpha = 1.0
+                    }
+                    
+                }
             }
+        }
+    }
+    
+    func updateCellContainerViewFrame(animated: Bool) {
+        if animated {
+            UIViewPropertyAnimator.runningPropertyAnimator(
+                withDuration: 0.2,
+                delay: 0.0,
+                options: .curveEaseInOut,
+                animations: {
+                    self.cellsContainerView.frame = self.cellsContainerViewFrame
+            })
+        } else {
+            cellsContainerView.frame = cellsContainerViewFrame
         }
     }
     
@@ -92,6 +133,7 @@ extension GameViewController: CLLocationManagerDelegate {
                 cell.setBackgroundColor(to: backgroundColor, animated: false)
                 cell.setNumberColor(to: numberColor, animated: false)
                 cell.setCornerRadius(to: appearance.cornerRadius)
+                cell.alpha = 0.0
                 cell.titleLabel?.font = UIFont.systemFont(ofSize: appearance.numbersFontSize)
                 cell.addTarget(self, action: #selector(cellPressed(sender:)), for: .touchDown)
                 cell.addTarget(self, action: #selector(cellReleased(sender:)), for: .touchUpInside)
@@ -101,18 +143,57 @@ extension GameViewController: CLLocationManagerDelegate {
             cells.append(cell)
             cellsContainerView.addSubview(cell)
         }
-        updateCellFrames()
     }
     
-    func removeCells(count: Int) {
+    func removeCells(count: Int, animated: Bool) {
         assert(count % 5 == 0, "Reason: invalid number of buttons to remove. Provide a multiple of five number.")
         for _ in 0..<count {
             let lastCell = cells.last
             if let lastCell = lastCell {
-                lastCell.removeFromSuperview()
+                if animated {
+                    lastCell.hideNumber(animated: false)
+                    UIViewPropertyAnimator.runningPropertyAnimator(
+                        withDuration: 0.5,
+                        delay: 0.0,
+                        options: .curveEaseInOut,
+                        animations: {
+                            lastCell.alpha = 0.0
+                    }) { (position) in
+                        if position == .end {
+                            lastCell.removeFromSuperview()
+                        }
+                    }
+                } else {
+                    lastCell.removeFromSuperview()
+                }
             }
             cells.removeLast()
         }
+    }
+    
+    internal func updateCellsCount(animated: Bool) {
+        // Adding/removing cells
+        if cells.count < game.maxNumber {
+            addCells(count: game.maxNumber - cells.count)
+        } else {
+            removeCells(count: cells.count - game.maxNumber, animated: animated)
+        }
+        
+        // Change cells position
+        updateCellFrames(animated: animated)
+        
+        // Set cell numbers
+        setNumbers(animated: false, hidden: true)
+        
+        // Change message view position
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: 0.2,
+            delay: 0.0,
+            options: .curveEaseInOut,
+            animations: {
+                self.messageView.bounds.size = CGSize(width: self.messageViewWidth, height: self.messageViewHeight)
+                self.messageView.center = self.cellsContainerView.center
+        })
     }
     
     // MARK: - Numbers
@@ -192,6 +273,7 @@ extension GameViewController: CLLocationManagerDelegate {
         
         cell.winkNumber {
             self.cellsNotAnimating.append(cell)
+            print(self.cellsNotAnimating.count)
         }
     }
     
@@ -225,6 +307,11 @@ extension GameViewController: CLLocationManagerDelegate {
             cell.setBackgroundColor(to: cellBackgroundColor, animated: true)
             cell.setNumberColor(to: cellNumberColor, animated: true)
         }
+    }
+    
+    internal func prepareForColorfulCellsMode() {
+        messageView.label.textColor = game.colorfulCellsMode ? .white : appearance.textColor
+        updateCellsColorsFromModel()
     }
     
     // MARK: - Helping Methods
@@ -282,22 +369,10 @@ extension GameViewController: CLLocationManagerDelegate {
     }
     
     func prepareForNewGame() {
-        winkNumberTimer.invalidate()
-        swapNumberTimer.invalidate()
-        
-        for cell in cells {
-            if cell.animator.state != .stopped {
-                cell.animator.stopAnimation(true)
-            } else {
-                cell.animator.finishAnimation(at: .end)
-            }
-            cell.titleLabel?.layer.removeAllAnimations()
-        }
-        
-        print(cellsNotAnimating.count)
-        
+        stopAnimations()
         game.newGame()
         setNumbers(animated: false, hidden: true)
+        cellsNotAnimating = cells
         
         for cell in cells {
             cell.hideNumber(animated: true)
@@ -315,10 +390,27 @@ extension GameViewController: CLLocationManagerDelegate {
         self.statusBarIsHidden = false
     }
     
+    func stopAnimations() {
+        winkNumberTimer.invalidate()
+        swapNumberTimer.invalidate()
+        for cell in cells {
+            if cell.animator.state != .stopped {
+                cell.animator.stopAnimation(true)
+            } else {
+                cell.animator.finishAnimation(at: .end)
+            }
+            cell.titleLabel?.layer.removeAllAnimations()
+        }
+        print("Cells not animating: \(cellsNotAnimating.count)")
+    }
+    
     @objc func timerSceduled() {
+        // Winking random number if Wink Numbers Mode is on
         if game.winkNumbersMode {
             winkRandomNumber()
         }
+        
+        // Swaping random numbers if Swap Numbers Mode is on
         if game.swapNumbersMode {
             swapNumbers(animated: true)
         }
