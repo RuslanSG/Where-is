@@ -73,11 +73,14 @@ extension GameViewController: CLLocationManagerDelegate {
     
     // MARK: - Cells
     
-    func updateCellFrames(animated: Bool) {
+    func updateCellFrames(animated: Bool, completion: (() -> Void)? = nil) {
+        /// Updates cell contariner view frame
         updateCellContainerViewFrame(animated: animated)
+        
+        /// Updates cell frames
         for i in cells.indices {
             let cell = cells[i]
-            if let cellFrame = grid[i] {
+            if let cellFrame = grid[i] { // Gets new frame
                 if animated {
                     UIViewPropertyAnimator.runningPropertyAnimator(
                         withDuration: 0.2,
@@ -94,7 +97,12 @@ extension GameViewController: CLLocationManagerDelegate {
                                     options: .curveEaseInOut,
                                     animations: {
                                         cell.alpha = 1.0
-                                })
+                                }) { (position) in
+                                    if position == .end && i == self.cells.count - 1 {
+                                        guard let completion = completion else { return }
+                                        completion()
+                                    }
+                                }
                             }
                         }
                     }
@@ -112,7 +120,7 @@ extension GameViewController: CLLocationManagerDelegate {
     func updateCellContainerViewFrame(animated: Bool) {
         if animated {
             UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: 0.2,
+                withDuration: 0.5,
                 delay: 0.0,
                 options: .curveEaseInOut,
                 animations: {
@@ -171,21 +179,24 @@ extension GameViewController: CLLocationManagerDelegate {
         }
     }
     
-    internal func updateCellsCount(animated: Bool) {
-        // Adding/removing cells
+    internal func updateCellsCount(animated: Bool, completion: (() -> Void)? = nil) {
+        /// Adds/removes cells
         if cells.count < game.maxNumber {
             addCells(count: game.maxNumber - cells.count)
         } else {
             removeCells(count: cells.count - game.maxNumber, animated: animated)
         }
         
-        // Change cells position
-        updateCellFrames(animated: animated)
+        /// Changes cells position
+        updateCellFrames(animated: animated) {
+            guard let completion = completion else { return }
+            completion()
+        }
         
-        // Set cell numbers
+        /// Sets cell numbers
         setNumbers(animated: false, hidden: true)
         
-        // Change message view position
+        /// Changes message view position
         UIViewPropertyAnimator.runningPropertyAnimator(
             withDuration: 0.2,
             delay: 0.0,
@@ -202,9 +213,10 @@ extension GameViewController: CLLocationManagerDelegate {
         for i in cells.indices {
             let number = game.numbers[i]
             let cell = cells[i]
+            let alpha: CGFloat = cell.titleLabel?.alpha == 1.0 ? 1.0 : 0.0
             cell.setNumber(
                 number,
-                alpha: cell.titleLabel?.alpha ?? 1.0,
+                alpha: alpha,
                 hidden: hidden,
                 animated: true
             )
@@ -273,7 +285,6 @@ extension GameViewController: CLLocationManagerDelegate {
         
         cell.winkNumber {
             self.cellsNotAnimating.append(cell)
-            print(self.cellsNotAnimating.count)
         }
     }
     
@@ -319,7 +330,7 @@ extension GameViewController: CLLocationManagerDelegate {
     @objc internal func startGame() {
         messageView.hide()
         
-        let needsToShowTip = stopGameEventConunter <= requiredNumberOfEvents
+        let needsToShowTip = stopGameEventConunter <= necessaryNumberOfEvents
         tipsLabel?.setText(needsToShowTip ? Strings.SwipeDownTipLabelText : nil, animated: true)
         
         feedbackGenerator.playSelectionHapticFeedback()
@@ -362,37 +373,78 @@ extension GameViewController: CLLocationManagerDelegate {
         }
     }
     
+    /// Counts count of stop game events (needed for tips) and makes all needed prerapations for new game
     func stopGame() {
         stopGameEventConunter += 1
-        if game.winkNumbersMode { cellsNotAnimating = cells }
         prepareForNewGame()
     }
     
-    func prepareForNewGame() {
-        stopAnimations()
-        game.newGame()
-        setNumbers(animated: false, hidden: true)
-        cellsNotAnimating = cells
+    /// Ends the game without preparations for the new one
+    func endGame() {
+        /// Says to the model to finish game
+        game.finishGame()
         
+        /// Stops all cell animations (e.g. wink, swap)
+        stopAnimations()
+        
+        /// Hides cell numbers and diables all cells
         for cell in cells {
             cell.hideNumber(animated: true)
             cell.isEnabled = false
         }
         
-        let needsToShowTip = showSettingsEventCounter <= requiredNumberOfEvents
+        /// Shows results with result time
+        let time = game.elapsedTime
+        self.view.addSubview(resultsView)
+        resultsView.show(withTime: time ?? 0.0)
+        resultsIsShowing = true
+        
+        /// Plays 'success' haptic feedback
+        feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .success)
+        
+        /// Says to the model to increase or decrease game level
+        game.changeLevel()
+    }
+    
+    /// Makes all needed prerapations for new game
+    func prepareForNewGame() {
+        /// Stops all cell animations (e.g. wink, swap)
+        stopAnimations()
+        
+        /// Sets all cells as 'without animations'
+        cellsNotAnimating = cells
+        
+        /// Says to the model to set new game
+        game.newGame()
+        
+        /// Sets numbers according to the model
+        setNumbers(animated: false, hidden: true)
+        
+        /// Hides cell numbers and diables all cells
+        for cell in cells {
+            cell.hideNumber(animated: true)
+            cell.isEnabled = false
+        }
+        
+        /// Shows 'how to open settings' tip if user has opened setting less then necessary
+        let needsToShowTip = showSettingsEventCounter <= necessaryNumberOfEvents
         tipsLabel?.setText(needsToShowTip ? Strings.SwipeUpTipLabelText : nil, animated: true)
         
+        /// Shows message view
         self.view.addSubview(messageView)
         messageView.show()
-
-        self.view.bringSubviewToFront(resultsView)
         
+        /// Shows status bar
         self.statusBarIsHidden = false
     }
     
+    /// Stops all cell animations (e.g. wink, swap)
     func stopAnimations() {
+        /// Stops subsequent animations
         winkNumberTimer.invalidate()
         swapNumberTimer.invalidate()
+        
+        /// Stops current animations and perform any completion tasks
         for cell in cells {
             if cell.animator.state != .stopped {
                 cell.animator.stopAnimation(true)
@@ -401,16 +453,16 @@ extension GameViewController: CLLocationManagerDelegate {
             }
             cell.titleLabel?.layer.removeAllAnimations()
         }
-        print("Cells not animating: \(cellsNotAnimating.count)")
     }
     
+    /// Performs periodic animations
     @objc func timerSceduled() {
-        // Winking random number if Wink Numbers Mode is on
+        /// Winks random number in the appropriate mode
         if game.winkNumbersMode {
             winkRandomNumber()
         }
         
-        // Swaping random numbers if Swap Numbers Mode is on
+        /// Swaps random numbers in the appropriate mode
         if game.swapNumbersMode {
             swapNumbers(animated: true)
         }

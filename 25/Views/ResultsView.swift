@@ -9,7 +9,7 @@
 import UIKit
 
 protocol ResultsViewDelegate {
-    func doneButtonPressed(_ sender: UIButton)
+    func resultsViewWillHide()
 }
 
 class ResultsView: UIVisualEffectView {
@@ -80,18 +80,19 @@ class ResultsView: UIVisualEffectView {
             animations: {
                 self.effect = nil
                 self.contentView.subviews.forEach { $0.alpha = 0.0 }
-        }) { (_) in
-            self.actionButton.alpha = 0.0
-            self.removeFromSuperview()
+        }) { (position) in
+            if position == .end {
+                self.delegate?.resultsViewWillHide()
+                self.removeFromSuperview()
+            }
         }
     }
     
     @objc private func actionButtonPressed(_ sender: UIButton) {
-        delegate?.doneButtonPressed(sender)
         UIViewPropertyAnimator.runningPropertyAnimator(
             withDuration: 0.03,
             delay: 0.0,
-            options: [],
+            options: .curveEaseInOut,
             animations: {
                 self.actionButton.alpha = 0.2
         })

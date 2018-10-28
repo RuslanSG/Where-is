@@ -28,7 +28,7 @@ class MessageView: UIVisualEffectView {
     private var animator = UIViewPropertyAnimator()
     
     func show() {
-        let duration = 0.4
+        let duration = 0.5
         animator.stopAnimation(true)
         animator = UIViewPropertyAnimator(
             duration: duration,

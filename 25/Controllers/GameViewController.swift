@@ -97,9 +97,9 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
     var firstTimeAppeared = true
     var resultsIsShowing = false
     
-    internal let requiredNumberOfEvents = 3
+    internal let necessaryNumberOfEvents = 3
     private var needsToShowTips: Bool {
-        return showSettingsEventCounter <= requiredNumberOfEvents && stopGameEventConunter <= requiredNumberOfEvents
+        return showSettingsEventCounter <= necessaryNumberOfEvents && stopGameEventConunter <= necessaryNumberOfEvents
     }
     internal var showSettingsEventCounter: Int {
         set {
@@ -215,27 +215,27 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
     }
     
     internal func setupColors() {
-        // Background color
+        /// Background color
         self.view.backgroundColor = appearance.mainViewColor
         
-        // Status bar color
+        /// Status bar color
         self.setNeedsStatusBarAppearanceUpdate()
         
-        // Result view color
+        /// Result view color
         resultsView.blur = appearance.blur
         resultsView.titleLabel.textColor = appearance.textColor
         resultsView.timeLabel.textColor = appearance.textColor
         resultsView.actionButton.backgroundColor = appearance.userInterfaceColor
         
-        // Message view color
+        /// Message view color
         messageView.blur = appearance.blur
         messageView.effect = appearance.blur
         messageView.label.textColor = game.colorfulCellsMode ? .white : appearance.textColor
         
-        // Cells color
+        /// Cells color
         updateCellsColorsFromModel()
         
-        // Tips label color
+        /// Tips label color
         tipsLabel?.textColor = appearance.textColor
     }
     
@@ -264,39 +264,39 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
     // MARK: - Actions
     
     @objc func cellPressed(sender: CellView) {
+        /// Stores last pressed cell
         self.lastPressedCell = sender
+        
+        /// Runs cell compression animation
         sender.compress(numberFeedback: !game.winkNumbersMode && !game.shuffleNumbersMode && !game.swapNumbersMode)
+        
+        /// Stores if selected number is right info
         self.selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
-
+        
+        /// Performs if user tapped last number
         if selectedNumberIsRight && sender.tag == game.maxNumber {
-            // User tapped the last number
-            game.finishGame()
-            
-            let time = game.elapsedTime
-            self.view.addSubview(resultsView)
-            resultsView.show(withTime: time ?? 0.0)
-            resultsIsShowing = true
-            
-            feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .success)
-            sender.uncompress()
-            
-            game.changeLevel()
-            stopAnimations()
+            endGame()
+            sender.uncompress(hiddenNumber: true)
             return
         }
-
+        
+        /// Plays selection haptic feedback
         feedbackGenerator.playSelectionHapticFeedback()
+        
+        /// Says to the model that number was selected
         game.numberSelected(sender.tag)
     }
     
     @objc func cellReleased(sender: CellView) {
+        /// If user tapped right number it plays selection haptic feedback (iPhone 6s or higher) otherwise it plays error haptic feedback and visual error feedback
         if self.selectedNumberIsRight {
             feedbackGenerator.playSelectionHapticFeedback()
         } else {
-            // User tapped the wrong number
             feedbackView.feedbackSelection(isRight: false)
             feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .error)
         }
+        
+        /// Shuffles numbers or colors under appropriate modes
         if game.inGame {
             if game.shuffleNumbersMode {
                 game.shuffleNumbers()
@@ -306,6 +306,8 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
                 updateCellsColorsFromModel()
             }
         }
+        
+        /// Runs cell uncompression animation
         sender.uncompress()
     }
     
@@ -313,7 +315,6 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
         if let lastPressedCell = self.lastPressedCell {
             lastPressedCell.uncompress(hiddenNumber: true)
         }
-        prepareForNewGame()
         self.performSegue(withIdentifier: "showSettings", sender: sender)
         showSettingsEventCounter += 1
     }
@@ -347,17 +348,20 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
     
     // MARK: - RelusltsViewDelegate
     
-    func doneButtonPressed(_ sender: UIButton) {
-        resultsIsShowing = false
+    func resultsViewWillHide() {
         if needsToUpdateCellColors {
             needsToUpdateCellColors = false
             prepareForColorfulCellsMode()
         }
         if needsToUpdateCellsCount {
             needsToUpdateCellsCount = false
-            updateCellsCount(animated: true)
+            updateCellsCount(animated: true) {
+                self.prepareForNewGame()
+            }
+        } else {
+            prepareForNewGame()
         }
-        prepareForNewGame()
+        resultsIsShowing = false
     }
     
     // MARK: - Segue
@@ -372,6 +376,9 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
             let rvc = segue.destination as! RootViewController
             rvc.appearance = appearance
         }
+        if !resultsIsShowing && game.inGame {
+            prepareForNewGame()
+        }
     }
     
     // MARK: - Notifications
@@ -380,7 +387,9 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
         if let cellToUncompress = lastPressedCell {
             cellToUncompress.uncompress()
         }
-        prepareForNewGame()
+        if !resultsIsShowing && game.inGame {
+            prepareForNewGame()
+        }
     }
     
     @objc func darkModeStateChangedNotification(notification: Notification) {

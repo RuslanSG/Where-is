@@ -144,7 +144,7 @@ extension CellView {
     }
     
     func setBackgroundColor(to color: UIColor, animated: Bool) {
-        let duration: Double = 0.1
+        let duration: Double = 0.2
         let delay: Double = 0.0
         
         if animated {
@@ -284,7 +284,7 @@ extension CellView {
     }
     
     func setNumberColor(to color: UIColor, animated: Bool) {
-        let duration: Double = 0.1
+        let duration: Double = 0.2
         let delay: Double = 0.0
         
         if animated {

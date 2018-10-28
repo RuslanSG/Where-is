@@ -166,7 +166,7 @@ class RootViewController: UIViewController, WelcomeViewControllerDelegate {
             animations: {
                 self.pageNumberLabel.textColor = self.appearance.textColor
                 self.view.backgroundColor = self.appearance.mainViewColor
-                self.topBarView.backgroundColor = self.appearance.mainViewColor
+                self.topBarView.backgroundColor = self.appearance.tableViewBackgroundColor
         })
         self.setNeedsStatusBarAppearanceUpdate()
     }
