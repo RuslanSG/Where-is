@@ -75,7 +75,10 @@ extension GameViewController: CLLocationManagerDelegate {
     
     func updateCellFrames(animated: Bool, completion: (() -> Void)? = nil) {
         /// Updates cell contariner view frame
-        updateCellContainerViewFrame(animated: animated)
+        updateCellContainerViewFrame(animated: animated) {
+            guard let completion = completion else { return }
+            completion()
+        }
         
         /// Updates cell frames
         for i in cells.indices {
@@ -97,12 +100,7 @@ extension GameViewController: CLLocationManagerDelegate {
                                     options: .curveEaseInOut,
                                     animations: {
                                         cell.alpha = 1.0
-                                }) { (position) in
-                                    if position == .end && i == self.cells.count - 1 {
-                                        guard let completion = completion else { return }
-                                        completion()
-                                    }
-                                }
+                                })
                             }
                         }
                     }
@@ -117,7 +115,7 @@ extension GameViewController: CLLocationManagerDelegate {
         }
     }
     
-    func updateCellContainerViewFrame(animated: Bool) {
+    func updateCellContainerViewFrame(animated: Bool, completion: (() -> Void)? = nil) {
         if animated {
             UIViewPropertyAnimator.runningPropertyAnimator(
                 withDuration: 0.5,
@@ -125,7 +123,10 @@ extension GameViewController: CLLocationManagerDelegate {
                 options: .curveEaseInOut,
                 animations: {
                     self.cellsContainerView.frame = self.cellsContainerViewFrame
-            })
+            }) { (position) in
+                guard let completion = completion else { return }
+                completion()
+            }
         } else {
             cellsContainerView.frame = cellsContainerViewFrame
         }
@@ -321,7 +322,8 @@ extension GameViewController: CLLocationManagerDelegate {
     }
     
     internal func prepareForColorfulCellsMode() {
-        messageView.label.textColor = game.colorfulCellsMode ? .white : appearance.textColor
+        messageView.titleLabel.textColor = game.colorfulCellsMode ? .white : appearance.textColor
+        messageView.detailLabel.textColor = game.colorfulCellsMode ? .white : appearance.textColor
         updateCellsColorsFromModel()
     }
     
@@ -394,9 +396,9 @@ extension GameViewController: CLLocationManagerDelegate {
         }
         
         /// Shows results with result time
-        let time = game.elapsedTime
+        guard let time = game.elapsedTime else { return }
         self.view.addSubview(resultsView)
-        resultsView.show(withTime: time ?? 0.0)
+        resultsView.show(withTime: time, goalAchieved: game.goalAchieved())
         resultsIsShowing = true
         
         /// Plays 'success' haptic feedback

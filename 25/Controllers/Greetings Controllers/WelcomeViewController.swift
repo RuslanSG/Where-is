@@ -35,7 +35,7 @@ class WelcomeViewController: UIViewController {
     
     private func setupColors() {
         self.labels.forEach { $0.textColor = self.appearance.textColor }
-        self.view.backgroundColor = self.appearance.tableViewBackgroundColor
+        self.view.backgroundColor = self.appearance.darkMode ? self.appearance.tableViewBackgroundColor : .white
     }
 
 }

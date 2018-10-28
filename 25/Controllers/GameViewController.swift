@@ -43,11 +43,16 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
         view.blur = appearance.blur
         view.layer.cornerRadius = appearance.cornerRadius
         view.clipsToBounds = true
-        view.label.textColor = appearance.textColor
-        view.label.font = UIFont.systemFont(ofSize: appearance.numbersFontSize)
-        view.label.text = Strings.StartButtonText
         view.frame.size = CGSize(width: messageViewWidth, height: messageViewHeight)
         view.center = cellsContainerView.center
+        
+        view.titleLabel.textColor = appearance.textColor
+        view.titleLabel.font = UIFont.systemFont(ofSize: appearance.numbersFontSize)
+        view.titleLabel.text = Strings.StartButtonText
+        
+        view.detailLabel.textColor = appearance.textColor
+        view.detailLabel.font = UIFont.boldSystemFont(ofSize: appearance.numbersFontSize / 2.2)
+        view.detailLabel.text = "Цель: \(game.goal)"
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(startGame))
         view.addGestureRecognizer(tap)
@@ -214,28 +219,30 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
         }
     }
     
+    /// Setups UI element colors
     internal func setupColors() {
-        /// Background color
+        /// Sets background color
         self.view.backgroundColor = appearance.mainViewColor
         
-        /// Status bar color
+        /// Sets status bar color
         self.setNeedsStatusBarAppearanceUpdate()
         
-        /// Result view color
+        /// Sets result view color
         resultsView.blur = appearance.blur
         resultsView.titleLabel.textColor = appearance.textColor
         resultsView.timeLabel.textColor = appearance.textColor
         resultsView.actionButton.backgroundColor = appearance.userInterfaceColor
         
-        /// Message view color
+        /// Sets message view color
         messageView.blur = appearance.blur
         messageView.effect = appearance.blur
-        messageView.label.textColor = game.colorfulCellsMode ? .white : appearance.textColor
+        messageView.titleLabel.textColor = game.colorfulCellsMode ? .white : appearance.textColor
+        messageView.detailLabel.textColor = game.colorfulCellsMode ? .white : appearance.textColor
         
-        /// Cells color
+        /// Sets cells color
         updateCellsColorsFromModel()
         
-        /// Tips label color
+        /// Sets tips label color
         tipsLabel?.textColor = appearance.textColor
     }
     
@@ -266,23 +273,23 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
     @objc func cellPressed(sender: CellView) {
         /// Stores last pressed cell
         self.lastPressedCell = sender
-        
+
         /// Runs cell compression animation
         sender.compress(numberFeedback: !game.winkNumbersMode && !game.shuffleNumbersMode && !game.swapNumbersMode)
-        
+
         /// Stores if selected number is right info
         self.selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
-        
+
         /// Performs if user tapped last number
         if selectedNumberIsRight && sender.tag == game.maxNumber {
             endGame()
             sender.uncompress(hiddenNumber: true)
             return
         }
-        
+
         /// Plays selection haptic feedback
         feedbackGenerator.playSelectionHapticFeedback()
-        
+
         /// Says to the model that number was selected
         game.numberSelected(sender.tag)
     }
@@ -344,6 +351,10 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
         } else {
             updateCellsCount(animated: false)
         }
+    }
+    
+    func levelChanged(to level: Int) {
+        messageView.detailLabel.text = "Цель: \(game.goal)"
     }
     
     // MARK: - RelusltsViewDelegate

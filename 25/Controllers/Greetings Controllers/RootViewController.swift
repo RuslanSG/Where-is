@@ -17,7 +17,6 @@ class RootViewController: UIViewController, WelcomeViewControllerDelegate {
         static let GreetingsViewController: String = "greetingsViewController"
         static let SensViewController: String = "sensViewController"
         static let TutorialViewController: String = "tutorialViewController"
-        static let RemindersViewController: String = "remindersViewController"
         static let DarkModeViewController: String = "darkModeViewController"
         static let WelcomeViewController: String = "welcomeViewController"
     }
@@ -26,7 +25,6 @@ class RootViewController: UIViewController, WelcomeViewControllerDelegate {
         let greetingsViewController = self.newViewConrtoller(withIdentifier: ViewControllerIdentifier.GreetingsViewController)
         let sensViewController = self.newViewConrtoller(withIdentifier: ViewControllerIdentifier.SensViewController)
         let tutorialViewController = self.newViewConrtoller(withIdentifier: ViewControllerIdentifier.TutorialViewController) as! TutorialViewController
-        let remindersViewContoller = self.newViewConrtoller(withIdentifier: ViewControllerIdentifier.RemindersViewController) as! RemindersTableViewController
         let darkModeViewContoller = self.newViewConrtoller(withIdentifier: ViewControllerIdentifier.DarkModeViewController) as! DarkModeTableViewController
         let welcomeViewController = self.newViewConrtoller(withIdentifier: ViewControllerIdentifier.WelcomeViewController) as! WelcomeViewController
         
@@ -37,7 +35,6 @@ class RootViewController: UIViewController, WelcomeViewControllerDelegate {
         return [greetingsViewController,
                 sensViewController,
                 tutorialViewController,
-                remindersViewContoller,
                 darkModeViewContoller,
                 welcomeViewController]
     }()

@@ -13,6 +13,7 @@ protocol GameDelegate {
     
     func colorfulCellsModeStateChanged(to state: Bool)
     func maxNumberChanged(to maxNumber: Int)
+    func levelChanged(to level: Int)
     
 }
 
@@ -24,6 +25,7 @@ class Game {
     
     // MARK: - Constants
     
+    /// Level modes
     private let levelsWithColorfulCellsMode = [2, 3, 8, 9, 10, 15, 16, 17, 22, 23, 24, 25, 26, 27, 28, 29, 30]
     private let levelsWithShuffleColorsMode = [3, 9, 10, 16, 17, 23, 24, 25, 26, 27, 28, 29, 30]
     private let levelsWithColorfulNumbersMode = [3, 9, 10, 16, 17, 23, 24, 25, 26, 27, 28, 29, 30]
@@ -32,10 +34,43 @@ class Game {
     private let levelsWithSwapNumbersMode = [4, 12, 19, 29]
     private let levelsWithShuffleNumbersMode = [6, 13, 16, 20, 25, 27, 30]
    
+    /// Levels cell count
     private let levelsWith25 = [1, 2, 3, 4, 5, 6, 9, 16]
     private let levelsWith30 = [7, 8, 10, 11, 12, 13, 24, 25]
     private let levelsWith35 = [14, 15, 17, 18, 19, 20, 26, 27]
     private let levelsWith40 = [21, 22, 23, 28, 29, 30]
+    
+    /// Goals dictionary: [level : goal(sec)]
+    private let goals = [1  : 27.5,
+                         2  : 34.0,
+                         3  : 42.0,
+                         4  : 47.5,
+                         5  : 41.0,
+                         6  : 47.5,
+                         7  : 38.0,
+                         8  : 46.0,
+                         9  : 55.0,
+                         10 : 55.5,
+                         11 : 60.0,
+                         12 : 80.0,
+                         13 : 63.5,
+                         14 : 58.5,
+                         15 : 64.5,
+                         16 : 72.0,
+                         17 : 78.0,
+                         18 : 76.5,
+                         19 : 100.0,
+                         20 : 73.0,
+                         21 : 64.0,
+                         22 : 78.0,
+                         23 : 127.0,
+                         24 : 77.0,
+                         25 : 97.0,
+                         26 : 128.0,
+                         27 : 170.0,
+                         28 : 180.0,
+                         29 : 188.0,
+                         30 : 190.0]
     
     let minLevel = 1
     let maxLevel = 30
@@ -68,8 +103,15 @@ class Game {
                 delegate.maxNumberChanged(to: maxNumber)
             }
             
+            delegate.levelChanged(to: level)
+            
             UserDefaults.standard.set(level, forKey: UserDefaults.Key.Level)
         }
+    }
+    
+    var goal: Double {
+        guard let goal = goals[level] else { return 0.0 }
+        return goal
     }
     
     var colums = 5
@@ -159,6 +201,11 @@ class Game {
     
     func selectedNumberIsRight(_ number: Int) -> Bool {
         return number == nextNumberToTap
+    }
+    
+    func goalAchieved() -> Bool {
+        guard let goalTime = goals[level] else { return true }
+        return elapsedTime < goalTime
     }
     
     func startGame() {

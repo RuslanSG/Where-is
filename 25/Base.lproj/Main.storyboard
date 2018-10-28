@@ -311,7 +311,7 @@
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Swk-JI-GFE">
                                                     <rect key="frame" x="16" y="50" width="343" height="731"/>
-                                                    <mutableString key="text">Приветствую и добро пожаловать! Большое спасибо за проявленный интерес.   Выставляю на Ваш суд свою новую игру. Я сейчас активно занимаюсь ее созданием, и мне никак не обойтись без Вашей помощи.   План такой: сейчас в игре представлен начальный набор уровней, который я составил исходя из своих личных ощущений и результатов игры. Теперь мне интересно как с ними сможете справиться Вы.   После каждой игры мне будут автоматически присылаться результаты, а я исходя из них буду точнее настраивать сложность каждого уровня. Таким образом мы очень быстро сможем создать действительно интересный и качественный продукт.   Так что играйте в свое удовольствие, ни в чем себя не ограничивайте. Я буду очень рад, если Вам понравится.  Если у Вас есть какие-либо предложения или комментарии — буду рад пообщаться (ссылки в настройках игры). Если найдете какие-либо ошибки в работе приложения — сообщите, пожалуйста, я оперативно их поправлю.  Приятной игры :)</mutableString>
+                                                    <string key="text">Приветствую и добро пожаловать! Большое спасибо за проявленный интерес.   Выставляю на Ваш суд свою новую игру. Я сейчас активно занимаюсь ее созданием, и мне никак не обойтись без Вашей помощи.   План такой: сейчас в игре представлен начальный набор уровней, который я составил исходя из своих личных ощущений и результатов игры. Теперь мне интересно как с ними сможете справиться Вы.   После каждой игры мне будут автоматически присылаться результаты, а я исходя из них буду точнее настраивать сложность каждого уровня. Таким образом мы очень быстро сможем создать действительно интересный и качественный продукт.   Так что играйте в свое удовольствие, ни в чем себя не ограничивайте. Я буду очень рад, если Вам понравится.  Если у Вас есть какие-либо предложения или комментарии — буду рад пообщаться (ссылки в настройках игры). Если найдете какие-либо ошибки в работе приложения — сообщите, пожалуйста, я оперативно их поправлю.  Приятной игры :)</string>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -419,7 +419,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Jl-CF-SZN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5723" y="831"/>
+            <point key="canvasLocation" x="4732" y="832"/>
         </scene>
         <!--Table View Controller-->
         <scene sceneID="G4o-qt-ybu">
@@ -484,99 +484,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="v1Y-7Q-tQu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1969" y="828"/>
-        </scene>
-        <!--Reminders Table View Controller-->
-        <scene sceneID="E4a-mc-dTU">
-            <objects>
-                <tableViewController storyboardIdentifier="remindersViewController" id="IK0-hX-x6I" customClass="RemindersTableViewController" customModule="_5" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="nJy-uA-gIn">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                        <sections>
-                            <tableViewSection id="uuY-zG-2wL">
-                                <cells>
-                                    <tableViewCell clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="IsY-12-zaY">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="IsY-12-zaY" id="OGg-gU-2pg">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.666666666666664"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Напоминания" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="OZ6-CK-9Bk">
-                                                    <rect key="frame" x="16" y="0.0" width="343" height="42"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="42" id="g1a-i1-ffm"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="35"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Позвольте мне иногда напоминать Вам поиграть. Это поможет собрать больше результатов и ускорить процесс тестирования." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BRH-aL-S95">
-                                                    <rect key="frame" x="16" y="50.333333333333336" width="343" height="81.333333333333314"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="OZ6-CK-9Bk" firstAttribute="top" secondItem="OGg-gU-2pg" secondAttribute="top" id="4cg-sc-tPM"/>
-                                                <constraint firstItem="BRH-aL-S95" firstAttribute="trailing" secondItem="OGg-gU-2pg" secondAttribute="trailingMargin" id="6Xm-qK-BIo"/>
-                                                <constraint firstAttribute="trailing" secondItem="OZ6-CK-9Bk" secondAttribute="trailing" constant="16" id="BLf-F1-vS9"/>
-                                                <constraint firstItem="BRH-aL-S95" firstAttribute="bottom" secondItem="OGg-gU-2pg" secondAttribute="bottomMargin" id="G9Y-4H-c6T"/>
-                                                <constraint firstItem="BRH-aL-S95" firstAttribute="leading" secondItem="OGg-gU-2pg" secondAttribute="leadingMargin" id="NrQ-vZ-vqG"/>
-                                                <constraint firstItem="BRH-aL-S95" firstAttribute="top" secondItem="OZ6-CK-9Bk" secondAttribute="bottom" constant="8" id="e7L-Hx-bH6"/>
-                                                <constraint firstItem="OZ6-CK-9Bk" firstAttribute="leading" secondItem="OGg-gU-2pg" secondAttribute="leading" constant="16" id="mlV-Nf-GK9"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" rowHeight="46" id="pSZ-0m-VEe">
-                                        <rect key="frame" x="0.0" y="44" width="375" height="46"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="pSZ-0m-VEe" id="c53-ZT-8VC">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="45.666666666666664"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Напоминать мне поиграть" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="jwh-bK-5HS">
-                                                    <rect key="frame" x="16" y="12.666666666666666" width="284" height="20.333333333333336"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="GKv-WJ-BdT">
-                                                    <rect key="frame" x="310" y="7.3333333333333321" width="51" height="30.999999999999996"/>
-                                                    <connections>
-                                                        <action selector="switcherValueChanged:" destination="IK0-hX-x6I" eventType="valueChanged" id="nLX-PW-gNj"/>
-                                                    </connections>
-                                                </switch>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="GKv-WJ-BdT" firstAttribute="leading" secondItem="jwh-bK-5HS" secondAttribute="trailing" constant="10" id="Has-2H-2sx"/>
-                                                <constraint firstItem="jwh-bK-5HS" firstAttribute="centerY" secondItem="c53-ZT-8VC" secondAttribute="centerY" id="SAw-0D-u4B"/>
-                                                <constraint firstAttribute="trailing" secondItem="GKv-WJ-BdT" secondAttribute="trailing" constant="16" id="T16-3F-reN"/>
-                                                <constraint firstItem="GKv-WJ-BdT" firstAttribute="centerY" secondItem="c53-ZT-8VC" secondAttribute="centerY" id="hZH-EA-wok"/>
-                                                <constraint firstItem="jwh-bK-5HS" firstAttribute="leading" secondItem="c53-ZT-8VC" secondAttribute="leading" constant="16" id="sOf-IT-syp"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
-                        </sections>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="rect" keyPath="contentInset">
-                                <rect key="value" x="60" y="0.0" width="40" height="0.0"/>
-                            </userDefinedRuntimeAttribute>
-                        </userDefinedRuntimeAttributes>
-                        <connections>
-                            <outlet property="dataSource" destination="IK0-hX-x6I" id="Vy0-Bb-ZVO"/>
-                            <outlet property="delegate" destination="IK0-hX-x6I" id="5kT-Pe-DXe"/>
-                        </connections>
-                    </tableView>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Iai-4i-lOK" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3823" y="831"/>
         </scene>
         <!--Dark Mode Table View Controller-->
         <scene sceneID="evM-Eh-C9G">
@@ -762,7 +669,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eV9-dF-n94" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4753" y="828"/>
+            <point key="canvasLocation" x="3762" y="829"/>
         </scene>
     </scenes>
 </document>

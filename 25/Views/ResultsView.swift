@@ -18,14 +18,12 @@ class ResultsView: UIVisualEffectView {
     
     var blur = UIBlurEffect()
     
-    private let phrases = ["Уровень пройден!"]
-
     // MARK: - Subviews
     
     let titleLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = UIFont(name: label.font.fontName, size: 45)
+        label.font = UIFont.boldSystemFont(ofSize: 45.0)
         label.adjustsFontSizeToFitWidth = true
         return label
     }()
@@ -52,7 +50,7 @@ class ResultsView: UIVisualEffectView {
     
     // MARK: - Actions
     
-    public func show(withTime time: Double) {
+    public func show(withTime time: Double, goalAchieved: Bool) {
         UIViewPropertyAnimator.runningPropertyAnimator(
             withDuration: 0.3,
             delay: 0.0,
@@ -60,7 +58,7 @@ class ResultsView: UIVisualEffectView {
             animations: {
                 self.effect = self.blur
         }) { (_) in
-            self.titleLabel.text = self.phrases[self.phrases.count.arc4random]
+            self.titleLabel.text = goalAchieved ? "Цель достигнута!" : "Цель не достигнута"
             self.timeLabel.text = String(format: "%.02f", time)
             UIViewPropertyAnimator.runningPropertyAnimator(
                 withDuration: 0.3,
@@ -121,7 +119,11 @@ class ResultsView: UIVisualEffectView {
         self.contentView.addConstraintsWithFormat(format: "H:|-30-[v0]-30-|", views: titleLabel)
         self.contentView.addConstraintsWithFormat(format: "V:|-100-[v0(50)]", views: titleLabel)
         
-        let currentDeviceIsIPhoneX = UIDevice.current.platform == .iPhoneX || UIDevice.current.platform == .iPhoneXR || UIDevice.current.platform == .iPhoneXS || UIDevice.current.platform == .iPhoneXSMax
+        let currentDeviceIsIPhoneX = UIDevice.current.platform == .iPhoneX ||
+                                     UIDevice.current.platform == .iPhoneXR ||
+                                     UIDevice.current.platform == .iPhoneXS ||
+                                     UIDevice.current.platform == .iPhoneXSMax
+        #warning("Change constraints")
         self.contentView.addConstraintsWithFormat(format: "H:|-10-[v0]-10-|", views: actionButton)
         self.contentView.addConstraintsWithFormat(format: currentDeviceIsIPhoneX ? "V:[v0(50)]-76-|" : "V:[v0(50)]-42-|", views: actionButton)
     }

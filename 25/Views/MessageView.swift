@@ -10,8 +10,32 @@ import UIKit
 
 class MessageView: UIVisualEffectView {
 
-    let label = UILabel()
+    let titleLabel: UILabel = {
+        let label = UILabel()
+        label.adjustsFontSizeToFitWidth = true
+        label.textAlignment = .center
+        label.alpha = 0.0
+        return label
+    }()
+    
+    let detailLabel: UILabel = {
+        let label = UILabel()
+        label.adjustsFontSizeToFitWidth = true
+        label.textAlignment = .center
+        label.alpha = 0.0
+        return label
+    }()
+    
     var blur = UIBlurEffect()
+    
+    lazy var stackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [titleLabel, detailLabel])
+        stackView.axis = .vertical
+        stackView.distribution = .equalSpacing
+        stackView.alignment = .center
+        stackView.spacing = 0
+        return stackView
+    }()
     
     init() {
         super.init(effect: nil)
@@ -35,7 +59,8 @@ class MessageView: UIVisualEffectView {
             curve: .easeOut,
             animations: {
                 self.effect = self.blur
-                self.label.alpha = 1.0
+                self.titleLabel.alpha = 1.0
+                self.detailLabel.alpha = 1.0
         })
         animator.startAnimation()
     }
@@ -48,7 +73,8 @@ class MessageView: UIVisualEffectView {
             curve: .easeOut,
             animations: {
                 self.effect = nil
-                self.label.alpha = 0.0
+                self.titleLabel.alpha = 0.0
+                self.detailLabel.alpha = 0.0
         })
         animator.addCompletion { (_) in
             self.removeFromSuperview()
@@ -59,13 +85,13 @@ class MessageView: UIVisualEffectView {
     // MARK: - Helping Methods
     
     private func setupInputComponents() {
-        label.adjustsFontSizeToFitWidth = true
-        label.textAlignment = .center
-        label.alpha = 0.0
+        contentView.addSubview(stackView)
         
-        contentView.addSubview(label)
-        contentView.addConstraintsWithFormat(format: "H:|-10-[v0]-10-|", views: label)
-        contentView.addConstraintsWithFormat(format: "V:|[v0]|", views: label)
+        /// Stack view constraints
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        let stackViewHorizontalConstraint = stackView.centerXAnchor.constraint(equalTo: self.centerXAnchor)
+        let stackViewVerticalConstraint = stackView.centerYAnchor.constraint(equalTo: self.centerYAnchor)
+        NSLayoutConstraint.activate([stackViewHorizontalConstraint, stackViewVerticalConstraint])
     }
     
 }
