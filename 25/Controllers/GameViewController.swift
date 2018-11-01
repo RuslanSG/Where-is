@@ -280,24 +280,28 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
         /// Stores if selected number is right info
         self.selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
 
-        /// Performs if user tapped last number
+        /// Ends game and runs cell uncomression animation on pressed cell if user tapped last number
         if selectedNumberIsRight && sender.tag == game.maxNumber {
             endGame()
             sender.uncompress(hiddenNumber: true)
             return
         }
 
-        /// Plays selection haptic feedback
-        feedbackGenerator.playSelectionHapticFeedback()
+        /// Plays selection haptic feedback (only on devices with Haptic Feedback)
+        if UIDevice.current.hasHapticFeedback {
+            feedbackGenerator.playSelectionHapticFeedback()
+        }
 
         /// Says to the model that number was selected
         game.numberSelected(sender.tag)
     }
     
     @objc func cellReleased(sender: CellView) {
-        /// If user tapped right number it plays selection haptic feedback (iPhone 6s or higher) otherwise it plays error haptic feedback and visual error feedback
+        /// If user tapped right number it plays selection haptic feedback (only on devices with Haptic Feedback) otherwise it plays error haptic feedback and visual error feedback
         if self.selectedNumberIsRight {
-            feedbackGenerator.playSelectionHapticFeedback()
+            if UIDevice.current.hasHapticFeedback {
+                feedbackGenerator.playSelectionHapticFeedback()
+            }
         } else {
             feedbackView.feedbackSelection(isRight: false)
             feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .error)

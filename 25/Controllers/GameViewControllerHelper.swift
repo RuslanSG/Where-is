@@ -195,7 +195,8 @@ extension GameViewController: CLLocationManagerDelegate {
         }
         
         /// Sets cell numbers
-        setNumbers(animated: false, hidden: true)
+        setNumbers(animated: false)
+        hideNumbers(animated: false)
         
         /// Changes message view position
         UIViewPropertyAnimator.runningPropertyAnimator(
@@ -210,17 +211,17 @@ extension GameViewController: CLLocationManagerDelegate {
     
     // MARK: - Numbers
     
-    func setNumbers(animated: Bool, hidden: Bool = false) {
+    func setNumbers(animated: Bool) {
         for i in cells.indices {
             let number = game.numbers[i]
             let cell = cells[i]
-            let alpha: CGFloat = cell.titleLabel?.alpha == 1.0 ? 1.0 : 0.0
-            cell.setNumber(
-                number,
-                alpha: alpha,
-                hidden: hidden,
-                animated: true
-            )
+            cell.setNumber(number, animated: animated)
+        }
+    }
+    
+    func hideNumbers(animated: Bool) {
+        for cell in cells {
+            cell.hideNumber(animated: animated)
         }
     }
     
@@ -284,8 +285,9 @@ extension GameViewController: CLLocationManagerDelegate {
             cellsNotAnimating.remove(at: index)
         }
         
-        cell.winkNumber {
+        cell.winkNumber() {
             self.cellsNotAnimating.append(cell)
+            print(self.cellsNotAnimating.count)
         }
     }
     
@@ -420,13 +422,10 @@ extension GameViewController: CLLocationManagerDelegate {
         game.newGame()
         
         /// Sets numbers according to the model
-        setNumbers(animated: false, hidden: true)
+        setNumbers(animated: false)
         
-        /// Hides cell numbers and diables all cells
-        for cell in cells {
-            cell.hideNumber(animated: true)
-            cell.isEnabled = false
-        }
+        /// Hides numbers
+        hideNumbers(animated: false)
         
         /// Shows 'how to open settings' tip if user has opened setting less then necessary
         let needsToShowTip = showSettingsEventCounter <= necessaryNumberOfEvents
@@ -442,16 +441,26 @@ extension GameViewController: CLLocationManagerDelegate {
     
     /// Stops all cell animations (e.g. wink, swap)
     func stopAnimations() {
-        /// Stops subsequent animations
+        /// Prevents subsequent animations
         winkNumberTimer.invalidate()
         swapNumberTimer.invalidate()
         
-        /// Stops current animations and perform any completion tasks
+        /// Stops current animations and performs any completion tasks
         for cell in cells {
-            if cell.animator.state != .stopped {
-                cell.animator.stopAnimation(true)
+            if cell.disappearingWinkAnimator.state == .stopped {
+                cell.disappearingWinkAnimator.finishAnimation(at: .end)
             } else {
-                cell.animator.finishAnimation(at: .end)
+                cell.disappearingWinkAnimator.stopAnimation(true)
+            }
+            if cell.appearingWinkAnimator.state == .stopped {
+                cell.appearingWinkAnimator.finishAnimation(at: .end)
+            } else {
+                cell.appearingWinkAnimator.stopAnimation(true)
+            }
+            if cell.setAnimator.state == .stopped {
+                cell.setAnimator.finishAnimation(at: .end)
+            } else {
+                cell.setAnimator.stopAnimation(true)
             }
             cell.titleLabel?.layer.removeAllAnimations()
         }

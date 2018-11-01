@@ -24,8 +24,7 @@ class CellView: UIButton {
     
     private var numberFeedback = true
     private var showNumber = true
-    private var isWinking = false
-    private var isAnimating = false
+    
     
     private lazy var cellView: UIView = {
         let view = UIView()
@@ -33,7 +32,17 @@ class CellView: UIButton {
         return view
     }()
     
-    var animator = UIViewPropertyAnimator()
+    var disappearingWinkAnimator = UIViewPropertyAnimator()
+    var appearingWinkAnimator = UIViewPropertyAnimator()
+    var setAnimator = UIViewPropertyAnimator()
+    
+    private enum WinkPhase {
+        case disappearing
+        case disappeared
+        case appearing
+    }
+    
+    private var winkPhase: WinkPhase?
     
     // MARK: - Initialization
     
@@ -167,12 +176,12 @@ extension CellView {
     // MARK: - Number
     
     func showNumber(animated: Bool) {
-        self.isUserInteractionEnabled = true
-        
-        let duration: Double = 0.2
-        let delay: Double = 0.0
-        
+        self.isEnabled = true
+
         if animated {
+            let duration: Double = 0.2
+            let delay: Double = 0.0
+            
             UIViewPropertyAnimator.runningPropertyAnimator(
                 withDuration: duration,
                 delay: delay,
@@ -186,10 +195,12 @@ extension CellView {
     }
     
     func hideNumber(animated: Bool) {
-        let duration = 0.2
-        let delay = 0.0
+        self.isEnabled = false
         
         if animated {
+            let duration = 0.2
+            let delay = 0.0
+            
             UIViewPropertyAnimator.runningPropertyAnimator(
                 withDuration: duration,
                 delay: delay,
@@ -203,83 +214,105 @@ extension CellView {
     }
     
     func winkNumber(completion: (() -> Void)?) {
-        let duration = 0.6
-        let delay = 1.0
-                
-        animator = UIViewPropertyAnimator(
-            duration: duration,
-            curve: .easeIn,
-            animations: {
+        if  self.disappearingWinkAnimator.state != .stopped &&
+            self.appearingWinkAnimator.state != .stopped &&
+            !self.setAnimator.isRunning {
+            let duration = 1.0
+            let delay = 1.0
+            let timing = UICubicTimingParameters(animationCurve: .easeInOut)
+            
+            /// Disappearing animation
+            self.disappearingWinkAnimator = UIViewPropertyAnimator(duration: duration, timingParameters: timing)
+            
+            self.disappearingWinkAnimator.addAnimations {
                 self.titleLabel?.alpha = 0.0
-        })
-        animator.addCompletion { (position) in
-            if position == .end {
-                self.animator = UIViewPropertyAnimator(
-                    duration: duration,
-                    curve: .easeOut,
-                    animations: {
-                        self.titleLabel?.alpha = 1.0
-                })
-                self.animator.addCompletion({ (position) in
-                    if position == .end {
-                        self.isAnimating = false
-                        self.isWinking = false
-                        guard let completion = completion else { return }
-                        completion()
-                    }
-                })
-                self.animator.startAnimation(afterDelay: delay)
             }
+            
+            self.disappearingWinkAnimator.addCompletion { (_) in
+                /// Appearing animation
+                self.appearingWinkAnimator = UIViewPropertyAnimator(duration: duration, timingParameters: timing)
+                
+                self.appearingWinkAnimator.addAnimations {
+                    self.titleLabel?.alpha = 1.0
+                }
+                
+                self.appearingWinkAnimator.addCompletion { (_) in
+                    self.winkPhase = nil
+                    guard let completion = completion else { return }
+                    completion()
+                }
+                
+                self.winkPhase = .disappeared
+
+                self.appearingWinkAnimator.startAnimation(afterDelay: 1.0)
+                DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
+                    self.winkPhase = .appearing
+                })
+            }
+            
+            self.disappearingWinkAnimator.startAnimation()
+            self.winkPhase = .disappearing
+        } else {
+            guard let completion = completion else { return }
+            completion()
         }
-        animator.startAnimation()
-        isAnimating = true
-        isWinking = true
     }
     
-    func setNumber(_ number: Int, alpha: CGFloat, hidden: Bool, animated: Bool) {
+    func setNumber(_ number: Int, animated: Bool) {
         if animated {
-            isAnimating = true
+            let duration = 0.1
+            let timing = UICubicTimingParameters(animationCurve: .easeInOut)
             
-            let durationIn: Double = 0.1
-            let durationOut: Double = 0.35
-            let delayIn: Double = 0.0
-            let delayOut: Double = 0.0
+            /// Disappearing animation
+            self.setAnimator = UIViewPropertyAnimator(duration: duration, timingParameters: timing)
             
-            if animator.state != .stopped {
-                animator.stopAnimation(false)
+            self.setAnimator.addAnimations {
+                self.titleLabel?.alpha = 0.0
             }
             
-            UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: durationIn,
-                delay: delayIn,
-                options: .curveEaseIn,
-                animations: {
-                    self.titleLabel?.alpha = 0.0
-            }) { (position) in
+            self.setAnimator.addCompletion { (_) in
                 self.setTitle(String(number), for: .normal)
                 self.tag = number
-                if !hidden {
-                    UIViewPropertyAnimator.runningPropertyAnimator(
-                        withDuration: durationOut,
-                        delay: delayOut,
-                        options: .curveEaseOut,
-                        animations: {
-                            self.titleLabel?.alpha = alpha
-                    }) { (position) in
-                        if position == .end {
-                            if self.isWinking && self.animator.state == .stopped {
-                                self.animator.finishAnimation(at: .end)
-                            } else {
-                                self.isAnimating = false
-                            }
-                        }
-                    }
+                
+                /// Appearing animation
+                self.setAnimator = UIViewPropertyAnimator(duration: duration, timingParameters: timing)
+                
+                self.setAnimator.addAnimations {
+                    self.titleLabel?.alpha = 1.0
                 }
+                
+                self.setAnimator.addCompletion({ (_) in
+                    if self.appearingWinkAnimator.state == .stopped {
+                        self.appearingWinkAnimator.finishAnimation(at: .end)
+                    }
+                })
+                
+                switch self.winkPhase {
+                case .disappearing?:
+                    self.disappearingWinkAnimator.finishAnimation(at: .end)
+                case .appearing?:
+                    self.setAnimator.startAnimation()
+                case nil:
+                    self.setAnimator.startAnimation()
+                default:
+                    break
+                }
+                
             }
+            
+            if self.winkPhase == .disappeared {
+                self.setTitle(String(number), for: .normal)
+                self.tag = number
+                return
+            } else if self.disappearingWinkAnimator.state == .active, self.disappearingWinkAnimator.isRunning {
+                self.disappearingWinkAnimator.stopAnimation(false)
+            } else if self.appearingWinkAnimator.state == .active, self.appearingWinkAnimator.isRunning {
+                self.appearingWinkAnimator.stopAnimation(false)
+            }
+            self.setAnimator.startAnimation()
         } else {
             self.setTitle(String(number), for: .normal)
             self.tag = number
-            self.titleLabel?.alpha = hidden ? 0.0 : alpha
         }
     }
     
