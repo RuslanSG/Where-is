@@ -277,19 +277,14 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
         /// Runs cell compression animation
         sender.compress(numberFeedback: !game.winkNumbersMode && !game.shuffleNumbersMode && !game.swapNumbersMode)
 
-        /// Stores if selected number is right info
+        /// Stores if selected number is right
         self.selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
 
         /// Ends game and runs cell uncomression animation on pressed cell if user tapped last number
         if selectedNumberIsRight && sender.tag == game.maxNumber {
             endGame()
-            sender.uncompress(hiddenNumber: true)
+            sender.uncompress(hapticFeedback: selectedNumberIsRight, hiddenNumber: true)
             return
-        }
-
-        /// Plays selection haptic feedback (only on devices with Haptic Feedback)
-        if UIDevice.current.hasHapticFeedback {
-            feedbackGenerator.playSelectionHapticFeedback()
         }
 
         /// Says to the model that number was selected
@@ -297,14 +292,9 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
     }
     
     @objc func cellReleased(sender: CellView) {
-        /// If user tapped right number it plays selection haptic feedback (only on devices with Haptic Feedback) otherwise it plays error haptic feedback and visual error feedback
-        if self.selectedNumberIsRight {
-            if UIDevice.current.hasHapticFeedback {
-                feedbackGenerator.playSelectionHapticFeedback()
-            }
-        } else {
-            feedbackView.feedbackSelection(isRight: false)
-            feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .error)
+        /// If user tapped the wrong number it plays error visual feedback
+        if !self.selectedNumberIsRight {
+            feedbackView.playErrorFeedback()
         }
         
         /// Shuffles numbers or colors under appropriate modes
@@ -319,7 +309,7 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
         }
         
         /// Runs cell uncompression animation
-        sender.uncompress()
+        sender.uncompress(hapticFeedback: self.selectedNumberIsRight)
     }
     
     @objc func userSwipedUp(_ sender: UISwipeGestureRecognizer) {

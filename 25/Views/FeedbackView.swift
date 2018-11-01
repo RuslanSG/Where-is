@@ -25,7 +25,7 @@ class FeedbackView: UIView {
     
     // MARK: - Actions
     
-    public func feedbackSelection(isRight: Bool) {
+    public func playErrorFeedback() {
         UIViewPropertyAnimator.runningPropertyAnimator(
             withDuration: 0.1,
             delay: 0.0,

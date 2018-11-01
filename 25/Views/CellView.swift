@@ -25,7 +25,6 @@ class CellView: UIButton {
     private var numberFeedback = true
     private var showNumber = true
     
-    
     private lazy var cellView: UIView = {
         let view = UIView()
         view.isUserInteractionEnabled = false
@@ -36,13 +35,15 @@ class CellView: UIButton {
     var appearingWinkAnimator = UIViewPropertyAnimator()
     var setAnimator = UIViewPropertyAnimator()
     
-    private enum WinkPhase {
+    private let feedbackGenerator = FeedbackGenerator()
+    
+    enum WinkPhase {
         case disappearing
         case disappeared
         case appearing
     }
     
-    private var winkPhase: WinkPhase?
+    var winkPhase: WinkPhase?
     
     // MARK: - Initialization
     
@@ -120,9 +121,14 @@ extension CellView {
                     self.titleLabel?.alpha = 0.2
                 }
         })
+        
+        /// Plays selection haptic feedback (only on devices with Haptic Feedback)
+        if UIDevice.current.hasHapticFeedback {
+            feedbackGenerator.playSelectionHapticFeedback()
+        }
     }
     
-    func uncompress(hiddenNumber: Bool = false) {
+    func uncompress(hapticFeedback: Bool? = nil, hiddenNumber: Bool = false) {
         let duration: Double = 0.4
         let delay: Double = 0.0
         
@@ -149,6 +155,17 @@ extension CellView {
             self.cellFrameY = nil
             self.cellFrameWidth = nil
             self.cellFrameHeight = nil
+        }
+        
+        /// If user tapped right number it plays selection haptic feedback (only on devices with Haptic Feedback) otherwise it plays error haptic feedback
+        if let hapticFeedback = hapticFeedback {
+            if hapticFeedback {
+                if UIDevice.current.hasHapticFeedback {
+                    self.feedbackGenerator.playSelectionHapticFeedback()
+                }
+            } else {
+                self.feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .error)
+            }
         }
     }
     
@@ -260,11 +277,12 @@ extension CellView {
     
     func setNumber(_ number: Int, animated: Bool) {
         if animated {
-            let duration = 0.1
-            let timing = UICubicTimingParameters(animationCurve: .easeInOut)
+            let durationIn = 0.1
+            let durationOut = 0.4
+            let timing = UICubicTimingParameters(animationCurve: .easeOut)
             
             /// Disappearing animation
-            self.setAnimator = UIViewPropertyAnimator(duration: duration, timingParameters: timing)
+            self.setAnimator = UIViewPropertyAnimator(duration: durationIn, timingParameters: timing)
             
             self.setAnimator.addAnimations {
                 self.titleLabel?.alpha = 0.0
@@ -275,7 +293,7 @@ extension CellView {
                 self.tag = number
                 
                 /// Appearing animation
-                self.setAnimator = UIViewPropertyAnimator(duration: duration, timingParameters: timing)
+                self.setAnimator = UIViewPropertyAnimator(duration: durationOut, timingParameters: timing)
                 
                 self.setAnimator.addAnimations {
                     self.titleLabel?.alpha = 1.0

@@ -35,6 +35,8 @@ class TutorialViewController: UIViewController {
         )
     }
     
+    private var selectedNumberIsRight = false
+    
     private var numbersFontSize: CGFloat {
         if UIDevice.current.userInterfaceIdiom == .pad {
             return UIScreen.main.bounds.width / 15
@@ -70,31 +72,31 @@ class TutorialViewController: UIViewController {
     // MARK: - Actions
     
     @objc func cellPressed(sender: CellView) {
-        let selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
-        if selectedNumberIsRight && sender.tag == game.maxNumber {
-            // User tapped the last number
-            sender.compress(numberFeedback: false)
+        self.selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
+        
+        /// User tapped the last number
+        if self.selectedNumberIsRight && sender.tag == game.maxNumber {
             lastCellTapped(sender)
             return
         }
+        
         sender.compress(numberFeedback: true)
+        
         game.numberSelected(sender.tag)
+        
+        /// User tapped the right number
         if selectedNumberIsRight {
-            // User tapped the right number
             lastTappedCell = sender
             nextCellToTap = getNextCellToTap()
             highlightRightCell()
-            feedbackGenerator.playSelectionHapticFeedback()
-        } else {
-            // User tapped the wrong number
-            feedbackView.feedbackSelection(isRight: false)
-            feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .error)
         }
     }
     
     @objc func cellReleased(sender: CellView) {
-        sender.uncompress()
-        feedbackGenerator.playSelectionHapticFeedback()
+        sender.uncompress(hapticFeedback: self.selectedNumberIsRight)
+        if !self.selectedNumberIsRight {
+            feedbackView.playErrorFeedback()
+        }
     }
     
     // MARK: - Helping Methods
@@ -168,6 +170,7 @@ class TutorialViewController: UIViewController {
     }
     
     private func lastCellTapped(_ cell: CellView) {
+        cell.compress(numberFeedback: false)
         game.finishGame()
         feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .success)
         cells.forEach {
@@ -178,7 +181,7 @@ class TutorialViewController: UIViewController {
         titleLabel.setText("Отлично!", animated: true)
         detaillabel.setText("Все очень просто! Этот принцип будет сохраняться во всех Ваших последующих играх.",
                                animated: true)
-        cell.uncompress()
+        cell.uncompress(hapticFeedback: true)
     }
 
 }

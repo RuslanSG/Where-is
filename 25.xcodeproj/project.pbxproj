@@ -153,7 +153,7 @@
 				2A118DB5211A132F0059E252 /* GameViewController.swift */,
 				2AAC160F212D94D00042D4A1 /* GameViewControllerHelper.swift */,
 				2A8C933C212197F70068F98E /* SettingsTableViewController.swift */,
-				2AA03498215A84FA00026648 /* Greetings Controllers */,
+				2AA03498215A84FA00026648 /* User Guide Controllers */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -167,7 +167,7 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		2AA03498215A84FA00026648 /* Greetings Controllers */ = {
+		2AA03498215A84FA00026648 /* User Guide Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				2AA03496215A84F100026648 /* RootViewController.swift */,
@@ -176,7 +176,7 @@
 				2AC2C4E6215FFB7500B07769 /* DarkModeTableViewController.swift */,
 				2AC2C4E8215FFB8300B07769 /* WelcomeViewController.swift */,
 			);
-			path = "Greetings Controllers";
+			path = "User Guide Controllers";
 			sourceTree = "<group>";
 		};
 		2FC3AAF029933E8E0930FFF5 /* Pods */ = {

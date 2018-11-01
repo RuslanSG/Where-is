@@ -239,11 +239,11 @@ extension GameViewController: CLLocationManagerDelegate {
         let number1 = cell1.tag
         let number2 = cell2.tag
         
-        let duration = 1.0
-        let delayIn = 0.0
-        let delayOut = 0.0
-        
         if animated {
+            let duration = 1.0
+            let delayIn = 0.0
+            let delayOut = 0.0
+            
             UIViewPropertyAnimator.runningPropertyAnimator(
                 withDuration: duration / 2,
                 delay: delayIn,
@@ -287,7 +287,6 @@ extension GameViewController: CLLocationManagerDelegate {
         
         cell.winkNumber() {
             self.cellsNotAnimating.append(cell)
-            print(self.cellsNotAnimating.count)
         }
     }
     
@@ -386,7 +385,7 @@ extension GameViewController: CLLocationManagerDelegate {
     /// Ends the game without preparations for the new one
     func endGame() {
         /// Says to the model to finish game
-        game.finishGame()
+        self.game.finishGame()
         
         /// Stops all cell animations (e.g. wink, swap)
         stopAnimations()
@@ -412,14 +411,16 @@ extension GameViewController: CLLocationManagerDelegate {
     
     /// Makes all needed prerapations for new game
     func prepareForNewGame() {
+        /// Says to the model to set new game
+        self.game.newGame()
+        
         /// Stops all cell animations (e.g. wink, swap)
         stopAnimations()
         
         /// Sets all cells as 'without animations'
-        cellsNotAnimating = cells
-        
-        /// Says to the model to set new game
-        game.newGame()
+        if !self.game.swapNumbersMode {
+            cellsNotAnimating = cells
+        }
         
         /// Sets numbers according to the model
         setNumbers(animated: false)
@@ -447,6 +448,7 @@ extension GameViewController: CLLocationManagerDelegate {
         
         /// Stops current animations and performs any completion tasks
         for cell in cells {
+            cell.winkPhase = nil
             if cell.disappearingWinkAnimator.state == .stopped {
                 cell.disappearingWinkAnimator.finishAnimation(at: .end)
             } else {
