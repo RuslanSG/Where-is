@@ -265,12 +265,11 @@ extension GameViewController: CLLocationManagerDelegate {
                             cell1.titleLabel?.alpha = 1.0
                             cell2.titleLabel?.alpha = 1.0
                     }) { (_) in
-                        self.cellsNotAnimating.append(cell1)
-                        self.cellsNotAnimating.append(cell2)
+                        if self.game.inGame {
+                            self.cellsNotAnimating.append(cell1)
+                            self.cellsNotAnimating.append(cell2)
+                        }
                     }
-                } else {
-                    self.cellsNotAnimating.append(cell1)
-                    self.cellsNotAnimating.append(cell2)
                 }
             }
         }
@@ -393,7 +392,6 @@ extension GameViewController: CLLocationManagerDelegate {
         /// Hides cell numbers and diables all cells
         for cell in cells {
             cell.hideNumber(animated: true)
-            cell.isEnabled = false
         }
         
         /// Shows results with result time
@@ -418,9 +416,7 @@ extension GameViewController: CLLocationManagerDelegate {
         stopAnimations()
         
         /// Sets all cells as 'without animations'
-        if !self.game.swapNumbersMode {
-            cellsNotAnimating = cells
-        }
+        cellsNotAnimating = cells
         
         /// Sets numbers according to the model
         setNumbers(animated: false)

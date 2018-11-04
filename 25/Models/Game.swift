@@ -217,7 +217,8 @@ class Game {
         inGame = false
         let finishTime = Date.timeIntervalSinceReferenceDate
         elapsedTime = finishTime - startTime
-        Analytics.logEvent("level_\(level)", parameters: ["time" : NSNumber(floatLiteral: elapsedTime)])
+        #warning("!")
+//        Analytics.logEvent("level_\(level)", parameters: ["time" : NSNumber(floatLiteral: elapsedTime)])
     }
     
     func newGame() {

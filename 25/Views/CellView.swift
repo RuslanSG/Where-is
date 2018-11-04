@@ -23,7 +23,7 @@ class CellView: UIButton {
     private var cellFrameWidth: CGFloat?
     
     private var numberFeedback = true
-    private var showNumber = true
+    private var inGame = false
     
     private lazy var cellView: UIView = {
         let view = UIView()
@@ -77,8 +77,8 @@ class CellView: UIButton {
     // MARK: - Notifications
     
     @objc private func inGameStateDidChange(notification: Notification) {
-        if let userInfo = notification.userInfo, let showNumber = userInfo[Notification.UserInfoKey.InGame] as? Bool {
-            self.showNumber = showNumber
+        if let userInfo = notification.userInfo, let inGame = userInfo[Notification.UserInfoKey.InGame] as? Bool {
+            self.inGame = inGame
         }
     }
     
@@ -260,13 +260,12 @@ extension CellView {
                 }
                 
                 self.winkPhase = .disappeared
-
+                
                 self.appearingWinkAnimator.startAnimation(afterDelay: 1.0)
                 DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
                     self.winkPhase = .appearing
                 })
             }
-            
             self.disappearingWinkAnimator.startAnimation()
             self.winkPhase = .disappearing
         } else {
