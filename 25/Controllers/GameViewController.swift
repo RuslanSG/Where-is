@@ -271,24 +271,24 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
     // MARK: - Actions
     
     @objc func cellPressed(sender: CellView) {
-//        /// Stores last pressed cell
-//        self.lastPressedCell = sender
-//
-//        /// Runs cell compression animation
-//        sender.compress(numberFeedback: !game.winkNumbersMode && !game.shuffleNumbersMode && !game.swapNumbersMode)
-//
-//        /// Stores if selected number is right
-//        self.selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
-//
-//        /// Ends game and runs cell uncomression animation on pressed cell if user tapped last number
-//        if selectedNumberIsRight && sender.tag == game.maxNumber {
+        /// Stores last pressed cell
+        self.lastPressedCell = sender
+
+        /// Runs cell compression animation
+        sender.compress(numberFeedback: !game.winkNumbersMode && !game.shuffleNumbersMode && !game.swapNumbersMode)
+
+        /// Stores if selected number is right
+        self.selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
+
+        /// Ends game and runs cell uncomression animation on pressed cell if user tapped last number
+        if selectedNumberIsRight && sender.tag == game.maxNumber {
             endGame()
             sender.uncompress(hapticFeedback: selectedNumberIsRight, hiddenNumber: true)
             return
-//        }
-//
-//        /// Says to the model that number was selected
-//        game.numberSelected(sender.tag)
+        }
+
+        /// Says to the model that number was selected
+        game.numberSelected(sender.tag)
     }
     
     @objc func cellReleased(sender: CellView) {
@@ -312,12 +312,24 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
         sender.uncompress(hapticFeedback: self.selectedNumberIsRight)
     }
     
+    private let sensetiveRect: CGRect = {
+        let x = UIScreen.main.bounds.minX
+        let y = UIScreen.main.bounds.minY
+        let width = UIScreen.main.bounds.width
+        let height = UIScreen.main.bounds.height - 50.0
+        return CGRect(x: x, y: y, width: width, height: height)
+    }()
+    
     @objc func userSwipedUp(_ sender: UISwipeGestureRecognizer) {
+        let point = sender.location(in: self.view)
+        if sensetiveRect.contains(point) {
+            self.performSegue(withIdentifier: "showSettings", sender: sender)
+            showSettingsEventCounter += 1
+        }
+        
         if let lastPressedCell = self.lastPressedCell {
             lastPressedCell.uncompress(hiddenNumber: true)
         }
-        self.performSegue(withIdentifier: "showSettings", sender: sender)
-        showSettingsEventCounter += 1
     }
     
     @objc func userSwipedDown(_ sender: UISwipeGestureRecognizer) {

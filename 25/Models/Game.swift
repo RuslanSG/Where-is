@@ -41,36 +41,36 @@ class Game {
     private let levelsWith40 = [21, 22, 23, 28, 29, 30]
     
     /// Goals dictionary: [level : goal(sec)]
-    private let goals = [1  : 27.5,
-                         2  : 34.0,
-                         3  : 42.0,
+    private let goals = [1  : 27.0,
+                         2  : 33.5,
+                         3  : 40.0,
                          4  : 47.5,
-                         5  : 41.0,
-                         6  : 47.5,
-                         7  : 38.0,
-                         8  : 46.0,
+                         5  : 37.5,
+                         6  : 42.0,
+                         7  : 37.5,
+                         8  : 44.5,
                          9  : 55.0,
-                         10 : 55.5,
-                         11 : 60.0,
-                         12 : 80.0,
-                         13 : 63.5,
-                         14 : 58.5,
-                         15 : 64.5,
-                         16 : 72.0,
-                         17 : 78.0,
-                         18 : 76.5,
-                         19 : 100.0,
-                         20 : 73.0,
-                         21 : 64.0,
-                         22 : 78.0,
-                         23 : 127.0,
-                         24 : 77.0,
+                         10 : 54.0,
+                         11 : 59.0,
+                         12 : 74.0,
+                         13 : 60.5,
+                         14 : 56.5,
+                         15 : 64.0,
+                         16 : 78.5,
+                         17 : 77.5,
+                         18 : 69.0,
+                         19 : 95.5,
+                         20 : 76.5,
+                         21 : 70.0,
+                         22 : 85.5,
+                         23 : 120.0,
+                         24 : 73.0,
                          25 : 97.0,
-                         26 : 128.0,
-                         27 : 170.0,
+                         26 : 120.0,
+                         27 : 169.0,
                          28 : 180.0,
                          29 : 188.0,
-                         30 : 190.0]
+                         30 : 187.0]
     
     let minLevel = 1
     let maxLevel = 30
@@ -217,8 +217,8 @@ class Game {
         inGame = false
         let finishTime = Date.timeIntervalSinceReferenceDate
         elapsedTime = finishTime - startTime
-        #warning("!")
-//        Analytics.logEvent("level_\(level)", parameters: ["time" : NSNumber(floatLiteral: elapsedTime)])
+//        #warning("!")
+        Analytics.logEvent("level_\(level)", parameters: ["time" : NSNumber(floatLiteral: elapsedTime)])
     }
     
     func newGame() {
