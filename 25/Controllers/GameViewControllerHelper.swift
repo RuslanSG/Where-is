@@ -396,8 +396,9 @@ extension GameViewController: CLLocationManagerDelegate {
         
         /// Shows results with result time
         guard let time = game.elapsedTime else { return }
+        let difference = game.goal - time
         self.view.addSubview(resultsView)
-        resultsView.show(withTime: time, goalAchieved: game.goalAchieved())
+        resultsView.show(withTime: time, goal: game.goal, difference: difference)
         resultsIsShowing = true
         
         /// Plays 'success' haptic feedback

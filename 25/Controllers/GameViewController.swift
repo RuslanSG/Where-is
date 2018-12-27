@@ -29,8 +29,7 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
     lazy var resultsView: ResultsView = {
         let view = ResultsView(frame: self.view.frame)
         view.blur = appearance.blur
-        view.titleLabel.textColor = appearance.textColor
-        view.timeLabel.textColor = appearance.textColor
+        view.labels.forEach { $0.textColor = appearance.textColor }
         view.actionButton.alpha = 0.0
         view.actionButton.backgroundColor = appearance.userInterfaceColor
         view.actionButton.layer.cornerRadius = appearance.cornerRadius
@@ -229,8 +228,7 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
         
         /// Sets result view color
         resultsView.blur = appearance.blur
-        resultsView.titleLabel.textColor = appearance.textColor
-        resultsView.timeLabel.textColor = appearance.textColor
+        resultsView.labels.forEach { $0.textColor = appearance.textColor }
         resultsView.actionButton.backgroundColor = appearance.userInterfaceColor
         
         /// Sets message view color
@@ -271,24 +269,24 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
     // MARK: - Actions
     
     @objc func cellPressed(sender: CellView) {
-        /// Stores last pressed cell
-        self.lastPressedCell = sender
-
-        /// Runs cell compression animation
-        sender.compress(numberFeedback: !game.winkNumbersMode && !game.shuffleNumbersMode && !game.swapNumbersMode)
-
-        /// Stores if selected number is right
-        self.selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
-
-        /// Ends game and runs cell uncomression animation on pressed cell if user tapped last number
-        if selectedNumberIsRight && sender.tag == game.maxNumber {
+//        /// Stores last pressed cell
+//        self.lastPressedCell = sender
+//
+//        /// Runs cell compression animation
+//        sender.compress(numberFeedback: !game.winkNumbersMode && !game.shuffleNumbersMode && !game.swapNumbersMode)
+//
+//        /// Stores if selected number is right
+//        self.selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
+//
+//        /// Ends game and runs cell uncomression animation on pressed cell if user tapped last number
+//        if selectedNumberIsRight && sender.tag == game.maxNumber {
             endGame()
             sender.uncompress(hapticFeedback: selectedNumberIsRight, hiddenNumber: true)
             return
-        }
-
-        /// Says to the model that number was selected
-        game.numberSelected(sender.tag)
+//        }
+//
+//        /// Says to the model that number was selected
+//        game.numberSelected(sender.tag)
     }
     
     @objc func cellReleased(sender: CellView) {

@@ -20,25 +20,39 @@ class ResultsView: UIVisualEffectView {
     
     // MARK: - Subviews
     
-    let titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
         label.font = UIFont.boldSystemFont(ofSize: 45.0)
         label.adjustsFontSizeToFitWidth = true
+        label.alpha = 0.0
         return label
     }()
     
-    lazy var timeLabel: UILabel = {
-        let label = UILabel(frame: CGRect(x: 0.0, y: 0.0, width: 250.0, height: 100.0))
-        label.center = self.center
+    private var timeLabel: UILabel = {
+        let label = UILabel()
         label.textAlignment = .center
-        label.font = UIFont(name: label.font.fontName, size: 90)
+        label.font = UIFont.systemFont(ofSize: 90.0)
         label.numberOfLines = 0
         label.adjustsFontSizeToFitWidth = true
+        label.alpha = 0.0
         return label
     }()
     
-    lazy var actionButton: UIButton = {
+    private var detailTimeLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.font = UIFont.boldSystemFont(ofSize: 25.0)
+        label.numberOfLines = 0
+        label.adjustsFontSizeToFitWidth = true
+        label.alpha = 0.0
+        label.textColor = .green
+        return label
+    }()
+    
+    lazy var labels = [titleLabel, timeLabel]
+    
+    var actionButton: UIButton = {
         let button = UIButton()
         button.setTitle("Готово", for: .normal)
         button.setTitleColor(.white, for: .normal)
@@ -50,7 +64,7 @@ class ResultsView: UIVisualEffectView {
     
     // MARK: - Actions
     
-    public func show(withTime time: Double, goalAchieved: Bool) {
+    public func show(withTime time: Double, goal: Double, difference: Double) {
         UIViewPropertyAnimator.runningPropertyAnimator(
             withDuration: 0.3,
             delay: 0.0,
@@ -58,8 +72,10 @@ class ResultsView: UIVisualEffectView {
             animations: {
                 self.effect = self.blur
         }) { (_) in
-            self.titleLabel.text = goalAchieved ? "Цель достигнута!" : "Цель не достигнута"
-            self.timeLabel.text = String(format: "%.02f", time)
+            let goalAchieved = time < goal
+            self.titleLabel.text = goalAchieved ? "Цель \(goal) сек достигнута!" : "Цель \(goal) сек не достигнута"
+            self.timeLabel.text = goalAchieved ? String(format: "%.02f", time) : "😢"
+            self.detailTimeLabel.text = "-" + String(format: "%.02f", difference)
             UIViewPropertyAnimator.runningPropertyAnimator(
                 withDuration: 0.3,
                 delay: 0.0,
@@ -112,20 +128,58 @@ class ResultsView: UIVisualEffectView {
     // MARK: - Helping Methods
     
     private func setupInputComponents() {
-        self.contentView.addSubview(titleLabel)
-        self.contentView.addSubview(timeLabel)
-        self.contentView.addSubview(actionButton)
-        
-        self.contentView.addConstraintsWithFormat(format: "H:|-30-[v0]-30-|", views: titleLabel)
-        self.contentView.addConstraintsWithFormat(format: "V:|-100-[v0(50)]", views: titleLabel)
         
         let currentDeviceIsIPhoneX = UIDevice.current.platform == .iPhoneX ||
-                                     UIDevice.current.platform == .iPhoneXR ||
-                                     UIDevice.current.platform == .iPhoneXS ||
-                                     UIDevice.current.platform == .iPhoneXSMax
-        #warning("Change constraints")
-        self.contentView.addConstraintsWithFormat(format: "H:|-10-[v0]-10-|", views: actionButton)
-        self.contentView.addConstraintsWithFormat(format: currentDeviceIsIPhoneX ? "V:[v0(50)]-76-|" : "V:[v0(50)]-42-|", views: actionButton)
+            UIDevice.current.platform == .iPhoneXR ||
+            UIDevice.current.platform == .iPhoneXS ||
+            UIDevice.current.platform == .iPhoneXSMax
+        
+        let topGap: CGFloat = 100.0
+        let bottomGap: CGFloat = currentDeviceIsIPhoneX ? 76.0 : 42.0
+        let sideGap: CGFloat = 10.0
+        let actionButtonHeight: CGFloat = 50.0
+        let timeLabelHeight: CGFloat = 100.0
+        let detailTimeLabelHeight: CGFloat = 50.0
+        
+        // Adding subviews
+        self.contentView.addSubview(titleLabel)
+        self.contentView.addSubview(timeLabel)
+        self.contentView.addSubview(detailTimeLabel)
+        self.contentView.addSubview(actionButton)
+        
+        // titleLabel constraints
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        let titleLabelHorizontalConstraint = titleLabel.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor)
+        let titleLabelTopConstraint = titleLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: topGap)
+        let titleLabelTrailingConstraint = titleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -sideGap)
+        let titleLabelLeadingConstraint = titleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: sideGap)
+        NSLayoutConstraint.activate([titleLabelHorizontalConstraint, titleLabelTopConstraint, titleLabelTrailingConstraint, titleLabelLeadingConstraint])
+        
+        // timeLabel constraints
+        timeLabel.translatesAutoresizingMaskIntoConstraints = false
+        let timeLabelHorizontalConstraint = timeLabel.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor)
+        let timeLabelVerticalConstraint = timeLabel.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor)
+        let timeLabelTrailingConstraint = timeLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -sideGap)
+        let timeLabelLeadingConstraint = timeLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: sideGap)
+        let timeLabelHeightConstraint = timeLabel.heightAnchor.constraint(equalToConstant: timeLabelHeight)
+        NSLayoutConstraint.activate([timeLabelHorizontalConstraint, timeLabelVerticalConstraint, timeLabelHeightConstraint, timeLabelTrailingConstraint, timeLabelLeadingConstraint])
+        
+        // detailTimeLabel constraints
+        detailTimeLabel.translatesAutoresizingMaskIntoConstraints = false
+        let detailTimeLabelTopConstraint = detailTimeLabel.topAnchor.constraint(equalTo: timeLabel.bottomAnchor)
+        let detailTimeLabelTrailingConstraint = detailTimeLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -sideGap)
+        let detailTimeLabelLeadingConstraint = detailTimeLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: sideGap)
+        let detailTimeLabelHeightConstraint = detailTimeLabel.heightAnchor.constraint(equalToConstant: detailTimeLabelHeight)
+        NSLayoutConstraint.activate([detailTimeLabelTopConstraint, detailTimeLabelTrailingConstraint, detailTimeLabelLeadingConstraint, detailTimeLabelHeightConstraint])
+
+        // actionButton constraints
+        actionButton.translatesAutoresizingMaskIntoConstraints = false
+        let actionButtonHorizontalConstraint = actionButton.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor)
+        let actionButtonBottomConstraint = actionButton.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -bottomGap)
+        let actionButtonTrailingConstraint = actionButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -sideGap)
+        let actionButtonLeadingConstraint = actionButton.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: sideGap)
+        let actionButtonHeightConstraint = actionButton.heightAnchor.constraint(equalToConstant: actionButtonHeight)
+        NSLayoutConstraint.activate([actionButtonHorizontalConstraint, actionButtonBottomConstraint, actionButtonTrailingConstraint, actionButtonLeadingConstraint, actionButtonHeightConstraint])
     }
     
 }
