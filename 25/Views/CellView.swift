@@ -358,19 +358,17 @@ extension CellView {
         self.addSubview(cellView)
         
         self.backgroundColor = .clear
+        
         self.titleLabel?.textAlignment = .center
         self.titleLabel?.alpha = 0.0
         
+        // cellView constraints
         self.cellView.translatesAutoresizingMaskIntoConstraints = false
-        
-        self.addConstraintsWithFormat(
-            format: "H:|-\(inset)-[v0]-\(inset)-|",
-            views: cellView
-        )
-        self.addConstraintsWithFormat(
-            format: "V:|-\(inset)-[v0]-\(inset)-|",
-            views: cellView
-        )
+        let cellViewTopConstraint = cellView.topAnchor.constraint(equalTo: self.topAnchor, constant: inset)
+        let cellViewBottomConstraint = cellView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -inset)
+        let cellViewTrailingConstraint = cellView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -inset)
+        let cellViewLeadingConstraint = cellView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: inset)
+        NSLayoutConstraint.activate([cellViewTopConstraint, cellViewBottomConstraint, cellViewTrailingConstraint, cellViewLeadingConstraint])
     }
     
 }

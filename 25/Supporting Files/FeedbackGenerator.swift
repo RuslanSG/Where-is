@@ -55,4 +55,9 @@ final class FeedbackGenerator {
         feedbackGenerator.selection.prepare()
     }
     
+    func playVibrationFeedback() {
+        let cancelled = SystemSoundID(kSystemSoundID_Vibrate)
+        AudioServicesPlaySystemSound(cancelled)
+    }
+    
 }

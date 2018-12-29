@@ -382,7 +382,7 @@ extension GameViewController: CLLocationManagerDelegate {
     }
     
     /// Ends the game without preparations for the new one
-    func endGame() {
+    func endGame(levelPassed: Bool) {
         /// Says to the model to finish game
         self.game.finishGame()
         
@@ -394,18 +394,29 @@ extension GameViewController: CLLocationManagerDelegate {
             cell.hideNumber(animated: true)
         }
         
-        /// Shows results with result time
-        guard let time = game.elapsedTime else { return }
-        let difference = game.goal - time
         self.view.addSubview(resultsView)
-        resultsView.show(withTime: time, goal: game.goal, difference: difference)
         resultsIsShowing = true
         
-        /// Plays 'success' haptic feedback
-        feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .success)
-        
-        /// Says to the model to increase or decrease game level
-        game.changeLevel()
+        if levelPassed {
+            /// Shows results with result time
+            guard let time = game.elapsedTime else { return }
+            let timeWithFine = time + game.fine
+            let difference = game.goal - timeWithFine
+            resultsView.show(withTime: timeWithFine, goal: game.goal, difference: difference, fine: game.fine)
+
+            /// Plays 'success' haptic feedback
+            feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .success)
+
+            /// Says to the model to increase or decrease game level
+            game.changeLevel()
+        } else {
+            /// Shows results
+            resultsView.show(goal: game.goal, fine: game.fine)
+            
+            /// Plays vibration feedback
+            feedbackGenerator.playVibrationFeedback()
+        }
+                
     }
     
     /// Makes all needed prerapations for new game

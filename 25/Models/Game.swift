@@ -14,6 +14,7 @@ protocol GameDelegate {
     func colorfulCellsModeStateChanged(to state: Bool)
     func maxNumberChanged(to maxNumber: Int)
     func levelChanged(to level: Int)
+    func timeIsOut()
     
 }
 
@@ -21,56 +22,60 @@ class Game {
     
     // MARK: - Delegate
     
-    var delegate: GameDelegate!
+    var delegate: GameDelegate?
+    
+    // MARK: - Timer
+    
+    private var timer = Timer()
     
     // MARK: - Constants
     
     /// Level modes
-    private let levelsWithColorfulCellsMode = [2, 3, 8, 9, 10, 15, 16, 17, 22, 23, 24, 25, 26, 27, 28, 29, 30]
-    private let levelsWithShuffleColorsMode = [3, 9, 10, 16, 17, 23, 24, 25, 26, 27, 28, 29, 30]
-    private let levelsWithColorfulNumbersMode = [3, 9, 10, 16, 17, 23, 24, 25, 26, 27, 28, 29, 30]
+    private let levelsWithColorfulCellsMode = [2, 5, 7, 9, 10, 14, 18, 19, 20, 22, 24, 25, 26, 27, 28, 29, 30]
+    private let levelsWithShuffleColorsMode = [5, 9, 10, 18, 19, 20, 24, 25, 26, 27, 28, 29, 30]
+    private let levelsWithColorfulNumbersMode = [5, 9, 10, 18, 19, 20, 24, 25, 26, 27, 28, 29, 30]
     
-    private let levelsWithWinkNumbersMode = [5, 9, 11, 16, 18, 24, 25, 26, 27, 28, 30]
-    private let levelsWithSwapNumbersMode = [4, 12, 19, 29]
-    private let levelsWithShuffleNumbersMode = [6, 13, 16, 20, 25, 27, 30]
+    private let levelsWithWinkNumbersMode = [3, 10, 12, 16, 19, 20, 24, 25, 27, 28, 30]
+    private let levelsWithSwapNumbersMode = [8, 17, 23, 29]
+    private let levelsWithShuffleNumbersMode = [6, 13, 20, 21, 24, 28, 30]
    
     /// Levels cell count
-    private let levelsWith25 = [1, 2, 3, 4, 5, 6, 9, 16]
-    private let levelsWith30 = [7, 8, 10, 11, 12, 13, 24, 25]
-    private let levelsWith35 = [14, 15, 17, 18, 19, 20, 26, 27]
-    private let levelsWith40 = [21, 22, 23, 28, 29, 30]
+    private let levelsWith25 = [1, 2, 3, 5, 6, 8, 10, 20]
+    private let levelsWith30 = [4, 7, 9, 12, 13, 17, 19, 24]
+    private let levelsWith35 = [11, 14, 16, 18, 21, 23, 25, 28]
+    private let levelsWith40 = [15, 22, 26, 27, 29, 30]
     
     /// Goals dictionary: [level : goal(sec)]
-    private let goals = [1  : 27.0,
-                         2  : 33.5,
-                         3  : 40.0,
-                         4  : 47.5,
-                         5  : 37.5,
-                         6  : 42.0,
-                         7  : 37.5,
-                         8  : 44.5,
-                         9  : 55.0,
-                         10 : 54.0,
-                         11 : 59.0,
-                         12 : 74.0,
-                         13 : 60.5,
-                         14 : 56.5,
-                         15 : 64.0,
-                         16 : 78.5,
-                         17 : 77.5,
-                         18 : 69.0,
-                         19 : 95.5,
-                         20 : 76.5,
-                         21 : 70.0,
-                         22 : 85.5,
-                         23 : 120.0,
-                         24 : 73.0,
-                         25 : 97.0,
-                         26 : 120.0,
-                         27 : 169.0,
-                         28 : 180.0,
-                         29 : 188.0,
-                         30 : 187.0]
+    private let goals = [1  : 27.5,
+                         2  : 34.0,
+                         3  : 35.5,
+                         4  : 37.5,
+                         5  : 40.0,
+                         6  : 43.0,
+                         7  : 43.5,
+                         8  : 45.5,
+                         9  : 51.5,
+                         10 : 52.0,
+                         11 : 53.0,
+                         12 : 54.0,
+                         13 : 55.0,
+                         14 : 59.5,
+                         15 : 62.5,
+                         16 : 63.0,
+                         17 : 63.0,
+                         18 : 68.0,
+                         19 : 68.0,
+                         20 : 70.0,
+                         21 : 70.5,
+                         22 : 75.0,
+                         23 : 77.0,
+                         24 : 85.0,
+                         25 : 95.0,
+                         26 : 95.45,
+                         27 : 129.0,
+                         28 : 136.5,
+                         29 : 142.0,
+                         30 : 167.0]
     
     let minLevel = 1
     let maxLevel = 30
@@ -96,14 +101,14 @@ class Game {
             let maxNumberOldValue = maxNumber(for: oldValue)
             
             if colorfulCellsMode != colorfulCellModeOldValue {
-                delegate.colorfulCellsModeStateChanged(to: colorfulCellsMode)
+                delegate?.colorfulCellsModeStateChanged(to: colorfulCellsMode)
             }
             if maxNumber != maxNumberOldValue {
                 self.setNumbers(count: maxNumber)
-                delegate.maxNumberChanged(to: maxNumber)
+                delegate?.maxNumberChanged(to: maxNumber)
             }
             
-            delegate.levelChanged(to: level)
+            delegate?.levelChanged(to: level)
             
             UserDefaults.standard.set(level, forKey: UserDefaults.Key.Level)
         }
@@ -113,6 +118,8 @@ class Game {
         guard let goal = goals[level] else { return 0.0 }
         return goal
     }
+    
+    var fine = 0.0
     
     var colums = 5
     var rows: Int {
@@ -196,6 +203,21 @@ class Game {
     func numberSelected(_ number: Int) {
         if number == nextNumberToTap {
             nextNumberToTap += 1
+        } else {
+            self.fine += 1.0
+            let currentTime = Date.timeIntervalSinceReferenceDate
+            let passedTime = currentTime - startTime
+            let timeLeft = goal - passedTime - fine // 1 sec fine
+            print(timeLeft)
+            // Setting timer with fine
+            timer.invalidate()
+            timer = Timer.scheduledTimer(
+                timeInterval: TimeInterval(timeLeft),
+                target: self,
+                selector: #selector(timerSceduled),
+                userInfo: nil,
+                repeats: false
+            )
         }
     }
     
@@ -211,21 +233,33 @@ class Game {
     func startGame() {
         inGame = true
         startTime = Date.timeIntervalSinceReferenceDate
+        
+        // Setting timer
+        timer = Timer.scheduledTimer(
+                timeInterval: TimeInterval(goal),
+                target: self,
+                selector: #selector(timerSceduled),
+                userInfo: nil,
+                repeats: false
+        )
     }
     
     func finishGame() {
         inGame = false
         let finishTime = Date.timeIntervalSinceReferenceDate
         elapsedTime = finishTime - startTime
-        #warning("!")
-//        Analytics.logEvent("level_\(level)", parameters: ["time" : NSNumber(floatLiteral: elapsedTime)])
+        timer.invalidate()
+//        #warning("!")
+        Analytics.logEvent("level_\(level)", parameters: ["passed" : "true"])
     }
     
     func newGame() {
         inGame = false
         nextNumberToTap = 1
         elapsedTime = 0.0
+        fine = 0.0
         numbers.shuffle()
+        timer.invalidate()
     }
     
     func shuffleNumbers() {
@@ -275,6 +309,12 @@ class Game {
             return 40
         }
         return 0
+    }
+    
+    @objc private func timerSceduled() {
+        delegate?.timeIsOut()
+        //        #warning("!")
+        Analytics.logEvent("level_\(level)", parameters: ["passed" : "false"])
     }
     
 }

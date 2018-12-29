@@ -74,7 +74,7 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
         label.adjustsFontSizeToFitWidth = true
         return label
     }()
-    
+        
     lazy var swipeUp: UISwipeGestureRecognizer = {
         let swipe = UISwipeGestureRecognizer(target: self, action: #selector(userSwipedUp(_:)))
         swipe.direction = .up
@@ -269,24 +269,24 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
     // MARK: - Actions
     
     @objc func cellPressed(sender: CellView) {
-//        /// Stores last pressed cell
-//        self.lastPressedCell = sender
-//
-//        /// Runs cell compression animation
-//        sender.compress(numberFeedback: !game.winkNumbersMode && !game.shuffleNumbersMode && !game.swapNumbersMode)
-//
-//        /// Stores if selected number is right
-//        self.selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
-//
-//        /// Ends game and runs cell uncomression animation on pressed cell if user tapped last number
-//        if selectedNumberIsRight && sender.tag == game.maxNumber {
-            endGame()
+        /// Stores last pressed cell
+        self.lastPressedCell = sender
+
+        /// Runs cell compression animation
+        sender.compress(numberFeedback: !game.winkNumbersMode && !game.shuffleNumbersMode && !game.swapNumbersMode)
+
+        /// Stores if selected number is right
+        self.selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
+
+        /// Ends game and runs cell uncomression animation on pressed cell if user tapped last number
+        if selectedNumberIsRight && sender.tag == game.maxNumber {
+            endGame(levelPassed: true)
             sender.uncompress(hapticFeedback: selectedNumberIsRight, hiddenNumber: true)
             return
-//        }
-//
-//        /// Says to the model that number was selected
-//        game.numberSelected(sender.tag)
+        }
+
+        /// Says to the model that number was selected
+        game.numberSelected(sender.tag)
     }
     
     @objc func cellReleased(sender: CellView) {
@@ -359,6 +359,10 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
     
     func levelChanged(to level: Int) {
         messageView.detailLabel.text = "Цель: \(game.goal)"
+    }
+    
+    func timeIsOut() {
+        endGame(levelPassed: false)
     }
     
     // MARK: - RelusltsViewDelegate
