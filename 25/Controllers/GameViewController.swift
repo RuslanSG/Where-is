@@ -18,15 +18,15 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
     
     // MARK: -
     
-    lazy var feedbackView = FeedbackView(frame: self.view.frame)
+    internal lazy var feedbackView = FeedbackView(frame: self.view.frame)
     
-    lazy var cellsContainerView: UIView = {
+    internal lazy var cellsContainerView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
         return view
     }()
     
-    lazy var resultsView: ResultsView = {
+    internal lazy var resultsView: ResultsView = {
         let view = ResultsView(frame: self.view.frame)
         view.blur = appearance.blur
         view.labels.forEach { $0.textColor = appearance.textColor }
@@ -37,7 +37,7 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
         return view
     }()
     
-    lazy var messageView: MessageView = {
+    internal lazy var messageView: MessageView = {
         let view = MessageView()
         view.blur = appearance.blur
         view.layer.cornerRadius = appearance.cornerRadius
@@ -59,29 +59,40 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
         return view
     }()
     
-    lazy var tipsLabel: UILabel? = {
+    internal lazy var tipsLabel: RGAnimatedLabel? = {
         if !needsToShowTips { return nil }
-        let height: CGFloat = 30.0
-        let label = UILabel(frame: CGRect(
-            x: UIScreen.main.bounds.maxX - height,
-            y: UIScreen.main.bounds.minY,
-            width: UIScreen.main.bounds.width,
-            height: height)
-        )
+        let label = RGAnimatedLabel()
         label.font = UIFont.boldSystemFont(ofSize: 15.0)
         label.textAlignment = .center
         label.isUserInteractionEnabled = false
         label.adjustsFontSizeToFitWidth = true
         return label
     }()
-        
-    lazy var swipeUp: UISwipeGestureRecognizer = {
+    
+    internal var timeLabel: RGAnimatedLabel = {
+        let label = RGAnimatedLabel()
+        var fontSize: CGFloat = {
+            switch UIDevice.current.platform {
+            case .iPhoneX: return 15.0
+            case .iPhoneXR: return 16.0
+            case .iPhoneXSMax: return 16.0
+            default: return 12.0
+            }
+        }()
+        label.font = UIFont.boldSystemFont(ofSize: fontSize)
+        label.textAlignment = .center
+        label.alpha = 0.0
+        label.textColor = .red
+        return label
+    }()
+    
+    internal lazy var swipeUp: UISwipeGestureRecognizer = {
         let swipe = UISwipeGestureRecognizer(target: self, action: #selector(userSwipedUp(_:)))
         swipe.direction = .up
         return swipe
     }()
     
-    lazy var swipeDown: UISwipeGestureRecognizer = {
+    internal lazy var swipeDown: UISwipeGestureRecognizer = {
         let swipe = UISwipeGestureRecognizer(target: self, action: #selector(userSwipedDown(_:)))
         swipe.direction = .down
         return swipe
@@ -207,15 +218,61 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
         
         if let tipsLabel = tipsLabel {
             self.view.addSubview(tipsLabel)
-            // Tips label constraints
+            
+            /// Tips label constraints
+            let tipsLabelInset: CGFloat = 5.0
+            let tipsLabelHeight: CGFloat = 30.0
             let margins = self.view.layoutMarginsGuide
+            
             tipsLabel.translatesAutoresizingMaskIntoConstraints = false
-            let trailingConstraint = tipsLabel.trailingAnchor.constraint(equalTo: margins.trailingAnchor)
-            let leadingConstraint = tipsLabel.leadingAnchor.constraint(equalTo: margins.leadingAnchor)
-            let bottomContstraint = tipsLabel.bottomAnchor.constraint(equalTo: margins.bottomAnchor, constant: -5.0)
-            let heightConstraint = tipsLabel.heightAnchor.constraint(equalToConstant: 30.0)
-            NSLayoutConstraint.activate([trailingConstraint, leadingConstraint, bottomContstraint, heightConstraint])
+            let tipsLabelTrailingConstraint = tipsLabel.trailingAnchor.constraint(equalTo: margins.trailingAnchor)
+            let tipsLabelLeadingConstraint = tipsLabel.leadingAnchor.constraint(equalTo: margins.leadingAnchor)
+            let tipsLabelBottomContstraint = tipsLabel.bottomAnchor.constraint(equalTo: margins.bottomAnchor, constant: -tipsLabelInset)
+            let tipsLabelHeightConstraint = tipsLabel.heightAnchor.constraint(equalToConstant: tipsLabelHeight)
+            
+            NSLayoutConstraint.activate([tipsLabelTrailingConstraint, tipsLabelLeadingConstraint, tipsLabelBottomContstraint, tipsLabelHeightConstraint])
         }
+        
+        /// Setups timeLabel
+        self.view.addSubview(timeLabel)
+        
+        let timeLabelTopInset: CGFloat = {
+            switch UIDevice.current.platform {
+            case .iPhoneX: return 13.0
+            case .iPhoneXR: return 15.0
+            case .iPhoneXSMax: return 12.5
+            default: return 0.0
+            }
+        }()
+        
+        let timeLabelLeadingInset: CGFloat? = {
+            switch UIDevice.current.platform {
+            case .iPhoneX: return 21.5
+            case .iPhoneXR: return 26.5
+            case .iPhoneXSMax: return 32.0
+            default: return nil
+            }
+        }()
+        
+        let timeLabelHeight: CGFloat = 20.0
+        let timeLabelWidth: CGFloat = 50.0
+        
+        timeLabel.translatesAutoresizingMaskIntoConstraints = false
+        if UIDevice.current.hasLiquidRetina {
+            let timeLabelLeadingConstraint = timeLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: timeLabelLeadingInset ?? 0.0)
+            let timeLabelTopContstraint = timeLabel.topAnchor.constraint(equalTo: self.view.topAnchor, constant: timeLabelTopInset)
+            NSLayoutConstraint.activate([timeLabelLeadingConstraint, timeLabelTopContstraint])
+        } else {
+            let timeLabelCenterXConstraint = timeLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0.9)
+            let timeLabelTopContstraint = timeLabel.topAnchor.constraint(equalTo: self.view.topAnchor)
+            NSLayoutConstraint.activate([timeLabelCenterXConstraint, timeLabelTopContstraint])
+        }
+        
+        let timeLabelHeightConstraint = timeLabel.heightAnchor.constraint(equalToConstant: timeLabelHeight)
+        let timeLabelWidthConstraint = timeLabel.widthAnchor.constraint(equalToConstant: timeLabelWidth)
+        
+        NSLayoutConstraint.activate([timeLabelHeightConstraint, timeLabelWidthConstraint])
+        
     }
     
     /// Setups UI element colors
@@ -289,10 +346,21 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
         game.numberSelected(sender.tag)
     }
     
+    private var counter: CGFloat = 0.0
+    
     @objc func cellReleased(sender: CellView) {
         /// If user tapped the wrong number it plays error visual feedback
         if !self.selectedNumberIsRight {
             feedbackView.playErrorFeedback()
+            if self.timeLabel.isAnimaing {
+                counter += 1.0
+                self.timeLabel.stopAnimation()
+                self.timeLabel.alpha = 1.0
+            } else {
+                counter = 1.0
+            }
+            
+            self.timeLabel.showAndHideText("+" + String(format: "%.02f", counter), duration: 1.0)
         }
         
         /// Shuffles numbers or colors under appropriate modes

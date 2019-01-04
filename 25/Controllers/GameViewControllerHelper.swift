@@ -247,7 +247,7 @@ extension GameViewController: CLLocationManagerDelegate {
             UIViewPropertyAnimator.runningPropertyAnimator(
                 withDuration: duration / 2,
                 delay: delayIn,
-                options: [],
+                options: .curveEaseInOut,
                 animations: {
                     cell1.titleLabel?.alpha = 0.0
                     cell2.titleLabel?.alpha = 0.0
@@ -260,7 +260,7 @@ extension GameViewController: CLLocationManagerDelegate {
                     UIViewPropertyAnimator.runningPropertyAnimator(
                         withDuration: duration / 2,
                         delay: delayOut,
-                        options: [],
+                        options: .curveEaseInOut,
                         animations: {
                             cell1.titleLabel?.alpha = 1.0
                             cell2.titleLabel?.alpha = 1.0
@@ -446,6 +446,10 @@ extension GameViewController: CLLocationManagerDelegate {
         
         /// Shows status bar
         self.statusBarIsHidden = false
+        
+        /// Hides Time Label
+        self.timeLabel.stopAnimation()
+        self.timeLabel.alpha = 0.0
     }
     
     /// Stops all cell animations (e.g. wink, swap)

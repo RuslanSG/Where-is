@@ -19,9 +19,9 @@ class DarkModeTableViewController: UITableViewController {
     
     @IBOutlet var darkerCells: [UITableViewCell]!
     
-    @IBOutlet weak var sunriseTimeLabel: UILabel!
-    @IBOutlet weak var sunsetTimeLabel: UILabel!
-    @IBOutlet weak var locationCityLabel: UILabel!
+    @IBOutlet weak var sunriseTimeLabel: RGAnimatedLabel!
+    @IBOutlet weak var sunsetTimeLabel: RGAnimatedLabel!
+    @IBOutlet weak var locationCityLabel: RGAnimatedLabel!
     
     @IBOutlet weak var switcher: UISwitch!
     

@@ -120,6 +120,7 @@ class Game {
     }
     
     var fine = 0.0
+    let fineToAdd = 1.0
     
     var colums = 5
     var rows: Int {
@@ -204,11 +205,11 @@ class Game {
         if number == nextNumberToTap {
             nextNumberToTap += 1
         } else {
-            self.fine += 1.0
+            self.fine += fineToAdd
             let currentTime = Date.timeIntervalSinceReferenceDate
             let passedTime = currentTime - startTime
-            let timeLeft = goal - passedTime - fine // 1 sec fine
-            print(timeLeft)
+            let timeLeft = goal - passedTime - fine
+
             // Setting timer with fine
             timer.invalidate()
             timer = Timer.scheduledTimer(

@@ -113,6 +113,15 @@ extension UIDevice {
             return hapticFeedbackPlatforms.contains(platform)
         }
     }
+    
+    var hasLiquidRetina: Bool {
+        get {
+            let iPhoneXPlatforms: [DevicePlatform] = [.iPhoneX,
+                                                      .iPhoneXR, .iPhoneXS, .iPhoneXSMax]
+            
+            return iPhoneXPlatforms.contains(platform)
+        }
+    }
 }
 
 extension UIView {
@@ -127,35 +136,6 @@ extension UIView {
                                                       options: NSLayoutConstraint.FormatOptions(),
                                                       metrics: nil,
                                                       views: viewsDictionary))
-    }
-}
-
-extension UILabel {
-    func setText(_ text: String?, animated: Bool) {
-        if animated {
-            let durationIn = 0.2
-            let durationOut = 0.2
-            let delayIn = 0.0
-            let delayOut = 0.0
-            UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: durationIn,
-                delay: delayIn,
-                options: .curveEaseIn,
-                animations: {
-                    self.alpha = 0.0
-            }) { (_) in
-                self.text = text
-                UIViewPropertyAnimator.runningPropertyAnimator(
-                    withDuration: durationOut,
-                    delay: delayOut,
-                    options: .curveEaseOut,
-                    animations: {
-                        self.alpha = 1.0
-                })
-            }
-        } else {
-            self.text = text
-        }
     }
 }
 

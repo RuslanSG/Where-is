@@ -164,15 +164,9 @@ class ResultsView: UIVisualEffectView {
     // MARK: - Helping Methods
     
     private func setupInputComponents() {
-        
-        let currentDeviceIsIPhoneX = UIDevice.current.platform == .iPhoneX ||
-            UIDevice.current.platform == .iPhoneXR ||
-            UIDevice.current.platform == .iPhoneXS ||
-            UIDevice.current.platform == .iPhoneXSMax
-        
         let topGap: CGFloat = 60.0
         let sideGap: CGFloat = 10.0
-        let bottomGap: CGFloat = currentDeviceIsIPhoneX ? 76.0 : 42.0
+        let bottomGap: CGFloat = UIDevice.current.hasLiquidRetina ? 76.0 : 42.0
         
         let titleLabelHeight: CGFloat = 100.0
         let timeLabelHeight: CGFloat = 100.0

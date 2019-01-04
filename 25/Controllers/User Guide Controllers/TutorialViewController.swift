@@ -11,8 +11,8 @@ import UIKit
 class TutorialViewController: UIViewController {
 
     @IBOutlet weak var cellsContainerView: UIView!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var detaillabel: UILabel!
+    @IBOutlet weak var titleLabel: RGAnimatedLabel!
+    @IBOutlet weak var detaillabel: RGAnimatedLabel!
     
     private var cells = [CellView]()
     private let feedbackGenerator = FeedbackGenerator()

@@ -275,6 +275,7 @@ extension CellView {
     }
     
     func setNumber(_ number: Int, animated: Bool) {
+        self.tag = number
         if animated {
             let durationIn = 0.1
             let durationOut = 0.4
@@ -289,7 +290,6 @@ extension CellView {
             
             self.setAnimator.addCompletion { (_) in
                 self.setTitle(String(number), for: .normal)
-                self.tag = number
                 
                 /// Appearing animation
                 self.setAnimator = UIViewPropertyAnimator(duration: durationOut, timingParameters: timing)
@@ -329,7 +329,6 @@ extension CellView {
             self.setAnimator.startAnimation()
         } else {
             self.setTitle(String(number), for: .normal)
-            self.tag = number
         }
     }
     
