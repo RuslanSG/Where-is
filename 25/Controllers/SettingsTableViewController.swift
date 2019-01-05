@@ -7,19 +7,16 @@
 //
 
 import UIKit
+//import QuartzCore
 
 class SettingsTableViewController: UITableViewController {
    
     @IBOutlet var switchers: [UISwitch]!
     @IBOutlet var labels: [UILabel]!
     @IBOutlet var cells: [UITableViewCell]!
-    @IBOutlet var steppers: [UIStepper]!
+    @IBOutlet var levelButtons: [UIButton]!
     
     @IBOutlet weak var doneButton: UIBarButtonItem!
-    
-    @IBOutlet weak var levelLabel: UILabel!
-    
-    @IBOutlet weak var levelStepper: UIStepper!
     
     @IBOutlet weak var darkModeSwitcher: UISwitch!
     @IBOutlet weak var automaticDarkModeSwitcher: UISwitch!
@@ -29,6 +26,8 @@ class SettingsTableViewController: UITableViewController {
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     var appearance: Appearance!
+    
+    private var lastPressedLevelButton: UIButton?
     
     // MARK: - Lifecycle
     
@@ -46,6 +45,12 @@ class SettingsTableViewController: UITableViewController {
         )
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        updateLevelButtons()
+    }
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -53,18 +58,11 @@ class SettingsTableViewController: UITableViewController {
     // MARK: - Setup UI
     
     private func setupInputComponents() {
-        levelLabel.text = String(game.level)
-        
-        levelStepper.maximumValue = Double(game.maxLevel)
-        levelStepper.minimumValue = Double(game.minLevel)
-        levelStepper.value = Double(game.level)
-        levelStepper.stepValue = 1
-        levelStepper.tintColor = appearance.userInterfaceColor
-        
         darkModeSwitcher.setOn(appearance.darkMode, animated: false)
         darkModeSwitcher.isEnabled = !appearance.automaticDarkMode
         
         automaticDarkModeSwitcher.setOn(appearance.automaticDarkMode, animated: false)
+        setupLevelButtons()
     }
     
     @objc private func setupColors() {
@@ -72,7 +70,6 @@ class SettingsTableViewController: UITableViewController {
         self.tableView.backgroundColor = self.appearance.tableViewBackgroundColor
         self.tableView.separatorColor = self.appearance.tableViewSeparatorColor
         
-        self.steppers.forEach { $0.tintColor = self.appearance.userInterfaceColor }
         self.cells.forEach { $0.backgroundColor = self.appearance.tableViewCellColor }
         
         self.navigationController?.navigationBar.barStyle = self.appearance.darkMode ? .black : .default
@@ -84,19 +81,20 @@ class SettingsTableViewController: UITableViewController {
             switcher.tintColor = self.appearance.switcherTintColor
             switcher.onTintColor = self.appearance.userInterfaceColor
         }
+        
+        for availableLevel in game.availableLevels {
+            for levelButton in levelButtons {
+                if levelButton.tag == availableLevel {
+                    levelButton.backgroundColor = appearance.userInterfaceColor
+                }
+            }            
+        }
     }
         
     // MARK: - Actions
     
     @IBAction func doneButtonPressed(_ sender: UIBarButtonItem) {
         self.dismiss(animated: true)
-    }
-    
-    
-    @IBAction func levelStepperValueChanged(_ sender: UIStepper) {
-        let level = Int(sender.value)
-        levelLabel.text = String(level)
-        game.level = level
     }
     
     @IBAction func darkModeSwitcherValueChanged(_ sender: UISwitch) {
@@ -110,6 +108,11 @@ class SettingsTableViewController: UITableViewController {
         darkModeSwitcher.isEnabled = !sender.isOn
     }
     
+    @objc private func levelButtonPressed(_ sender: UIButton) {
+        game.level = sender.tag
+        selectLevelButton(sender)
+    }
+    
     // MARK: - Notifications
     
     @objc func darkModeStateChangedNotification(notification: Notification) {
@@ -117,6 +120,47 @@ class SettingsTableViewController: UITableViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.setupColors()
         }
+    }
+    
+    // MARK: - Hepling methods
+    
+    /// Initial setup of Level Buttons
+    private func setupLevelButtons() {
+        for levelButton in levelButtons {
+            if let text = levelButton.titleLabel?.text {
+                levelButton.tag = Int(text) ?? 0
+            }
+            levelButton.layer.cornerRadius = levelButton.frame.size.height / 6
+            levelButton.setTitleColor(.white, for: .normal)
+            levelButton.addTarget(self, action: #selector(levelButtonPressed(_:)), for: .touchUpInside)
+        }
+        updateLevelButtons()
+    }
+    
+    /// Setups Level Buttons colors and set selected one
+    private func updateLevelButtons() {
+        for levelButton in levelButtons {
+            if game.availableLevels.contains(levelButton.tag) {
+                levelButton.alpha = 1.0
+                levelButton.backgroundColor = appearance.userInterfaceColor
+                levelButton.isEnabled = true
+            } else {
+                levelButton.alpha = 0.5
+                levelButton.backgroundColor = .gray
+                levelButton.isEnabled = false
+            }
+            if levelButton.tag == game.level {
+                selectLevelButton(levelButton)
+            }
+        }
+    }
+    
+    /// Sets stroke on selected Button
+    private func selectLevelButton(_ button: UIButton) {
+        lastPressedLevelButton?.layer.borderWidth = 0.0
+        lastPressedLevelButton = button
+        button.layer.borderWidth = 3.0
+        button.layer.borderColor = appearance.highlightedCellColor.cgColor
     }
 
 }

@@ -38,15 +38,18 @@ class Game {
     private let levelsWithWinkNumbersMode = [3, 10, 12, 16, 19, 20, 24, 25, 27, 28, 30]
     private let levelsWithSwapNumbersMode = [8, 17, 23, 29]
     private let levelsWithShuffleNumbersMode = [6, 13, 20, 21, 24, 28, 30]
+    
+    private let levelsWithInfinityMode = [0]
    
     /// Levels cell count
     private let levelsWith25 = [1, 2, 3, 5, 6, 8, 10, 20]
     private let levelsWith30 = [4, 7, 9, 12, 13, 17, 19, 24]
     private let levelsWith35 = [11, 14, 16, 18, 21, 23, 25, 28]
-    private let levelsWith40 = [15, 22, 26, 27, 29, 30]
+    private let levelsWith40 = [0, 15, 22, 26, 27, 29, 30]
     
     /// Goals dictionary: [level : goal(sec)]
-    private let goals = [1  : 27.5,
+    private let goals = [0  : 5.0,
+                         1  : 27.5,
                          2  : 34.0,
                          3  : 35.5,
                          4  : 37.5,
@@ -71,13 +74,28 @@ class Game {
                          23 : 77.0,
                          24 : 85.0,
                          25 : 95.0,
-                         26 : 95.45,
+                         26 : 95.5,
                          27 : 129.0,
                          28 : 136.5,
                          29 : 142.0,
                          30 : 167.0]
     
-    let minLevel = 1
+    /// Levels user can select
+    var availableLevels: [Int] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+//    var availableLevels: [Int] {
+//        set {
+//            UserDefaults.standard.set(newValue, forKey: UserDefaults.Key.AvailableLevels)
+//        }
+//        get {
+//            if let availableLevels = UserDefaults.standard.array(forKey: UserDefaults.Key.AvailableLevels) as? [Int] {
+//                return availableLevels
+//            } else {
+//                return [1]
+//            }
+//        }
+//    }
+    
+    let minLevel = 0
     let maxLevel = 30
     
     private enum LevelChanger {
@@ -85,7 +103,7 @@ class Game {
         case down
     }
     
-    private var needsToUpLevel: Bool {
+    private var needsToLevelUp: Bool {
         set {
             UserDefaults.standard.set(newValue, forKey: UserDefaults.Key.LevelChanger)
         }
@@ -138,6 +156,9 @@ class Game {
     var maxNumber: Int {
         return maxNumber(for: level)
     }
+    
+    var infinityModeMaxNumber = 40
+    var infinityModeScore = 0
     
     var nextNumberToTap = 1
     var numbers = [Int]()
@@ -199,11 +220,32 @@ class Game {
         return false
     }
     
+    var infinityMode: Bool {
+        if self.levelsWithInfinityMode.contains(level) {
+            return true
+        }
+        return false
+    }
+    
     // MARK: - Game Actions
     
     func numberSelected(_ number: Int) {
         if number == nextNumberToTap {
             nextNumberToTap += 1
+            /// Infinity Mode
+            if self.infinityMode {
+                infinityModeMaxNumber += 1
+                infinityModeScore += 1
+                // Setting timer for Infinity Mode
+                timer.invalidate()
+                timer = Timer.scheduledTimer(
+                    timeInterval: TimeInterval(goal),
+                    target: self,
+                    selector: #selector(timerSceduled),
+                    userInfo: nil,
+                    repeats: false
+                )
+            }
         } else {
             self.fine += fineToAdd
             let currentTime = Date.timeIntervalSinceReferenceDate
@@ -235,6 +277,9 @@ class Game {
         inGame = true
         startTime = Date.timeIntervalSinceReferenceDate
         
+        infinityModeScore = 0
+        infinityModeMaxNumber = 40
+        
         // Setting timer
         timer = Timer.scheduledTimer(
                 timeInterval: TimeInterval(goal),
@@ -249,6 +294,7 @@ class Game {
         inGame = false
         let finishTime = Date.timeIntervalSinceReferenceDate
         elapsedTime = finishTime - startTime
+        openNextLevel()
         timer.invalidate()
 //        #warning("!")
         Analytics.logEvent("level_\(level)", parameters: ["passed" : "true"])
@@ -268,25 +314,23 @@ class Game {
     }
     
     func changeLevel() {
+        if level == 0 { return }
         if self.level == maxLevel {
-            needsToUpLevel = false
-        } else if self.level == minLevel {
-            needsToUpLevel = true
-        }
-        if self.needsToUpLevel {
-            level += 1
+            level = 0
         } else {
-            level -= 1
+            level += 1
         }
     }
-    
+
     // MARK: - Initialization
     
     init() {
         let level = UserDefaults.standard.integer(forKey: UserDefaults.Key.Level)
         self.level = level == 0 ? 1 : level
-
+        
         self.setNumbers(count: maxNumber)
+    
+        print(self.availableLevels)
     }
     
     // MARK: - Helping Methods
@@ -316,6 +360,15 @@ class Game {
         delegate?.timeIsOut()
         //        #warning("!")
         Analytics.logEvent("level_\(level)", parameters: ["passed" : "false"])
+    }
+    
+    private func openNextLevel() {
+        if level == 0 { return }
+        if level != maxLevel {
+            self.availableLevels.append(level + 1)
+        } else {
+            self.availableLevels.append(0)
+        }
     }
     
 }

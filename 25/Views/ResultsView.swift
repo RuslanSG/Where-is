@@ -122,6 +122,16 @@ class ResultsView: UIVisualEffectView {
         self.show()
     }
     
+    public func show(score: Int) {
+        self.titleLabel.text = "Игра окончена! Найдено цифр:"
+        self.timeLabel.text = String(score)
+        self.detailTimeLabel.text = ""
+        self.fineTimeLabel.attributedText = NSAttributedString()
+        self.actionButton.setTitle("Готово", for: .normal)
+        
+        self.show()
+    }
+    
     @objc public func hide() {
         UIViewPropertyAnimator.runningPropertyAnimator(
             withDuration: 0.3,

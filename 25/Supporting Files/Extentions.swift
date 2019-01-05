@@ -207,6 +207,7 @@ extension UserDefaults {
         static let AppearingCount: String = "AppearingCountUserDefaultsKey"
         static let ShowSettingsEventCount: String = "ShowSettingsEventCountUserDefaultsKey"
         static let StopGameEventCount: String = "StopGameEventCountUserDefaultsKey"
+        static let AvailableLevels: String = "AvailableLevelsUserDefaultsKey"
     }
 }
 

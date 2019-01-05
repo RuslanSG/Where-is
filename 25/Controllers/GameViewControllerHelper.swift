@@ -397,7 +397,12 @@ extension GameViewController: CLLocationManagerDelegate {
         self.view.addSubview(resultsView)
         resultsIsShowing = true
         
-        if levelPassed {
+        if game.infinityMode {
+            resultsView.show(score: game.infinityModeScore)
+            
+            /// Plays vibration feedback
+            feedbackGenerator.playVibrationFeedback()
+        } else if levelPassed {
             /// Shows results with result time
             guard let time = game.elapsedTime else { return }
             let timeWithFine = time + game.fine
@@ -416,7 +421,8 @@ extension GameViewController: CLLocationManagerDelegate {
             /// Plays vibration feedback
             feedbackGenerator.playVibrationFeedback()
         }
-                
+        
+        lastPressedCell.uncompress(hapticFeedback: false, hiddenNumber: true)
     }
     
     /// Makes all needed prerapations for new game
