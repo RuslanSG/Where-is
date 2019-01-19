@@ -689,70 +689,6 @@
             </objects>
             <point key="canvasLocation" x="2859.375" y="830.28169014084506"/>
         </scene>
-        <!--Table View Controller-->
-        <scene sceneID="PMJ-ma-06Y">
-            <objects>
-                <tableViewController storyboardIdentifier="greetingsViewController" id="2l1-Yc-uRr" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="9Et-HA-u2g">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <sections>
-                            <tableViewSection id="2wO-xb-SZ7">
-                                <cells>
-                                    <tableViewCell clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="EsY-9q-Mq6">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="EsY-9q-Mq6" id="uGH-n2-1v3">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Спасибо!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="sC6-rd-Hpw">
-                                                    <rect key="frame" x="16" y="0.0" width="288" height="42"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="42" id="XVM-jM-E33"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="35"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Swk-JI-GFE">
-                                                    <rect key="frame" x="16" y="50" width="288" height="832"/>
-                                                    <string key="text">Приветствую и добро пожаловать! Большое спасибо за проявленный интерес.   Выставляю на Ваш суд свою новую игру. Я сейчас активно занимаюсь ее созданием, и мне никак не обойтись без Вашей помощи.   План такой: сейчас в игре представлен начальный набор уровней, который я составил исходя из своих личных ощущений и результатов игры. Теперь мне интересно как с ними сможете справиться Вы.   После каждой игры мне будут автоматически присылаться результаты, а я исходя из них буду точнее настраивать сложность каждого уровня. Таким образом мы очень быстро сможем создать действительно интересный и качественный продукт.   Так что играйте в свое удовольствие, ни в чем себя не ограничивайте. Я буду очень рад, если Вам понравится.  Если у Вас есть какие-либо предложения или комментарии — буду рад пообщаться (ссылки в настройках игры). Если найдете какие-либо ошибки в работе приложения — сообщите, пожалуйста, я оперативно их поправлю.  Приятной игры :)</string>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="Swk-JI-GFE" firstAttribute="trailing" secondItem="uGH-n2-1v3" secondAttribute="trailingMargin" id="AEr-Ff-8eN"/>
-                                                <constraint firstItem="sC6-rd-Hpw" firstAttribute="leading" secondItem="uGH-n2-1v3" secondAttribute="leading" constant="16" id="OVf-dE-Y6N"/>
-                                                <constraint firstItem="Swk-JI-GFE" firstAttribute="bottom" secondItem="uGH-n2-1v3" secondAttribute="bottomMargin" id="QSa-6U-M6m"/>
-                                                <constraint firstItem="sC6-rd-Hpw" firstAttribute="top" secondItem="uGH-n2-1v3" secondAttribute="top" id="W6a-X5-cp9"/>
-                                                <constraint firstAttribute="trailing" secondItem="sC6-rd-Hpw" secondAttribute="trailing" constant="16" id="WLS-7T-wpA"/>
-                                                <constraint firstItem="Swk-JI-GFE" firstAttribute="top" secondItem="sC6-rd-Hpw" secondAttribute="bottom" constant="8" id="da0-gy-Y6D"/>
-                                                <constraint firstItem="Swk-JI-GFE" firstAttribute="leading" secondItem="uGH-n2-1v3" secondAttribute="leadingMargin" id="eRG-At-er4"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
-                        </sections>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="rect" keyPath="contentInset">
-                                <rect key="value" x="60" y="0.0" width="40" height="0.0"/>
-                            </userDefinedRuntimeAttribute>
-                        </userDefinedRuntimeAttributes>
-                        <connections>
-                            <outlet property="dataSource" destination="2l1-Yc-uRr" id="Qa8-it-4y3"/>
-                            <outlet property="delegate" destination="2l1-Yc-uRr" id="o6d-Ya-iHe"/>
-                        </connections>
-                    </tableView>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="oi1-0T-doq" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1061.5999999999999" y="830.54187192118229"/>
-        </scene>
         <!--Welcome View Controller-->
         <scene sceneID="8Mk-Zs-771">
             <objects>
@@ -827,6 +763,54 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Jl-CF-SZN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4732" y="832"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="meJ-p5-L0W">
+            <objects>
+                <viewController storyboardIdentifier="greetingsViewController" id="vUJ-hT-Kah" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="KeI-dy-o3o">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Where is?!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="RLe-nN-oqr">
+                                <rect key="frame" x="16" y="344" width="288" height="42"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="42" id="5vH-Rs-SMu"/>
+                                    <constraint firstAttribute="width" constant="288" id="8Lb-8S-nFO"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="35"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Where_is_icon" translatesAutoresizingMaskIntoConstraints="NO" id="1up-5q-qvX">
+                                <rect key="frame" x="60" y="134" width="200" height="200"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="3l8-v3-waX"/>
+                                    <constraint firstAttribute="width" constant="200" id="MjT-RD-gBb"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Здесь будет слоган" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="cq7-BS-oyO" customClass="RGAnimatedLabel" customModule="_5" customModuleProvider="target">
+                                <rect key="frame" x="82" y="391" width="156" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="RLe-nN-oqr" firstAttribute="centerX" secondItem="KeI-dy-o3o" secondAttribute="centerX" id="BfI-wA-YZg"/>
+                            <constraint firstItem="1up-5q-qvX" firstAttribute="centerX" secondItem="KeI-dy-o3o" secondAttribute="centerX" id="BpK-ec-5JH"/>
+                            <constraint firstItem="1up-5q-qvX" firstAttribute="centerY" secondItem="KeI-dy-o3o" secondAttribute="centerY" constant="-50" id="K2Z-Xu-jJR"/>
+                            <constraint firstItem="cq7-BS-oyO" firstAttribute="centerX" secondItem="KeI-dy-o3o" secondAttribute="centerX" id="OAK-aP-8hC"/>
+                            <constraint firstItem="cq7-BS-oyO" firstAttribute="top" secondItem="RLe-nN-oqr" secondAttribute="bottom" constant="5" id="bbr-YN-JRa"/>
+                            <constraint firstItem="RLe-nN-oqr" firstAttribute="top" secondItem="1up-5q-qvX" secondAttribute="bottom" constant="10" id="e8L-BH-jbc"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="YHb-j8-8am"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dc1-Gk-2s4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1059.375" y="826.05633802816908"/>
         </scene>
         <!--Table View Controller-->
         <scene sceneID="G4o-qt-ybu">
@@ -1079,4 +1063,7 @@
             <point key="canvasLocation" x="3762" y="829"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Where_is_icon" width="245.75999450683594" height="245.75999450683594"/>
+    </resources>
 </document>

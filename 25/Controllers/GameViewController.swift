@@ -12,8 +12,11 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
     
     internal enum Strings {
         static let StartButtonText = "Старт"
+        static let StartButtonGoalText = "Цель: "
+        static let StartButtonInfinityModeText = "Цель: ∞"
         static let SwipeUpTipLabelText = "↑ Смахните вверх, чтобы открыть настройки"
-        static let SwipeDownTipLabelText = "↓ Смахните вниз, чтобы начать новую игру"
+        static let SwipeDownTipLabelText = "↓ Смахните вниз, чтобы остановить"
+        
     }
     
     // MARK: -
@@ -51,7 +54,7 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
         
         view.detailLabel.textColor = appearance.textColor
         view.detailLabel.font = UIFont.boldSystemFont(ofSize: appearance.numbersFontSize / 2.2)
-        view.detailLabel.text = "Цель: \(game.goal)"
+        view.detailLabel.text = game.infinityMode ? Strings.StartButtonInfinityModeText : Strings.StartButtonGoalText + String(game.goal)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(startGame))
         view.addGestureRecognizer(tap)
@@ -160,7 +163,7 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
     
     lazy var cellsNotAnimating = cells
     
-    internal var lastPressedCell: CellView!
+    internal var lastPressedCell: CellView?
     
     internal var buttonHeight: CGFloat? {
         if let button = cells.first {
@@ -335,20 +338,16 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
 
         /// Stores if selected number is right
         self.selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
-        
+
         /// Ends game and runs cell uncomression animation on pressed cell if user tapped last number
         if selectedNumberIsRight && sender.tag == game.maxNumber, !game.infinityMode {
             endGame(levelPassed: true)
-            sender.uncompress(hapticFeedback: selectedNumberIsRight, hiddenNumber: true)
+            sender.uncompress(hiddenNumber: true)
             return
         }
 
         /// Says to the model that number was selected
         game.numberSelected(sender.tag)
-        
-        if game.infinityMode, selectedNumberIsRight {
-            
-        }
     }
     
     private var counter: CGFloat = 0.0
@@ -377,14 +376,13 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
             if game.shuffleColorsMode {
                 updateCellsColorsFromModel()
             }
+            /// Runs cell uncompression animation
+            sender.uncompress(hapticFeedback: self.selectedNumberIsRight)
         }
         
         if game.infinityMode, self.selectedNumberIsRight {
             sender.setNumber(game.infinityModeMaxNumber, animated: true)
         }
-        
-        /// Runs cell uncompression animation
-        sender.uncompress(hapticFeedback: self.selectedNumberIsRight)
     }
     
     private let sensetiveRect: CGRect = {
@@ -437,7 +435,7 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
     }
     
     func levelChanged(to level: Int) {
-        messageView.detailLabel.text = game.infinityMode ? "Цель: ∞" : "Цель: \(game.goal)"
+        messageView.detailLabel.text = game.infinityMode ? Strings.StartButtonInfinityModeText : Strings.StartButtonGoalText + String(game.goal)
     }
     
     func timeIsOut() {

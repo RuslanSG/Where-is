@@ -422,7 +422,7 @@ extension GameViewController: CLLocationManagerDelegate {
             feedbackGenerator.playVibrationFeedback()
         }
         
-        lastPressedCell.uncompress(hapticFeedback: false, hiddenNumber: true)
+        lastPressedCell?.uncompress(hiddenNumber: true)
     }
     
     /// Makes all needed prerapations for new game

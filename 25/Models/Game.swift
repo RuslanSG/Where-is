@@ -326,7 +326,8 @@ class Game {
     
     init() {
         let level = UserDefaults.standard.integer(forKey: UserDefaults.Key.Level)
-        self.level = level == 0 ? 1 : level
+        
+        self.level = self.availableLevels.contains(level) ? level : 1
         
         self.setNumbers(count: maxNumber)
     

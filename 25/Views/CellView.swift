@@ -159,10 +159,8 @@ extension CellView {
         
         /// If user tapped right number it plays selection haptic feedback (only on devices with Haptic Feedback) otherwise it plays error haptic feedback
         if let hapticFeedback = hapticFeedback {
-            if hapticFeedback {
-                if UIDevice.current.hasHapticFeedback {
-                    self.feedbackGenerator.playSelectionHapticFeedback()
-                }
+            if hapticFeedback, UIDevice.current.hasHapticFeedback {
+                self.feedbackGenerator.playSelectionHapticFeedback()
             } else {
                 self.feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .error)
             }
