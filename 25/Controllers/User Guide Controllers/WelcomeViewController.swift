@@ -28,6 +28,7 @@ class WelcomeViewController: UIViewController {
     // MARK: - Actions
     
     @IBAction func doneButtonPressed(_ sender: UIButton) {
+        UserDefaults.standard.set(true, forKey: UserDefaults.Key.NotFirstLaunch)
         delegate?.doneButtonPressed()
     }    
     

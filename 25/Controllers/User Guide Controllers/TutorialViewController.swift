@@ -171,7 +171,6 @@ class TutorialViewController: UIViewController {
     
     private func lastCellTapped(_ cell: CellView) {
         cell.compress(numberFeedback: false)
-        game.finishGame()
         feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .success)
         cells.forEach {
             $0.hideNumber(animated: true)

@@ -38,7 +38,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
-                            <tableViewSection headerTitle="Уровень" footerTitle="Уровень сложности повышается автоматически. После прохождения последнего, уровни начинают уменьшаться." id="Ct6-Pk-3eQ">
+                            <tableViewSection headerTitle="Уровень" footerTitle="" id="Ct6-Pk-3eQ">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="371" id="nqK-xB-ueq">
                                         <rect key="frame" x="0.0" y="55.5" width="320" height="371"/>
@@ -468,7 +468,7 @@
                                 <string key="footerTitle">Чтобы определить время захода и восхода солнца, необходимо разово получить данные о Вашем примерном местоположении. Эта информация будет храниться только на данном устройстве.</string>
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="Bwc-sR-ifx">
-                                        <rect key="frame" x="0.0" y="534" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="490" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Bwc-sR-ifx" id="z18-fN-cbQ">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
@@ -497,7 +497,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="eu3-ia-SYG">
-                                        <rect key="frame" x="0.0" y="578" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="534" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="eu3-ia-SYG" id="0zo-ld-bI4">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
@@ -654,7 +654,7 @@
                                     <constraint firstItem="pBi-mz-966" firstAttribute="centerY" secondItem="ne1-OU-c6u" secondAttribute="centerY" id="cLi-KF-ytm"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Давайте попробуем сыграть! Найдите каждое число от 1 до 25 в порядке возрастания:" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="pjS-oa-48R" customClass="RGAnimatedLabel" customModule="_5" customModuleProvider="target">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Давайте попробуем! Найдите числа от 1 до 25 в порядке возрастания:" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="pjS-oa-48R" customClass="RGAnimatedLabel" customModule="_5" customModuleProvider="target">
                                 <rect key="frame" x="16" y="115" width="288" height="61"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="61" id="Fop-iV-PDd"/>
@@ -773,10 +773,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Where is?!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="RLe-nN-oqr">
-                                <rect key="frame" x="16" y="344" width="288" height="42"/>
+                                <rect key="frame" x="60" y="344" width="200" height="42"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="42" id="5vH-Rs-SMu"/>
-                                    <constraint firstAttribute="width" constant="288" id="8Lb-8S-nFO"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="8Lb-8S-nFO"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="35"/>
                                 <nil key="textColor"/>
@@ -789,18 +789,20 @@
                                     <constraint firstAttribute="width" constant="200" id="MjT-RD-gBb"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Здесь будет слоган" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="cq7-BS-oyO" customClass="RGAnimatedLabel" customModule="_5" customModuleProvider="target">
-                                <rect key="frame" x="82" y="391" width="156" height="20.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Отличный способ развить внимательность" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="cq7-BS-oyO" customClass="RGAnimatedLabel" customModule="_5" customModuleProvider="target">
+                                <rect key="frame" x="16" y="391" width="288" height="48"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="cq7-BS-oyO" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="KeI-dy-o3o" secondAttribute="leading" constant="16" id="75B-Zt-1hf"/>
                             <constraint firstItem="RLe-nN-oqr" firstAttribute="centerX" secondItem="KeI-dy-o3o" secondAttribute="centerX" id="BfI-wA-YZg"/>
                             <constraint firstItem="1up-5q-qvX" firstAttribute="centerX" secondItem="KeI-dy-o3o" secondAttribute="centerX" id="BpK-ec-5JH"/>
                             <constraint firstItem="1up-5q-qvX" firstAttribute="centerY" secondItem="KeI-dy-o3o" secondAttribute="centerY" constant="-50" id="K2Z-Xu-jJR"/>
+                            <constraint firstAttribute="trailing" secondItem="cq7-BS-oyO" secondAttribute="trailing" constant="16" id="L1h-f3-rzF"/>
                             <constraint firstItem="cq7-BS-oyO" firstAttribute="centerX" secondItem="KeI-dy-o3o" secondAttribute="centerX" id="OAK-aP-8hC"/>
                             <constraint firstItem="cq7-BS-oyO" firstAttribute="top" secondItem="RLe-nN-oqr" secondAttribute="bottom" constant="5" id="bbr-YN-JRa"/>
                             <constraint firstItem="RLe-nN-oqr" firstAttribute="top" secondItem="1up-5q-qvX" secondAttribute="bottom" constant="10" id="e8L-BH-jbc"/>
@@ -840,8 +842,8 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ppl-1t-cmI">
-                                                    <rect key="frame" x="16" y="50" width="288" height="406"/>
-                                                    <string key="text">За основу взята разработка немецкого психиатра и психотерапевта Вальтера Шульте.   Простейшая таблица Шульте представляет собой квадратный листок бумаги шириной с книжную страницу, условно разделенный на 25 одинаковых квадратных ячеек (5 рядов и 5 столбцов), в которые шрифтом обычного книжного размера беспорядочно вписаны числа от 1 до 25.   Необходимо найти каждое число в порядке возрастания. Упражнения с таблицами позволяют улучшить периферическое зрительное восприятие, что важно, например, для скорочтения.</string>
+                                                    <rect key="frame" x="16" y="50" width="288" height="345"/>
+                                                    <mutableString key="text">За основу взята разработка немецкого психиатра и психотерапевта Вальтера Шульте.  Задача проста: необходимо найти каждое число в таблице в порядке возрастания за отведенное время.  Вам предстоит пройти 30 уровней, каждый из которых будет сложнее предыдущего.   Когда Вы сделаете это, то сильно улучшите свою концентрацию, переферийное зрение и умение сохранять спокойствие в стрессовых ситуациях.</mutableString>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>

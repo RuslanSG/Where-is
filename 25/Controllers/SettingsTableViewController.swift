@@ -7,10 +7,15 @@
 //
 
 import UIKit
-//import QuartzCore
+import CoreLocation
 
 class SettingsTableViewController: UITableViewController {
    
+    private enum Strings {
+        static let LocationServicesEnabledFooterText = "Чтобы определить время захода и восхода солнца, необходимо разово получить данные о Вашем примерном местоположении. Эта информация будет храниться только на данном устройстве."
+        static let LocationServicesDisabledFooterText = "Для работы автоматического темного режима, пожалуйста, предоставьте приложению доступ к Вашему примерному местоположению (Настройки → Конфиденциальность → Службы геолокации → Where is?! → При использовании программы). Эта информация будет храниться только на данном устройстве."
+    }
+    
     @IBOutlet var switchers: [UISwitch]!
     @IBOutlet var labels: [UILabel]!
     @IBOutlet var cells: [UITableViewCell]!
@@ -29,6 +34,8 @@ class SettingsTableViewController: UITableViewController {
     
     private var lastPressedLevelButton: UIButton?
     
+    private var automaticDarkModeEnabled = false
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -41,6 +48,12 @@ class SettingsTableViewController: UITableViewController {
             self,
             selector: #selector(darkModeStateChangedNotification(notification:)),
             name: Notification.Name.DarkModeStateDidChange,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(didBecomeActive),
+            name: UIApplication.didBecomeActiveNotification,
             object: nil
         )
     }
@@ -61,7 +74,7 @@ class SettingsTableViewController: UITableViewController {
         darkModeSwitcher.setOn(appearance.darkMode, animated: false)
         darkModeSwitcher.isEnabled = !appearance.automaticDarkMode
         
-        automaticDarkModeSwitcher.setOn(appearance.automaticDarkMode, animated: false)
+        setupAutomaticDarkModeSwitcher()
         setupLevelButtons()
     }
     
@@ -90,6 +103,44 @@ class SettingsTableViewController: UITableViewController {
             }            
         }
     }
+    
+    /// Initial setup of Level Buttons
+    private func setupLevelButtons() {
+        for levelButton in levelButtons {
+            if let text = levelButton.titleLabel?.text {
+                levelButton.tag = Int(text) ?? 0
+            }
+            levelButton.layer.cornerRadius = levelButton.frame.size.height / 6
+            levelButton.setTitleColor(.white, for: .normal)
+            levelButton.addTarget(self, action: #selector(levelButtonPressed(_:)), for: .touchUpInside)
+        }
+        updateLevelButtons()
+    }
+    
+    private func setupAutomaticDarkModeSwitcher() {
+        if CLLocationManager.locationServicesEnabled() {
+            switch CLLocationManager.authorizationStatus() {
+            case .restricted, .denied:
+                automaticDarkModeSwitcher.isEnabled = false
+                automaticDarkModeSwitcher.setOn(false, animated: true)
+                appearance.automaticDarkMode = false
+                self.automaticDarkModeEnabled = false
+                darkModeSwitcher.isEnabled = true
+            case .authorizedAlways, .authorizedWhenInUse, .notDetermined:
+                automaticDarkModeSwitcher.isEnabled = true
+                automaticDarkModeSwitcher.setOn(appearance.automaticDarkMode, animated: false)
+                darkModeSwitcher.isEnabled = !appearance.automaticDarkMode
+                self.automaticDarkModeEnabled = true
+            }
+        } else {
+            automaticDarkModeSwitcher.isEnabled = false
+            automaticDarkModeSwitcher.setOn(false, animated: true)
+            appearance.automaticDarkMode = false
+            darkModeSwitcher.isEnabled = true
+            self.automaticDarkModeEnabled = false
+        }
+        tableView.reloadSections(IndexSet.init(integer: 1), with: .none)
+    }
         
     // MARK: - Actions
     
@@ -113,6 +164,21 @@ class SettingsTableViewController: UITableViewController {
         selectLevelButton(sender)
     }
     
+    // MARK: - Data Source
+    
+    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        switch section {
+        case 1:
+            if self.automaticDarkModeEnabled {
+                return Strings.LocationServicesEnabledFooterText
+            } else {
+                return Strings.LocationServicesDisabledFooterText
+            }
+        default:
+            return nil
+        }
+    }
+    
     // MARK: - Notifications
     
     @objc func darkModeStateChangedNotification(notification: Notification) {
@@ -122,20 +188,11 @@ class SettingsTableViewController: UITableViewController {
         }
     }
     
-    // MARK: - Hepling methods
-    
-    /// Initial setup of Level Buttons
-    private func setupLevelButtons() {
-        for levelButton in levelButtons {
-            if let text = levelButton.titleLabel?.text {
-                levelButton.tag = Int(text) ?? 0
-            }
-            levelButton.layer.cornerRadius = levelButton.frame.size.height / 6
-            levelButton.setTitleColor(.white, for: .normal)
-            levelButton.addTarget(self, action: #selector(levelButtonPressed(_:)), for: .touchUpInside)
-        }
-        updateLevelButtons()
+    @objc private func didBecomeActive() {
+        setupAutomaticDarkModeSwitcher()
     }
+    
+    // MARK: - Hepling methods
     
     /// Setups Level Buttons colors and set selected one
     private func updateLevelButtons() {

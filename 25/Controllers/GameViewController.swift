@@ -199,7 +199,6 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
         let firstLaunch = !UserDefaults.standard.bool(forKey: UserDefaults.Key.NotFirstLaunch)
         if firstLaunch {
             showGreetingsViewController()
-            UserDefaults.standard.set(true, forKey: UserDefaults.Key.NotFirstLaunch)
         }
     }
     
