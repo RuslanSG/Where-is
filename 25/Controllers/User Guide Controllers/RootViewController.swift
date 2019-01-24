@@ -154,18 +154,7 @@ class RootViewController: UIViewController, WelcomeViewControllerDelegate {
     // MARK: - Notifications
     
     @objc func darkModeStateChangedNotification(_ notification: Notification) {
-        let duration = 0.6
-        let delay = 0.0
-        UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: duration,
-            delay: delay,
-            options: .curveEaseInOut,
-            animations: {
-                self.pageNumberLabel.textColor = self.appearance.textColor
-                self.view.backgroundColor = self.appearance.mainViewColor
-                self.topBarView.backgroundColor = self.appearance.tableViewBackgroundColor
-        })
-        self.setNeedsStatusBarAppearanceUpdate()
+        setupColors()
     }
     
     // MARK: - Status Bar
@@ -221,6 +210,21 @@ class RootViewController: UIViewController, WelcomeViewControllerDelegate {
         
         self.pageNumberLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         self.view.addConstraintsWithFormat(format: "V:|-\(statusBarHeight + inset)-[v0(\(height))]", views: pageNumberLabel)
+    }
+    
+    private func setupColors() {
+        let duration = 0.6
+        let delay = 0.0
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: duration,
+            delay: delay,
+            options: .curveEaseInOut,
+            animations: {
+                self.pageNumberLabel.textColor = self.appearance.textColor
+                self.view.backgroundColor = self.appearance.tableViewBackgroundColor
+                self.topBarView.backgroundColor = self.appearance.tableViewBackgroundColor
+        })
+        self.setNeedsStatusBarAppearanceUpdate()
     }
     
     private func newViewConrtoller(withIdentifier identifier: String) -> UIViewController {

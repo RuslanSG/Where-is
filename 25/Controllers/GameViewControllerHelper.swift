@@ -412,7 +412,8 @@ extension GameViewController: CLLocationManagerDelegate {
             /// Plays 'success' haptic feedback
             feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .success)
 
-            /// Says to the model to increase or decrease game level
+            /// Says to the model to open next level
+            game.openNextLevel()
             game.changeLevel()
         } else {
             /// Shows results

@@ -236,7 +236,7 @@ class Game {
             if self.infinityMode {
                 infinityModeMaxNumber += 1
                 infinityModeScore += 1
-                // Setting timer for Infinity Mode
+                /// Setting timer for Infinity Mode
                 timer.invalidate()
                 timer = Timer.scheduledTimer(
                     timeInterval: TimeInterval(goal),
@@ -252,7 +252,7 @@ class Game {
             let passedTime = currentTime - startTime
             let timeLeft = goal - passedTime - fine
 
-            // Setting timer with fine
+            /// Setting timer with fine
             timer.invalidate()
             timer = Timer.scheduledTimer(
                 timeInterval: TimeInterval(timeLeft),
@@ -280,7 +280,7 @@ class Game {
         infinityModeScore = 0
         infinityModeMaxNumber = 40
         
-        // Setting timer
+        /// Setting timer
         timer = Timer.scheduledTimer(
                 timeInterval: TimeInterval(goal),
                 target: self,
@@ -294,10 +294,10 @@ class Game {
         inGame = false
         let finishTime = Date.timeIntervalSinceReferenceDate
         elapsedTime = finishTime - startTime
-        openNextLevel()
         timer.invalidate()
+        
 //        #warning("!")
-        Analytics.logEvent("level_\(level)", parameters: ["passed" : "true"])
+        Analytics.logEvent("level_\(level)", parameters: ["passing_rate" : NSNumber(integerLiteral: 1)])
     }
     
     func newGame() {
@@ -313,11 +313,20 @@ class Game {
         numbers.shuffle()
     }
     
+    func openNextLevel() {
+        if level == 0 { return }
+        if level != maxLevel {
+            self.availableLevels.append(level + 1)
+        } else {
+            self.availableLevels.append(0)
+        }
+    }
+    
     func changeLevel() {
         if level == 0 { return }
         if self.level == maxLevel {
             level = 0
-        } else {
+        } else if self.availableLevels.contains(level + 1) {
             level += 1
         }
     }
@@ -361,16 +370,7 @@ class Game {
     @objc private func timerSceduled() {
         delegate?.timeIsOut()
         //        #warning("!")
-        Analytics.logEvent("level_\(level)", parameters: ["passed" : "false"])
-    }
-    
-    private func openNextLevel() {
-        if level == 0 { return }
-        if level != maxLevel {
-            self.availableLevels.append(level + 1)
-        } else {
-            self.availableLevels.append(0)
-        }
+        Analytics.logEvent("level_\(level)", parameters: ["passing_rate" : NSNumber(integerLiteral: 0)])
     }
     
 }

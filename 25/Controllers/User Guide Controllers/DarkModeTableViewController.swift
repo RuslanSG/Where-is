@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreLocation
 
 protocol DarkModeViewControllerDelegate {
     func automaticDarkModeStateChanged(to state: Bool)
@@ -50,12 +51,27 @@ class DarkModeTableViewController: UITableViewController {
             name: Notification.Name.UserLocationDidUpdate,
             object: nil
         )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(didBecomeActive),
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil
+        )
     }
     
     // MARK: - Actions
     
     @IBAction func automaticDarkModeSwitcherValueChanged(_ sender: UISwitch) {
-        appearance.automaticDarkMode = sender.isOn
+        if CLLocationManager.locationServicesEnabled() {
+            switch CLLocationManager.authorizationStatus() {
+            case .restricted, .denied:
+                showLocationServicesAlertController(sender: sender)
+            case .authorizedAlways, .authorizedWhenInUse, .notDetermined:
+                appearance.automaticDarkMode = sender.isOn
+            }
+        } else {
+            showLocationServicesAlertController(sender: sender)
+        }
     }
     
     // MARK: - Notifications
@@ -73,7 +89,11 @@ class DarkModeTableViewController: UITableViewController {
         }
     }
     
-    // MARK: - Helping methods
+    @objc private func didBecomeActive() {
+        setupAutomaticDarkModeSwitcher()
+    }
+    
+    // MARK: - Setuping
     
     private func setupColors() {
         if appearance.darkMode {
@@ -109,6 +129,38 @@ class DarkModeTableViewController: UITableViewController {
         sunriseTimeLabel.setText(sunriseTimeString, animated: true)
         sunsetTimeLabel.setText(sunsetTimeString, animated: true)
         locationCityLabel.setText(self.cityName, animated: true)
+    }
+    
+    private func setupAutomaticDarkModeSwitcher() {
+        if CLLocationManager.locationServicesEnabled() {
+            switch CLLocationManager.authorizationStatus() {
+            case .restricted, .denied:
+                switcher.setOn(false, animated: true)
+            case .authorizedAlways, .authorizedWhenInUse, .notDetermined:
+                switcher.setOn(appearance.automaticDarkMode, animated: false)
+            }
+        } else {
+            switcher.setOn(false, animated: true)
+        }
+    }
+    
+    // MARK: - Location Services Alert Controller
+    
+    private func showLocationServicesAlertController(sender: UISwitch) {
+        let alertController = UIAlertController(title: "Предоставьте доступ к геолокации", message: "Чтобы определить время захода и восхода солнца, необходимо разово получить данные о Вашем примерном местоположении. Эта информация будет храниться только на данном устройстве.", preferredStyle: .alert)
+        
+        let action1 = UIAlertAction(title: "Отмена", style: .cancel) { (action: UIAlertAction) in
+            sender.setOn(false, animated: true)
+        }
+        
+        let action2 = UIAlertAction(title: "Перейти в настройки", style: .default) { (action: UIAlertAction) in
+            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+        }
+        
+        alertController.addAction(action1)
+        alertController.addAction(action2)
+        
+        self.present(alertController, animated: true, completion: nil)
     }
 
 }

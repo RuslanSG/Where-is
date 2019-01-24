@@ -13,7 +13,7 @@ class SettingsTableViewController: UITableViewController {
    
     private enum Strings {
         static let LocationServicesEnabledFooterText = "Чтобы определить время захода и восхода солнца, необходимо разово получить данные о Вашем примерном местоположении. Эта информация будет храниться только на данном устройстве."
-        static let LocationServicesDisabledFooterText = "Для работы автоматического темного режима, пожалуйста, предоставьте приложению доступ к Вашему примерному местоположению (Настройки → Конфиденциальность → Службы геолокации → Where is?! → При использовании программы). Эта информация будет храниться только на данном устройстве."
+        static let LocationServicesDisabledFooterText = "Для работы автоматического темного режима, пожалуйста, предоставьте приложению доступ к Вашему примерному местоположению. Эта информация будет храниться только на данном устройстве."
     }
     
     @IBOutlet var switchers: [UISwitch]!
@@ -121,19 +121,16 @@ class SettingsTableViewController: UITableViewController {
         if CLLocationManager.locationServicesEnabled() {
             switch CLLocationManager.authorizationStatus() {
             case .restricted, .denied:
-                automaticDarkModeSwitcher.isEnabled = false
                 automaticDarkModeSwitcher.setOn(false, animated: true)
                 appearance.automaticDarkMode = false
                 self.automaticDarkModeEnabled = false
                 darkModeSwitcher.isEnabled = true
             case .authorizedAlways, .authorizedWhenInUse, .notDetermined:
-                automaticDarkModeSwitcher.isEnabled = true
                 automaticDarkModeSwitcher.setOn(appearance.automaticDarkMode, animated: false)
                 darkModeSwitcher.isEnabled = !appearance.automaticDarkMode
                 self.automaticDarkModeEnabled = true
             }
         } else {
-            automaticDarkModeSwitcher.isEnabled = false
             automaticDarkModeSwitcher.setOn(false, animated: true)
             appearance.automaticDarkMode = false
             darkModeSwitcher.isEnabled = true
@@ -155,8 +152,17 @@ class SettingsTableViewController: UITableViewController {
     }
     
     @IBAction func automaticDarkModeSwitcherValueChanged(_ sender: UISwitch) {
-        appearance.automaticDarkMode = sender.isOn
-        darkModeSwitcher.isEnabled = !sender.isOn
+        if CLLocationManager.locationServicesEnabled() {
+            switch CLLocationManager.authorizationStatus() {
+            case .restricted, .denied:
+                showLocationServicesAlertController(sender: sender)
+            case .authorizedAlways, .authorizedWhenInUse, .notDetermined:
+                appearance.automaticDarkMode = sender.isOn
+                darkModeSwitcher.isEnabled = !sender.isOn
+            }
+        } else {
+            showLocationServicesAlertController(sender: sender)
+        }
     }
     
     @objc private func levelButtonPressed(_ sender: UIButton) {
@@ -190,6 +196,25 @@ class SettingsTableViewController: UITableViewController {
     
     @objc private func didBecomeActive() {
         setupAutomaticDarkModeSwitcher()
+    }
+    
+    // MARK: - Location Services Alert Controller
+    
+    private func showLocationServicesAlertController(sender: UISwitch) {
+        let alertController = UIAlertController(title: "Предоставьте доступ к геолокации", message: "Чтобы определить время захода и восхода солнца, необходимо разово получить данные о Вашем примерном местоположении. Эта информация будет храниться только на данном устройстве.", preferredStyle: .alert)
+        
+        let action1 = UIAlertAction(title: "Отмена", style: .cancel) { (action: UIAlertAction) in
+            sender.setOn(false, animated: true)
+        }
+        
+        let action2 = UIAlertAction(title: "Перейти в настройки", style: .default) { (action: UIAlertAction) in
+            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+        }
+        
+        alertController.addAction(action1)
+        alertController.addAction(action2)
+        
+        self.present(alertController, animated: true, completion: nil)
     }
     
     // MARK: - Hepling methods
