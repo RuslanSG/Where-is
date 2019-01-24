@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:25.xcodeproj">
+   </FileRef>
+   <Group
+      location = "group:Pods"
+      name = "Pods">
+      <FileRef
+         location = "group:Pods.xcodeproj">
+      </FileRef>
+      <Group
+         location = "group:FirebaseCore"
+         name = "FirebaseCore">
+         <Group
+            location = "group:Frameworks"
+            name = "Frameworks">
+            <Group
+               location = "group:FirebaseCore.framework"
+               name = "FirebaseCore.framework">
+               <FileRef
+                  location = "group:FirebaseCore">
+               </FileRef>
+               <Group
+                  location = "group:Headers"
+                  name = "Headers">
+                  <FileRef
+                     location = "group:FIRConfiguration.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:FIROptions.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:FIRApp.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:FIRLoggerLevel.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:FIRAnalyticsConfiguration.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:FirebaseCore.h">
+                  </FileRef>
+               </Group>
+               <Group
+                  location = "group:Modules"
+                  name = "Modules">
+                  <FileRef
+                     location = "group:module.modulemap">
+                  </FileRef>
+               </Group>
+            </Group>
+         </Group>
+      </Group>
+      <Group
+         location = "group:Target Support Files"
+         name = "Target Support Files">
+         <Group
+            location = "group:Pods-25"
+            name = "Pods-25">
+            <FileRef
+               location = "group:Pods-25-umbrella.h">
+            </FileRef>
+            <FileRef
+               location = "group:Pods-25-acknowledgements.plist">
+            </FileRef>
+            <FileRef
+               location = "group:Pods-25.debug.xcconfig">
+            </FileRef>
+            <FileRef
+               location = "group:Pods-25.modulemap">
+            </FileRef>
+            <FileRef
+               location = "group:Pods-25-resources.sh">
+            </FileRef>
+            <FileRef
+               location = "group:Pods-25-dummy.m">
+            </FileRef>
+            <FileRef
+               location = "group:Pods-25-acknowledgements.markdown">
+            </FileRef>
+            <FileRef
+               location = "group:Pods-25.release.xcconfig">
+            </FileRef>
+            <FileRef
+               location = "group:Info.plist">
+            </FileRef>
+            <FileRef
+               location = "group:Pods-25-frameworks.sh">
+            </FileRef>
+         </Group>
+         <Group
+            location = "group:GoogleToolboxForMac"
+            name = "GoogleToolboxForMac">
+            <FileRef
+               location = "group:GoogleToolboxForMac-dummy.m">
+            </FileRef>
+            <FileRef
+               location = "group:GoogleToolboxForMac.modulemap">
+            </FileRef>
+            <FileRef
+               location = "group:GoogleToolboxForMac-umbrella.h">
+            </FileRef>
+            <FileRef
+               location = "group:GoogleToolboxForMac-prefix.pch">
+            </FileRef>
+            <FileRef
+               location = "group:GoogleToolboxForMac.xcconfig">
+            </FileRef>
+            <FileRef
+               location = "group:Info.plist">
+            </FileRef>
+         </Group>
+         <Group
+            location = "group:nanopb"
+            name = "nanopb">
+            <FileRef
+               location = "group:nanopb-dummy.m">
+            </FileRef>
+            <FileRef
+               location = "group:nanopb.modulemap">
+            </FileRef>
+            <FileRef
+               location = "group:nanopb.xcconfig">
+            </FileRef>
+            <FileRef
+               location = "group:nanopb-prefix.pch">
+            </FileRef>
+            <FileRef
+               location = "group:nanopb-umbrella.h">
+            </FileRef>
+            <FileRef
+               location = "group:Info.plist">
+            </FileRef>
+         </Group>
+      </Group>
+      <FileRef
+         location = "group:Manifest.lock">
+      </FileRef>
+      <Group
+         location = "group:FirebaseInstanceID"
+         name = "FirebaseInstanceID">
+         <FileRef
+            location = "group:CHANGELOG.md">
+         </FileRef>
+         <FileRef
+            location = "group:README.md">
+         </FileRef>
+         <Group
+            location = "group:Frameworks"
+            name = "Frameworks">
+            <Group
+               location = "group:FirebaseInstanceID.framework"
+               name = "FirebaseInstanceID.framework">
+               <FileRef
+                  location = "group:FirebaseInstanceID">
+               </FileRef>
+               <Group
+                  location = "group:Headers"
+                  name = "Headers">
+                  <FileRef
+                     location = "group:FirebaseInstanceID.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:FIRInstanceID.h">
+                  </FileRef>
+               </Group>
+               <Group
+                  location = "group:Modules"
+                  name = "Modules">
+                  <FileRef
+                     location = "group:module.modulemap">
+                  </FileRef>
+               </Group>
+            </Group>
+         </Group>
+      </Group>
+      <Group
+         location = "group:Local Podspecs"
+         name = "Local Podspecs">
+      </Group>
+      <Group
+         location = "group:Firebase"
+         name = "Firebase">
+         <Group
+            location = "group:Core"
+            name = "Core">
+            <Group
+               location = "group:Sources"
+               name = "Sources">
+               <FileRef
+                  location = "group:Firebase.h">
+               </FileRef>
+               <FileRef
+                  location = "group:module.modulemap">
+               </FileRef>
+            </Group>
+         </Group>
+         <FileRef
+            location = "group:README.md">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:Headers"
+         name = "Headers">
+         <Group
+            location = "group:Public"
+            name = "Public">
+            <Group
+               location = "group:Firebase"
+               name = "Firebase">
+               <FileRef
+                  location = "group:Firebase.h">
+               </FileRef>
+            </Group>
+         </Group>
+         <Group
+            location = "group:Private"
+            name = "Private">
+            <Group
+               location = "group:Firebase"
+               name = "Firebase">
+               <FileRef
+                  location = "group:Firebase.h">
+               </FileRef>
+            </Group>
+         </Group>
+      </Group>
+      <Group
+         location = "group:FirebaseAnalytics"
+         name = "FirebaseAnalytics">
+         <Group
+            location = "group:Frameworks"
+            name = "Frameworks">
+            <Group
+               location = "group:FirebaseAnalytics.framework"
+               name = "FirebaseAnalytics.framework">
+               <Group
+                  location = "group:Headers"
+                  name = "Headers">
+                  <FileRef
+                     location = "group:FIREventNames.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:FIRAnalyticsSwiftNameSupport.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:FIRParameterNames.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:FIRAnalytics+AppDelegate.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:FIRConfiguration.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:FirebaseAnalytics.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:FIROptions.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:FIRApp.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:FIRAnalyticsConfiguration.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:FIRUserPropertyNames.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:FIRAnalytics.h">
+                  </FileRef>
+               </Group>
+               <FileRef
+                  location = "group:FirebaseAnalytics">
+               </FileRef>
+               <Group
+                  location = "group:Modules"
+                  name = "Modules">
+                  <FileRef
+                     location = "group:module.modulemap">
+                  </FileRef>
+               </Group>
+            </Group>
+            <Group
+               location = "group:FirebaseNanoPB.framework"
+               name = "FirebaseNanoPB.framework">
+               <FileRef
+                  location = "group:FirebaseNanoPB">
+               </FileRef>
+            </Group>
+            <Group
+               location = "group:FirebaseCoreDiagnostics.framework"
+               name = "FirebaseCoreDiagnostics.framework">
+               <FileRef
+                  location = "group:FirebaseCoreDiagnostics">
+               </FileRef>
+               <Group
+                  location = "group:Modules"
+                  name = "Modules">
+                  <FileRef
+                     location = "group:module.modulemap">
+                  </FileRef>
+               </Group>
+            </Group>
+         </Group>
+      </Group>
+      <Group
+         location = "group:GoogleToolboxForMac"
+         name = "GoogleToolboxForMac">
+         <FileRef
+            location = "group:LICENSE">
+         </FileRef>
+         <Group
+            location = "group:Foundation"
+            name = "Foundation">
+            <FileRef
+               location = "group:GTMNSData+zlib.h">
+            </FileRef>
+            <FileRef
+               location = "group:GTMNSData+zlib.m">
+            </FileRef>
+         </Group>
+         <FileRef
+            location = "group:README.md">
+         </FileRef>
+         <FileRef
+            location = "group:GTMDefines.h">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:nanopb"
+         name = "nanopb">
+         <FileRef
+            location = "group:pb_common.c">
+         </FileRef>
+         <FileRef
+            location = "group:pb_decode.c">
+         </FileRef>
+         <FileRef
+            location = "group:pb_encode.c">
+         </FileRef>
+         <FileRef
+            location = "group:README.md">
+         </FileRef>
+         <FileRef
+            location = "group:pb_common.h">
+         </FileRef>
+         <FileRef
+            location = "group:pb.h">
+         </FileRef>
+         <FileRef
+            location = "group:LICENSE.txt">
+         </FileRef>
+         <FileRef
+            location = "group:pb_encode.h">
+         </FileRef>
+         <FileRef
+            location = "group:pb_decode.h">
+         </FileRef>
+      </Group>
+   </Group>
+</Workspace>
