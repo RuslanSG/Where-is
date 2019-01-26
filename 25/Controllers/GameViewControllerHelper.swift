@@ -204,8 +204,8 @@ extension GameViewController: CLLocationManagerDelegate {
             delay: 0.0,
             options: .curveEaseInOut,
             animations: {
-                self.messageView.bounds.size = CGSize(width: self.messageViewWidth, height: self.messageViewHeight)
-                self.messageView.center = self.cellsContainerView.center
+                self.startGameView.bounds.size = CGSize(width: self.messageViewWidth, height: self.messageViewHeight)
+                self.startGameView.center = self.cellsContainerView.center
         })
     }
     
@@ -322,15 +322,15 @@ extension GameViewController: CLLocationManagerDelegate {
     }
     
     internal func prepareForColorfulCellsMode() {
-        messageView.titleLabel.textColor = game.colorfulCellsMode ? .white : appearance.textColor
-        messageView.detailLabel.textColor = game.colorfulCellsMode ? .white : appearance.textColor
+        startGameView.titleLabel.textColor = game.colorfulCellsMode ? .white : appearance.textColor
+        startGameView.detailLabel.textColor = game.colorfulCellsMode ? .white : appearance.textColor
         updateCellsColorsFromModel()
     }
     
     // MARK: - Helping Methods
     
     @objc internal func startGame() {
-        messageView.hide()
+        startGameView.hide()
         
         let needsToShowTip = stopGameEventConunter <= necessaryNumberOfEvents
         tipsLabel?.setText(needsToShowTip ? Strings.SwipeDownTipLabelText : nil, animated: true)
@@ -394,20 +394,31 @@ extension GameViewController: CLLocationManagerDelegate {
             cell.hideNumber(animated: true)
         }
         
-        self.view.addSubview(resultsView)
-        resultsIsShowing = true
-        
         if game.infinityMode {
+            self.view.addSubview(resultsView)
+            resultsIsShowing = true
             resultsView.show(score: game.infinityModeScore)
             
             /// Plays vibration feedback
             feedbackGenerator.playVibrationFeedback()
         } else if levelPassed {
-            /// Shows results with result time
-            guard let time = game.elapsedTime else { return }
-            let timeWithFine = time + game.fine
-            let difference = game.goal - timeWithFine
-            resultsView.show(withTime: timeWithFine, goal: game.goal, difference: difference, fine: game.fine)
+            if game.level == game.maxLevel {
+                let title = "Поздравляю! 🎂"
+                let text = "Вы смогли пройти все \(game.maxLevel) уровней! Отличная работа!"
+                
+                self.view.addSubview(messageView)
+                resultsIsShowing = true
+                messageView.show(title: title, text: text)
+            } else {
+                /// Shows results with result time
+                guard let time = game.elapsedTime else { return }
+                let timeWithFine = time + game.fine
+                let difference = game.goal - timeWithFine
+                
+                self.view.addSubview(resultsView)
+                resultsIsShowing = true
+                resultsView.show(withTime: timeWithFine, goal: game.goal, difference: difference, fine: game.fine)
+            }
 
             /// Plays 'success' haptic feedback
             feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .success)
@@ -417,6 +428,8 @@ extension GameViewController: CLLocationManagerDelegate {
             game.changeLevel()
         } else {
             /// Shows results
+            self.view.addSubview(resultsView)
+            resultsIsShowing = true
             resultsView.show(goal: game.goal, fine: game.fine)
             
             /// Plays vibration feedback
@@ -448,8 +461,8 @@ extension GameViewController: CLLocationManagerDelegate {
         tipsLabel?.setText(needsToShowTip ? Strings.SwipeUpTipLabelText : nil, animated: true)
         
         /// Shows message view
-        self.view.addSubview(messageView)
-        messageView.show()
+        self.view.addSubview(startGameView)
+        startGameView.show()
         
         /// Shows status bar
         self.statusBarIsHidden = false

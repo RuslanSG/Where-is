@@ -100,11 +100,21 @@ class Appearance {
     }
     
     var numbersFontSize: CGFloat {
-        return UIScreen.main.bounds.width / 10
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            return UIScreen.main.bounds.width / 10
+        } else if UIDevice.current.userInterfaceIdiom == .pad {
+            return UIScreen.main.bounds.width / 13
+        }
+        return 0.0
     }
     
     var gridInset: CGFloat {
-        return UIScreen.main.bounds.width / 200
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            return UIScreen.main.bounds.width / 200
+        } else if UIDevice.current.userInterfaceIdiom == .pad {
+            return UIScreen.main.bounds.width / 65
+        }
+        return 0.0
     }
         
     let statusBarHeight = UIApplication.shared.statusBarFrame.height

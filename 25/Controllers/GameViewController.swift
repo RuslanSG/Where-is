@@ -8,7 +8,7 @@
 
 import UIKit
 
-class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
+class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate, MessageViewDelegate {
     
     internal enum Strings {
         static let StartButtonText = "Старт"
@@ -41,7 +41,18 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
     }()
     
     internal lazy var messageView: MessageView = {
-        let view = MessageView()
+        let view = MessageView(frame: self.view.frame)
+        view.blur = appearance.blur
+        view.labels.forEach { $0.textColor = appearance.textColor }
+        view.actionButton.alpha = 0.0
+        view.actionButton.backgroundColor = appearance.userInterfaceColor
+        view.actionButton.layer.cornerRadius = appearance.cornerRadius
+        view.delegate = self
+        return view
+    }()
+    
+    internal lazy var startGameView: StartGameView = {
+        let view = StartGameView()
         view.blur = appearance.blur
         view.layer.cornerRadius = appearance.cornerRadius
         view.clipsToBounds = true
@@ -261,20 +272,15 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
         
         timeLabel.translatesAutoresizingMaskIntoConstraints = false
         if UIDevice.current.hasLiquidRetina {
-            let timeLabelLeadingConstraint = timeLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: timeLabelLeadingInset ?? 0.0)
-            let timeLabelTopContstraint = timeLabel.topAnchor.constraint(equalTo: self.view.topAnchor, constant: timeLabelTopInset)
-            NSLayoutConstraint.activate([timeLabelLeadingConstraint, timeLabelTopContstraint])
+            timeLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: timeLabelLeadingInset ?? 0.0).isActive = true
+            timeLabel.topAnchor.constraint(equalTo: self.view.topAnchor, constant: timeLabelTopInset).isActive = true
         } else {
-            let timeLabelCenterXConstraint = timeLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0.9)
-            let timeLabelTopContstraint = timeLabel.topAnchor.constraint(equalTo: self.view.topAnchor)
-            NSLayoutConstraint.activate([timeLabelCenterXConstraint, timeLabelTopContstraint])
+            timeLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0.9)
+            timeLabel.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
         }
         
-        let timeLabelHeightConstraint = timeLabel.heightAnchor.constraint(equalToConstant: timeLabelHeight)
-        let timeLabelWidthConstraint = timeLabel.widthAnchor.constraint(equalToConstant: timeLabelWidth)
-        
-        NSLayoutConstraint.activate([timeLabelHeightConstraint, timeLabelWidthConstraint])
-        
+        timeLabel.heightAnchor.constraint(equalToConstant: timeLabelHeight).isActive = true
+        timeLabel.widthAnchor.constraint(equalToConstant: timeLabelWidth).isActive = true
     }
     
     /// Setups UI element colors
@@ -285,16 +291,21 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
         /// Sets status bar color
         self.setNeedsStatusBarAppearanceUpdate()
         
-        /// Sets result view color
+        /// Sets resultsView color
         resultsView.blur = appearance.blur
         resultsView.labels.forEach { $0.textColor = appearance.textColor }
         resultsView.actionButton.backgroundColor = appearance.userInterfaceColor
         
-        /// Sets message view color
+        /// Sets messageView color
         messageView.blur = appearance.blur
-        messageView.effect = appearance.blur
-        messageView.titleLabel.textColor = game.colorfulCellsMode ? .white : appearance.textColor
-        messageView.detailLabel.textColor = game.colorfulCellsMode ? .white : appearance.textColor
+        messageView.labels.forEach { $0.textColor = appearance.textColor }
+        messageView.actionButton.backgroundColor = appearance.userInterfaceColor
+        
+        /// Sets startGameView color
+        startGameView.blur = appearance.blur
+        startGameView.effect = appearance.blur
+        startGameView.titleLabel.textColor = game.colorfulCellsMode ? .white : appearance.textColor
+        startGameView.detailLabel.textColor = game.colorfulCellsMode ? .white : appearance.textColor
         
         /// Sets cells color
         updateCellsColorsFromModel()
@@ -328,25 +339,25 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
     // MARK: - Actions
     
     @objc func cellPressed(sender: CellView) {
-        /// Stores last pressed cell
-        self.lastPressedCell = sender
-
-        /// Runs cell compression animation
-        let numberFeedback = !game.winkNumbersMode && !game.shuffleNumbersMode && !game.swapNumbersMode && !game.infinityMode
-        sender.compress(numberFeedback: numberFeedback)
-
-        /// Stores if selected number is right
-        self.selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
-
-        /// Ends game and runs cell uncomression animation on pressed cell if user tapped last number
-        if selectedNumberIsRight && sender.tag == game.maxNumber, !game.infinityMode {
+//        /// Stores last pressed cell
+//        self.lastPressedCell = sender
+//
+//        /// Runs cell compression animation
+//        let numberFeedback = !game.winkNumbersMode && !game.shuffleNumbersMode && !game.swapNumbersMode && !game.infinityMode
+//        sender.compress(numberFeedback: numberFeedback)
+//
+//        /// Stores if selected number is right
+//        self.selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
+//
+//        /// Ends game and runs cell uncomression animation on pressed cell if user tapped last number
+//        if selectedNumberIsRight && sender.tag == game.maxNumber, !game.infinityMode {
             endGame(levelPassed: true)
             sender.uncompress(hiddenNumber: true)
             return
-        }
-
-        /// Says to the model that number was selected
-        game.numberSelected(sender.tag)
+//        }
+//
+//        /// Says to the model that number was selected
+//        game.numberSelected(sender.tag)
     }
     
     private var counter: CGFloat = 0.0
@@ -434,7 +445,7 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
     }
     
     func levelChanged(to level: Int) {
-        messageView.detailLabel.text = game.infinityMode ? Strings.StartButtonInfinityModeText : Strings.StartButtonGoalText + String(game.goal)
+        startGameView.detailLabel.text = game.infinityMode ? Strings.StartButtonInfinityModeText : Strings.StartButtonGoalText + String(game.goal)
     }
     
     func timeIsOut() {
@@ -444,19 +455,13 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
     // MARK: - RelusltsViewDelegate
     
     func resultsViewWillHide() {
-        if needsToUpdateCellColors {
-            needsToUpdateCellColors = false
-            prepareForColorfulCellsMode()
-        }
-        if needsToUpdateCellsCount {
-            needsToUpdateCellsCount = false
-            updateCellsCount(animated: true) {
-                self.prepareForNewGame()
-            }
-        } else {
-            prepareForNewGame()
-        }
-        resultsIsShowing = false
+        completeNewGamePreparations()
+    }
+    
+    // MARK: - MessageViewDelegate
+    
+    func messageViewWillHide() {
+        completeNewGamePreparations()
     }
     
     // MARK: - Segue
@@ -495,6 +500,22 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate {
     
     private func showGreetingsViewController() {
         self.performSegue(withIdentifier: "showGrettings", sender: nil)
+    }
+    
+    private func completeNewGamePreparations() {
+        if needsToUpdateCellColors {
+            needsToUpdateCellColors = false
+            prepareForColorfulCellsMode()
+        }
+        if needsToUpdateCellsCount {
+            needsToUpdateCellsCount = false
+            updateCellsCount(animated: true) {
+                self.prepareForNewGame()
+            }
+        } else {
+            prepareForNewGame()
+        }
+        resultsIsShowing = false
     }
         
 }

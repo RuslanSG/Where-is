@@ -18,9 +18,10 @@
 		2A118DCE211AEC100059E252 /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A118DCD211AEC100059E252 /* Grid.swift */; };
 		2A237940214C5CF00008FC2A /* Solar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A23793F214C5CF00008FC2A /* Solar.swift */; };
 		2A237942214E6E8A0008FC2A /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A237941214E6E8A0008FC2A /* Appearance.swift */; };
+		2A3279E721FCFFEC006AEA9F /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3279E621FCFFEC006AEA9F /* MessageView.swift */; };
+		2A3279E921FD0661006AEA9F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2A3279E821FD0660006AEA9F /* GoogleService-Info.plist */; };
 		2A3F693B21DFBA6C00DD5232 /* RGAnimatedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3F693A21DFBA6C00DD5232 /* RGAnimatedLabel.swift */; };
 		2A45DAB6216FC17E00FCB89C /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A45DAB5216FC17E00FCB89C /* Time.swift */; };
-		2A5A27A821D6DCAE0029B22C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2A5A27A721D6DCAE0029B22C /* GoogleService-Info.plist */; };
 		2A8C933D212197F70068F98E /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8C933C212197F70068F98E /* SettingsTableViewController.swift */; };
 		2AA03497215A84F100026648 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA03496215A84F100026648 /* RootViewController.swift */; };
 		2AA4BD47215D67BF005C8D32 /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA4BD46215D67BF005C8D32 /* TutorialViewController.swift */; };
@@ -30,7 +31,7 @@
 		2AC2C4E7215FFB7500B07769 /* DarkModeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC2C4E6215FFB7500B07769 /* DarkModeTableViewController.swift */; };
 		2AC2C4E9215FFB8300B07769 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC2C4E8215FFB8300B07769 /* WelcomeViewController.swift */; };
 		2ACDF75C213D5B43004FEA1B /* FeedbackGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ACDF75B213D5B43004FEA1B /* FeedbackGenerator.swift */; };
-		2ACDF75E213F35B9004FEA1B /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ACDF75D213F35B9004FEA1B /* MessageView.swift */; };
+		2ACDF75E213F35B9004FEA1B /* StartGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ACDF75D213F35B9004FEA1B /* StartGameView.swift */; };
 		2AEEA946215284FA00AC7896 /* CellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEEA945215284FA00AC7896 /* CellView.swift */; };
 		2AF5792D216A36D900EB0423 /* Daytime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF5792C216A36D900EB0423 /* Daytime.swift */; };
 		2AF5792F216A4DC400EB0423 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF5792E216A4DC400EB0423 /* LocationManager.swift */; };
@@ -52,9 +53,10 @@
 		2A118DCD211AEC100059E252 /* Grid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
 		2A23793F214C5CF00008FC2A /* Solar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Solar.swift; sourceTree = "<group>"; };
 		2A237941214E6E8A0008FC2A /* Appearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; };
+		2A3279E621FCFFEC006AEA9F /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
+		2A3279E821FD0660006AEA9F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2A3F693A21DFBA6C00DD5232 /* RGAnimatedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RGAnimatedLabel.swift; sourceTree = "<group>"; };
 		2A45DAB5216FC17E00FCB89C /* Time.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Time.swift; sourceTree = "<group>"; };
-		2A5A27A721D6DCAE0029B22C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2A69D6F421F4DB6100D91073 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
 		2A69D6F521F4DB6100D91073 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		2A69D6F621F4DEE500D91073 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
@@ -67,7 +69,7 @@
 		2AC2C4E6215FFB7500B07769 /* DarkModeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkModeTableViewController.swift; sourceTree = "<group>"; };
 		2AC2C4E8215FFB8300B07769 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		2ACDF75B213D5B43004FEA1B /* FeedbackGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackGenerator.swift; sourceTree = "<group>"; };
-		2ACDF75D213F35B9004FEA1B /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
+		2ACDF75D213F35B9004FEA1B /* StartGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartGameView.swift; sourceTree = "<group>"; };
 		2AEEA945215284FA00AC7896 /* CellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellView.swift; sourceTree = "<group>"; };
 		2AF5792C216A36D900EB0423 /* Daytime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Daytime.swift; sourceTree = "<group>"; };
 		2AF5792E216A4DC400EB0423 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
@@ -117,7 +119,7 @@
 				2A118DC8211A13450059E252 /* Supporting Files */,
 				2A118DC2211A13300059E252 /* Info.plist */,
 				2A118DBA211A132F0059E252 /* _5.xcdatamodeld */,
-				2A5A27A721D6DCAE0029B22C /* GoogleService-Info.plist */,
+				2A3279E821FD0660006AEA9F /* GoogleService-Info.plist */,
 			);
 			path = 25;
 			sourceTree = "<group>";
@@ -144,7 +146,8 @@
 			children = (
 				2AAC1632213C04210042D4A1 /* ResultsView.swift */,
 				2AA4BD48215D6F10005C8D32 /* FeedbackView.swift */,
-				2ACDF75D213F35B9004FEA1B /* MessageView.swift */,
+				2ACDF75D213F35B9004FEA1B /* StartGameView.swift */,
+				2A3279E621FCFFEC006AEA9F /* MessageView.swift */,
 				2AEEA945215284FA00AC7896 /* CellView.swift */,
 				2A3F693A21DFBA6C00DD5232 /* RGAnimatedLabel.swift */,
 			);
@@ -265,7 +268,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2A118DC1211A13300059E252 /* LaunchScreen.storyboard in Resources */,
-				2A5A27A821D6DCAE0029B22C /* GoogleService-Info.plist in Resources */,
+				2A3279E921FD0661006AEA9F /* GoogleService-Info.plist in Resources */,
 				2A118DBE211A13300059E252 /* Assets.xcassets in Resources */,
 				2A118DB9211A132F0059E252 /* Main.storyboard in Resources */,
 			);
@@ -339,13 +342,14 @@
 				2AA4BD49215D6F10005C8D32 /* FeedbackView.swift in Sources */,
 				2AAC1610212D94D00042D4A1 /* GameViewControllerHelper.swift in Sources */,
 				2AEEA946215284FA00AC7896 /* CellView.swift in Sources */,
+				2A3279E721FCFFEC006AEA9F /* MessageView.swift in Sources */,
 				2A45DAB6216FC17E00FCB89C /* Time.swift in Sources */,
 				2AC2C4E9215FFB8300B07769 /* WelcomeViewController.swift in Sources */,
 				2A118DCA211A1BD50059E252 /* Extentions.swift in Sources */,
 				2AF5792D216A36D900EB0423 /* Daytime.swift in Sources */,
 				2AC2C4E7215FFB7500B07769 /* DarkModeTableViewController.swift in Sources */,
 				2A118DB4211A132F0059E252 /* AppDelegate.swift in Sources */,
-				2ACDF75E213F35B9004FEA1B /* MessageView.swift in Sources */,
+				2ACDF75E213F35B9004FEA1B /* StartGameView.swift in Sources */,
 				2A118DCC211AEB2A0059E252 /* Game.swift in Sources */,
 				2ACDF75C213D5B43004FEA1B /* FeedbackGenerator.swift in Sources */,
 				2A118DCE211AEC100059E252 /* Grid.swift in Sources */,

@@ -19,12 +19,15 @@ class SettingsTableViewController: UITableViewController {
     @IBOutlet var switchers: [UISwitch]!
     @IBOutlet var labels: [UILabel]!
     @IBOutlet var cells: [UITableViewCell]!
-    @IBOutlet var levelButtons: [UIButton]!
+    
+    @IBOutlet var firstCell: UITableViewCell!
     
     @IBOutlet weak var doneButton: UIBarButtonItem!
     
     @IBOutlet weak var darkModeSwitcher: UISwitch!
     @IBOutlet weak var automaticDarkModeSwitcher: UISwitch!
+    
+    private var levelButtons = [UIButton]()
     
     var game: Game!
     
@@ -35,6 +38,18 @@ class SettingsTableViewController: UITableViewController {
     private var lastPressedLevelButton: UIButton?
     
     private var automaticDarkModeEnabled = false
+    
+    private let levelButtonSideSize: CGFloat = 50.0
+    private let infinityLevelButtonHeightCoeff: CGFloat = 1.7 /// higher coeff = lower height revatavely to the regular level button
+    
+    private let levelButtonsGridParameters: (rows: Int, colums: Int) = {
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            return (rows: 7, colums: 5)
+        } else if UIDevice.current.userInterfaceIdiom == .pad {
+            return (rows: 4, colums: 10)
+        }
+        return (rows: 0, colums: 0)
+    }()
     
     // MARK: - Lifecycle
     
@@ -71,11 +86,12 @@ class SettingsTableViewController: UITableViewController {
     // MARK: - Setup UI
     
     private func setupInputComponents() {
+        setupLevelButtonsStackView(count: game.maxLevel)
+        
         darkModeSwitcher.setOn(appearance.darkMode, animated: false)
         darkModeSwitcher.isEnabled = !appearance.automaticDarkMode
         
         setupAutomaticDarkModeSwitcher()
-        setupLevelButtons()
     }
     
     @objc private func setupColors() {
@@ -94,26 +110,39 @@ class SettingsTableViewController: UITableViewController {
             switcher.tintColor = self.appearance.switcherTintColor
             switcher.onTintColor = self.appearance.userInterfaceColor
         }
-        
-        for availableLevel in game.availableLevels {
-            for levelButton in levelButtons {
-                if levelButton.tag == availableLevel {
-                    levelButton.backgroundColor = appearance.userInterfaceColor
-                }
-            }            
-        }
     }
     
-    /// Initial setup of Level Buttons
-    private func setupLevelButtons() {
-        for levelButton in levelButtons {
-            if let text = levelButton.titleLabel?.text {
-                levelButton.tag = Int(text) ?? 0
+    private func setupLevelButtonsStackView(count: Int) {
+        let verticalStackView = UIStackView()
+        verticalStackView.axis = .vertical
+        verticalStackView.distribution = .equalSpacing
+        verticalStackView.alignment = .fill
+        
+        for i in 0..<levelButtonsGridParameters.rows - 1 { /// minus Infinity Level button
+            let horizontalStackView = UIStackView()
+            horizontalStackView.axis = .horizontal
+            horizontalStackView.distribution = .equalSpacing
+            horizontalStackView.alignment = .fill
+            
+            for j in 1...levelButtonsGridParameters.colums {
+                let level = j + i * levelButtonsGridParameters.colums
+                horizontalStackView.addArrangedSubview(setupLevelButton(for: level))
             }
-            levelButton.layer.cornerRadius = levelButton.frame.size.height / 6
-            levelButton.setTitleColor(.white, for: .normal)
-            levelButton.addTarget(self, action: #selector(levelButtonPressed(_:)), for: .touchUpInside)
+            verticalStackView.addArrangedSubview(horizontalStackView)
         }
+        
+        /// Adding Infinity Level button
+        verticalStackView.addArrangedSubview(setupLevelButton(for: 0))
+        
+        self.firstCell.contentView.addSubview(verticalStackView)
+        
+        /// verticalStackView constraints
+        verticalStackView.translatesAutoresizingMaskIntoConstraints = false
+        verticalStackView.topAnchor.constraint(equalTo: self.firstCell.contentView.topAnchor, constant: 10.0).isActive = true
+        verticalStackView.bottomAnchor.constraint(equalTo: self.firstCell.contentView.bottomAnchor, constant: -10.0).isActive = true
+        verticalStackView.leftAnchor.constraint(equalTo: self.firstCell.contentView.leftAnchor, constant: 16.0).isActive = true
+        verticalStackView.rightAnchor.constraint(equalTo: self.firstCell.contentView.rightAnchor, constant: -16.0).isActive = true
+        
         updateLevelButtons()
     }
     
@@ -185,6 +214,14 @@ class SettingsTableViewController: UITableViewController {
         }
     }
     
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 0, indexPath.row == 0 {
+            let spacingCoeff = 1.25
+            return (self.levelButtonSideSize * CGFloat(self.levelButtonsGridParameters.rows - 1) + self.levelButtonSideSize / self.infinityLevelButtonHeightCoeff) * CGFloat(spacingCoeff)
+        }
+        return 44.0
+    }
+    
     // MARK: - Notifications
     
     @objc func darkModeStateChangedNotification(notification: Notification) {
@@ -219,10 +256,32 @@ class SettingsTableViewController: UITableViewController {
     
     // MARK: - Hepling methods
     
+    private func setupLevelButton(for level: Int) -> UIButton {
+        let fontSize: CGFloat = 25.0
+        let cornerRadius: CGFloat = 8.0
+        let title = level == 0 ? "∞" : String(level)
+        let side = level == 0 ? levelButtonSideSize / self.infinityLevelButtonHeightCoeff : levelButtonSideSize
+        
+        let levelButton = UIButton()
+        levelButton.setTitle(title, for: .normal)
+        levelButton.setTitleColor(.white, for: .normal)
+        levelButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: fontSize)
+        levelButton.tag = level
+        levelButton.layer.cornerRadius = cornerRadius
+        levelButton.translatesAutoresizingMaskIntoConstraints = false
+        levelButton.heightAnchor.constraint(equalToConstant: side).isActive = true
+        levelButton.widthAnchor.constraint(equalToConstant: side).isActive = true
+        levelButton.addTarget(self, action: #selector(levelButtonPressed(_:)), for: .touchUpInside)
+        
+        self.levelButtons.append(levelButton)
+        
+        return levelButton
+    }
+    
     /// Setups Level Buttons colors and set selected one
     private func updateLevelButtons() {
         for levelButton in levelButtons {
-            if game.availableLevels.contains(levelButton.tag) {
+            if game.levelIsAvailable(levelButton.tag) {
                 levelButton.alpha = 1.0
                 levelButton.backgroundColor = appearance.userInterfaceColor
                 levelButton.isEnabled = true

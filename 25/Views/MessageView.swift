@@ -2,44 +2,120 @@
 //  MessageView.swift
 //  25
 //
-//  Created by Ruslan Gritsenko on 05.09.2018.
-//  Copyright © 2018 Ruslan Gritsenko. All rights reserved.
+//  Created by Ruslan Gritsenko on 1/26/19.
+//  Copyright © 2019 Ruslan Gritsenko. All rights reserved.
 //
 
 import UIKit
 
-class MessageView: UIVisualEffectView {
+import UIKit
 
-    let titleLabel: UILabel = {
-        let label = UILabel()
-        label.adjustsFontSizeToFitWidth = true
-        label.textAlignment = .center
-        label.alpha = 0.0
-        return label
-    }()
+protocol MessageViewDelegate {
+    func messageViewWillHide()
+}
+
+class MessageView: UIVisualEffectView {
     
-    let detailLabel: UILabel = {
-        let label = UILabel()
-        label.adjustsFontSizeToFitWidth = true
-        label.textAlignment = .center
-        label.alpha = 0.0
-        return label
-    }()
+    var delegate: ResultsViewDelegate?
     
     var blur = UIBlurEffect()
     
-    lazy var stackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [titleLabel, detailLabel])
-        stackView.axis = .vertical
-        stackView.distribution = .equalSpacing
-        stackView.alignment = .center
-        stackView.spacing = 0
-        return stackView
+    private let sadEmojies = ["😢", "😭", "😤", "😠", "😡", "🤬", "🤯", "🥵", "😱", "😨", "😰", "😥", "😓", "😐", "😶", "😧", "🤮", "💩", "😒", "😞", "😔"]
+    
+    // MARK: - Subviews
+    
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.font = UIFont.boldSystemFont(ofSize: 35.0)
+        label.adjustsFontSizeToFitWidth = true
+        label.alpha = 0.0
+        label.numberOfLines = 0
+        return label
     }()
     
-    init() {
-        super.init(effect: nil)
+    private let textLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.font = UIFont.boldSystemFont(ofSize: 20.0)
+        label.adjustsFontSizeToFitWidth = true
+        label.alpha = 0.0
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    lazy var labels = [titleLabel, textLabel]
+    
+    var actionButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Готово", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17.0)
+        button.addTarget(self, action: #selector(hide), for: .touchUpInside)
+        button.addTarget(self, action: #selector(actionButtonPressed(_:)), for: .touchDown)
+        return button
+    }()
+    
+    // MARK: - Actions
+    
+    private func show() {
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: 0.3,
+            delay: 0.0,
+            options: [],
+            animations: {
+                self.effect = self.blur
+        }) { (_) in
+            UIViewPropertyAnimator.runningPropertyAnimator(
+                withDuration: 0.3,
+                delay: 0.0,
+                options: [],
+                animations: {
+                    self.contentView.subviews.forEach { $0.alpha = 1.0 }
+            })
+        }
+    }
+    
+    public func show(title: String, text: String) {
+        self.titleLabel.text = title
+        self.textLabel.text = text
+        self.actionButton.setTitle("Перейти к ∞", for: .normal)
 
+        self.show()
+    }
+    
+    @objc public func hide() {
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: 0.3,
+            delay: 0.0,
+            options: [],
+            animations: {
+                self.effect = nil
+                self.contentView.subviews.forEach { $0.alpha = 0.0 }
+        }) { (position) in
+            if position == .end {
+                self.delegate?.resultsViewWillHide()
+                self.removeFromSuperview()
+            }
+        }
+    }
+    
+    @objc private func actionButtonPressed(_ sender: UIButton) {
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: 0.03,
+            delay: 0.0,
+            options: .curveEaseInOut,
+            animations: {
+                self.actionButton.alpha = 0.2
+        })
+    }
+    
+    // MARK: - Initialization
+    
+    init(frame: CGRect) {
+        super.init(effect: nil)
+        
+        self.frame = frame
         setupInputComponents()
     }
     
@@ -47,51 +123,44 @@ class MessageView: UIVisualEffectView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Actions
-    
-    private var animator = UIViewPropertyAnimator()
-    
-    func show() {
-        let duration = 0.5
-        animator.stopAnimation(true)
-        animator = UIViewPropertyAnimator(
-            duration: duration,
-            curve: .easeOut,
-            animations: {
-                self.effect = self.blur
-                self.titleLabel.alpha = 1.0
-                self.detailLabel.alpha = 1.0
-        })
-        animator.startAnimation()
-    }
-    
-    @objc public func hide() {
-        let duration = 0.15
-        animator.stopAnimation(true)
-        animator = UIViewPropertyAnimator(
-            duration: duration,
-            curve: .easeOut,
-            animations: {
-                self.effect = nil
-                self.titleLabel.alpha = 0.0
-                self.detailLabel.alpha = 0.0
-        })
-        animator.addCompletion { (_) in
-            self.removeFromSuperview()
-        }
-        animator.startAnimation()
-    }
-    
     // MARK: - Helping Methods
     
     private func setupInputComponents() {
-        contentView.addSubview(stackView)
+        let topGap: CGFloat = 60.0
+        let sideGap: CGFloat = 10.0
+        let bottomGap: CGFloat = UIDevice.current.hasLiquidRetina ? 76.0 : 42.0
         
-        /// Stack view constraints
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        let stackViewHorizontalConstraint = stackView.centerXAnchor.constraint(equalTo: self.centerXAnchor)
-        let stackViewVerticalConstraint = stackView.centerYAnchor.constraint(equalTo: self.centerYAnchor)
-        NSLayoutConstraint.activate([stackViewHorizontalConstraint, stackViewVerticalConstraint])
+        let titleLabelHeight: CGFloat = 100.0
+        let actionButtonHeight: CGFloat = 50.0
+        
+        /// Adding subviews
+        self.contentView.addSubview(titleLabel)
+        self.contentView.addSubview(textLabel)
+        self.contentView.addSubview(actionButton)
+        
+        /// titleLabel constraints
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: topGap).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -sideGap).isActive = true
+        titleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: sideGap).isActive = true
+        titleLabel.heightAnchor.constraint(equalToConstant: titleLabelHeight).isActive = true
+        
+        /// textLabel constraints
+        textLabel.translatesAutoresizingMaskIntoConstraints = false
+        textLabel.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor).isActive = true
+        textLabel.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive = true
+        textLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -sideGap).isActive = true
+        textLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: sideGap).isActive = true
+//        textLabel(equalToConstant: timeLabelHeight).isActive = true
+        
+        /// actionButton constraints
+        actionButton.translatesAutoresizingMaskIntoConstraints = false
+        actionButton.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor).isActive = true
+        actionButton.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -bottomGap).isActive = true
+        actionButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -sideGap).isActive = true
+        actionButton.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: sideGap).isActive = true
+        actionButton.heightAnchor.constraint(equalToConstant: actionButtonHeight).isActive = true
     }
     
 }
