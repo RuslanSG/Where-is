@@ -15,6 +15,16 @@ protocol DarkModeViewControllerDelegate {
 
 class DarkModeTableViewController: UITableViewController {
     
+    private enum Strings {
+        static let Cancel = NSLocalizedString("Отмена", comment: "Выход")
+        
+        static let EnableLocationServicesTitle = NSLocalizedString("Предоставьте доступ к геолокации", comment: "")
+        
+        static let EnableLocationServicesText = NSLocalizedString("Чтобы определить время захода и восхода солнца, необходимо разово получить данные о Вашем примерном местоположении. Эта информация будет храниться только на данном устройстве.", comment: "")
+        
+        static let GoToSettings = NSLocalizedString("Перейти в настройки", comment: "")
+    }
+    
     @IBOutlet var labels: [UILabel]!
     @IBOutlet var cells: [UITableViewCell]!
     
@@ -147,13 +157,13 @@ class DarkModeTableViewController: UITableViewController {
     // MARK: - Location Services Alert Controller
     
     private func showLocationServicesAlertController(sender: UISwitch) {
-        let alertController = UIAlertController(title: "Предоставьте доступ к геолокации", message: "Чтобы определить время захода и восхода солнца, необходимо разово получить данные о Вашем примерном местоположении. Эта информация будет храниться только на данном устройстве.", preferredStyle: .alert)
+        let alertController = UIAlertController(title: Strings.EnableLocationServicesTitle, message: Strings.EnableLocationServicesText, preferredStyle: .alert)
         
-        let action1 = UIAlertAction(title: "Отмена", style: .cancel) { (action: UIAlertAction) in
+        let action1 = UIAlertAction(title: Strings.Cancel, style: .cancel) { (action: UIAlertAction) in
             sender.setOn(false, animated: true)
         }
         
-        let action2 = UIAlertAction(title: "Перейти в настройки", style: .default) { (action: UIAlertAction) in
+        let action2 = UIAlertAction(title: Strings.GoToSettings, style: .default) { (action: UIAlertAction) in
             UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
         }
         

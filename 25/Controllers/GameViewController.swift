@@ -11,11 +11,13 @@ import UIKit
 class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate, MessageViewDelegate {
     
     internal enum Strings {
-        static let StartButtonText = "Старт"
-        static let StartButtonGoalText = "Цель: "
-        static let StartButtonInfinityModeText = "Цель: ∞"
-        static let SwipeUpTipLabelText = "↑ Смахните вверх, чтобы открыть настройки"
-        static let SwipeDownTipLabelText = "↓ Смахните вниз, чтобы остановить"
+        static let StartButtonText = NSLocalizedString("Старт", comment: "Начать игру")
+        static let StartButtonGoalText = NSLocalizedString("Цель: ", comment: "За сколько времени нужно пройти уровень")
+        static let StartButtonInfinityModeText = NSLocalizedString("Цель: ∞", comment: "За сколько времени нужно пройти уровень")
+        static let SwipeUpTipLabelText = NSLocalizedString("↑ Смахните вверх, чтобы открыть настройки", comment: "Открыть настройки") 
+        static let SwipeDownTipLabelText = NSLocalizedString("↓ Смахните вниз, чтобы остановить", comment: "Остановить игру")
+        static let CongratulationsTitle = NSLocalizedString("Поздравляю! 🎂", comment: "Поздарвление")
+        static let CongratulationsText = NSLocalizedString("Вы смогли пройти все %d уровней! Отличная работа!", comment: "")
         
     }
     

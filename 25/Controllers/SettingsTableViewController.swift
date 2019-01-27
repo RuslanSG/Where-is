@@ -13,13 +13,21 @@ import Foundation
 class SettingsTableViewController: UITableViewController {
    
     private enum Strings {
-        static let LocationServicesEnabledFooterText = "Чтобы определить время захода и восхода солнца, необходимо разово получить данные о Вашем примерном местоположении. Эта информация будет храниться только на данном устройстве."
+        static let LocationServicesEnabledFooterText = NSLocalizedString("Чтобы определить время захода и восхода солнца, необходимо разово получить данные о Вашем примерном местоположении. Эта информация будет храниться только на данном устройстве.", comment: "")
         
-        static let LocationServicesDisabledFooterText = "Для работы автоматического темного режима, пожалуйста, предоставьте приложению доступ к Вашему примерному местоположению. Эта информация будет храниться только на данном устройстве."
+        static let LocationServicesDisabledFooterText = NSLocalizedString("Для работы автоматического темного режима, пожалуйста, предоставьте приложению доступ к Вашему примерному местоположению. Эта информация будет храниться только на данном устройстве.", comment: "")
         
-        static let RegularLevelDescription = "Для прохождения уровня найдите все числа от 1 до %d менее, чем за %.1f сек."
+        static let RegularLevelDescription = NSLocalizedString("Для прохождения уровня найдите все числа от 1 до %d менее, чем за %.1f сек.", comment: "")
         
-        static let InfinityLevelDescription = "На этом уровне после нахождения число заменяется на новое. Постарайтесь найти как можно больше чисел. На поиски каждого отводится %.1f сек."
+        static let InfinityLevelDescription = NSLocalizedString("На этом уровне после нахождения число заменяется на новое. Постарайтесь найти как можно больше чисел. На поиски каждого отводится %.1f сек.", comment: "")
+        
+        static let Cancel = NSLocalizedString("Отмена", comment: "Выход")
+        
+        static let EnableLocationServicesTitle = NSLocalizedString("Предоставьте доступ к геолокации", comment: "")
+        
+        static let EnableLocationServicesText = NSLocalizedString("Чтобы определить время захода и восхода солнца, необходимо разово получить данные о Вашем примерном местоположении. Эта информация будет храниться только на данном устройстве.", comment: "")
+        
+        static let GoToSettings = NSLocalizedString("Перейти в настройки", comment: "")
     }
     
     @IBOutlet var switchers: [UISwitch]!
@@ -270,13 +278,13 @@ class SettingsTableViewController: UITableViewController {
     // MARK: - Location Services Alert Controller
     
     private func showLocationServicesAlertController(sender: UISwitch) {
-        let alertController = UIAlertController(title: "Предоставьте доступ к геолокации", message: "Чтобы определить время захода и восхода солнца, необходимо разово получить данные о Вашем примерном местоположении. Эта информация будет храниться только на данном устройстве.", preferredStyle: .alert)
+        let alertController = UIAlertController(title: Strings.EnableLocationServicesTitle, message: Strings.EnableLocationServicesText, preferredStyle: .alert)
         
-        let action1 = UIAlertAction(title: "Отмена", style: .cancel) { (action: UIAlertAction) in
+        let action1 = UIAlertAction(title: Strings.Cancel, style: .cancel) { (action: UIAlertAction) in
             sender.setOn(false, animated: true)
         }
         
-        let action2 = UIAlertAction(title: "Перейти в настройки", style: .default) { (action: UIAlertAction) in
+        let action2 = UIAlertAction(title: Strings.GoToSettings, style: .default) { (action: UIAlertAction) in
             UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
         }
         

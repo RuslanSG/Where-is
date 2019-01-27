@@ -10,6 +10,11 @@ import UIKit
 
 class TutorialViewController: UIViewController {
 
+    private enum Strings {
+        static let WellDoneTitle = NSLocalizedString("Отлично!", comment: "Отличная работа!")
+        static let WellDoneText = NSLocalizedString("Все очень просто! Этот принцип будет сохраняться во всех Ваших последующих играх.", comment: "")
+    }
+    
     @IBOutlet weak var cellsContainerView: UIView!
     @IBOutlet weak var titleLabel: RGAnimatedLabel!
     @IBOutlet weak var detaillabel: RGAnimatedLabel!
@@ -177,9 +182,8 @@ class TutorialViewController: UIViewController {
             $0.isUserInteractionEnabled = false
         }
         nextCellToTap?.setBackgroundColor(to: appearance.defaultCellsColor, animated: true)
-        titleLabel.setText("Отлично!", animated: true)
-        detaillabel.setText("Все очень просто! Этот принцип будет сохраняться во всех Ваших последующих играх.",
-                               animated: true)
+        titleLabel.setText(Strings.WellDoneTitle, animated: true)
+        detaillabel.setText(Strings.WellDoneText, animated: true)
         cell.uncompress(hapticFeedback: true)
     }
 

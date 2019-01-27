@@ -14,11 +14,17 @@ class RootViewController: UIViewController, WelcomeViewControllerDelegate {
     var appearance: Appearance!
     
     private enum ViewControllerIdentifier {
-        static let GreetingsViewController: String = "greetingsViewController"
-        static let SensViewController: String = "sensViewController"
-        static let TutorialViewController: String = "tutorialViewController"
-        static let DarkModeViewController: String = "darkModeViewController"
-        static let WelcomeViewController: String = "welcomeViewController"
+        static let GreetingsViewController = "greetingsViewController"
+        static let SensViewController = "sensViewController"
+        static let TutorialViewController = "tutorialViewController"
+        static let DarkModeViewController = "darkModeViewController"
+        static let WelcomeViewController = "welcomeViewController"
+    }
+    
+    private enum Strings {
+        static let Next = NSLocalizedString("Далее", comment: "Кнопка, которая перемещает в следующее меню")
+        static let Back = NSLocalizedString("Назад", comment: "Кнопка, которая перемещает в предыдущее меню")
+        static let Of = NSLocalizedString("из", comment: "Например: 1 из 5")
     }
     
     private lazy var orderedViewControllers: [UIViewController] = {
@@ -60,7 +66,7 @@ class RootViewController: UIViewController, WelcomeViewControllerDelegate {
     private lazy var nextButton: UIButton = {
         let button = UIButton()
         let rightArrow = UIImage(named: "arrow_right")
-        button.setTitle("Далее", for: .normal)
+        button.setTitle(Strings.Next, for: .normal)
         button.setImage(rightArrow, for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
         button.semanticContentAttribute = .forceRightToLeft
@@ -72,7 +78,7 @@ class RootViewController: UIViewController, WelcomeViewControllerDelegate {
     private lazy var backButton: UIButton = {
         let button = UIButton()
         let leftArrow = UIImage(named: "arrow_left")
-        button.setTitle("Назад", for: .normal)
+        button.setTitle(Strings.Back, for: .normal)
         button.setImage(leftArrow, for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
         button.setTitleColor(#colorLiteral(red: 0, green: 0.4793452024, blue: 0.9990863204, alpha: 1), for: .normal)
@@ -85,7 +91,7 @@ class RootViewController: UIViewController, WelcomeViewControllerDelegate {
     private lazy var pageNumberLabel: UILabel = {
         let label = UILabel()
         let indexOfVisiblePage = orderedViewControllers.index(of: visibleViewController) ?? 0
-        label.text = "\(indexOfVisiblePage + 1) из \(orderedViewControllers.count)"
+        label.text = String(indexOfVisiblePage + 1) + Strings.Of + String(orderedViewControllers.count)
         label.font = UIFont.boldSystemFont(ofSize: 17.0)
         return label
     }()
@@ -197,19 +203,30 @@ class RootViewController: UIViewController, WelcomeViewControllerDelegate {
         self.view.addSubview(backButton)
         self.view.addSubview(pageNumberLabel)
         
-        let statusBarHeight = UIApplication.shared.statusBarFrame.height
+        let statusBarHeight: CGFloat = UIApplication.shared.statusBarFrame.height
         let inset: CGFloat = 5.0
-        let height = 22.0
-        let width = 80.0
+        let height: CGFloat = 22.0
+        let width: CGFloat = 80.0
         
-        self.view.addConstraintsWithFormat(format: "H:[v0(\(width))]-\(inset)-|", views: nextButton)
-        self.view.addConstraintsWithFormat(format: "V:|-\(statusBarHeight + inset)-[v0(\(height))]", views: nextButton)
+        /// nextButton constraints
+        nextButton.translatesAutoresizingMaskIntoConstraints = false
+        nextButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: statusBarHeight + inset).isActive = true
+        nextButton.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -inset).isActive = true
+        nextButton.heightAnchor.constraint(equalToConstant: height).isActive = true
+        nextButton.widthAnchor.constraint(equalToConstant: width).isActive = true
         
-        self.view.addConstraintsWithFormat(format: "H:|-\(inset)-[v0(\(width))]", views: backButton)
-        self.view.addConstraintsWithFormat(format: "V:|-\(statusBarHeight + inset)-[v0(\(height))]", views: backButton)
+        /// nextButton constraints
+        backButton.translatesAutoresizingMaskIntoConstraints = false
+        backButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: statusBarHeight + inset).isActive = true
+        backButton.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: inset).isActive = true
+        backButton.heightAnchor.constraint(equalToConstant: height).isActive = true
+        backButton.widthAnchor.constraint(equalToConstant: width).isActive = true
         
-        self.pageNumberLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        self.view.addConstraintsWithFormat(format: "V:|-\(statusBarHeight + inset)-[v0(\(height))]", views: pageNumberLabel)
+        /// pageNumberLabel constraints
+        pageNumberLabel.translatesAutoresizingMaskIntoConstraints = false
+        pageNumberLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        pageNumberLabel.topAnchor.constraint(equalTo: self.view.topAnchor, constant: statusBarHeight + inset).isActive = true
+        pageNumberLabel.heightAnchor.constraint(equalToConstant: height).isActive = true
     }
     
     private func setupColors() {

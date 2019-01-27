@@ -16,11 +16,15 @@ protocol MessageViewDelegate {
 
 class MessageView: UIVisualEffectView {
     
+    private enum Strings {
+        static let Done = NSLocalizedString("Готово", comment: "Кнопка, которая закрывает меню")
+        static let GoToInfinity = NSLocalizedString("Перейти к ∞", comment: "Кнопка, которая переводит в уровень 'бесконечность'")
+        
+    }
+    
     var delegate: ResultsViewDelegate?
-    
+
     var blur = UIBlurEffect()
-    
-    private let sadEmojies = ["😢", "😭", "😤", "😠", "😡", "🤬", "🤯", "🥵", "😱", "😨", "😰", "😥", "😓", "😐", "😶", "😧", "🤮", "💩", "😒", "😞", "😔"]
     
     // MARK: - Subviews
     
@@ -48,7 +52,7 @@ class MessageView: UIVisualEffectView {
     
     var actionButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Готово", for: .normal)
+        button.setTitle(Strings.Done, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17.0)
         button.addTarget(self, action: #selector(hide), for: .touchUpInside)
@@ -79,7 +83,7 @@ class MessageView: UIVisualEffectView {
     public func show(title: String, text: String) {
         self.titleLabel.text = title
         self.textLabel.text = text
-        self.actionButton.setTitle("Перейти к ∞", for: .normal)
+        self.actionButton.setTitle(Strings.GoToInfinity, for: .normal)
 
         self.show()
     }
@@ -152,7 +156,6 @@ class MessageView: UIVisualEffectView {
         textLabel.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive = true
         textLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -sideGap).isActive = true
         textLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: sideGap).isActive = true
-//        textLabel(equalToConstant: timeLabelHeight).isActive = true
         
         /// actionButton constraints
         actionButton.translatesAutoresizingMaskIntoConstraints = false

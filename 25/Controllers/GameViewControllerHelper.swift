@@ -403,8 +403,8 @@ extension GameViewController: CLLocationManagerDelegate {
             feedbackGenerator.playVibrationFeedback()
         } else if levelPassed {
             if game.level == game.maxLevel {
-                let title = "Поздравляю! 🎂"
-                let text = "Вы смогли пройти все \(game.maxLevel) уровней! Отличная работа!"
+                let title = Strings.CongratulationsTitle
+                let text = String(format: Strings.CongratulationsText, game.maxLevel)
                 
                 self.view.addSubview(messageView)
                 resultsIsShowing = true

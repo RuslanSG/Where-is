@@ -14,6 +14,16 @@ protocol ResultsViewDelegate {
 
 class ResultsView: UIVisualEffectView {
     
+    private enum Strings {
+        static let Done = NSLocalizedString("Готово", comment: "Кнопка, которая закрывает меню")
+        static let GoalAcieved = NSLocalizedString("Цель в %d сек достигнута!", comment: "")
+        static let GoalNotAcieved = NSLocalizedString("Цель в %d сек не достигнута", comment: "")
+        static let OnceAgain = NSLocalizedString("Еще раз", comment: "Еще попытка")
+        static let GameOver = NSLocalizedString("Игра окончена! Найдено цифр:", comment: "")
+        static let Record = NSLocalizedString("Рекорд: ", comment: "Рекодный счет в игре")
+        static let Fine = NSLocalizedString("Штраф: +", comment: "Штраф за неправильно нажатые цифры")
+    }
+    
     var delegate: ResultsViewDelegate?
     
     var blur = UIBlurEffect()
@@ -73,7 +83,7 @@ class ResultsView: UIVisualEffectView {
     
     var actionButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Готово", for: .normal)
+        button.setTitle(Strings.Done, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17.0)
         button.addTarget(self, action: #selector(hide), for: .touchUpInside)
@@ -102,35 +112,35 @@ class ResultsView: UIVisualEffectView {
     }
     
     public func show(withTime time: Double, goal: Double, difference: Double, fine: Double) {
-        self.titleLabel.text = "Цель в \(goal) сек достигнута!"
+        self.titleLabel.text = String(format: Strings.GoalAcieved, goal)
         self.timeLabel.text = String(format: "%.02f", time)
         self.detailTimeLabel.text = "-" + String(format: "%.02f", abs(difference))
         fineTimeLabel.textColor = .red
         self.fineTimeLabel.attributedText = fine > 0.0 ? attributedTextForFineLabel(fine: fine) : NSAttributedString()
-        self.actionButton.setTitle("Готово", for: .normal)
+        self.actionButton.setTitle(Strings.Done, for: .normal)
         
         self.show()
     }
     
     public func show(goal: Double, fine: Double) {
-        self.titleLabel.text = "Цель в \(goal) сек не достигнута"
+        self.titleLabel.text = String(format: Strings.GoalNotAcieved, goal)
         let randomSadEmojie = self.sadEmojies[self.sadEmojies.count.arc4random]
         self.timeLabel.text = randomSadEmojie
         self.detailTimeLabel.text = ""
         fineTimeLabel.textColor = .red
         self.fineTimeLabel.attributedText = fine > 0.0 ? attributedTextForFineLabel(fine: fine) : NSAttributedString()
-        self.actionButton.setTitle("Еще раз", for: .normal)
+        self.actionButton.setTitle(Strings.OnceAgain, for: .normal)
         
         self.show()
     }
     
     public func show(score: Int, record: Int) {
-        self.titleLabel.text = "Игра окончена! Найдено цифр:"
+        self.titleLabel.text = Strings.GameOver
         self.timeLabel.text = String(score)
         self.detailTimeLabel.text = ""
         fineTimeLabel.textColor = .black
-        self.fineTimeLabel.text = "Рекорд: " + String(record)
-        self.actionButton.setTitle("Готово", for: .normal)
+        self.fineTimeLabel.text = Strings.Record + String(record)
+        self.actionButton.setTitle(Strings.Done, for: .normal)
         
         self.show()
     }
@@ -196,51 +206,46 @@ class ResultsView: UIVisualEffectView {
         
         /// titleLabel constraints
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        let titleLabelHorizontalConstraint = titleLabel.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor)
-        let titleLabelTopConstraint = titleLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: topGap)
-        let titleLabelTrailingConstraint = titleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -sideGap)
-        let titleLabelLeadingConstraint = titleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: sideGap)
-        let titleLabelHeightConstraint = titleLabel.heightAnchor.constraint(equalToConstant: titleLabelHeight)
-        NSLayoutConstraint.activate([titleLabelHorizontalConstraint, titleLabelTopConstraint, titleLabelTrailingConstraint, titleLabelLeadingConstraint, titleLabelHeightConstraint])
+        titleLabel.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: topGap).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -sideGap).isActive = true
+        titleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: sideGap).isActive = true
+        titleLabel.heightAnchor.constraint(equalToConstant: titleLabelHeight).isActive = true
         
         /// timeLabel constraints
         timeLabel.translatesAutoresizingMaskIntoConstraints = false
-        let timeLabelHorizontalConstraint = timeLabel.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor)
-        let timeLabelVerticalConstraint = timeLabel.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor)
-        let timeLabelTrailingConstraint = timeLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -sideGap)
-        let timeLabelLeadingConstraint = timeLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: sideGap)
-        let timeLabelHeightConstraint = timeLabel.heightAnchor.constraint(equalToConstant: timeLabelHeight)
-        NSLayoutConstraint.activate([timeLabelHorizontalConstraint, timeLabelVerticalConstraint, timeLabelHeightConstraint, timeLabelTrailingConstraint, timeLabelLeadingConstraint])
+        timeLabel.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor).isActive = true
+        timeLabel.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive = true
+        timeLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -sideGap).isActive = true
+        timeLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: sideGap).isActive = true
+        timeLabel.heightAnchor.constraint(equalToConstant: timeLabelHeight).isActive = true
         
         /// detailTimeLabel constraints
         detailTimeLabel.translatesAutoresizingMaskIntoConstraints = false
-        let detailTimeLabelTopConstraint = detailTimeLabel.topAnchor.constraint(equalTo: timeLabel.bottomAnchor)
-        let detailTimeLabelTrailingConstraint = detailTimeLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -sideGap)
-        let detailTimeLabelLeadingConstraint = detailTimeLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: sideGap)
-        let detailTimeLabelHeightConstraint = detailTimeLabel.heightAnchor.constraint(equalToConstant: detailTimeLabelHeight)
-        NSLayoutConstraint.activate([detailTimeLabelTopConstraint, detailTimeLabelTrailingConstraint, detailTimeLabelLeadingConstraint, detailTimeLabelHeightConstraint])
+        detailTimeLabel.topAnchor.constraint(equalTo: timeLabel.bottomAnchor).isActive = true
+        detailTimeLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -sideGap).isActive = true
+        detailTimeLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: sideGap).isActive = true
+        detailTimeLabel.heightAnchor.constraint(equalToConstant: detailTimeLabelHeight).isActive = true
         
         /// fineTimeLabel constraints
         fineTimeLabel.translatesAutoresizingMaskIntoConstraints = false
-        let fineTimeLabelBottomConstraint = fineTimeLabel.bottomAnchor.constraint(equalTo: actionButton.topAnchor)
-        let fineTimeLabelTrailingConstraint = fineTimeLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -sideGap)
-        let fineTimeLabelLeadingConstraint = fineTimeLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: sideGap)
-        let fineTimeLabelHeightConstraint = fineTimeLabel.heightAnchor.constraint(equalToConstant: fineTimeLabelHeight)
-        NSLayoutConstraint.activate([fineTimeLabelBottomConstraint, fineTimeLabelTrailingConstraint, fineTimeLabelLeadingConstraint, fineTimeLabelHeightConstraint])
+        fineTimeLabel.bottomAnchor.constraint(equalTo: actionButton.topAnchor).isActive = true
+        fineTimeLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -sideGap).isActive = true
+        fineTimeLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: sideGap).isActive = true
+        fineTimeLabel.heightAnchor.constraint(equalToConstant: fineTimeLabelHeight).isActive = true
 
         /// actionButton constraints
         actionButton.translatesAutoresizingMaskIntoConstraints = false
-        let actionButtonHorizontalConstraint = actionButton.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor)
-        let actionButtonBottomConstraint = actionButton.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -bottomGap)
-        let actionButtonTrailingConstraint = actionButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -sideGap)
-        let actionButtonLeadingConstraint = actionButton.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: sideGap)
-        let actionButtonHeightConstraint = actionButton.heightAnchor.constraint(equalToConstant: actionButtonHeight)
-        NSLayoutConstraint.activate([actionButtonHorizontalConstraint, actionButtonBottomConstraint, actionButtonTrailingConstraint, actionButtonLeadingConstraint, actionButtonHeightConstraint])
+        actionButton.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor).isActive = true
+        actionButton.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -bottomGap).isActive = true
+        actionButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -sideGap).isActive = true
+        actionButton.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: sideGap).isActive = true
+        actionButton.heightAnchor.constraint(equalToConstant: actionButtonHeight).isActive = true
     }
     
     private func attributedTextForFineLabel(fine: Double) -> NSMutableAttributedString {
         /// fineTimeLabel attributed text
-        let fineString = "Штраф: +" + String(format: "%.02f", abs(fine))
+        let fineString = Strings.Fine + String(format: "%.02f", abs(fine))
         let fineMutableString = NSMutableAttributedString(
             string: fineString,
             attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20.0)]
