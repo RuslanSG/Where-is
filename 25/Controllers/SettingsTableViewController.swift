@@ -8,12 +8,18 @@
 
 import UIKit
 import CoreLocation
+import Foundation
 
 class SettingsTableViewController: UITableViewController {
    
     private enum Strings {
         static let LocationServicesEnabledFooterText = "Чтобы определить время захода и восхода солнца, необходимо разово получить данные о Вашем примерном местоположении. Эта информация будет храниться только на данном устройстве."
+        
         static let LocationServicesDisabledFooterText = "Для работы автоматического темного режима, пожалуйста, предоставьте приложению доступ к Вашему примерному местоположению. Эта информация будет храниться только на данном устройстве."
+        
+        static let RegularLevelDescription = "Для прохождения уровня найдите все числа от 1 до %d менее, чем за %.1f сек."
+        
+        static let InfinityLevelDescription = "На этом уровне после нахождения число заменяется на новое. Постарайтесь найти как можно больше чисел. На поиски каждого отводится %.1f сек."
     }
     
     @IBOutlet var switchers: [UISwitch]!
@@ -110,6 +116,12 @@ class SettingsTableViewController: UITableViewController {
             switcher.tintColor = self.appearance.switcherTintColor
             switcher.onTintColor = self.appearance.userInterfaceColor
         }
+        
+        for levelButton in levelButtons {
+            if game.levelIsAvailable(levelButton.tag) {
+                levelButton.backgroundColor = appearance.userInterfaceColor
+            }
+        }
     }
     
     private func setupLevelButtonsStackView(count: Int) {
@@ -195,14 +207,34 @@ class SettingsTableViewController: UITableViewController {
     }
     
     @objc private func levelButtonPressed(_ sender: UIButton) {
-        game.level = sender.tag
-        selectLevelButton(sender)
+        if sender != lastPressedLevelButton {
+            selectLevelButton(sender)
+            game.level = sender.tag
+            if let containerView = tableView.footerView(forSection: 0) {
+                var text = String()
+                if sender.tag == 0 {
+                    text = String(format: Strings.InfinityLevelDescription, game.goal)
+                } else {
+                    text = String(format: Strings.RegularLevelDescription, game.maxNumber, game.goal)
+                }
+                tableView.beginUpdates()
+                containerView.textLabel!.text = text
+                containerView.sizeToFit()
+                tableView.endUpdates()
+            }
+        }
     }
     
     // MARK: - Data Source
     
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         switch section {
+        case 0:
+            if game.level == 0 {
+                return String(format: Strings.InfinityLevelDescription, game.goal)
+            } else {
+                return String(format: Strings.RegularLevelDescription, game.maxNumber, game.goal)
+            }
         case 1:
             if self.automaticDarkModeEnabled {
                 return Strings.LocationServicesEnabledFooterText

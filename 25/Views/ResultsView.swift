@@ -105,6 +105,7 @@ class ResultsView: UIVisualEffectView {
         self.titleLabel.text = "Цель в \(goal) сек достигнута!"
         self.timeLabel.text = String(format: "%.02f", time)
         self.detailTimeLabel.text = "-" + String(format: "%.02f", abs(difference))
+        fineTimeLabel.textColor = .red
         self.fineTimeLabel.attributedText = fine > 0.0 ? attributedTextForFineLabel(fine: fine) : NSAttributedString()
         self.actionButton.setTitle("Готово", for: .normal)
         
@@ -116,17 +117,19 @@ class ResultsView: UIVisualEffectView {
         let randomSadEmojie = self.sadEmojies[self.sadEmojies.count.arc4random]
         self.timeLabel.text = randomSadEmojie
         self.detailTimeLabel.text = ""
+        fineTimeLabel.textColor = .red
         self.fineTimeLabel.attributedText = fine > 0.0 ? attributedTextForFineLabel(fine: fine) : NSAttributedString()
         self.actionButton.setTitle("Еще раз", for: .normal)
         
         self.show()
     }
     
-    public func show(score: Int) {
+    public func show(score: Int, record: Int) {
         self.titleLabel.text = "Игра окончена! Найдено цифр:"
         self.timeLabel.text = String(score)
         self.detailTimeLabel.text = ""
-        self.fineTimeLabel.attributedText = NSAttributedString()
+        fineTimeLabel.textColor = .black
+        self.fineTimeLabel.text = "Рекорд: " + String(record)
         self.actionButton.setTitle("Готово", for: .normal)
         
         self.show()

@@ -397,7 +397,7 @@ extension GameViewController: CLLocationManagerDelegate {
         if game.infinityMode {
             self.view.addSubview(resultsView)
             resultsIsShowing = true
-            resultsView.show(score: game.infinityModeScore)
+            resultsView.show(score: game.infinityModeScore, record: game.infinityModeRecord)
             
             /// Plays vibration feedback
             feedbackGenerator.playVibrationFeedback()

@@ -238,12 +238,10 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate, M
             let margins = self.view.layoutMarginsGuide
             
             tipsLabel.translatesAutoresizingMaskIntoConstraints = false
-            let tipsLabelTrailingConstraint = tipsLabel.trailingAnchor.constraint(equalTo: margins.trailingAnchor)
-            let tipsLabelLeadingConstraint = tipsLabel.leadingAnchor.constraint(equalTo: margins.leadingAnchor)
-            let tipsLabelBottomContstraint = tipsLabel.bottomAnchor.constraint(equalTo: margins.bottomAnchor, constant: -tipsLabelInset)
-            let tipsLabelHeightConstraint = tipsLabel.heightAnchor.constraint(equalToConstant: tipsLabelHeight)
-            
-            NSLayoutConstraint.activate([tipsLabelTrailingConstraint, tipsLabelLeadingConstraint, tipsLabelBottomContstraint, tipsLabelHeightConstraint])
+            tipsLabel.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
+            tipsLabel.leadingAnchor.constraint(equalTo: margins.leadingAnchor).isActive = true
+            tipsLabel.bottomAnchor.constraint(equalTo: margins.bottomAnchor, constant: -tipsLabelInset).isActive = true
+            tipsLabel.heightAnchor.constraint(equalToConstant: tipsLabelHeight).isActive = true
         }
         
         /// Setups timeLabel
@@ -275,7 +273,7 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate, M
             timeLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: timeLabelLeadingInset ?? 0.0).isActive = true
             timeLabel.topAnchor.constraint(equalTo: self.view.topAnchor, constant: timeLabelTopInset).isActive = true
         } else {
-            timeLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0.9)
+            timeLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0.9).isActive = true
             timeLabel.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
         }
         
@@ -339,25 +337,25 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate, M
     // MARK: - Actions
     
     @objc func cellPressed(sender: CellView) {
-//        /// Stores last pressed cell
-//        self.lastPressedCell = sender
-//
-//        /// Runs cell compression animation
-//        let numberFeedback = !game.winkNumbersMode && !game.shuffleNumbersMode && !game.swapNumbersMode && !game.infinityMode
-//        sender.compress(numberFeedback: numberFeedback)
-//
-//        /// Stores if selected number is right
-//        self.selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
-//
-//        /// Ends game and runs cell uncomression animation on pressed cell if user tapped last number
-//        if selectedNumberIsRight && sender.tag == game.maxNumber, !game.infinityMode {
+        /// Stores last pressed cell
+        self.lastPressedCell = sender
+
+        /// Runs cell compression animation
+        let numberFeedback = !game.winkNumbersMode && !game.shuffleNumbersMode && !game.swapNumbersMode && !game.infinityMode
+        sender.compress(numberFeedback: numberFeedback)
+
+        /// Stores if selected number is right
+        self.selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
+
+        /// Ends game and runs cell uncomression animation on pressed cell if user tapped last number
+        if selectedNumberIsRight && sender.tag == game.maxNumber, !game.infinityMode {
             endGame(levelPassed: true)
             sender.uncompress(hiddenNumber: true)
             return
-//        }
-//
-//        /// Says to the model that number was selected
-//        game.numberSelected(sender.tag)
+        }
+
+        /// Says to the model that number was selected
+        game.numberSelected(sender.tag)
     }
     
     private var counter: CGFloat = 0.0

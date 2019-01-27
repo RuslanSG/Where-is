@@ -98,21 +98,6 @@ class Game {
     let minLevel = 0
     let maxLevel = 30
     
-    private enum LevelChanger {
-        case up
-        case down
-    }
-    
-    private var needsToLevelUp: Bool {
-        set {
-            UserDefaults.standard.set(newValue, forKey: UserDefaults.Key.LevelChanger)
-        }
-        get {
-            guard let levelChanger = UserDefaults.standard.value(forKey: UserDefaults.Key.LevelChanger) as? Bool else { return true }
-            return levelChanger
-        }
-    }
-    
     var level: Int {
         didSet {
             let colorfulCellModeOldValue = levelsWithColorfulCellsMode.contains(oldValue)
@@ -159,6 +144,16 @@ class Game {
     
     var infinityModeMaxNumber = 40
     var infinityModeScore = 0
+    
+    var infinityModeRecord: Int {
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.Key.InfinityModeScoreRecord)
+        }
+        get {
+            let record = UserDefaults.standard.integer(forKey: UserDefaults.Key.InfinityModeScoreRecord)
+            return record
+        }
+    }
     
     var nextNumberToTap = 1
     var numbers = [Int]()
@@ -225,6 +220,19 @@ class Game {
             return true
         }
         return false
+    }
+    
+    // MARK: - Initialization
+    
+    init() {
+        let level = UserDefaults.standard.integer(forKey: UserDefaults.Key.Level)
+        if let availableLevels = UserDefaults.standard.array(forKey: UserDefaults.Key.AvailableLevels) as? [Int] {
+            self.level = availableLevels.contains(level) ? level : 1
+        } else {
+            self.level = 1
+        }
+        
+        self.setNumbers(count: maxNumber)
     }
     
     // MARK: - Game Actions
@@ -295,9 +303,7 @@ class Game {
         let finishTime = Date.timeIntervalSinceReferenceDate
         elapsedTime = finishTime - startTime
         timer.invalidate()
-        
-//        #warning("!")
-        Analytics.logEvent("level_\(level)", parameters: ["passing_rate" : NSNumber(integerLiteral: 1)])
+        sendInfoToServer(levelPassed: true)
     }
     
     func newGame() {
@@ -334,18 +340,15 @@ class Game {
     func levelIsAvailable(_ level: Int) -> Bool {
         return self.availableLevels.contains(level)
     }
-
-    // MARK: - Initialization
     
-    init() {
-        let level = UserDefaults.standard.integer(forKey: UserDefaults.Key.Level)
-        if let availableLevels = UserDefaults.standard.array(forKey: UserDefaults.Key.AvailableLevels) as? [Int] {
-            self.level = availableLevels.contains(level) ? level : 1
-        } else {
-            self.level = 1
-        }
-        
-        self.setNumbers(count: maxNumber)
+    // MARK: - Server
+    
+    private func sendInfoToServer(levelPassed: Bool) {
+        Analytics.logEvent("level_\(level)", parameters: ["passing_rate" : NSNumber(integerLiteral: levelPassed ? 1 : 0)])
+    }
+    
+    private func sendInfoToServer(numbersFounded: Int) {
+        Analytics.logEvent("level_\(level)", parameters: ["numbers_founded" : NSNumber(integerLiteral: numbersFounded)])
     }
     
     // MARK: - Helping Methods
@@ -372,9 +375,15 @@ class Game {
     }
     
     @objc private func timerSceduled() {
+        if level == 0 {
+            sendInfoToServer(numbersFounded: infinityModeScore)
+            if infinityModeScore > infinityModeRecord {
+                infinityModeRecord = infinityModeScore
+            }
+        } else {
+            sendInfoToServer(levelPassed: false)
+        }
         delegate?.timeIsOut()
-        //        #warning("!")
-        Analytics.logEvent("level_\(level)", parameters: ["passing_rate" : NSNumber(integerLiteral: 0)])
     }
     
 }
