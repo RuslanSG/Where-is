@@ -16,8 +16,8 @@ class ResultsView: UIVisualEffectView {
     
     private enum Strings {
         static let Done = NSLocalizedString("Готово", comment: "Кнопка, которая закрывает меню")
-        static let GoalAcieved = NSLocalizedString("Цель в %d сек достигнута!", comment: "")
-        static let GoalNotAcieved = NSLocalizedString("Цель в %d сек не достигнута", comment: "")
+        static let GoalAcieved = NSLocalizedString("Цель в %.1f сек достигнута!", comment: "")
+        static let GoalNotAcieved = NSLocalizedString("Цель в %.1f сек не достигнута", comment: "")
         static let OnceAgain = NSLocalizedString("Еще раз", comment: "Еще попытка")
         static let GameOver = NSLocalizedString("Игра окончена! Найдено цифр:", comment: "")
         static let Record = NSLocalizedString("Рекорд: ", comment: "Рекодный счет в игре")
@@ -113,8 +113,8 @@ class ResultsView: UIVisualEffectView {
     
     public func show(withTime time: Double, goal: Double, difference: Double, fine: Double) {
         self.titleLabel.text = String(format: Strings.GoalAcieved, goal)
-        self.timeLabel.text = String(format: "%.02f", time)
-        self.detailTimeLabel.text = "-" + String(format: "%.02f", abs(difference))
+        self.timeLabel.text = String(format: "%.2f", time)
+        self.detailTimeLabel.text = "-" + String(format: "%.2f", abs(difference))
         fineTimeLabel.textColor = .red
         self.fineTimeLabel.attributedText = fine > 0.0 ? attributedTextForFineLabel(fine: fine) : NSAttributedString()
         self.actionButton.setTitle(Strings.Done, for: .normal)
