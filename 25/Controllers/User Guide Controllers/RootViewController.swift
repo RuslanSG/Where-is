@@ -91,7 +91,7 @@ class RootViewController: UIViewController, WelcomeViewControllerDelegate {
     private lazy var pageNumberLabel: UILabel = {
         let label = UILabel()
         let indexOfVisiblePage = orderedViewControllers.index(of: visibleViewController) ?? 0
-        label.text = String(indexOfVisiblePage + 1) + Strings.Of + String(orderedViewControllers.count)
+        label.text = String(indexOfVisiblePage + 1) + " " + Strings.Of + " " + String(orderedViewControllers.count)
         label.font = UIFont.boldSystemFont(ofSize: 17.0)
         return label
     }()
@@ -267,7 +267,7 @@ class RootViewController: UIViewController, WelcomeViewControllerDelegate {
     
     private func updatePageLabel(currentPage: UIViewController) {
         let indexOfVisiblePage = orderedViewControllers.index(of: currentPage) ?? 0
-        pageNumberLabel.text = "\(indexOfVisiblePage + 1) из \(orderedViewControllers.count)"
+        pageNumberLabel.text = String(indexOfVisiblePage + 1) + " " + Strings.Of + " " + String(orderedViewControllers.count)
     }
 
 }

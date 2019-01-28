@@ -12,7 +12,7 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate, M
     
     internal enum Strings {
         static let StartButtonText = NSLocalizedString("Старт", comment: "Начать игру")
-        static let StartButtonGoalText = NSLocalizedString("Цель: ", comment: "За сколько времени нужно пройти уровень")
+        static let StartButtonGoalText = NSLocalizedString("Цель:", comment: "За сколько времени нужно пройти уровень")
         static let StartButtonInfinityModeText = NSLocalizedString("Цель: ∞", comment: "За сколько времени нужно пройти уровень")
         static let SwipeUpTipLabelText = NSLocalizedString("↑ Смахните вверх, чтобы открыть настройки", comment: "Открыть настройки") 
         static let SwipeDownTipLabelText = NSLocalizedString("↓ Смахните вниз, чтобы остановить", comment: "Остановить игру")
@@ -67,7 +67,7 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate, M
         
         view.detailLabel.textColor = appearance.textColor
         view.detailLabel.font = UIFont.boldSystemFont(ofSize: appearance.numbersFontSize / 2.2)
-        view.detailLabel.text = game.infinityMode ? Strings.StartButtonInfinityModeText : Strings.StartButtonGoalText + String(game.goal)
+        view.detailLabel.text = game.infinityMode ? Strings.StartButtonInfinityModeText : Strings.StartButtonGoalText + " " + String(game.goal)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(startGame))
         view.addGestureRecognizer(tap)
@@ -445,7 +445,7 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate, M
     }
     
     func levelChanged(to level: Int) {
-        startGameView.detailLabel.text = game.infinityMode ? Strings.StartButtonInfinityModeText : Strings.StartButtonGoalText + String(game.goal)
+        startGameView.detailLabel.text = game.infinityMode ? Strings.StartButtonInfinityModeText : Strings.StartButtonGoalText + " " + String(game.goal)
     }
     
     func timeIsOut() {
