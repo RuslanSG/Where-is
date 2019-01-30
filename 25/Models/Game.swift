@@ -81,19 +81,19 @@ class Game {
                          30 : 167.0]
     
     /// Levels user can select
-//    var availableLevels: [Int] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
-    private var availableLevels: [Int] {
-        set {
-            UserDefaults.standard.set(newValue, forKey: UserDefaults.Key.AvailableLevels)
-        }
-        get {
-            if let availableLevels = UserDefaults.standard.array(forKey: UserDefaults.Key.AvailableLevels) as? [Int] {
-                return availableLevels
-            } else {
-                return [1]
-            }
-        }
-    }
+    var availableLevels: [Int] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+//    private var availableLevels: [Int] {
+//        set {
+//            UserDefaults.standard.set(newValue, forKey: UserDefaults.Key.AvailableLevels)
+//        }
+//        get {
+//            if let availableLevels = UserDefaults.standard.array(forKey: UserDefaults.Key.AvailableLevels) as? [Int] {
+//                return availableLevels
+//            } else {
+//                return [1]
+//            }
+//        }
+//    }
     
     let minLevel = 0
     let maxLevel = 30
@@ -120,6 +120,15 @@ class Game {
     var goal: Double {
         guard let goal = goals[level] else { return 0.0 }
         return goal
+    }
+    
+    var gamePassed: Bool {
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.Key.GamePassed)
+        }
+        get {
+            return UserDefaults.standard.bool(forKey: UserDefaults.Key.GamePassed)
+        }
     }
     
     var fine = 0.0

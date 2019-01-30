@@ -397,18 +397,19 @@ extension GameViewController: CLLocationManagerDelegate {
         if game.infinityMode {
             self.view.addSubview(resultsView)
             resultsIsShowing = true
-            resultsView.show(score: game.infinityModeScore, record: game.infinityModeRecord)
+            resultsView.show(level: game.level, score: game.infinityModeScore, record: game.infinityModeRecord)
             
             /// Plays vibration feedback
             feedbackGenerator.playVibrationFeedback()
         } else if levelPassed {
-            if game.level == game.maxLevel {
+            if game.level == game.maxLevel && !game.gamePassed {
                 let title = Strings.CongratulationsTitle
                 let text = String(format: Strings.CongratulationsText, game.maxLevel)
                 
                 self.view.addSubview(messageView)
                 resultsIsShowing = true
                 messageView.show(title: title, text: text)
+                game.gamePassed = true
             } else {
                 /// Shows results with result time
                 guard let time = game.elapsedTime else { return }
@@ -417,7 +418,7 @@ extension GameViewController: CLLocationManagerDelegate {
                 
                 self.view.addSubview(resultsView)
                 resultsIsShowing = true
-                resultsView.show(withTime: timeWithFine, goal: game.goal, difference: difference, fine: game.fine)
+                resultsView.show(withTime: timeWithFine, level: game.level, goal: game.goal, difference: difference, fine: game.fine)
             }
 
             /// Plays 'success' haptic feedback
@@ -430,7 +431,7 @@ extension GameViewController: CLLocationManagerDelegate {
             /// Shows results
             self.view.addSubview(resultsView)
             resultsIsShowing = true
-            resultsView.show(goal: game.goal, fine: game.fine)
+            resultsView.show(level: game.level, goal: game.goal, fine: game.fine)
             
             /// Plays vibration feedback
             feedbackGenerator.playVibrationFeedback()

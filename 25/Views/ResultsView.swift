@@ -32,12 +32,22 @@ class ResultsView: UIVisualEffectView {
     
     // MARK: - Subviews
     
+    let levelLabel: UILabel = {
+        let label = UILabel()
+        let cornerRadius: CGFloat = 10.0
+        label.textColor = .white
+        label.font = UIFont.boldSystemFont(ofSize: 50.0)
+        label.textAlignment = .center
+        label.layer.cornerRadius = cornerRadius
+        label.clipsToBounds = true
+        return label
+    }()
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.textAlignment = .center
-        label.font = UIFont.boldSystemFont(ofSize: 35.0)
+        label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 35.0, weight: UIFont.Weight.light) //boldSystemFont(ofSize: 35.0)
         label.adjustsFontSizeToFitWidth = true
-        label.alpha = 0.0
         label.numberOfLines = 0
         return label
     }()
@@ -48,7 +58,6 @@ class ResultsView: UIVisualEffectView {
         label.font = UIFont.systemFont(ofSize: 90.0)
         label.numberOfLines = 0
         label.adjustsFontSizeToFitWidth = true
-        label.alpha = 0.0
         return label
     }()
     
@@ -58,12 +67,11 @@ class ResultsView: UIVisualEffectView {
         label.font = UIFont.boldSystemFont(ofSize: 25.0)
         label.numberOfLines = 0
         label.adjustsFontSizeToFitWidth = true
-        label.alpha = 0.0
         label.textColor = .green
         label.layer.shadowColor = UIColor.black.cgColor
         label.layer.shadowRadius = 2.0
         label.layer.shadowOpacity = 0.2
-        label.layer.shadowOffset = CGSize(width: 0, height: 0)
+        label.layer.shadowOffset = CGSize(width: 0.8, height: 0.8)
         label.layer.masksToBounds = false
         return label
     }()
@@ -74,7 +82,6 @@ class ResultsView: UIVisualEffectView {
         label.font = UIFont.boldSystemFont(ofSize: 25.0)
         label.numberOfLines = 0
         label.adjustsFontSizeToFitWidth = true
-        label.alpha = 0.0
         label.textColor = .red
         return label
     }()
@@ -111,7 +118,8 @@ class ResultsView: UIVisualEffectView {
         }
     }
     
-    public func show(withTime time: Double, goal: Double, difference: Double, fine: Double) {
+    func show(withTime time: Double, level: Int, goal: Double, difference: Double, fine: Double) {
+        self.levelLabel.text = level == 0 ? "∞" : String(level)
         self.titleLabel.text = String(format: Strings.GoalAcieved, goal)
         self.timeLabel.text = String(format: "%.2f", time)
         self.detailTimeLabel.text = "-" + String(format: "%.2f", abs(difference))
@@ -122,7 +130,8 @@ class ResultsView: UIVisualEffectView {
         self.show()
     }
     
-    public func show(goal: Double, fine: Double) {
+    func show(level: Int, goal: Double, fine: Double) {
+        self.levelLabel.text = level == 0 ? "∞" : String(level)
         self.titleLabel.text = String(format: Strings.GoalNotAcieved, goal)
         let randomSadEmojie = self.sadEmojies[self.sadEmojies.count.arc4random]
         self.timeLabel.text = randomSadEmojie
@@ -134,7 +143,8 @@ class ResultsView: UIVisualEffectView {
         self.show()
     }
     
-    public func show(score: Int, record: Int) {
+    public func show(level: Int, score: Int, record: Int) {
+        self.levelLabel.text = level == 0 ? "∞" : String(level)
         self.titleLabel.text = Strings.GameOver
         self.timeLabel.text = String(score)
         self.detailTimeLabel.text = ""
@@ -187,29 +197,39 @@ class ResultsView: UIVisualEffectView {
     // MARK: - Helping Methods
     
     private func setupInputComponents() {
-        let topGap: CGFloat = 60.0
-        let sideGap: CGFloat = 10.0
+        let topGap: CGFloat = 45.0
+        let sideGap: CGFloat = 20.0
         let bottomGap: CGFloat = UIDevice.current.hasLiquidRetina ? 76.0 : 42.0
         
-        let titleLabelHeight: CGFloat = 100.0
+        let levelLabelHeight: CGFloat = 85.0
+        let titleLabelHeight: CGFloat = levelLabelHeight
         let timeLabelHeight: CGFloat = 100.0
         let detailTimeLabelHeight: CGFloat = 50.0
         let fineTimeLabelHeight: CGFloat = 50.0
         let actionButtonHeight: CGFloat = 50.0
         
         /// Adding subviews
+        self.contentView.addSubview(levelLabel)
         self.contentView.addSubview(titleLabel)
         self.contentView.addSubview(timeLabel)
         self.contentView.addSubview(detailTimeLabel)
         self.contentView.addSubview(fineTimeLabel)
         self.contentView.addSubview(actionButton)
         
+        /// levelLabel constraints
+        levelLabel.translatesAutoresizingMaskIntoConstraints = false
+        //levelLabel.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor).isActive = true
+        levelLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: topGap).isActive = true
+        levelLabel.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: sideGap).isActive = true
+        levelLabel.heightAnchor.constraint(equalToConstant: levelLabelHeight).isActive = true
+        levelLabel.widthAnchor.constraint(equalToConstant: levelLabelHeight).isActive = true
+        
         /// titleLabel constraints
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor).isActive = true
+        //titleLabel.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor).isActive = true
         titleLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: topGap).isActive = true
-        titleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -sideGap).isActive = true
-        titleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: sideGap).isActive = true
+        titleLabel.leftAnchor.constraint(equalTo: levelLabel.rightAnchor, constant: sideGap).isActive = true
+        titleLabel.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -sideGap).isActive = true
         titleLabel.heightAnchor.constraint(equalToConstant: titleLabelHeight).isActive = true
         
         /// timeLabel constraints
@@ -241,6 +261,8 @@ class ResultsView: UIVisualEffectView {
         actionButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -sideGap).isActive = true
         actionButton.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: sideGap).isActive = true
         actionButton.heightAnchor.constraint(equalToConstant: actionButtonHeight).isActive = true
+        
+        self.contentView.subviews.forEach { $0.alpha = 0.0 }
     }
     
     private func attributedTextForFineLabel(fine: Double) -> NSMutableAttributedString {
