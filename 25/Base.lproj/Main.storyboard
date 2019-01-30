@@ -113,6 +113,34 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
+                            <tableViewSection id="ETk-z1-gjn">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="wpw-SF-3GS">
+                                        <rect key="frame" x="0.0" y="674" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="wpw-SF-3GS" id="won-cq-Gzj">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5ys-Kl-Z29">
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <state key="normal" title="Связаться с разработчиком"/>
+                                                    <connections>
+                                                        <action selector="helpButtonPressed:" destination="3hQ-19-uEL" eventType="touchUpInside" id="jKX-pO-Icu"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="5ys-Kl-Z29" firstAttribute="leading" secondItem="won-cq-Gzj" secondAttribute="leading" id="E0a-Zv-WwP"/>
+                                                <constraint firstItem="5ys-Kl-Z29" firstAttribute="top" secondItem="won-cq-Gzj" secondAttribute="top" id="eWz-3R-sA8"/>
+                                                <constraint firstAttribute="trailing" secondItem="5ys-Kl-Z29" secondAttribute="trailing" id="lp3-7h-hTE"/>
+                                                <constraint firstAttribute="bottom" secondItem="5ys-Kl-Z29" secondAttribute="bottom" id="zLU-EV-A8J"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
                         </sections>
                         <connections>
                             <outlet property="dataSource" destination="3hQ-19-uEL" id="fNB-hi-iJW"/>
@@ -131,6 +159,7 @@
                         <outlet property="darkModeSwitcher" destination="MXe-5e-7Cz" id="yav-wM-UXX"/>
                         <outlet property="doneButton" destination="ZBl-rg-R9a" id="Vf8-4A-tXF"/>
                         <outlet property="firstCell" destination="nqK-xB-ueq" id="zW5-wX-OVm"/>
+                        <outlet property="helpButton" destination="5ys-Kl-Z29" id="bz4-O0-4O3"/>
                         <outletCollection property="labels" destination="d64-jR-bAW" collectionClass="NSMutableArray" id="F8Q-Sb-MFT"/>
                         <outletCollection property="switchers" destination="MXe-5e-7Cz" collectionClass="NSMutableArray" id="WMc-hv-mLd"/>
                         <outletCollection property="cells" destination="nqK-xB-ueq" collectionClass="NSMutableArray" id="nbM-5V-uGc"/>

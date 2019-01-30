@@ -41,6 +41,8 @@ class SettingsTableViewController: UITableViewController {
     @IBOutlet weak var darkModeSwitcher: UISwitch!
     @IBOutlet weak var automaticDarkModeSwitcher: UISwitch!
     
+    @IBOutlet weak var helpButton: UIButton!
+    
     private var levelButtons = [UIButton]()
     
     var game: Game!
@@ -110,6 +112,7 @@ class SettingsTableViewController: UITableViewController {
     
     @objc private func setupColors() {
         self.doneButton.tintColor = self.appearance.userInterfaceColor
+        self.helpButton.tintColor = self.appearance.userInterfaceColor
         self.tableView.backgroundColor = self.appearance.tableViewBackgroundColor
         self.tableView.separatorColor = self.appearance.tableViewSeparatorColor
         
@@ -229,6 +232,17 @@ class SettingsTableViewController: UITableViewController {
                 containerView.textLabel!.text = text
                 containerView.sizeToFit()
                 tableView.endUpdates()
+            }
+        }
+    }
+    
+    @IBAction func helpButtonPressed(_ sender: UIBarButtonItem) {
+        let email = "whereisassist@gmail.com"
+        if let url = URL(string: "mailto:\(email)") {
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(url)
+            } else {
+                UIApplication.shared.openURL(url)
             }
         }
     }

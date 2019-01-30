@@ -9,6 +9,7 @@
 import UIKit
 import QuartzCore
 import CoreLocation
+import StoreKit
 
 extension GameViewController: CLLocationManagerDelegate {
     
@@ -423,7 +424,12 @@ extension GameViewController: CLLocationManagerDelegate {
 
             /// Plays 'success' haptic feedback
             feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .success)
-
+            
+            /// Requests a feedback
+            if game.level >= 12 {
+                SKStoreReviewController.requestReview()
+            }
+            
             /// Says to the model to open next level
             game.openNextLevel()
             game.changeLevel()

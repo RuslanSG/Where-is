@@ -1,3 +1,6 @@
+/* Class = "UIButton"; normalTitle = "Связаться с разработчиком"; ObjectID = "5ys-Kl-Z29"; */
+"5ys-Kl-Z29.normalTitle" = "Contact the developer";
+
 /* Class = "UILabel"; text = "Местоположение:"; ObjectID = "6xH-ei-jRN"; */
 "6xH-ei-jRN.text" = "Location:";
 
@@ -38,7 +41,7 @@
 "pjS-oa-48R.text" = "Find the numbers from 1 to 25 in ascending order:";
 
 /* Class = "UILabel"; text = "За основу взята разработка немецкого психиатра и психотерапевта Вальтера Шульте.  Задача проста: необходимо найти каждое число в таблице в порядке возрастания за отведенное время.  Вам предстоит пройти 30 уровней, каждый из которых будет сложнее предыдущего.   Когда Вы сделаете это, то сильно улучшите свою концентрацию, переферийное зрение и умение сохранять спокойствие в стрессовых ситуациях."; ObjectID = "Ppl-1t-cmI"; */
-"Ppl-1t-cmI.text" = "The basis is the development of the German psychiatrist and psychotherapist Walter Schulte.   The task is simple: you need to find each number in the table in ascending order in the allotted time.   You will go through 30 levels, each of which will be more difficult than the previous one.   When you do this, you will greatly improve your concentration, peripheral vision and ability to remain calm in stressful situations.";
+"Ppl-1t-cmI.text" = "The basis of the application is the development of the German psychiatrist and psychotherapist Walter Schulte.   The task is simple: you need to find each number in the table in ascending order in the allotted time.   You will go through 30 levels, each of which will be more difficult than the previous one.   When you do this, you will greatly improve your concentration, peripheral vision and ability to remain calm in stressful situations.";
 
 /* Class = "UINavigationItem"; title = "Where is?!"; ObjectID = "PuX-6X-KnQ"; */
 "PuX-6X-KnQ.title" = "Where is?!";

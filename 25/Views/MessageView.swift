@@ -19,7 +19,7 @@ class MessageView: UIVisualEffectView {
     private enum Strings {
         static let Done = NSLocalizedString("Готово", comment: "Кнопка, которая закрывает меню")
         static let GoToInfinity = NSLocalizedString("Перейти к ∞", comment: "Кнопка, которая переводит в уровень 'бесконечность'")
-        
+        static let LeaveFeedbackButtonText = NSLocalizedString("Оставить отзыв", comment: "Это кнопка 'Оставить отзыв', которая переводит пользователя на страницу приложения в App Store")
     }
     
     var delegate: ResultsViewDelegate?
@@ -33,22 +33,33 @@ class MessageView: UIVisualEffectView {
         label.textAlignment = .center
         label.font = UIFont.boldSystemFont(ofSize: 35.0)
         label.adjustsFontSizeToFitWidth = true
-        label.alpha = 0.0
         label.numberOfLines = 0
         return label
     }()
     
     private let textLabel: UILabel = {
         let label = UILabel()
-        label.textAlignment = .center
-        label.font = UIFont.boldSystemFont(ofSize: 20.0)
+        label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 17.0)
         label.adjustsFontSizeToFitWidth = true
-        label.alpha = 0.0
         label.numberOfLines = 0
         return label
     }()
     
     lazy var labels = [titleLabel, textLabel]
+    
+    var leaveFeedbackButton: UIButton = {
+        let button = UIButton()
+        button.setTitle(Strings.LeaveFeedbackButtonText, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17.0)
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowRadius = 0.4
+        button.layer.shadowOpacity = 0.2
+        button.layer.shadowOffset = CGSize(width: 0.5, height: 0.5)
+        button.layer.masksToBounds = false
+        button.addTarget(self, action: #selector(leaveFeedbackButtonPressed(_:)), for: .touchUpInside)
+        return button
+    }()
     
     var actionButton: UIButton = {
         let button = UIButton()
@@ -114,6 +125,10 @@ class MessageView: UIVisualEffectView {
         })
     }
     
+    @objc private func leaveFeedbackButtonPressed(_ sender: UIButton) {
+        
+    }
+    
     // MARK: - Initialization
     
     init(frame: CGRect) {
@@ -130,16 +145,20 @@ class MessageView: UIVisualEffectView {
     // MARK: - Helping Methods
     
     private func setupInputComponents() {
-        let topGap: CGFloat = 60.0
-        let sideGap: CGFloat = 10.0
-        let bottomGap: CGFloat = UIDevice.current.hasLiquidRetina ? 76.0 : 42.0
+        let topGap: CGFloat = 15.0
+        let sideGap: CGFloat = 20.0
+        let bottomGap: CGFloat = UIDevice.current.hasLiquidRetina ? 50.0 : 30.0
         
         let titleLabelHeight: CGFloat = 100.0
+//        let leaveFeedbackButtonHeight: CGFloat = 15.0
+//        let leaveFeedbackButtonWidth: CGFloat = 150.0
         let actionButtonHeight: CGFloat = 50.0
+        let textLabelHeight: CGFloat = self.bounds.size.height - titleLabelHeight - actionButtonHeight - topGap - bottomGap - sideGap * 2
         
         /// Adding subviews
         self.contentView.addSubview(titleLabel)
         self.contentView.addSubview(textLabel)
+        //self.contentView.addSubview(leaveFeedbackButton)
         self.contentView.addSubview(actionButton)
         
         /// titleLabel constraints
@@ -156,6 +175,14 @@ class MessageView: UIVisualEffectView {
         textLabel.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive = true
         textLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -sideGap).isActive = true
         textLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: sideGap).isActive = true
+        textLabel.heightAnchor.constraint(lessThanOrEqualToConstant: textLabelHeight).isActive = true
+        
+//        /// leaveFeedbackButton constraints
+//        leaveFeedbackButton.translatesAutoresizingMaskIntoConstraints = false
+//        leaveFeedbackButton.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor).isActive = true
+//        leaveFeedbackButton.bottomAnchor.constraint(equalTo: actionButton.topAnchor, constant: -10.0).isActive = true
+//        leaveFeedbackButton.heightAnchor.constraint(equalToConstant: leaveFeedbackButtonHeight).isActive = true
+//        leaveFeedbackButton.widthAnchor.constraint(equalToConstant: leaveFeedbackButtonWidth).isActive = true
         
         /// actionButton constraints
         actionButton.translatesAutoresizingMaskIntoConstraints = false
@@ -164,6 +191,8 @@ class MessageView: UIVisualEffectView {
         actionButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -sideGap).isActive = true
         actionButton.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: sideGap).isActive = true
         actionButton.heightAnchor.constraint(equalToConstant: actionButtonHeight).isActive = true
+        
+        self.contentView.subviews.forEach { $0.alpha = 0.0 }
     }
     
 }
