@@ -340,7 +340,7 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate, M
     // MARK: - Actions
     
     @objc func cellPressed(sender: CellView) {
-        /// Stores last pressed cell
+//        /// Stores last pressed cell
 //        self.lastPressedCell = sender
 //
 //        /// Runs cell compression animation

@@ -146,7 +146,7 @@ class MessageView: UIVisualEffectView {
     
     private func setupInputComponents() {
         let topGap: CGFloat = 15.0
-        let sideGap: CGFloat = 20.0
+        let sideGap: CGFloat = UIDevice.current.userInterfaceIdiom == .phone ? 20.0 : 80.0
         let bottomGap: CGFloat = UIDevice.current.hasLiquidRetina ? 50.0 : 30.0
         
         let titleLabelHeight: CGFloat = 100.0
