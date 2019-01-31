@@ -20,7 +20,7 @@
 "Далее" = "Next";
 
 /* No comment provided by engineer. */
-"Для прохождения уровня найдите все числа от 1 до %d менее, чем за %.1f сек." = "To pass a level, find all the numbers from 1 to %1$d in less than %2$.1f seconds.";
+"Для прохождения уровня найдите все числа от 1 до %d менее чем за %.1f сек." = "To pass a level find all the numbers from 1 to %1$d in less than %2$.1f seconds.";
 
 /* No comment provided by engineer. */
 "Для работы автоматического темного режима, пожалуйста, предоставьте приложению доступ к Вашему примерному местоположению. Эта информация будет храниться только на данном устройстве." = "To enable Auto-Dark Mode, please allow the application to access your approximate location. Note that this location is stored locally on your device only.";

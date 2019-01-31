@@ -17,7 +17,7 @@ class SettingsTableViewController: UITableViewController {
         
         static let LocationServicesDisabledFooterText = NSLocalizedString("Для работы автоматического темного режима, пожалуйста, предоставьте приложению доступ к Вашему примерному местоположению. Эта информация будет храниться только на данном устройстве.", comment: "")
         
-        static let RegularLevelDescription = NSLocalizedString("Для прохождения уровня найдите все числа от 1 до %d менее, чем за %.1f сек.", comment: "")
+        static let RegularLevelDescription = NSLocalizedString("Для прохождения уровня найдите все числа от 1 до %d менее чем за %.1f сек.", comment: "")
         
         static let InfinityLevelDescription = NSLocalizedString("На этом уровне после нахождения число заменяется на новое. Постарайтесь найти как можно больше чисел. На поиски каждого отводится %.1f сек.", comment: "")
         

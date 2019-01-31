@@ -161,35 +161,37 @@ class MessageView: UIVisualEffectView {
         //self.contentView.addSubview(leaveFeedbackButton)
         self.contentView.addSubview(actionButton)
         
+        let margins = self.contentView.layoutMarginsGuide
+        
         /// titleLabel constraints
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor).isActive = true
-        titleLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: topGap).isActive = true
-        titleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -sideGap).isActive = true
-        titleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: sideGap).isActive = true
+        titleLabel.centerXAnchor.constraint(equalTo: margins.centerXAnchor).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: margins.topAnchor, constant: topGap).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo: margins.trailingAnchor, constant: -sideGap).isActive = true
+        titleLabel.leadingAnchor.constraint(equalTo: margins.leadingAnchor, constant: sideGap).isActive = true
         titleLabel.heightAnchor.constraint(equalToConstant: titleLabelHeight).isActive = true
         
         /// textLabel constraints
         textLabel.translatesAutoresizingMaskIntoConstraints = false
-        textLabel.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor).isActive = true
-        textLabel.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive = true
-        textLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -sideGap).isActive = true
-        textLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: sideGap).isActive = true
+        textLabel.centerXAnchor.constraint(equalTo: margins.centerXAnchor).isActive = true
+        textLabel.centerYAnchor.constraint(equalTo: margins.centerYAnchor).isActive = true
+        textLabel.trailingAnchor.constraint(equalTo: margins.trailingAnchor, constant: -sideGap).isActive = true
+        textLabel.leadingAnchor.constraint(equalTo: margins.leadingAnchor, constant: sideGap).isActive = true
         textLabel.heightAnchor.constraint(lessThanOrEqualToConstant: textLabelHeight).isActive = true
         
 //        /// leaveFeedbackButton constraints
 //        leaveFeedbackButton.translatesAutoresizingMaskIntoConstraints = false
-//        leaveFeedbackButton.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor).isActive = true
+//        leaveFeedbackButton.centerXAnchor.constraint(equalTo: margins.centerXAnchor).isActive = true
 //        leaveFeedbackButton.bottomAnchor.constraint(equalTo: actionButton.topAnchor, constant: -10.0).isActive = true
 //        leaveFeedbackButton.heightAnchor.constraint(equalToConstant: leaveFeedbackButtonHeight).isActive = true
 //        leaveFeedbackButton.widthAnchor.constraint(equalToConstant: leaveFeedbackButtonWidth).isActive = true
         
         /// actionButton constraints
         actionButton.translatesAutoresizingMaskIntoConstraints = false
-        actionButton.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor).isActive = true
-        actionButton.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -bottomGap).isActive = true
-        actionButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -sideGap).isActive = true
-        actionButton.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: sideGap).isActive = true
+        actionButton.centerXAnchor.constraint(equalTo: margins.centerXAnchor).isActive = true
+        actionButton.bottomAnchor.constraint(equalTo: margins.bottomAnchor, constant: -bottomGap).isActive = true
+        actionButton.trailingAnchor.constraint(equalTo: margins.trailingAnchor, constant: -sideGap).isActive = true
+        actionButton.leadingAnchor.constraint(equalTo: margins.leadingAnchor, constant: sideGap).isActive = true
         actionButton.heightAnchor.constraint(equalToConstant: actionButtonHeight).isActive = true
         
         self.contentView.subviews.forEach { $0.alpha = 0.0 }

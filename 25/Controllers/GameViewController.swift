@@ -127,7 +127,7 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate, M
     var firstTimeAppeared = true
     var resultsIsShowing = false
     
-    internal let necessaryNumberOfEvents = 3
+    internal let necessaryNumberOfEvents = 5
     private var needsToShowTips: Bool {
         return showSettingsEventCounter <= necessaryNumberOfEvents && stopGameEventConunter <= necessaryNumberOfEvents
     }
@@ -340,25 +340,25 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate, M
     // MARK: - Actions
     
     @objc func cellPressed(sender: CellView) {
-//        /// Stores last pressed cell
-//        self.lastPressedCell = sender
-//
-//        /// Runs cell compression animation
-//        let numberFeedback = !game.winkNumbersMode && !game.shuffleNumbersMode && !game.swapNumbersMode && !game.infinityMode
-//        sender.compress(numberFeedback: numberFeedback)
-//
-//        /// Stores if selected number is right
-//        self.selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
-//
-//        /// Ends game and runs cell uncomression animation on pressed cell if user tapped last number
-//        if selectedNumberIsRight && sender.tag == game.maxNumber, !game.infinityMode {
+        /// Stores last pressed cell
+        self.lastPressedCell = sender
+
+        /// Runs cell compression animation
+        let numberFeedback = !game.winkNumbersMode && !game.shuffleNumbersMode && !game.swapNumbersMode && !game.infinityMode
+        sender.compress(numberFeedback: numberFeedback)
+
+        /// Stores if selected number is right
+        self.selectedNumberIsRight = game.selectedNumberIsRight(sender.tag)
+
+        /// Ends game and runs cell uncomression animation on pressed cell if user tapped last number
+        if selectedNumberIsRight && sender.tag == game.maxNumber, !game.infinityMode {
             endGame(levelPassed: true)
             sender.uncompress(hiddenNumber: true)
             return
-//        }
-//
-//        /// Says to the model that number was selected
-//        game.numberSelected(sender.tag)
+        }
+
+        /// Says to the model that number was selected
+        game.numberSelected(sender.tag)
     }
     
     private var counter: CGFloat = 0.0

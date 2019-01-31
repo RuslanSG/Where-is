@@ -103,7 +103,7 @@ class Appearance {
         if UIDevice.current.userInterfaceIdiom == .phone {
             return UIScreen.main.bounds.width / 10
         } else if UIDevice.current.userInterfaceIdiom == .pad {
-            return UIScreen.main.bounds.width / 13
+            return UIScreen.main.bounds.width / 15
         }
         return 0.0
     }
@@ -112,7 +112,7 @@ class Appearance {
         if UIDevice.current.userInterfaceIdiom == .phone {
             return UIScreen.main.bounds.width / 200
         } else if UIDevice.current.userInterfaceIdiom == .pad {
-            return UIScreen.main.bounds.width / 65
+            return UIScreen.main.bounds.width / 100
         }
         return 0.0
     }

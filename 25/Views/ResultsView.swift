@@ -36,7 +36,7 @@ class ResultsView: UIVisualEffectView {
         let label = UILabel()
         let cornerRadius: CGFloat = 10.0
         label.textColor = .white
-        label.font = UIFont.boldSystemFont(ofSize: 50.0)
+        label.font = UIFont.boldSystemFont(ofSize: 40.0)
         label.textAlignment = .center
         label.layer.cornerRadius = cornerRadius
         label.clipsToBounds = true
@@ -148,7 +148,7 @@ class ResultsView: UIVisualEffectView {
         self.titleLabel.text = Strings.GameOver
         self.timeLabel.text = String(score)
         self.detailTimeLabel.text = ""
-        fineTimeLabel.textColor = .black
+        fineTimeLabel.textColor = titleLabel.textColor
         self.fineTimeLabel.text = Strings.Record + " " + String(record)
         self.actionButton.setTitle(Strings.Done, for: .normal)
         
@@ -199,70 +199,88 @@ class ResultsView: UIVisualEffectView {
     private func setupInputComponents() {
         let topGap: CGFloat = 45.0
         let sideGap: CGFloat = 20.0
-        let bottomGap: CGFloat = UIDevice.current.hasLiquidRetina ? 76.0 : 42.0
+        let bottomGap: CGFloat = UIDevice.current.hasLiquidRetina ? 40.0 : 20.0
         
-        let levelLabelHeight: CGFloat = 85.0
-        let titleLabelHeight: CGFloat = levelLabelHeight
+        let levelLabelHeight: CGFloat = 70.0
+        let titleLabelHeight: CGFloat = 70.0
+        let titleLabelWidth: CGFloat = 200.0
         let timeLabelHeight: CGFloat = 100.0
         let detailTimeLabelHeight: CGFloat = 50.0
         let fineTimeLabelHeight: CGFloat = 50.0
         let actionButtonHeight: CGFloat = 50.0
         
         /// Adding subviews
-        self.contentView.addSubview(levelLabel)
-        self.contentView.addSubview(titleLabel)
         self.contentView.addSubview(timeLabel)
         self.contentView.addSubview(detailTimeLabel)
         self.contentView.addSubview(fineTimeLabel)
         self.contentView.addSubview(actionButton)
         
+        let margins = self.contentView.layoutMarginsGuide
+        
         /// levelLabel constraints
         levelLabel.translatesAutoresizingMaskIntoConstraints = false
-        //levelLabel.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor).isActive = true
-        levelLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: topGap).isActive = true
-        levelLabel.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: sideGap).isActive = true
         levelLabel.heightAnchor.constraint(equalToConstant: levelLabelHeight).isActive = true
         levelLabel.widthAnchor.constraint(equalToConstant: levelLabelHeight).isActive = true
         
         /// titleLabel constraints
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        //titleLabel.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor).isActive = true
-        titleLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: topGap).isActive = true
-        titleLabel.leftAnchor.constraint(equalTo: levelLabel.rightAnchor, constant: sideGap).isActive = true
-        titleLabel.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -sideGap).isActive = true
-        titleLabel.heightAnchor.constraint(equalToConstant: titleLabelHeight).isActive = true
+        titleLabel.heightAnchor.constraint(equalToConstant: levelLabelHeight).isActive = true
+        titleLabel.widthAnchor.constraint(equalToConstant: titleLabelWidth).isActive = true
         
         /// timeLabel constraints
         timeLabel.translatesAutoresizingMaskIntoConstraints = false
-        timeLabel.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor).isActive = true
-        timeLabel.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive = true
-        timeLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -sideGap).isActive = true
-        timeLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: sideGap).isActive = true
+        timeLabel.centerXAnchor.constraint(equalTo: margins.centerXAnchor).isActive = true
+        timeLabel.centerYAnchor.constraint(equalTo: margins.centerYAnchor).isActive = true
+        timeLabel.trailingAnchor.constraint(equalTo: margins.trailingAnchor, constant: -sideGap).isActive = true
+        timeLabel.leadingAnchor.constraint(equalTo: margins.leadingAnchor, constant: sideGap).isActive = true
         timeLabel.heightAnchor.constraint(equalToConstant: timeLabelHeight).isActive = true
         
         /// detailTimeLabel constraints
         detailTimeLabel.translatesAutoresizingMaskIntoConstraints = false
         detailTimeLabel.topAnchor.constraint(equalTo: timeLabel.bottomAnchor).isActive = true
-        detailTimeLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -sideGap).isActive = true
-        detailTimeLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: sideGap).isActive = true
+        detailTimeLabel.trailingAnchor.constraint(equalTo: margins.trailingAnchor, constant: -sideGap).isActive = true
+        detailTimeLabel.leadingAnchor.constraint(equalTo: margins.leadingAnchor, constant: sideGap).isActive = true
         detailTimeLabel.heightAnchor.constraint(equalToConstant: detailTimeLabelHeight).isActive = true
         
         /// fineTimeLabel constraints
         fineTimeLabel.translatesAutoresizingMaskIntoConstraints = false
         fineTimeLabel.bottomAnchor.constraint(equalTo: actionButton.topAnchor).isActive = true
-        fineTimeLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -sideGap).isActive = true
-        fineTimeLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: sideGap).isActive = true
+        fineTimeLabel.trailingAnchor.constraint(equalTo: margins.trailingAnchor, constant: -sideGap).isActive = true
+        fineTimeLabel.leadingAnchor.constraint(equalTo: margins.leadingAnchor, constant: sideGap).isActive = true
         fineTimeLabel.heightAnchor.constraint(equalToConstant: fineTimeLabelHeight).isActive = true
 
         /// actionButton constraints
         actionButton.translatesAutoresizingMaskIntoConstraints = false
-        actionButton.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor).isActive = true
-        actionButton.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -bottomGap).isActive = true
-        actionButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -sideGap).isActive = true
-        actionButton.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: sideGap).isActive = true
+        actionButton.centerXAnchor.constraint(equalTo: margins.centerXAnchor).isActive = true
+        actionButton.bottomAnchor.constraint(equalTo: margins.bottomAnchor, constant: -bottomGap).isActive = true
+        actionButton.trailingAnchor.constraint(equalTo: margins.trailingAnchor, constant: -sideGap).isActive = true
+        actionButton.leadingAnchor.constraint(equalTo: margins.leadingAnchor, constant: sideGap).isActive = true
         actionButton.heightAnchor.constraint(equalToConstant: actionButtonHeight).isActive = true
         
+        let titleStackView = UIStackView(arrangedSubviews: [levelLabel, titleLabel])
+        let spacing: CGFloat = 15.0
+        titleStackView.axis = .horizontal
+        titleStackView.distribution = .equalSpacing
+        titleStackView.alignment = .center
+        titleStackView.spacing = spacing
+        
+        self.contentView.addSubview(titleStackView)
+        
+        let titleStackViewWidth = levelLabelHeight + titleLabelWidth + spacing
+        
+        /// titleStackView constraints
+        titleStackView.translatesAutoresizingMaskIntoConstraints = false
+        titleStackView.centerXAnchor.constraint(equalTo: margins.centerXAnchor).isActive = true
+        titleStackView.topAnchor.constraint(equalTo: margins.topAnchor, constant: topGap).isActive = true
+        titleStackView.heightAnchor.constraint(equalToConstant: titleLabelHeight).isActive = true
+        titleStackView.widthAnchor.constraint(equalToConstant: titleStackViewWidth).isActive = true
+        
         self.contentView.subviews.forEach { $0.alpha = 0.0 }
+
+    }
+    
+    private func setupTitleStackView() {
+        
     }
     
     private func attributedTextForFineLabel(fine: Double) -> NSMutableAttributedString {

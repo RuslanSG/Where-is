@@ -23,16 +23,18 @@ extension GameViewController: CLLocationManagerDelegate {
         let maxY = screenHeight - bottomGap - appearance.gridInset
         let maxAlllowedHeight = maxY - minY
         
-        let expectedHeight = screenWidth / CGFloat(game.colums) * CGFloat(game.rows)
+        let iPadInset: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 120.0 : 0.0
+        
+        let expectedHeight = (screenWidth / CGFloat(game.colums) * CGFloat(game.rows)) - iPadInset
         let expectedMinY = screenHeight / 2 - expectedHeight / 2
         let expectedMaxY = screenHeight / 2 + expectedHeight / 2
         
-        let width = screenWidth - appearance.gridInset * 2
+        let width = screenWidth - appearance.gridInset * 2 - iPadInset
         var height: CGFloat {
             return expectedHeight < maxAlllowedHeight ? expectedHeight : maxAlllowedHeight
         }
         
-        let x = appearance.gridInset
+        let x = appearance.gridInset + iPadInset / 2
         var y: CGFloat {
             if expectedHeight < maxAlllowedHeight {
                 if expectedMinY < minY && expectedMaxY < maxY {
@@ -208,6 +210,7 @@ extension GameViewController: CLLocationManagerDelegate {
                 self.startGameView.bounds.size = CGSize(width: self.messageViewWidth, height: self.messageViewHeight)
                 self.startGameView.center = self.cellsContainerView.center
         })
+        
     }
     
     // MARK: - Numbers
@@ -426,7 +429,7 @@ extension GameViewController: CLLocationManagerDelegate {
             feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .success)
             
             /// Requests a feedback
-            if game.level >= 12 {
+            if game.levelsToReqestReview.contains(game.level) {
                 SKStoreReviewController.requestReview()
             }
             
