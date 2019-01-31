@@ -58,6 +58,9 @@ class SettingsTableViewController: UITableViewController {
     private let levelButtonSideSize: CGFloat = 50.0
     private let infinityLevelButtonHeightCoeff: CGFloat = 1.7 /// higher coeff = lower height revatavely to the regular level button
     
+    private var locationServicesEnabled = false
+    private var locationServicesAutorized = false
+    
     private let levelButtonsGridParameters: (rows: Int, colums: Int) = {
         if UIDevice.current.userInterfaceIdiom == .phone {
             return (rows: 7, colums: 5)
@@ -171,22 +174,26 @@ class SettingsTableViewController: UITableViewController {
     
     private func setupAutomaticDarkModeSwitcher() {
         if CLLocationManager.locationServicesEnabled() {
+            locationServicesEnabled = true
             switch CLLocationManager.authorizationStatus() {
             case .restricted, .denied:
                 automaticDarkModeSwitcher.setOn(false, animated: true)
                 appearance.automaticDarkMode = false
-                self.automaticDarkModeEnabled = false
+                automaticDarkModeEnabled = false
                 darkModeSwitcher.isEnabled = true
+                locationServicesAutorized = false
             case .authorizedAlways, .authorizedWhenInUse, .notDetermined:
                 automaticDarkModeSwitcher.setOn(appearance.automaticDarkMode, animated: false)
                 darkModeSwitcher.isEnabled = !appearance.automaticDarkMode
-                self.automaticDarkModeEnabled = true
+                automaticDarkModeEnabled = true
+                locationServicesAutorized = true
             }
         } else {
             automaticDarkModeSwitcher.setOn(false, animated: true)
             appearance.automaticDarkMode = false
             darkModeSwitcher.isEnabled = true
-            self.automaticDarkModeEnabled = false
+            automaticDarkModeEnabled = false
+            locationServicesEnabled = false
         }
         tableView.reloadSections(IndexSet.init(integer: 1), with: .none)
     }
@@ -286,7 +293,7 @@ class SettingsTableViewController: UITableViewController {
     }
     
     @objc private func didBecomeActive() {
-        setupAutomaticDarkModeSwitcher()
+        checkLocationServicesAccess()
     }
     
     // MARK: - Location Services Alert Controller
@@ -356,6 +363,23 @@ class SettingsTableViewController: UITableViewController {
         lastPressedLevelButton = button
         button.layer.borderWidth = 3.0
         button.layer.borderColor = appearance.highlightedCellColor.cgColor
+    }
+    
+    private func checkLocationServicesAccess() {
+        var locationServicesAutorized = false
+        if CLLocationManager.locationServicesEnabled() {
+            self.locationServicesEnabled = true
+            switch CLLocationManager.authorizationStatus() {
+            case .restricted, .denied:
+                locationServicesAutorized = false
+            case .authorizedAlways, .authorizedWhenInUse, .notDetermined:
+                locationServicesAutorized = true
+            }
+        }
+        if  locationServicesEnabled != CLLocationManager.locationServicesEnabled() ||
+            self.locationServicesAutorized != locationServicesAutorized {
+            setupAutomaticDarkModeSwitcher()
+        }
     }
 
 }

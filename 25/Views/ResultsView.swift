@@ -46,7 +46,7 @@ class ResultsView: UIVisualEffectView {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .left
-        label.font = UIFont.systemFont(ofSize: 35.0, weight: UIFont.Weight.light) //boldSystemFont(ofSize: 35.0)
+        label.font = UIFont.systemFont(ofSize: 35.0, weight: UIFont.Weight.light)
         label.adjustsFontSizeToFitWidth = true
         label.numberOfLines = 0
         return label
@@ -230,7 +230,7 @@ class ResultsView: UIVisualEffectView {
         /// timeLabel constraints
         timeLabel.translatesAutoresizingMaskIntoConstraints = false
         timeLabel.centerXAnchor.constraint(equalTo: margins.centerXAnchor).isActive = true
-        timeLabel.centerYAnchor.constraint(equalTo: margins.centerYAnchor).isActive = true
+        timeLabel.centerYAnchor.constraint(equalTo: margins.centerYAnchor, constant: -20.0).isActive = true
         timeLabel.trailingAnchor.constraint(equalTo: margins.trailingAnchor, constant: -sideGap).isActive = true
         timeLabel.leadingAnchor.constraint(equalTo: margins.leadingAnchor, constant: sideGap).isActive = true
         timeLabel.heightAnchor.constraint(equalToConstant: timeLabelHeight).isActive = true

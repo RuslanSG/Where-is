@@ -147,6 +147,7 @@ extension GameViewController: CLLocationManagerDelegate {
                 cell.setCornerRadius(to: appearance.cornerRadius)
                 cell.alpha = 0.0
                 cell.titleLabel?.font = UIFont.systemFont(ofSize: appearance.numbersFontSize)
+                cell.titleLabel?.adjustsFontSizeToFitWidth = true
                 cell.addTarget(self, action: #selector(cellPressed(sender:)), for: .touchDown)
                 cell.addTarget(self, action: #selector(cellReleased(sender:)), for: .touchUpInside)
                 cell.addTarget(self, action: #selector(cellReleased(sender:)), for: .touchUpOutside)
