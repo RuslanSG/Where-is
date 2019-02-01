@@ -21,7 +21,6 @@
 		2A237940214C5CF00008FC2A /* Solar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A23793F214C5CF00008FC2A /* Solar.swift */; };
 		2A237942214E6E8A0008FC2A /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A237941214E6E8A0008FC2A /* Appearance.swift */; };
 		2A3279E721FCFFEC006AEA9F /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3279E621FCFFEC006AEA9F /* MessageView.swift */; };
-		2A3279EB21FDC5CE006AEA9F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2A3279EA21FDC5CE006AEA9F /* GoogleService-Info.plist */; };
 		2A3F693B21DFBA6C00DD5232 /* RGAnimatedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3F693A21DFBA6C00DD5232 /* RGAnimatedLabel.swift */; };
 		2A45DAB6216FC17E00FCB89C /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A45DAB5216FC17E00FCB89C /* Time.swift */; };
 		2A8C933D212197F70068F98E /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8C933C212197F70068F98E /* SettingsTableViewController.swift */; };
@@ -32,6 +31,7 @@
 		2AAC1633213C04210042D4A1 /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AAC1632213C04210042D4A1 /* ResultsView.swift */; };
 		2AC2C4E7215FFB7500B07769 /* DarkModeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC2C4E6215FFB7500B07769 /* DarkModeTableViewController.swift */; };
 		2AC2C4E9215FFB8300B07769 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC2C4E8215FFB8300B07769 /* WelcomeViewController.swift */; };
+		2ACD85792205009E006E5E7E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2ACD85782205009E006E5E7E /* GoogleService-Info.plist */; };
 		2ACDF75C213D5B43004FEA1B /* FeedbackGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ACDF75B213D5B43004FEA1B /* FeedbackGenerator.swift */; };
 		2ACDF75E213F35B9004FEA1B /* StartGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ACDF75D213F35B9004FEA1B /* StartGameView.swift */; };
 		2AEEA946215284FA00AC7896 /* CellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEEA945215284FA00AC7896 /* CellView.swift */; };
@@ -60,7 +60,6 @@
 		2A23793F214C5CF00008FC2A /* Solar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Solar.swift; sourceTree = "<group>"; };
 		2A237941214E6E8A0008FC2A /* Appearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; };
 		2A3279E621FCFFEC006AEA9F /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
-		2A3279EA21FDC5CE006AEA9F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2A3F693A21DFBA6C00DD5232 /* RGAnimatedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RGAnimatedLabel.swift; sourceTree = "<group>"; };
 		2A45DAB5216FC17E00FCB89C /* Time.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Time.swift; sourceTree = "<group>"; };
 		2A69D6F421F4DB6100D91073 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
@@ -74,6 +73,7 @@
 		2AAC1632213C04210042D4A1 /* ResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsView.swift; sourceTree = "<group>"; };
 		2AC2C4E6215FFB7500B07769 /* DarkModeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkModeTableViewController.swift; sourceTree = "<group>"; };
 		2AC2C4E8215FFB8300B07769 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
+		2ACD85782205009E006E5E7E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2ACDF75B213D5B43004FEA1B /* FeedbackGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackGenerator.swift; sourceTree = "<group>"; };
 		2ACDF75D213F35B9004FEA1B /* StartGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartGameView.swift; sourceTree = "<group>"; };
 		2AD5D45D21FE141D00F3730E /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Main.strings; sourceTree = "<group>"; };
@@ -125,9 +125,9 @@
 				2A118DB7211A132F0059E252 /* Main.storyboard */,
 				2A118DC8211A13450059E252 /* Supporting Files */,
 				2A118DC2211A13300059E252 /* Info.plist */,
+				2ACD85782205009E006E5E7E /* GoogleService-Info.plist */,
 				2A1D127421FF31DA00A8DA9B /* Localizable.strings */,
 				2A1D127121FF31DA00A8DA9B /* InfoPlist.strings */,
-				2A3279EA21FDC5CE006AEA9F /* GoogleService-Info.plist */,
 			);
 			path = 25;
 			sourceTree = "<group>";
@@ -281,10 +281,10 @@
 			files = (
 				2A118DC1211A13300059E252 /* LaunchScreen.storyboard in Resources */,
 				2A1D127621FF31DA00A8DA9B /* Localizable.strings in Resources */,
-				2A3279EB21FDC5CE006AEA9F /* GoogleService-Info.plist in Resources */,
 				2A118DBE211A13300059E252 /* Assets.xcassets in Resources */,
 				2A118DB9211A132F0059E252 /* Main.storyboard in Resources */,
 				2A1D127321FF31DA00A8DA9B /* InfoPlist.strings in Resources */,
+				2ACD85792205009E006E5E7E /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -81,19 +81,19 @@ class Game {
                          30 : 167.0]
     
     /// Levels user can select
-//    var availableLevels: [Int] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
-    private var availableLevels: [Int] {
-        set {
-            UserDefaults.standard.set(newValue, forKey: UserDefaults.Key.AvailableLevels)
-        }
-        get {
-            if let availableLevels = UserDefaults.standard.array(forKey: UserDefaults.Key.AvailableLevels) as? [Int] {
-                return availableLevels
-            } else {
-                return [1]
-            }
-        }
-    }
+    var availableLevels: [Int] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+//    private var availableLevels: [Int] {
+//        set {
+//            UserDefaults.standard.set(newValue, forKey: UserDefaults.Key.AvailableLevels)
+//        }
+//        get {
+//            if let availableLevels = UserDefaults.standard.array(forKey: UserDefaults.Key.AvailableLevels) as? [Int] {
+//                return availableLevels
+//            } else {
+//                return [1]
+//            }
+//        }
+//    }
     
     let levelsToReqestReview = [12, 18, 25, 0]
     
@@ -179,6 +179,24 @@ class Game {
                 object: nil,
                 userInfo: [Notification.UserInfoKey.InGame : inGame]
             )
+        }
+    }
+    
+    private var attemptsCountArray: [Int] {
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.Key.AttemptsCount)
+        }
+        get {
+            if let array = UserDefaults.standard.array(forKey: UserDefaults.Key.AttemptsCount) as? [Int] {
+                return array
+            } else {
+                var initialArray = [Int]()
+                for _ in 0..<maxLevel {
+                    initialArray.append(0)
+                }
+                return initialArray
+            }
+            
         }
     }
     
@@ -309,12 +327,14 @@ class Game {
         )
     }
     
-    func finishGame() {
+    func finishGame(levelPassed: Bool) {
         inGame = false
         let finishTime = Date.timeIntervalSinceReferenceDate
         elapsedTime = finishTime - startTime
         timer.invalidate()
-        sendInfoToServer(levelPassed: true)
+        if levelPassed {
+            sendInfoToServer()
+        }
     }
     
     func newGame() {
@@ -354,8 +374,13 @@ class Game {
     
     // MARK: - Server
     
-    private func sendInfoToServer(levelPassed: Bool) {
-        Analytics.logEvent("level_\(level)", parameters: ["passing_rate" : NSNumber(integerLiteral: levelPassed ? 1 : 0)])
+    private func sendInfoToServer() {
+        var attemptsCount = attemptsCountArray[level - 1]
+        if attemptsCount == 0 {
+            attemptsCount = 1
+        }
+        Analytics.logEvent("level_\(level)", parameters: ["attempts_count" : NSNumber(integerLiteral: attemptsCount)])
+        attemptsCountArray[level - 1] = 0
     }
     
     private func sendInfoToServer(numbersFounded: Int) {
@@ -392,7 +417,7 @@ class Game {
                 infinityModeRecord = infinityModeScore
             }
         } else {
-            sendInfoToServer(levelPassed: false)
+            attemptsCountArray[level - 1] += 1
         }
         delegate?.timeIsOut()
     }

@@ -389,7 +389,7 @@ extension GameViewController: CLLocationManagerDelegate {
     /// Ends the game without preparations for the new one
     func endGame(levelPassed: Bool) {
         /// Says to the model to finish game
-        self.game.finishGame()
+        self.game.finishGame(levelPassed: levelPassed)
         
         /// Stops all cell animations (e.g. wink, swap)
         stopAnimations()

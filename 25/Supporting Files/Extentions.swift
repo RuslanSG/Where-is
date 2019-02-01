@@ -210,6 +210,7 @@ extension UserDefaults {
         static let AvailableLevels: String = "AvailableLevelsUserDefaultsKey"
         static let InfinityModeScoreRecord: String = "InfinityModeScoreRecordUserDefaultsKey"
         static let GamePassed: String = "GamePassedUserDefaultsKey"
+        static let AttemptsCount: String = "AttemptsCountUserDefaultsKey"
     }
 }
 
