@@ -8,13 +8,13 @@
 
 import UIKit
 
-class RootViewController: UIViewController, WelcomeViewControllerDelegate {
+class RootViewController: UIViewController, WelcomeViewControllerDelegate, GreetingViewControllerDelegate {
     
     var pageViewController: UIPageViewController?
     var appearance: Appearance!
     
     private enum ViewControllerIdentifier {
-        static let GreetingsViewController = "greetingsViewController"
+        static let GreetingViewController = "greetingViewController"
         static let SensViewController = "sensViewController"
         static let TutorialViewController = "tutorialViewController"
         static let DarkModeViewController = "darkModeViewController"
@@ -28,17 +28,18 @@ class RootViewController: UIViewController, WelcomeViewControllerDelegate {
     }
     
     private lazy var orderedViewControllers: [UIViewController] = {
-        let greetingsViewController = self.newViewConrtoller(withIdentifier: ViewControllerIdentifier.GreetingsViewController)
+        let greetingViewController = self.newViewConrtoller(withIdentifier: ViewControllerIdentifier.GreetingViewController) as! GreetingViewController
         let sensViewController = self.newViewConrtoller(withIdentifier: ViewControllerIdentifier.SensViewController)
         let tutorialViewController = self.newViewConrtoller(withIdentifier: ViewControllerIdentifier.TutorialViewController) as! TutorialViewController
         let darkModeViewContoller = self.newViewConrtoller(withIdentifier: ViewControllerIdentifier.DarkModeViewController) as! DarkModeTableViewController
         let welcomeViewController = self.newViewConrtoller(withIdentifier: ViewControllerIdentifier.WelcomeViewController) as! WelcomeViewController
         
+        greetingViewController.delegate = self
         welcomeViewController.delegate = self
         darkModeViewContoller.appearance = appearance
         welcomeViewController.appearance = appearance
                 
-        return [greetingsViewController,
+        return [greetingViewController,
                 sensViewController,
                 tutorialViewController,
                 darkModeViewContoller,
@@ -149,6 +150,12 @@ class RootViewController: UIViewController, WelcomeViewControllerDelegate {
         setupControlButtons(to: previousViewController)
         visibleViewController = previousViewController
         updatePageLabel(currentPage: visibleViewController)
+    }
+    
+    // MARK: - GreetingViewControllerDelegate
+    
+    func skipButtonPressed() {
+        self.dismiss(animated: true, completion: nil)
     }
     
     // MARK: - WelcomeViewControllerDelegate

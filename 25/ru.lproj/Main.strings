@@ -1,42 +1,12 @@
 
-/* Class = "UIButton"; normalTitle = "19"; ObjectID = "04E-HZ-wdU"; */
-"04E-HZ-wdU.normalTitle" = "19";
-
-/* Class = "UIButton"; normalTitle = "25"; ObjectID = "0Ep-cs-B60"; */
-"0Ep-cs-B60.normalTitle" = "25";
-
-/* Class = "UIButton"; normalTitle = "20"; ObjectID = "0Ep-wP-j6i"; */
-"0Ep-wP-j6i.normalTitle" = "20";
-
-/* Class = "UIButton"; normalTitle = "27"; ObjectID = "30X-vd-Chg"; */
-"30X-vd-Chg.normalTitle" = "27";
-
-/* Class = "UIButton"; normalTitle = "14"; ObjectID = "599-sc-dVY"; */
-"599-sc-dVY.normalTitle" = "14";
-
-/* Class = "UIButton"; normalTitle = "24"; ObjectID = "5Ja-zg-RQJ"; */
-"5Ja-zg-RQJ.normalTitle" = "24";
-
-/* Class = "UIButton"; normalTitle = "26"; ObjectID = "611-mN-kWO"; */
-"611-mN-kWO.normalTitle" = "26";
+/* Class = "UIButton"; normalTitle = "Связаться с разработчиком"; ObjectID = "5ys-Kl-Z29"; */
+"5ys-Kl-Z29.normalTitle" = "Связаться с разработчиком";
 
 /* Class = "UILabel"; text = "Местоположение:"; ObjectID = "6xH-ei-jRN"; */
 "6xH-ei-jRN.text" = "Местоположение:";
 
-/* Class = "UIButton"; normalTitle = "28"; ObjectID = "7kN-HP-Hgz"; */
-"7kN-HP-Hgz.normalTitle" = "28";
-
-/* Class = "UIButton"; normalTitle = "10"; ObjectID = "9Mi-lZ-1L5"; */
-"9Mi-lZ-1L5.normalTitle" = "10";
-
-/* Class = "UIButton"; normalTitle = "18"; ObjectID = "A0Q-03-E8Y"; */
-"A0Q-03-E8Y.normalTitle" = "18";
-
 /* Class = "UILabel"; text = "Темный режим"; ObjectID = "AEZ-4X-F33"; */
 "AEZ-4X-F33.text" = "Темный режим";
-
-/* Class = "UIButton"; normalTitle = "4"; ObjectID = "BgD-eP-Yzo"; */
-"BgD-eP-Yzo.normalTitle" = "4";
 
 /* Class = "UILabel"; text = "Закат:"; ObjectID = "CsL-aK-788"; */
 "CsL-aK-788.text" = "Закат:";
@@ -44,41 +14,14 @@
 /* Class = "UITableViewSection"; headerTitle = "Уровень"; ObjectID = "Ct6-Pk-3eQ"; */
 "Ct6-Pk-3eQ.headerTitle" = "Уровень";
 
-/* Class = "UIButton"; normalTitle = "1"; ObjectID = "DdL-Lc-lcL"; */
-"DdL-Lc-lcL.normalTitle" = "1";
-
-/* Class = "UIButton"; normalTitle = "13"; ObjectID = "F7H-Fm-qEX"; */
-"F7H-Fm-qEX.normalTitle" = "13";
-
 /* Class = "UIButton"; normalTitle = "Начать игру"; ObjectID = "Hto-JK-rrS"; */
 "Hto-JK-rrS.normalTitle" = "Начать игру";
-
-/* Class = "UIButton"; normalTitle = "16"; ObjectID = "IWK-0S-CPh"; */
-"IWK-0S-CPh.normalTitle" = "16";
-
-/* Class = "UIButton"; normalTitle = "8"; ObjectID = "LH3-Ce-5po"; */
-"LH3-Ce-5po.normalTitle" = "8";
-
-/* Class = "UIButton"; normalTitle = "9"; ObjectID = "Lap-ag-hjS"; */
-"Lap-ag-hjS.normalTitle" = "9";
 
 /* Class = "UILabel"; text = "Добро пожаловать!"; ObjectID = "MWR-IR-CHB"; */
 "MWR-IR-CHB.text" = "Добро пожаловать!";
 
-/* Class = "UIButton"; normalTitle = "12"; ObjectID = "Mpw-di-UNG"; */
-"Mpw-di-UNG.normalTitle" = "12";
-
-/* Class = "UIButton"; normalTitle = "23"; ObjectID = "N5P-Yo-c3m"; */
-"N5P-Yo-c3m.normalTitle" = "23";
-
 /* Class = "UILabel"; text = "Восход:"; ObjectID = "NWo-C6-1MW"; */
 "NWo-C6-1MW.text" = "Восход:";
-
-/* Class = "UIButton"; normalTitle = "7"; ObjectID = "NfH-Qz-QoW"; */
-"NfH-Qz-QoW.normalTitle" = "7";
-
-/* Class = "UIButton"; normalTitle = "21"; ObjectID = "Oan-va-6BF"; */
-"Oan-va-6BF.normalTitle" = "21";
 
 /* Class = "UILabel"; text = "—"; ObjectID = "PBb-ea-16Z"; */
 "PBb-ea-16Z.text" = "—";
@@ -86,14 +29,11 @@
 /* Class = "UILabel"; text = "Пробуем!"; ObjectID = "PCl-4P-UIJ"; */
 "PCl-4P-UIJ.text" = "Пробуем!";
 
-/* Class = "UILabel"; text = "За основу взята разработка немецкого психиатра и психотерапевта Вальтера Шульте.  Задача проста: необходимо найти каждое число в таблице в порядке возрастания за отведенное время.  Вам предстоит пройти 30 уровней, каждый из которых будет сложнее предыдущего.   Когда Вы сделаете это, то сильно улучшите свою концентрацию, переферийное зрение и умение сохранять спокойствие в стрессовых ситуациях."; ObjectID = "Ppl-1t-cmI"; */
-"Ppl-1t-cmI.text" = "За основу взята разработка немецкого психиатра и психотерапевта Вальтера Шульте.  Задача проста: необходимо найти каждое число в таблице в порядке возрастания за отведенное время.  Вам предстоит пройти 30 уровней, каждый из которых будет сложнее предыдущего.   Когда Вы сделаете это, то сильно улучшите свою концентрацию, переферийное зрение и умение сохранять спокойствие в стрессовых ситуациях.";
+/* Class = "UILabel"; text = "Дорогой внимательный пользователь,  Благодарю за приобретение моего приложения. Для меня очень важна Ваша поддержка.   Я создал это приложение для того, чтобы помочь людям развить внимательность. Для этого я позаимствовал идею человека по имеми Вальтер Шульте, которая заключается в создании таблицы со случайно расположенными числами. Задача проста — найти все числа в порядке возрастания.   Однако я позволил себе добавить сюда несколько своих идей, чтобы сделать процесс немного веселее. Я предполагаю, что это приложение поможет улучшить Вашу внимательность, потому что чтобы находить все эти числа, нужно неслабо ее задейстовать.  Я подготовил 30 уровней, каждый из которых сложнее предыдущенго. Полное их прохождение будет означать, что Ваша внимательность находится на отличном уровне! Также в конце игры я предусмотрел бонусный уровень, с помощью которого Вы можете совершенствоваться без границ.   Управление простое: • для начала игры нажмите \"Старт\" (чуть ниже Вы увидите время, за которое необходимо найти все числа); • для того, чтобы остановить игру, смахните вниз (по центру экрана); • для того, чтобы открыть настройки, смахните вверх (по центру экрана).  Если Вы желаете со мной связаться, то для этого я оставил соответствующую кнопку в настройках.  Желаю терпения.  С любовью, Руслан"; ObjectID = "Ppl-1t-cmI"; */
+"Ppl-1t-cmI.text" = "Дорогой внимательный пользователь,  Благодарю за приобретение моего приложения. Для меня очень важна Ваша поддержка.   Я создал это приложение для того, чтобы помочь людям развить внимательность. Для этого я позаимствовал идею человека по имеми Вальтер Шульте, которая заключается в создании таблицы со случайно расположенными числами. Задача проста — найти все числа в порядке возрастания.   Однако я позволил себе добавить несколько своих идей, чтобы сделать процесс немного веселее. Я предполагаю, что это приложение поможет улучшить Вашу внимательность, потому что чтобы находить все эти числа, нужно неслабо ее задействовать.  Я подготовил 30 уровней, каждый из которых сложнее предыдущего. Полное их прохождение будет означать, что Ваша внимательность находится на отличном уровне! Также в конце игры я предусмотрел бонусный уровень, с помощью которого Вы можете совершенствоваться без границ.   Управление простое: • для начала игры нажмите "Старт" (чуть ниже Вы увидите время, за которое необходимо найти все числа); • для того, чтобы остановить игру, смахните вниз (по центру экрана); • для того, чтобы открыть настройки, смахните вверх (по центру экрана).  Если Вы желаете со мной связаться, то для этого я оставил соответствующую кнопку в настройках.  Желаю терпения.  С любовью, Руслан";
 
 /* Class = "UINavigationItem"; title = "Where is?!"; ObjectID = "PuX-6X-KnQ"; */
 "PuX-6X-KnQ.title" = "Where is?!";
-
-/* Class = "UIButton"; normalTitle = "2"; ObjectID = "QH0-VJ-Lgn"; */
-"QH0-VJ-Lgn.normalTitle" = "2";
 
 /* Class = "UITableViewSection"; footerTitle = "Чтобы определить время захода и восхода солнца, необходимо разово получить данные о Вашем примерном местоположении. Эта информация будет храниться только на данном устройстве."; ObjectID = "QRs-2j-qDO"; */
 "QRs-2j-qDO.footerTitle" = "Чтобы определить время захода и восхода солнца, необходимо разово получить данные о Вашем примерном местоположении. Эта информация будет храниться только на данном устройстве.";
@@ -101,17 +41,11 @@
 /* Class = "UITableViewSection"; headerTitle = "ОФОРМЛЕНИЕ"; ObjectID = "QRs-2j-qDO"; */
 "QRs-2j-qDO.headerTitle" = "ОФОРМЛЕНИЕ";
 
-/* Class = "UIButton"; normalTitle = "5"; ObjectID = "QVZ-HO-E1z"; */
-"QVZ-HO-E1z.normalTitle" = "5";
-
-/* Class = "UIButton"; normalTitle = "6"; ObjectID = "R5M-52-tXv"; */
-"R5M-52-tXv.normalTitle" = "6";
-
 /* Class = "UILabel"; text = "Where is?!"; ObjectID = "RLe-nN-oqr"; */
 "RLe-nN-oqr.text" = "Where is?!";
 
-/* Class = "UILabel"; text = "В чем смысл?"; ObjectID = "S1d-6G-cNI"; */
-"S1d-6G-cNI.text" = "В чем смысл?";
+/* Class = "UILabel"; text = "Where is?!"; ObjectID = "S1d-6G-cNI"; */
+"S1d-6G-cNI.text" = "Where is?!";
 
 /* Class = "UILabel"; text = "—"; ObjectID = "Ts9-gn-O4H"; */
 "Ts9-gn-O4H.text" = "—";
@@ -131,38 +65,17 @@
 /* Class = "UILabel"; text = "Темный режим"; ObjectID = "d64-jR-bAW"; */
 "d64-jR-bAW.text" = "Темный режим";
 
-/* Class = "UIButton"; normalTitle = "3"; ObjectID = "ilS-lu-Rkg"; */
-"ilS-lu-Rkg.normalTitle" = "3";
-
 /* Class = "UILabel"; text = "Игра автоматически будет переходить в темный режим после захода солнца. Это поможет снизить нагрузку на Ваши глаза.   Для определения времени восхода и заката необходима информация о Вашем текущем местоположении. Эта информация не будет использована ни в каких иных целях. Вы можете в любой момент отключить эту функцию в настройках.  Информация о текущем местоположении хранится исключительно внутри устройства и не отправляется на внешние сервера."; ObjectID = "jBS-GU-GLJ"; */
 "jBS-GU-GLJ.text" = "Игра автоматически будет переходить в темный режим после захода солнца. Это поможет снизить нагрузку на Ваши глаза.   Для определения времени восхода и заката необходима информация о Вашем текущем местоположении. Эта информация не будет использована ни в каких иных целях. Вы можете в любой момент отключить эту функцию в настройках.  Информация о текущем местоположении хранится исключительно внутри устройства и не отправляется на внешние сервера.";
 
-/* Class = "UIButton"; normalTitle = "17"; ObjectID = "l0V-Uw-hxM"; */
-"l0V-Uw-hxM.normalTitle" = "17";
-
-/* Class = "UIButton"; normalTitle = "11"; ObjectID = "lNI-KI-DbQ"; */
-"lNI-KI-DbQ.normalTitle" = "11";
-
-/* Class = "UIButton"; normalTitle = "∞"; ObjectID = "mrn-Bp-XWw"; */
-"mrn-Bp-XWw.normalTitle" = "∞";
-
-/* Class = "UIButton"; normalTitle = "30"; ObjectID = "oc4-wh-w0v"; */
-"oc4-wh-w0v.normalTitle" = "30";
-
-/* Class = "UIButton"; normalTitle = "15"; ObjectID = "ojs-V1-vJT"; */
-"ojs-V1-vJT.normalTitle" = "15";
-
-/* Class = "UIButton"; normalTitle = "22"; ObjectID = "p1y-Ed-5gB"; */
-"p1y-Ed-5gB.normalTitle" = "22";
-
-/* Class = "UIButton"; normalTitle = "29"; ObjectID = "pAz-pa-aVY"; */
-"pAz-pa-aVY.normalTitle" = "29";
-
-/* Class = "UILabel"; text = "Давайте попробуем! Найдите числа от 1 до 25 в порядке возрастания:"; ObjectID = "pjS-oa-48R"; */
-"pjS-oa-48R.text" = "Давайте попробуем! Найдите числа от 1 до 25 в порядке возрастания:";
+/* Class = "UILabel"; text = "Перед началом немного практики не помешает. Найдите числа от 1 до 25 в порядке возрастания:"; ObjectID = "pjS-oa-48R"; */
+"pjS-oa-48R.text" = "Перед началом немного практики не помешает. Найдите числа от 1 до 25 в порядке возрастания:";
 
 /* Class = "UILabel"; text = "Автоматически"; ObjectID = "u7g-WF-Od3"; */
 "u7g-WF-Od3.text" = "Автоматически";
+
+/* Class = "UIButton"; normalTitle = "Пропустить"; ObjectID = "vqi-KN-iku"; */
+"vqi-KN-iku.normalTitle" = "Пропустить";
 
 /* Class = "UILabel"; text = "Авто-темный режим"; ObjectID = "wxM-HH-6kC"; */
 "wxM-HH-6kC.text" = "Авто-темный режим";

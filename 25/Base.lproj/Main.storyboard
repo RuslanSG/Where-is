@@ -240,7 +240,7 @@
                                     <constraint firstItem="pBi-mz-966" firstAttribute="centerY" secondItem="ne1-OU-c6u" secondAttribute="centerY" id="cLi-KF-ytm"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Давайте попробуем! Найдите числа от 1 до 25 в порядке возрастания:" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="pjS-oa-48R" customClass="RGAnimatedLabel" customModule="_5" customModuleProvider="target">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Перед началом немного практики не помешает. Найдите числа от 1 до 25 в порядке возрастания:" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="pjS-oa-48R" customClass="RGAnimatedLabel" customModule="_5" customModuleProvider="target">
                                 <rect key="frame" x="16" y="115" width="343" height="61"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="61" id="Fop-iV-PDd"/>
@@ -350,10 +350,10 @@
             </objects>
             <point key="canvasLocation" x="4732" y="832"/>
         </scene>
-        <!--View Controller-->
+        <!--Greeting View Controller-->
         <scene sceneID="meJ-p5-L0W">
             <objects>
-                <viewController storyboardIdentifier="greetingsViewController" id="vUJ-hT-Kah" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="greetingViewController" id="vUJ-hT-Kah" customClass="GreetingViewController" customModule="_5" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="KeI-dy-o3o">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -381,6 +381,13 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vqi-KN-iku">
+                                <rect key="frame" x="145" y="617" width="85" height="30"/>
+                                <state key="normal" title="Пропустить"/>
+                                <connections>
+                                    <action selector="skipButtonPressed:" destination="vUJ-hT-Kah" eventType="touchUpInside" id="mI3-59-cxO"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -390,7 +397,9 @@
                             <constraint firstItem="1up-5q-qvX" firstAttribute="centerY" secondItem="KeI-dy-o3o" secondAttribute="centerY" constant="-50" id="K2Z-Xu-jJR"/>
                             <constraint firstAttribute="trailing" secondItem="cq7-BS-oyO" secondAttribute="trailing" constant="16" id="L1h-f3-rzF"/>
                             <constraint firstItem="cq7-BS-oyO" firstAttribute="centerX" secondItem="KeI-dy-o3o" secondAttribute="centerX" id="OAK-aP-8hC"/>
+                            <constraint firstItem="vqi-KN-iku" firstAttribute="centerX" secondItem="KeI-dy-o3o" secondAttribute="centerX" id="YtJ-Zc-mOg"/>
                             <constraint firstItem="cq7-BS-oyO" firstAttribute="top" secondItem="RLe-nN-oqr" secondAttribute="bottom" constant="5" id="bbr-YN-JRa"/>
+                            <constraint firstItem="YHb-j8-8am" firstAttribute="bottom" secondItem="vqi-KN-iku" secondAttribute="bottom" constant="20" id="dWC-fP-Fae"/>
                             <constraint firstItem="RLe-nN-oqr" firstAttribute="top" secondItem="1up-5q-qvX" secondAttribute="bottom" constant="10" id="e8L-BH-jbc"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="YHb-j8-8am"/>
@@ -418,7 +427,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="В чем смысл?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="S1d-6G-cNI">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Where is?!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="S1d-6G-cNI">
                                                     <rect key="frame" x="16" y="0.0" width="343" height="42"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="42" id="RNb-kH-jXi"/>
@@ -428,8 +437,8 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ppl-1t-cmI">
-                                                    <rect key="frame" x="16" y="50" width="343" height="345"/>
-                                                    <string key="text">За основу взята разработка немецкого психиатра и психотерапевта Вальтера Шульте.  Задача проста: необходимо найти каждое число в таблице в порядке возрастания за отведенное время.  Вам предстоит пройти 30 уровней, каждый из которых будет сложнее предыдущего.   Когда Вы сделаете это, то сильно улучшите свою концентрацию, переферийное зрение и умение сохранять спокойствие в стрессовых ситуациях.</string>
+                                                    <rect key="frame" x="16" y="50" width="343" height="995"/>
+                                                    <mutableString key="text">Дорогой внимательный пользователь,  Благодарю за приобретение моего приложения. Для меня очень важна Ваша поддержка.   Я создал это приложение для того, чтобы помочь людям развить внимательность. Для этого я позаимствовал идею человека по имеми Вальтер Шульте, которая заключается в создании таблицы со случайно расположенными числами. Задача проста — найти все числа в порядке возрастания.   Однако я позволил себе добавить несколько своих идей, чтобы сделать процесс немного веселее. Я предполагаю, что это приложение поможет улучшить Вашу внимательность, потому что чтобы находить все эти числа, нужно неслабо ее задействовать.  Я подготовил 30 уровней, каждый из которых сложнее предыдущего. Полное их прохождение будет означать, что Ваша внимательность находится на отличном уровне! Также в конце игры я предусмотрел бонусный уровень, с помощью которого Вы можете совершенствоваться без границ.   Управление простое: • для начала игры нажмите "Старт" (чуть ниже Вы увидите время, за которое необходимо найти все числа); • для того, чтобы остановить игру, смахните вниз (по центру экрана); • для того, чтобы открыть настройки, смахните вверх (по центру экрана).  Если Вы желаете со мной связаться, то для этого я оставил соответствующую кнопку в настройках.  Желаю терпения.  С любовью, Руслан</mutableString>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -494,7 +503,7 @@
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jBS-GU-GLJ">
                                                     <rect key="frame" x="16" y="50" width="343" height="325"/>
-                                                    <string key="text">Игра автоматически будет переходить в темный режим после захода солнца. Это поможет снизить нагрузку на Ваши глаза.   Для определения времени восхода и заката необходима информация о Вашем текущем местоположении. Эта информация не будет использована ни в каких иных целях. Вы можете в любой момент отключить эту функцию в настройках.  Информация о текущем местоположении хранится исключительно внутри устройства и не отправляется на внешние сервера.</string>
+                                                    <mutableString key="text">Игра автоматически будет переходить в темный режим после захода солнца. Это поможет снизить нагрузку на Ваши глаза.   Для определения времени восхода и заката необходима информация о Вашем текущем местоположении. Эта информация не будет использована ни в каких иных целях. Вы можете в любой момент отключить эту функцию в настройках.  Информация о текущем местоположении хранится исключительно внутри устройства и не отправляется на внешние сервера.</mutableString>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>

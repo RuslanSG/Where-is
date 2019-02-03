@@ -12,9 +12,8 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate, M
     
     internal enum Strings {
         static let StartButtonText = NSLocalizedString("Старт", comment: "Начать игру")
-        static let StartButtonGoalText = NSLocalizedString("Цель:", comment: "За сколько времени нужно пройти уровень")
-        static let StartButtonInfinityModeText = NSLocalizedString("Цель: ∞", comment: "За сколько времени нужно пройти уровень")
-        static let SwipeUpTipLabelText = NSLocalizedString("↑ Смахните вверх, чтобы открыть настройки", comment: "Открыть настройки") 
+        static let StartButtonGoalText = NSLocalizedString("Время:", comment: "За сколько времени нужно пройти уровень")
+        static let SwipeUpTipLabelText = NSLocalizedString("↑ Смахните вверх, чтобы открыть настройки", comment: "Открыть настройки")
         static let SwipeDownTipLabelText = NSLocalizedString("↓ Смахните вниз, чтобы остановить", comment: "Остановить игру")
         static let CongratulationsTitle = NSLocalizedString("Поздравляю!🎂", comment: "Поздарвление")
         static let CongratulationsText = NSLocalizedString("Вы прошли все %d уровней! Отличная работа! Это наверняка была нелегкая задача, но Вы справились и сильно развили свою внимательность.\n\nТеперь стал доступен '∞' уровень, который позволит Вам и дальше совершенствовать свои навыки. После нахождения число будет заменено на новое. У Вас есть 5 сек на поиски каждого. Старайтесь найти как можно больше чисел и достигайте новых вершин! Удачи!\n\nПоставьте, пожалуйста, оценку моему приложению и оставьте отзыв. Для меня очень важно знать Ваше мнение.", comment: "")
@@ -66,7 +65,7 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate, M
         
         view.detailLabel.textColor = appearance.textColor
         view.detailLabel.font = UIFont.boldSystemFont(ofSize: appearance.numbersFontSize / 2.2)
-        view.detailLabel.text = game.infinityMode ? Strings.StartButtonInfinityModeText : Strings.StartButtonGoalText + " " + String(game.goal)
+        view.detailLabel.text = Strings.StartButtonGoalText + " " + String(game.goal)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(startGame))
         view.addGestureRecognizer(tap)
@@ -446,7 +445,7 @@ class GameViewController: UIViewController, GameDelegate, ResultsViewDelegate, M
     }
     
     func levelChanged(to level: Int) {
-        startGameView.detailLabel.text = game.infinityMode ? Strings.StartButtonInfinityModeText : Strings.StartButtonGoalText + " " + String(game.goal)
+        startGameView.detailLabel.text = Strings.StartButtonGoalText + " " + String(game.goal)
     }
     
     func timeIsOut() {

@@ -79,7 +79,7 @@ class ResultsView: UIVisualEffectView {
     private var fineTimeLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = UIFont.boldSystemFont(ofSize: 25.0)
+        label.font = UIFont.boldSystemFont(ofSize: 17.0)
         label.numberOfLines = 0
         label.adjustsFontSizeToFitWidth = true
         label.textColor = .red
