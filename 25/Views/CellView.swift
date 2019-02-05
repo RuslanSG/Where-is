@@ -123,9 +123,7 @@ extension CellView {
         })
         
         /// Plays selection haptic feedback (only on devices with Haptic Feedback)
-        if UIDevice.current.hasHapticFeedback {
-            feedbackGenerator.playSelectionHapticFeedback()
-        }
+        feedbackGenerator.playSelectionHapticFeedback()
     }
     
     func uncompress(hapticFeedback: Bool? = nil, hiddenNumber: Bool = false) {
@@ -159,7 +157,7 @@ extension CellView {
         
         /// If user tapped right number it plays selection haptic feedback (only on devices with Haptic Feedback) otherwise it plays error haptic feedback
         if let hapticFeedback = hapticFeedback {
-            if hapticFeedback, UIDevice.current.hasHapticFeedback {
+            if hapticFeedback {
                 self.feedbackGenerator.playSelectionHapticFeedback()
             } else {
                 self.feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .error)
