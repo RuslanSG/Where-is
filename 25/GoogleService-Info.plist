@@ -2,39 +2,35 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
-	<string>ca-app-pub-3940256099942544/2934735716</string>
-	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
-	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>208024880321-4npl45fs3hpv6uo1875rv27trl4fntmq.apps.googleusercontent.com</string>
+	<string>874346476493-u30fs6hki7r9igcrkfqhrjl66jaebm0a.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.208024880321-4npl45fs3hpv6uo1875rv27trl4fntmq</string>
+	<string>com.googleusercontent.apps.874346476493-u30fs6hki7r9igcrkfqhrjl66jaebm0a</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDYTFHzYhWsmT2QoOrO09Tjxckw4MaPp1I</string>
+	<string>AIzaSyCttve13FJAQFGAabZj9f49oi4ZjYvMNk4</string>
 	<key>GCM_SENDER_ID</key>
-	<string>208024880321</string>
+	<string>874346476493</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.ruslangritsenko.-25</string>
 	<key>PROJECT_ID</key>
-	<string>where-is-16d7d</string>
+	<string>where-is-d126a</string>
 	<key>STORAGE_BUCKET</key>
-	<string>where-is-16d7d.appspot.com</string>
+	<string>where-is-d126a.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<true></true>
+	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
 	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<false></false>
+	<true></true>
 	<key>IS_GCM_ENABLED</key>
 	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:208024880321:ios:14c2a99bbf0a16ad</string>
+	<string>1:874346476493:ios:14c2a99bbf0a16ad</string>
 	<key>DATABASE_URL</key>
-	<string>https://where-is-16d7d.firebaseio.com</string>
+	<string>https://where-is-d126a.firebaseio.com</string>
 </dict>
 </plist>
