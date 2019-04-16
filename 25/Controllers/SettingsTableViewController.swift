@@ -187,6 +187,8 @@ class SettingsTableViewController: UITableViewController {
                 darkModeSwitcher.isEnabled = !appearance.automaticDarkMode
                 automaticDarkModeEnabled = true
                 locationServicesAutorized = true
+            @unknown default:
+                break
             }
         } else {
             automaticDarkModeSwitcher.setOn(false, animated: true)
@@ -218,6 +220,8 @@ class SettingsTableViewController: UITableViewController {
             case .authorizedAlways, .authorizedWhenInUse, .notDetermined:
                 appearance.automaticDarkMode = sender.isOn
                 darkModeSwitcher.isEnabled = !sender.isOn
+            @unknown default:
+                break
             }
         } else {
             showLocationServicesAlertController(sender: sender)
@@ -374,8 +378,11 @@ class SettingsTableViewController: UITableViewController {
                 locationServicesAutorized = false
             case .authorizedAlways, .authorizedWhenInUse, .notDetermined:
                 locationServicesAutorized = true
+            @unknown default:
+                break
             }
         }
+        
         if  locationServicesEnabled != CLLocationManager.locationServicesEnabled() ||
             self.locationServicesAutorized != locationServicesAutorized {
             setupAutomaticDarkModeSwitcher()

@@ -78,6 +78,8 @@ class DarkModeTableViewController: UITableViewController {
                 showLocationServicesAlertController(sender: sender)
             case .authorizedAlways, .authorizedWhenInUse, .notDetermined:
                 appearance.automaticDarkMode = sender.isOn
+            @unknown default:
+                break
             }
         } else {
             showLocationServicesAlertController(sender: sender)
@@ -148,6 +150,8 @@ class DarkModeTableViewController: UITableViewController {
                 switcher.setOn(false, animated: true)
             case .authorizedAlways, .authorizedWhenInUse, .notDetermined:
                 switcher.setOn(appearance.automaticDarkMode, animated: false)
+            @unknown default:
+                break
             }
         } else {
             switcher.setOn(false, animated: true)

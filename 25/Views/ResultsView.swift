@@ -292,7 +292,7 @@ class ResultsView: UIVisualEffectView {
         )
         fineMutableString.addAttribute(
             NSAttributedString.Key.foregroundColor,
-            value: titleLabel.textColor,
+            value: titleLabel.textColor!,
             range: NSRange(location: 0, length: 6)
         )
         return fineMutableString
