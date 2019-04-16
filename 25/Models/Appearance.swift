@@ -202,7 +202,7 @@ extension Appearance {
     
     func getAnotherColor(for color: UIColor) -> UIColor? {
         var allColors = currentColorSet.map { darkMode ? $0.dark : $0.light }
-        let index = allColors.index(of: color)
+        let index = allColors.firstIndex(of: color)
         if let index = index {
             allColors.remove(at: index)
             let otherColors = allColors

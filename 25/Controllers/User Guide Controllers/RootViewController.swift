@@ -91,7 +91,7 @@ class RootViewController: UIViewController, WelcomeViewControllerDelegate, Greet
     
     private lazy var pageNumberLabel: UILabel = {
         let label = UILabel()
-        let indexOfVisiblePage = orderedViewControllers.index(of: visibleViewController) ?? 0
+        let indexOfVisiblePage = orderedViewControllers.firstIndex(of: visibleViewController) ?? 0
         label.text = String(indexOfVisiblePage + 1) + " " + Strings.Of + " " + String(orderedViewControllers.count)
         label.font = UIFont.boldSystemFont(ofSize: 17.0)
         return label
@@ -116,7 +116,7 @@ class RootViewController: UIViewController, WelcomeViewControllerDelegate, Greet
     
     @objc private func nextButtonPressed(_ sender: UIButton) {
         guard let currentViewController = pageViewController?.viewControllers?.first else { return }
-        guard let viewControllerIndex = orderedViewControllers.index(of: currentViewController) else { return }
+        guard let viewControllerIndex = orderedViewControllers.firstIndex(of: currentViewController) else { return }
         let nextIndex = viewControllerIndex + 1
         guard orderedViewControllers.count != nextIndex else { return }
         guard orderedViewControllers.count > nextIndex else { return }
@@ -135,7 +135,7 @@ class RootViewController: UIViewController, WelcomeViewControllerDelegate, Greet
     
     @objc private func backButtonPressed(_ sender: UIButton) {
         guard let currentViewController = pageViewController?.viewControllers?.first else { return }
-        guard let viewControllerIndex = orderedViewControllers.index(of: currentViewController) else { return }
+        guard let viewControllerIndex = orderedViewControllers.firstIndex(of: currentViewController) else { return }
         let previousIndex = viewControllerIndex - 1
         guard previousIndex >= 0  else { return }
         guard orderedViewControllers.count > previousIndex else { return }
@@ -273,7 +273,7 @@ class RootViewController: UIViewController, WelcomeViewControllerDelegate, Greet
     }
     
     private func updatePageLabel(currentPage: UIViewController) {
-        let indexOfVisiblePage = orderedViewControllers.index(of: currentPage) ?? 0
+        let indexOfVisiblePage = orderedViewControllers.firstIndex(of: currentPage) ?? 0
         pageNumberLabel.text = String(indexOfVisiblePage + 1) + " " + Strings.Of + " " + String(orderedViewControllers.count)
     }
 

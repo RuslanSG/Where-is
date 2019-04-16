@@ -234,11 +234,11 @@ extension GameViewController: CLLocationManagerDelegate {
         if cellsNotAnimating.isEmpty { return }
         
         let cell1 = cellsNotAnimating[cellsNotAnimating.count.arc4random]
-        guard let index1 = cellsNotAnimating.index(of: cell1) else { return }
+        guard let index1 = cellsNotAnimating.firstIndex(of: cell1) else { return }
         cellsNotAnimating.remove(at: index1)
         
         let cell2 = cellsNotAnimating[cellsNotAnimating.count.arc4random]
-        guard let index2 = cellsNotAnimating.index(of: cell2) else { return }
+        guard let index2 = cellsNotAnimating.firstIndex(of: cell2) else { return }
         cellsNotAnimating.remove(at: index2)
         
         let number1 = cell1.tag
@@ -285,7 +285,7 @@ extension GameViewController: CLLocationManagerDelegate {
         
         let cell = cellsNotAnimating[cellsNotAnimating.count.arc4random]
         
-        if let index = cellsNotAnimating.index(of: cell) {
+        if let index = cellsNotAnimating.firstIndex(of: cell) {
             cellsNotAnimating.remove(at: index)
         }
         
