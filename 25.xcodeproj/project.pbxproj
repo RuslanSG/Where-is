@@ -63,11 +63,8 @@
 		2A8F0991226519C000CF9A04 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2A9FB209220731D400E5E162 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 		2A9FB20A220731DA00E5E162 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
-		2A9FB20B220731E000E5E162 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Main.strings; sourceTree = "<group>"; };
 		2A9FB20D22074B3900E5E162 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2A9FB21022074B3900E5E162 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		2A9FB21222074B4B00E5E162 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		2A9FB21322074B4B00E5E162 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2AA03496215A84F100026648 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		2AA4BD46215D67BF005C8D32 /* TutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
 		2AA4BD48215D6F10005C8D32 /* FeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackView.swift; sourceTree = "<group>"; };
@@ -250,7 +247,7 @@
 						LastSwiftMigration = 1020;
 						SystemCapabilities = {
 							com.apple.Push = {
-								enabled = 1;
+								enabled = 0;
 							};
 						};
 					};
@@ -264,7 +261,6 @@
 				ru,
 				Base,
 				en,
-				uk,
 			);
 			mainGroup = 2A118DA7211A132F0059E252;
 			productRefGroup = 2A118DB1211A132F0059E252 /* Products */;
@@ -383,7 +379,6 @@
 				2A118DB8211A132F0059E252 /* Base */,
 				2A9FB209220731D400E5E162 /* en */,
 				2A9FB20A220731DA00E5E162 /* ru */,
-				2A9FB20B220731E000E5E162 /* uk */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -400,7 +395,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				2A9FB20D22074B3900E5E162 /* en */,
-				2A9FB21222074B4B00E5E162 /* uk */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -409,7 +403,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				2A9FB21022074B3900E5E162 /* en */,
-				2A9FB21322074B4B00E5E162 /* uk */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -538,7 +531,6 @@
 			baseConfigurationReference = 88725F259EA3F250A806BD5E /* Pods-25.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = 25/25.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 88X53XUV8A;
 				ENABLE_BITCODE = YES;
@@ -561,7 +553,6 @@
 			baseConfigurationReference = 5CA357FDB184547893460637 /* Pods-25.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = 25/25.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 88X53XUV8A;
 				ENABLE_BITCODE = YES;
