@@ -1,396 +1,75 @@
 //
-//  Engine.swift
-//  25
+//  Game.swift
+//  StackViewTest
 //
-//  Created by Ruslan Gritsenko on 08.08.2018.
-//  Copyright © 2018 Ruslan Gritsenko. All rights reserved.
+//  Created by Ruslan Gritsenko on 4/5/19.
+//  Copyright © 2019 Ruslan Gritsenko. All rights reserved.
 //
 
 import Foundation
-import Firebase
-
-protocol GameDelegate {
-    
-    func colorfulCellsModeStateChanged(to state: Bool)
-    func maxNumberChanged(to maxNumber: Int)
-    func levelChanged(to level: Int)
-    func timeIsOut()
-    
-}
 
 class Game {
     
-    // MARK: - Delegate
-    
-    var delegate: GameDelegate?
-    
-    // MARK: - Timer
-    
-    private var timer = Timer()
-    
-    // MARK: - Constants
-    
-    /// Level modes
-    private let levelsWithColorfulCellsMode = [2, 5, 7, 9, 10, 14, 18, 19, 20, 22, 24, 25, 26, 27, 28, 29, 30]
-    private let levelsWithShuffleColorsMode = [5, 9, 10, 18, 19, 20, 24, 25, 26, 27, 28, 29, 30]
-    private let levelsWithColorfulNumbersMode = [5, 9, 10, 18, 19, 20, 24, 25, 26, 27, 28, 29, 30]
-    
-    private let levelsWithWinkNumbersMode = [3, 10, 12, 16, 19, 20, 24, 25, 27, 28, 30]
-    private let levelsWithSwapNumbersMode = [8, 17, 23, 29]
-    private let levelsWithShuffleNumbersMode = [6, 13, 20, 21, 24, 28, 30]
-    
-    private let levelsWithInfinityMode = [0]
-   
-    /// Levels cell count
-    private let levelsWith25 = [1, 2, 3, 5, 6, 8, 10, 20]
-    private let levelsWith30 = [4, 7, 9, 12, 13, 17, 19, 24]
-    private let levelsWith35 = [11, 14, 16, 18, 21, 23, 25, 28]
-    private let levelsWith40 = [0, 15, 22, 26, 27, 29, 30]
-    
-    /// Goals dictionary: [level : goal(sec)]
-    private let goals = [0  : 5.0,
-                         1  : 27.5,
-                         2  : 34.0,
-                         3  : 35.5,
-                         4  : 37.5,
-                         5  : 40.0,
-                         6  : 43.0,
-                         7  : 43.5,
-                         8  : 45.5,
-                         9  : 51.5,
-                         10 : 52.0,
-                         11 : 53.0,
-                         12 : 54.0,
-                         13 : 55.0,
-                         14 : 59.5,
-                         15 : 62.5,
-                         16 : 63.0,
-                         17 : 63.0,
-                         18 : 68.0,
-                         19 : 68.0,
-                         20 : 70.0,
-                         21 : 70.5,
-                         22 : 75.0,
-                         23 : 77.0,
-                         24 : 85.0,
-                         25 : 95.0,
-                         26 : 95.5,
-                         27 : 129.0,
-                         28 : 136.5,
-                         29 : 142.0,
-                         30 : 167.0]
-    
-    /// Levels user can select
-//    var availableLevels: [Int] = [1, 2, 3]
-//    var availableLevels: [Int] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
-    private var availableLevels: [Int] {
-        set {
-            UserDefaults.standard.set(newValue, forKey: UserDefaults.Key.AvailableLevels)
-        }
-        get {
-            if let availableLevels = UserDefaults.standard.array(forKey: UserDefaults.Key.AvailableLevels) as? [Int] {
-                return availableLevels
-            } else {
-                return [1]
-            }
-        }
-    }
-    
-    let levelsToReqestReview = [12, 18, 25, 0]
-    
-    let minLevel = 0
-    let maxLevel = 30
-    
-    var level: Int {
-        didSet {
-            let colorfulCellModeOldValue = levelsWithColorfulCellsMode.contains(oldValue)
-            let maxNumberOldValue = maxNumber(for: oldValue)
-            
-            if colorfulCellsMode != colorfulCellModeOldValue {
-                delegate?.colorfulCellsModeStateChanged(to: colorfulCellsMode)
-            }
-            if maxNumber != maxNumberOldValue {
-                self.setNumbers(count: maxNumber)
-                delegate?.maxNumberChanged(to: maxNumber)
-            }
-            
-            delegate?.levelChanged(to: level)
-            
-            UserDefaults.standard.set(level, forKey: UserDefaults.Key.Level)
-        }
-    }
-    
-    var goal: Double {
-        guard let goal = goals[level] else { return 0.0 }
-        return goal
-    }
-    
-    var gamePassed: Bool {
-        set {
-            UserDefaults.standard.set(newValue, forKey: UserDefaults.Key.GamePassed)
-        }
-        get {
-            return UserDefaults.standard.bool(forKey: UserDefaults.Key.GamePassed)
-        }
-    }
-    
-    var fine = 0.0
-    let fineToAdd = 1.0
-    
-    var colums = 5
-    var rows: Int {
-        set {
-            setNumbers(count: maxNumber)
-        }
-        get {
-            return self.maxNumber / colums
-        }
-    }
-    
-    let maxPossibleNumber = 40
-    let minPossibleNumber = 25
-    
-    var maxNumber: Int {
-        return maxNumber(for: level)
-    }
-    
-    var infinityModeMaxNumber = 40
-    var infinityModeScore = 0
-    
-    var infinityModeRecord: Int {
-        set {
-            UserDefaults.standard.set(newValue, forKey: UserDefaults.Key.InfinityModeScoreRecord)
-        }
-        get {
-            let record = UserDefaults.standard.integer(forKey: UserDefaults.Key.InfinityModeScoreRecord)
-            return record
-        }
-    }
-    
-    var nextNumberToTap = 1
     var numbers = [Int]()
-    
-    private var startTime = TimeInterval()
-    private(set) var elapsedTime: Double!
-    
-    var inGame = false {
-        didSet {
-             NotificationCenter.default.post(
-                name: Notification.Name.InGameStateDidChange,
-                object: nil,
-                userInfo: [Notification.UserInfoKey.InGame : inGame]
-            )
-        }
+    var nextNumber = 1
+    var isRunning = false
+    var level: Level {
+        return levels[currentLevelIndex]
     }
     
-    private var attemptsCountArray: [Int] {
-        set {
-            UserDefaults.standard.set(newValue, forKey: UserDefaults.Key.AttemptsCount)
-        }
+    private var levels = [Level]()
+    private var maxLevel = 30
+    private var currentLevelIndex: Int {
         get {
-            if let array = UserDefaults.standard.array(forKey: UserDefaults.Key.AttemptsCount) as? [Int] {
-                return array
-            } else {
-                var initialArray = [Int]()
-                for _ in 0..<maxLevel {
-                    initialArray.append(0)
-                }
-                return initialArray
-            }
-            
+            return UserDefaults.standard.integer(forKey: UserDefaults.Key.levelIndex)
         }
-    }
-    
-    // MARK: - Game Modes
-    
-    var shuffleNumbersMode: Bool {
-        if self.levelsWithShuffleNumbersMode.contains(level) {
-            return true
+        set {
+            UserDefaults.standard.set(level, forKey: UserDefaults.Key.levelIndex)
         }
-        return false
-    }
-    
-    var colorfulNumbersMode: Bool {
-        if self.levelsWithColorfulNumbersMode.contains(level) {
-            return true
-        }
-        return false
-    }
-    
-    var winkNumbersMode: Bool {
-        if self.levelsWithWinkNumbersMode.contains(level) {
-            return true
-        }
-        return false
-    }
-    
-    var swapNumbersMode: Bool {
-        if self.levelsWithSwapNumbersMode.contains(level) {
-            return true
-        }
-        return false
-    }
-    
-    var colorfulCellsMode: Bool {
-        if self.levelsWithColorfulCellsMode.contains(level) {
-            return true
-        }
-        return false
-    }
-    
-    var shuffleColorsMode: Bool {
-        if self.levelsWithShuffleColorsMode.contains(level) {
-            return true
-        }
-        return false
-    }
-    
-    var infinityMode: Bool {
-        if self.levelsWithInfinityMode.contains(level) {
-            return true
-        }
-        return false
     }
     
     // MARK: - Initialization
     
     init() {
-        let level = UserDefaults.standard.integer(forKey: UserDefaults.Key.Level)
-        if let availableLevels = UserDefaults.standard.array(forKey: UserDefaults.Key.AvailableLevels) as? [Int] {
-            self.level = availableLevels.contains(level) ? level : 1
-        } else {
-            self.level = 1
-        }
-        
-        self.setNumbers(count: maxNumber)
+        setLevels()
+        setNumbers(count: level.numbers)
+        registerDefaults()
     }
     
-    // MARK: - Game Actions
+    // MARK: - Public Methods
     
     func numberSelected(_ number: Int) {
-        if number == nextNumberToTap {
-            nextNumberToTap += 1
-            /// Infinity Mode
-            if self.infinityMode {
-                infinityModeMaxNumber += 1
-                infinityModeScore += 1
-                /// Setting timer for Infinity Mode
-                timer.invalidate()
-                timer = Timer.scheduledTimer(
-                    timeInterval: TimeInterval(goal),
-                    target: self,
-                    selector: #selector(timerSceduled),
-                    userInfo: nil,
-                    repeats: false
-                )
-            }
-        } else {
-            self.fine += fineToAdd
-            let currentTime = Date.timeIntervalSinceReferenceDate
-            let passedTime = currentTime - startTime
-            let timeLeft = goal - passedTime - fine
-
-            /// Setting timer with fine
-            timer.invalidate()
-            timer = Timer.scheduledTimer(
-                timeInterval: TimeInterval(timeLeft),
-                target: self,
-                selector: #selector(timerSceduled),
-                userInfo: nil,
-                repeats: false
-            )
+        if number == nextNumber {
+            nextNumber += 1
         }
     }
     
-    func selectedNumberIsRight(_ number: Int) -> Bool {
-        return number == nextNumberToTap
-    }
-    
-    func goalAchieved() -> Bool {
-        guard let goalTime = goals[level] else { return true }
-        return elapsedTime < goalTime
+    func newGame(numbers: Int) {
+        setNumbers(count: numbers)
+        nextNumber = 1
+        isRunning = false
     }
     
     func startGame() {
-        inGame = true
-        startTime = Date.timeIntervalSinceReferenceDate
-        
-        infinityModeScore = 0
-        infinityModeMaxNumber = 40
-        
-        /// Setting timer
-        timer = Timer.scheduledTimer(
-                timeInterval: TimeInterval(goal),
-                target: self,
-                selector: #selector(timerSceduled),
-                userInfo: nil,
-                repeats: false
-        )
+        isRunning = true
     }
     
-    func finishGame(levelPassed: Bool) {
-        inGame = false
-        let finishTime = Date.timeIntervalSinceReferenceDate
-        elapsedTime = finishTime - startTime
-        timer.invalidate()
-        if levelPassed {
-            sendInfoToServer()
-        }
-    }
-    
-    func newGame() {
-        inGame = false
-        nextNumberToTap = 1
-        elapsedTime = 0.0
-        fine = 0.0
-        numbers.shuffle()
-        timer.invalidate()
+    func finishGame() {
+        isRunning = false
     }
     
     func shuffleNumbers() {
         numbers.shuffle()
     }
     
-    func openNextLevel() {
-        if level == 0 { return }
-        if level != maxLevel {
-            self.availableLevels.append(level + 1)
-        } else {
-            self.availableLevels.append(0)
-        }
+    func setLevel(_ levelIndex: Int) {
+        currentLevelIndex = levelIndex
     }
     
-    func changeLevel() {
-        if level == 0 { return }
-        if self.level == maxLevel {
-            level = 0
-        } else if self.availableLevels.contains(level + 1) {
-            level += 1
-        }
-    }
-    
-    func levelIsAvailable(_ level: Int) -> Bool {
-        return self.availableLevels.contains(level)
-    }
-    
-    // MARK: - Server
-    
-    private func sendInfoToServer() {
-        var attemptsCount = attemptsCountArray[level - 1]
-        if attemptsCount == 0 {
-            attemptsCount = 1
-        }
-        Analytics.logEvent("level_\(level)", parameters: ["attempts_count" : NSNumber(integerLiteral: attemptsCount)])
-        attemptsCountArray[level - 1] = 0
-    }
-    
-    private func sendInfoToServer(numbersFounded: Int) {
-        Analytics.logEvent("level_\(level)", parameters: ["numbers_founded" : NSNumber(integerLiteral: numbersFounded)])
-    }
-    
-    // MARK: - Helping Methods
+    // MARK: - Private Methods
     
     private func setNumbers(count: Int) {
+        if count <= 0 { return }
         numbers.removeAll()
         for i in 1...count {
             numbers.append(i)
@@ -398,29 +77,36 @@ class Game {
         numbers.shuffle()
     }
     
-    private func maxNumber(for level: Int) -> Int {
-        if levelsWith25.contains(level) {
-            return 25
-        } else if levelsWith30.contains(level) {
-            return 30
-        } else if levelsWith35.contains(level) {
-            return 35
-        } else if levelsWith40.contains(level) {
-            return 40
+    private func setLevels() {
+        let parameters = LevelParameters()
+        for i in 0...maxLevel {
+            let index = i
+            let numbersCount = parameters.numbersCountForLevel[i]!
+            let goal = parameters.goalForLevel[i]!
+            let colorsModeFor = (numbers: parameters.colorModeFor.numbersForLevel[i]!,
+                                 cells: parameters.colorModeFor.cellsForLevel[i]!)
+            let winkMode = parameters.winkModeForLevel[i]!
+            let swapMode = parameters.swapModeForLevel[i]!
+            let shuffleMode = parameters.shuffleModeForLevel[i]!
+            
+            let level = Level(index: index,
+                              numbersCount: numbersCount,
+                              goal: goal,
+                              colorModeFor: colorsModeFor,
+                              winkMode: winkMode,
+                              swapMode: swapMode,
+                              shuffleMode: shuffleMode)
+            
+            levels.append(level)
         }
-        return 0
     }
     
-    @objc private func timerSceduled() {
-        if level == 0 {
-            sendInfoToServer(numbersFounded: infinityModeScore)
-            if infinityModeScore > infinityModeRecord {
-                infinityModeRecord = infinityModeScore
-            }
-        } else {
-            attemptsCountArray[level - 1] += 1
-        }
-        delegate?.timeIsOut()
+    // MARK: - Helper Methods
+    
+    private func registerDefaults() {
+        let key = UserDefaults.Key.levelIndex
+        let dictionary: [String: Any] = [key: 1]
+        UserDefaults.standard.register(defaults: dictionary)
     }
     
 }

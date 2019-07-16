@@ -7,77 +7,51 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2A118DB4211A132F0059E252 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A118DB3211A132F0059E252 /* AppDelegate.swift */; };
-		2A118DB6211A132F0059E252 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A118DB5211A132F0059E252 /* GameViewController.swift */; };
 		2A118DB9211A132F0059E252 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2A118DB7211A132F0059E252 /* Main.storyboard */; };
-		2A118DBC211A132F0059E252 /* _5.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2A118DBA211A132F0059E252 /* _5.xcdatamodeld */; };
 		2A118DBE211A13300059E252 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2A118DBD211A13300059E252 /* Assets.xcassets */; };
 		2A118DC1211A13300059E252 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2A118DBF211A13300059E252 /* LaunchScreen.storyboard */; };
-		2A118DCA211A1BD50059E252 /* Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A118DC9211A1BD50059E252 /* Extentions.swift */; };
-		2A118DCC211AEB2A0059E252 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A118DCB211AEB2A0059E252 /* Game.swift */; };
-		2A118DCE211AEC100059E252 /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A118DCD211AEC100059E252 /* Grid.swift */; };
-		2A237940214C5CF00008FC2A /* Solar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A23793F214C5CF00008FC2A /* Solar.swift */; };
-		2A237942214E6E8A0008FC2A /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A237941214E6E8A0008FC2A /* Appearance.swift */; };
-		2A3279E721FCFFEC006AEA9F /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3279E621FCFFEC006AEA9F /* MessageView.swift */; };
-		2A3F693B21DFBA6C00DD5232 /* RGAnimatedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3F693A21DFBA6C00DD5232 /* RGAnimatedLabel.swift */; };
-		2A45DAB6216FC17E00FCB89C /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A45DAB5216FC17E00FCB89C /* Time.swift */; };
-		2A8C933D212197F70068F98E /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8C933C212197F70068F98E /* SettingsTableViewController.swift */; };
+		2A118DCA211A1BD50059E252 /* UIDevice+Info.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A118DC9211A1BD50059E252 /* UIDevice+Info.swift */; };
 		2A8F0992226519C000CF9A04 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2A8F0991226519C000CF9A04 /* GoogleService-Info.plist */; };
-		2A9FB20E22074B3900E5E162 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2A9FB20C22074B3900E5E162 /* InfoPlist.strings */; };
-		2A9FB21122074B3900E5E162 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2A9FB20F22074B3900E5E162 /* Localizable.strings */; };
-		2AA03497215A84F100026648 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA03496215A84F100026648 /* RootViewController.swift */; };
-		2AA4BD47215D67BF005C8D32 /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA4BD46215D67BF005C8D32 /* TutorialViewController.swift */; };
-		2AA4BD49215D6F10005C8D32 /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA4BD48215D6F10005C8D32 /* FeedbackView.swift */; };
-		2AAC1610212D94D00042D4A1 /* GameViewControllerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AAC160F212D94D00042D4A1 /* GameViewControllerHelper.swift */; };
-		2AAC1633213C04210042D4A1 /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AAC1632213C04210042D4A1 /* ResultsView.swift */; };
-		2AC2C4E7215FFB7500B07769 /* DarkModeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC2C4E6215FFB7500B07769 /* DarkModeTableViewController.swift */; };
-		2AC2C4E9215FFB8300B07769 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC2C4E8215FFB8300B07769 /* WelcomeViewController.swift */; };
-		2ACD857B22071F82006E5E7E /* GreetingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ACD857A22071F82006E5E7E /* GreetingViewController.swift */; };
 		2ACDF75C213D5B43004FEA1B /* FeedbackGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ACDF75B213D5B43004FEA1B /* FeedbackGenerator.swift */; };
-		2ACDF75E213F35B9004FEA1B /* StartGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ACDF75D213F35B9004FEA1B /* StartGameView.swift */; };
-		2AEEA946215284FA00AC7896 /* CellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEEA945215284FA00AC7896 /* CellView.swift */; };
-		2AF5792D216A36D900EB0423 /* Daytime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF5792C216A36D900EB0423 /* Daytime.swift */; };
-		2AF5792F216A4DC400EB0423 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF5792E216A4DC400EB0423 /* LocationManager.swift */; };
+		2AE841EA22DE38D800D724E0 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE841E922DE38D800D724E0 /* GameViewController.swift */; };
+		2AE841EC22DE394600D724E0 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE841EB22DE394600D724E0 /* SettingsViewController.swift */; };
+		2AE841F022DE398600D724E0 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE841EF22DE398600D724E0 /* Game.swift */; };
+		2AE841F222DE399400D724E0 /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE841F122DE399400D724E0 /* Level.swift */; };
+		2AE841F522DE39BA00D724E0 /* CellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE841F422DE39BA00D724E0 /* CellView.swift */; };
+		2AE841F722DE39DD00D724E0 /* StartGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE841F622DE39DD00D724E0 /* StartGameView.swift */; };
+		2AE841F922DE39F900D724E0 /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE841F822DE39F900D724E0 /* FeedbackView.swift */; };
+		2AE841FB22DE3A2600D724E0 /* CellsGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE841FA22DE3A2600D724E0 /* CellsGrid.swift */; };
+		2AE841FE22DE3ABC00D724E0 /* CellsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE841FD22DE3ABC00D724E0 /* CellsManager.swift */; };
+		2AE8420022DE3AD800D724E0 /* LevelParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE841FF22DE3AD800D724E0 /* LevelParameters.swift */; };
+		2AE8420222DE3AFB00D724E0 /* UserDefaults+Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE8420122DE3AFB00D724E0 /* UserDefaults+Key.swift */; };
+		2AE8420422DE3B0D00D724E0 /* UIColor+CellColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE8420322DE3B0D00D724E0 /* UIColor+CellColor.swift */; };
+		2AE8420722DE3BE900D724E0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE8420622DE3BE900D724E0 /* AppDelegate.swift */; };
 		7F705113E96C575DDF0B29E6 /* Pods_25.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69C4B541956BA2E70DD7D54D /* Pods_25.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2A002767216D1DC500969CB2 /* 25.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = 25.entitlements; sourceTree = "<group>"; };
 		2A118DB0211A132F0059E252 /* 25.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 25.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		2A118DB3211A132F0059E252 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		2A118DB5211A132F0059E252 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
-		2A118DB8211A132F0059E252 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		2A118DBB211A132F0059E252 /* _5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = _5.xcdatamodel; sourceTree = "<group>"; };
 		2A118DBD211A13300059E252 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		2A118DC0211A13300059E252 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2A118DC2211A13300059E252 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2A118DC9211A1BD50059E252 /* Extentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extentions.swift; sourceTree = "<group>"; };
-		2A118DCB211AEB2A0059E252 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
-		2A118DCD211AEC100059E252 /* Grid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
-		2A23793F214C5CF00008FC2A /* Solar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Solar.swift; sourceTree = "<group>"; };
-		2A237941214E6E8A0008FC2A /* Appearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; };
-		2A3279E621FCFFEC006AEA9F /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
-		2A3F693A21DFBA6C00DD5232 /* RGAnimatedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RGAnimatedLabel.swift; sourceTree = "<group>"; };
-		2A45DAB5216FC17E00FCB89C /* Time.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Time.swift; sourceTree = "<group>"; };
-		2A8C933C212197F70068F98E /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
+		2A118DC9211A1BD50059E252 /* UIDevice+Info.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Info.swift"; sourceTree = "<group>"; };
 		2A8F0991226519C000CF9A04 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		2A9FB209220731D400E5E162 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
-		2A9FB20A220731DA00E5E162 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
-		2A9FB20D22074B3900E5E162 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		2A9FB21022074B3900E5E162 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		2AA03496215A84F100026648 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
-		2AA4BD46215D67BF005C8D32 /* TutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
-		2AA4BD48215D6F10005C8D32 /* FeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackView.swift; sourceTree = "<group>"; };
-		2AAC160F212D94D00042D4A1 /* GameViewControllerHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewControllerHelper.swift; sourceTree = "<group>"; };
-		2AAC1632213C04210042D4A1 /* ResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsView.swift; sourceTree = "<group>"; };
-		2AC2C4E6215FFB7500B07769 /* DarkModeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkModeTableViewController.swift; sourceTree = "<group>"; };
-		2AC2C4E8215FFB8300B07769 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
-		2ACD857A22071F82006E5E7E /* GreetingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GreetingViewController.swift; sourceTree = "<group>"; };
 		2ACDF75B213D5B43004FEA1B /* FeedbackGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackGenerator.swift; sourceTree = "<group>"; };
-		2ACDF75D213F35B9004FEA1B /* StartGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartGameView.swift; sourceTree = "<group>"; };
-		2AEEA945215284FA00AC7896 /* CellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellView.swift; sourceTree = "<group>"; };
-		2AF5792C216A36D900EB0423 /* Daytime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Daytime.swift; sourceTree = "<group>"; };
-		2AF5792E216A4DC400EB0423 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		2AE841E622DE36CA00D724E0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
+		2AE841E722DE36CB00D724E0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		2AE841E922DE38D800D724E0 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		2AE841EB22DE394600D724E0 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		2AE841EF22DE398600D724E0 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
+		2AE841F122DE399400D724E0 /* Level.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
+		2AE841F422DE39BA00D724E0 /* CellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellView.swift; sourceTree = "<group>"; };
+		2AE841F622DE39DD00D724E0 /* StartGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartGameView.swift; sourceTree = "<group>"; };
+		2AE841F822DE39F900D724E0 /* FeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackView.swift; sourceTree = "<group>"; };
+		2AE841FA22DE3A2600D724E0 /* CellsGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellsGrid.swift; sourceTree = "<group>"; };
+		2AE841FD22DE3ABC00D724E0 /* CellsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellsManager.swift; sourceTree = "<group>"; };
+		2AE841FF22DE3AD800D724E0 /* LevelParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelParameters.swift; sourceTree = "<group>"; };
+		2AE8420122DE3AFB00D724E0 /* UserDefaults+Key.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Key.swift"; sourceTree = "<group>"; };
+		2AE8420322DE3B0D00D724E0 /* UIColor+CellColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+CellColor.swift"; sourceTree = "<group>"; };
+		2AE8420622DE3BE900D724E0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5CA357FDB184547893460637 /* Pods-25.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-25.release.xcconfig"; path = "Pods/Target Support Files/Pods-25/Pods-25.release.xcconfig"; sourceTree = "<group>"; };
 		69C4B541956BA2E70DD7D54D /* Pods_25.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_25.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		88725F259EA3F250A806BD5E /* Pods-25.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-25.debug.xcconfig"; path = "Pods/Target Support Files/Pods-25/Pods-25.debug.xcconfig"; sourceTree = "<group>"; };
@@ -117,15 +91,14 @@
 			isa = PBXGroup;
 			children = (
 				2A002767216D1DC500969CB2 /* 25.entitlements */,
-				2A7B6799214924F000AE9C7E /* Controllers */,
-				2A7B679A214924FC00AE9C7E /* Models */,
-				2A7B6798214924DE00AE9C7E /* Views */,
-				2A118DB7211A132F0059E252 /* Main.storyboard */,
+				2AE841EE22DE396B00D724E0 /* Models */,
+				2AE841F322DE39AC00D724E0 /* Views */,
+				2AE841ED22DE395700D724E0 /* Controllers */,
 				2A118DC8211A13450059E252 /* Supporting Files */,
+				2AE841FC22DE3A9B00D724E0 /* Extentions */,
+				2AE8420522DE3BCB00D724E0 /* Recources */,
 				2A118DC2211A13300059E252 /* Info.plist */,
 				2A8F0991226519C000CF9A04 /* GoogleService-Info.plist */,
-				2A9FB20F22074B3900E5E162 /* Localizable.strings */,
-				2A9FB20C22074B3900E5E162 /* InfoPlist.strings */,
 			);
 			path = 25;
 			sourceTree = "<group>";
@@ -133,64 +106,61 @@
 		2A118DC8211A13450059E252 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				2A118DB3211A132F0059E252 /* AppDelegate.swift */,
-				2AF5792C216A36D900EB0423 /* Daytime.swift */,
-				2A45DAB5216FC17E00FCB89C /* Time.swift */,
-				2AF5792E216A4DC400EB0423 /* LocationManager.swift */,
+				2AE841FA22DE3A2600D724E0 /* CellsGrid.swift */,
+				2AE841FD22DE3ABC00D724E0 /* CellsManager.swift */,
+				2AE841FF22DE3AD800D724E0 /* LevelParameters.swift */,
 				2ACDF75B213D5B43004FEA1B /* FeedbackGenerator.swift */,
-				2A118DCD211AEC100059E252 /* Grid.swift */,
-				2A23793F214C5CF00008FC2A /* Solar.swift */,
-				2A118DC9211A1BD50059E252 /* Extentions.swift */,
-				2A118DBD211A13300059E252 /* Assets.xcassets */,
-				2A118DBF211A13300059E252 /* LaunchScreen.storyboard */,
-				2A118DBA211A132F0059E252 /* _5.xcdatamodeld */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		2A7B6798214924DE00AE9C7E /* Views */ = {
+		2AE841ED22DE395700D724E0 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				2AAC1632213C04210042D4A1 /* ResultsView.swift */,
-				2AA4BD48215D6F10005C8D32 /* FeedbackView.swift */,
-				2ACDF75D213F35B9004FEA1B /* StartGameView.swift */,
-				2A3279E621FCFFEC006AEA9F /* MessageView.swift */,
-				2AEEA945215284FA00AC7896 /* CellView.swift */,
-				2A3F693A21DFBA6C00DD5232 /* RGAnimatedLabel.swift */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		2A7B6799214924F000AE9C7E /* Controllers */ = {
-			isa = PBXGroup;
-			children = (
-				2A118DB5211A132F0059E252 /* GameViewController.swift */,
-				2AAC160F212D94D00042D4A1 /* GameViewControllerHelper.swift */,
-				2A8C933C212197F70068F98E /* SettingsTableViewController.swift */,
-				2AA03498215A84FA00026648 /* User Guide Controllers */,
+				2AE841E922DE38D800D724E0 /* GameViewController.swift */,
+				2AE841EB22DE394600D724E0 /* SettingsViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
 		};
-		2A7B679A214924FC00AE9C7E /* Models */ = {
+		2AE841EE22DE396B00D724E0 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				2A118DCB211AEB2A0059E252 /* Game.swift */,
-				2A237941214E6E8A0008FC2A /* Appearance.swift */,
+				2AE841EF22DE398600D724E0 /* Game.swift */,
+				2AE841F122DE399400D724E0 /* Level.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
 		};
-		2AA03498215A84FA00026648 /* User Guide Controllers */ = {
+		2AE841F322DE39AC00D724E0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				2AA03496215A84F100026648 /* RootViewController.swift */,
-				2ACD857A22071F82006E5E7E /* GreetingViewController.swift */,
-				2AA4BD46215D67BF005C8D32 /* TutorialViewController.swift */,
-				2AC2C4E6215FFB7500B07769 /* DarkModeTableViewController.swift */,
-				2AC2C4E8215FFB8300B07769 /* WelcomeViewController.swift */,
+				2AE841F422DE39BA00D724E0 /* CellView.swift */,
+				2AE841F622DE39DD00D724E0 /* StartGameView.swift */,
+				2AE841F822DE39F900D724E0 /* FeedbackView.swift */,
 			);
-			path = "User Guide Controllers";
+			path = Views;
+			sourceTree = "<group>";
+		};
+		2AE841FC22DE3A9B00D724E0 /* Extentions */ = {
+			isa = PBXGroup;
+			children = (
+				2A118DC9211A1BD50059E252 /* UIDevice+Info.swift */,
+				2AE8420122DE3AFB00D724E0 /* UserDefaults+Key.swift */,
+				2AE8420322DE3B0D00D724E0 /* UIColor+CellColor.swift */,
+			);
+			path = Extentions;
+			sourceTree = "<group>";
+		};
+		2AE8420522DE3BCB00D724E0 /* Recources */ = {
+			isa = PBXGroup;
+			children = (
+				2AE8420622DE3BE900D724E0 /* AppDelegate.swift */,
+				2A118DB7211A132F0059E252 /* Main.storyboard */,
+				2A118DBD211A13300059E252 /* Assets.xcassets */,
+				2A118DBF211A13300059E252 /* LaunchScreen.storyboard */,
+			);
+			path = Recources;
 			sourceTree = "<group>";
 		};
 		2FC3AAF029933E8E0930FFF5 /* Pods */ = {
@@ -255,12 +225,11 @@
 			};
 			buildConfigurationList = 2A118DAB211A132F0059E252 /* Build configuration list for PBXProject "25" */;
 			compatibilityVersion = "Xcode 9.3";
-			developmentRegion = ru;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				ru,
-				Base,
 				en,
+				Base,
 			);
 			mainGroup = 2A118DA7211A132F0059E252;
 			productRefGroup = 2A118DB1211A132F0059E252 /* Products */;
@@ -278,10 +247,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				2A118DC1211A13300059E252 /* LaunchScreen.storyboard in Resources */,
-				2A9FB21122074B3900E5E162 /* Localizable.strings in Resources */,
 				2A118DBE211A13300059E252 /* Assets.xcassets in Resources */,
 				2A118DB9211A132F0059E252 /* Main.storyboard in Resources */,
-				2A9FB20E22074B3900E5E162 /* InfoPlist.strings in Resources */,
 				2A8F0992226519C000CF9A04 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -342,31 +309,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2AA03497215A84F100026648 /* RootViewController.swift in Sources */,
-				2AA4BD47215D67BF005C8D32 /* TutorialViewController.swift in Sources */,
-				2A118DBC211A132F0059E252 /* _5.xcdatamodeld in Sources */,
-				2ACD857B22071F82006E5E7E /* GreetingViewController.swift in Sources */,
-				2A3F693B21DFBA6C00DD5232 /* RGAnimatedLabel.swift in Sources */,
-				2AAC1633213C04210042D4A1 /* ResultsView.swift in Sources */,
-				2A118DB6211A132F0059E252 /* GameViewController.swift in Sources */,
-				2A237940214C5CF00008FC2A /* Solar.swift in Sources */,
-				2AF5792F216A4DC400EB0423 /* LocationManager.swift in Sources */,
-				2A237942214E6E8A0008FC2A /* Appearance.swift in Sources */,
-				2AA4BD49215D6F10005C8D32 /* FeedbackView.swift in Sources */,
-				2AAC1610212D94D00042D4A1 /* GameViewControllerHelper.swift in Sources */,
-				2AEEA946215284FA00AC7896 /* CellView.swift in Sources */,
-				2A3279E721FCFFEC006AEA9F /* MessageView.swift in Sources */,
-				2A45DAB6216FC17E00FCB89C /* Time.swift in Sources */,
-				2AC2C4E9215FFB8300B07769 /* WelcomeViewController.swift in Sources */,
-				2A118DCA211A1BD50059E252 /* Extentions.swift in Sources */,
-				2AF5792D216A36D900EB0423 /* Daytime.swift in Sources */,
-				2AC2C4E7215FFB7500B07769 /* DarkModeTableViewController.swift in Sources */,
-				2A118DB4211A132F0059E252 /* AppDelegate.swift in Sources */,
-				2ACDF75E213F35B9004FEA1B /* StartGameView.swift in Sources */,
-				2A118DCC211AEB2A0059E252 /* Game.swift in Sources */,
+				2AE841F222DE399400D724E0 /* Level.swift in Sources */,
+				2AE841F722DE39DD00D724E0 /* StartGameView.swift in Sources */,
+				2AE841F922DE39F900D724E0 /* FeedbackView.swift in Sources */,
+				2AE8420722DE3BE900D724E0 /* AppDelegate.swift in Sources */,
+				2AE8420422DE3B0D00D724E0 /* UIColor+CellColor.swift in Sources */,
+				2A118DCA211A1BD50059E252 /* UIDevice+Info.swift in Sources */,
+				2AE841F022DE398600D724E0 /* Game.swift in Sources */,
+				2AE8420222DE3AFB00D724E0 /* UserDefaults+Key.swift in Sources */,
+				2AE841FE22DE3ABC00D724E0 /* CellsManager.swift in Sources */,
+				2AE841FB22DE3A2600D724E0 /* CellsGrid.swift in Sources */,
+				2AE841EA22DE38D800D724E0 /* GameViewController.swift in Sources */,
+				2AE8420022DE3AD800D724E0 /* LevelParameters.swift in Sources */,
 				2ACDF75C213D5B43004FEA1B /* FeedbackGenerator.swift in Sources */,
-				2A118DCE211AEC100059E252 /* Grid.swift in Sources */,
-				2A8C933D212197F70068F98E /* SettingsTableViewController.swift in Sources */,
+				2AE841EC22DE394600D724E0 /* SettingsViewController.swift in Sources */,
+				2AE841F522DE39BA00D724E0 /* CellView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -376,9 +333,7 @@
 		2A118DB7211A132F0059E252 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				2A118DB8211A132F0059E252 /* Base */,
-				2A9FB209220731D400E5E162 /* en */,
-				2A9FB20A220731DA00E5E162 /* ru */,
+				2AE841E622DE36CA00D724E0 /* en */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -386,25 +341,9 @@
 		2A118DBF211A13300059E252 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				2A118DC0211A13300059E252 /* Base */,
+				2AE841E722DE36CB00D724E0 /* en */,
 			);
 			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-		2A9FB20C22074B3900E5E162 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				2A9FB20D22074B3900E5E162 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		2A9FB20F22074B3900E5E162 /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				2A9FB21022074B3900E5E162 /* en */,
-			);
-			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -536,11 +475,12 @@
 				ENABLE_BITCODE = YES;
 				GCC_OPTIMIZATION_LEVEL = s;
 				INFOPLIST_FILE = 25/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ruslangritsenko.-25";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -558,11 +498,12 @@
 				ENABLE_BITCODE = YES;
 				GCC_OPTIMIZATION_LEVEL = s;
 				INFOPLIST_FILE = 25/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ruslangritsenko.-25";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -592,19 +533,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		2A118DBA211A132F0059E252 /* _5.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				2A118DBB211A132F0059E252 /* _5.xcdatamodel */,
-			);
-			currentVersion = 2A118DBB211A132F0059E252 /* _5.xcdatamodel */;
-			path = _5.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 2A118DA8211A132F0059E252 /* Project object */;
 }

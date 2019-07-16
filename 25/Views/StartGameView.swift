@@ -1,32 +1,52 @@
 //
-//  MessageView.swift
-//  25
+//  StartView.swift
+//  StackViewTest
 //
-//  Created by Ruslan Gritsenko on 05.09.2018.
-//  Copyright © 2018 Ruslan Gritsenko. All rights reserved.
+//  Created by Ruslan Gritsenko on 4/9/19.
+//  Copyright © 2019 Ruslan Gritsenko. All rights reserved.
 //
 
 import UIKit
 
 class StartGameView: UIVisualEffectView {
-
+    
+    private enum Strings {
+        static let startButtonText = NSLocalizedString("Start", comment: "Start gmae button")
+        static let goalText = NSLocalizedString("Time: ", comment: "Time given to find all of the numbers")
+    }
+    
+    enum Style {
+        case lightWithBlackText
+        case lightWithWhiteText
+        case darkWithWhiteText
+    }
+    
+    private var goal: Double
+    private var animator = UIViewPropertyAnimator()
+    private var blur: UIBlurEffect! {
+        didSet {
+            effect = blur
+        }
+    }
+    
+    var heightConstraint: NSLayoutConstraint?
+    var widthConstraint: NSLayoutConstraint?
+    
     let titleLabel: UILabel = {
         let label = UILabel()
+        label.text = Strings.startButtonText
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
-        label.alpha = 0.0
         return label
     }()
     
-    let detailLabel: UILabel = {
+    lazy var detailLabel: UILabel = {
         let label = UILabel()
+        label.text = Strings.goalText + String(format: "%.2f", goal)
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
-        label.alpha = 0.0
         return label
     }()
-    
-    var blur = UIBlurEffect()
     
     lazy var stackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [titleLabel, detailLabel])
@@ -37,21 +57,22 @@ class StartGameView: UIVisualEffectView {
         return stackView
     }()
     
-    init() {
+    init(goal: Double, style: StartGameView.Style) {
+        self.goal = goal
         super.init(effect: nil)
-
         setupInputComponents()
+        setStyle(style)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Actions
-    
-    private var animator = UIViewPropertyAnimator()
+    // MARK: - Public Methods
     
     func show() {
+        if !isHidden { return }
+        isHidden = false
         let duration = 0.5
         animator.stopAnimation(true)
         animator = UIViewPropertyAnimator(
@@ -65,7 +86,8 @@ class StartGameView: UIVisualEffectView {
         animator.startAnimation()
     }
     
-    @objc public func hide() {
+    func hide() {
+        if isHidden { return }
         let duration = 0.15
         animator.stopAnimation(true)
         animator = UIViewPropertyAnimator(
@@ -77,21 +99,39 @@ class StartGameView: UIVisualEffectView {
                 self.detailLabel.alpha = 0.0
         })
         animator.addCompletion { (_) in
-            self.removeFromSuperview()
+            self.isHidden = true
         }
         animator.startAnimation()
     }
     
-    // MARK: - Helping Methods
+    func setStyle(_ style: StartGameView.Style) {
+        let blurStyle: UIBlurEffect.Style
+        let textColor: UIColor
+        
+        switch style {
+        case .lightWithBlackText:
+            blurStyle = .light
+            textColor = .black
+        case .lightWithWhiteText:
+            blurStyle = .light
+            textColor = .white
+        case .darkWithWhiteText:
+            blurStyle = .dark
+            textColor = .white
+        }
+        
+        self.blur = UIBlurEffect(style: blurStyle)
+        titleLabel.textColor = textColor
+        detailLabel.textColor = textColor
+    }
+    
+    // MARK: - Private Methods
     
     private func setupInputComponents() {
         contentView.addSubview(stackView)
-        
-        /// Stack view constraints
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        let stackViewHorizontalConstraint = stackView.centerXAnchor.constraint(equalTo: self.centerXAnchor)
-        let stackViewVerticalConstraint = stackView.centerYAnchor.constraint(equalTo: self.centerYAnchor)
-        NSLayoutConstraint.activate([stackViewHorizontalConstraint, stackViewVerticalConstraint])
+        stackView.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor).isActive = true
+        stackView.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive = true
     }
     
 }

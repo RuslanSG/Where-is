@@ -1,369 +1,298 @@
 //
 //  CellView.swift
-//  25
+//  StackViewTest
 //
-//  Created by Ruslan Gritsenko on 19.09.2018.
-//  Copyright © 2018 Ruslan Gritsenko. All rights reserved.
+//  Created by Ruslan Gritsenko on 4/5/19.
+//  Copyright © 2019 Ruslan Gritsenko. All rights reserved.
 //
 
 import UIKit
 
 class CellView: UIButton {
     
-    private enum ViewConstants {
-        static let CompressionRatio: CGFloat = 0.90
+    enum Style {
+        case defaultWithWhiteNumber
+        case defaultWithBlackNumber
+        case colorfulWithWhiteNumber
+        case colorfulWithColorfulNumber
     }
     
-    var number = "?"
-    var inset: CGFloat = 0.0
+    enum AnimationSpeed {
+        case slow
+        case fast
+    }
     
-    private var cellFrameX: CGFloat?
-    private var cellFrameY: CGFloat?
-    private var cellFrameHeight: CGFloat?
-    private var cellFrameWidth: CGFloat?
+    var isAnimating = false
+    var number = 0
     
-    private var numberFeedback = true
-    private var inGame = false
+    private enum NumberState {
+        case visible
+        case invisible
+        case appearing
+        case disappearing
+    }
     
-    private lazy var cellView: UIView = {
+    private var disappearingAnimator: UIViewPropertyAnimator?
+    private var appearingAnimator: UIViewPropertyAnimator?
+    private var settingAnimator: UIViewPropertyAnimator?
+    
+    private var cellView: UIView = {
         let view = UIView()
         view.isUserInteractionEnabled = false
         return view
     }()
     
-    var disappearingWinkAnimator = UIViewPropertyAnimator()
-    var appearingWinkAnimator = UIViewPropertyAnimator()
-    var setAnimator = UIViewPropertyAnimator()
-    
-    private let feedbackGenerator = FeedbackGenerator()
-    
-    enum WinkPhase {
-        case disappearing
-        case disappeared
-        case appearing
-    }
-    
-    var winkPhase: WinkPhase?
+    private var inset: CGFloat
+    private var numberState: NumberState = .visible
     
     // MARK: - Initialization
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
-    init(frame: CGRect, inset: CGFloat) {
-        super.init(frame: frame)
-        
+    init(inset: CGFloat) {
         self.inset = inset
-        
-        setupInputComponents()
-
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(inGameStateDidChange(notification:)),
-            name: Notification.Name.InGameStateDidChange,
-            object: nil
-        )
+        super.init(frame: .zero)
+        setupUI()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
+    // MARK: - Public Methods
     
-    // MARK: - Notifications
-    
-    @objc private func inGameStateDidChange(notification: Notification) {
-        if let userInfo = notification.userInfo, let inGame = userInfo[Notification.UserInfoKey.InGame] as? Bool {
-            self.inGame = inGame
+    func setNumber(_ number: Int, animated: Bool, speed: CellView.AnimationSpeed = .fast) {
+        self.number = number
+        
+        if !animated && !isAnimating {
+            setTitle(String(number), for: .normal)
+            return
         }
+        
+        let duranion1: Double
+        let duration2: Double
+        
+        switch speed {
+        case .slow:
+            duranion1 = 0.3
+            duration2 = 0.6
+        case .fast:
+            duranion1 = 0.1
+            duration2 = 0.3
+        }
+        
+        let easeIn = UICubicTimingParameters(animationCurve: .easeIn)
+        let easeOut = UICubicTimingParameters(animationCurve: .easeOut)
+        
+        let animator1 = UIViewPropertyAnimator(duration: duranion1, timingParameters: easeIn)
+        let animator2 = UIViewPropertyAnimator(duration: duration2, timingParameters: easeOut)
+        
+        animator1.addAnimations {
+            self.titleLabel?.alpha = 0.0
+        }
+        
+        animator1.addCompletion { (_) in
+            self.setTitle(String(number), for: .normal)
+            if self.numberState != .invisible && self.isAnimating {
+                self.settingAnimator = animator2
+                self.settingAnimator?.startAnimation()
+            } else {
+                self.isAnimating = false
+            }
+        }
+        
+        animator2.addAnimations {
+            self.titleLabel?.alpha = 1.0
+        }
+        
+        animator2.addCompletion { (_) in
+            self.numberState = .visible
+            self.isAnimating = false
+            self.settingAnimator = nil
+        }
+        
+        switch numberState {
+        case .disappearing:
+            disappearingAnimator?.stopAnimation(false)
+            disappearingAnimator?.finishAnimation(at: .current)
+        case .invisible:
+            setTitle(String(number), for: .normal)
+        case .appearing:
+            appearingAnimator?.stopAnimation(false)
+            if appearingAnimator?.state == .stopped {
+                appearingAnimator?.finishAnimation(at: .current)
+            }
+        default:
+            break
+        }
+        
+        settingAnimator = animator1
+        settingAnimator?.startAnimation()
+        isAnimating = true
     }
     
-}
-
-extension CellView {
+    func setStyle(_ style: CellView.Style, animated: Bool) {
+        let cellColors: [UIColor] = [.cellBlue, .cellTurquoise, .cellGreen]
+        var numberColors: [UIColor] = [.numberBlue, .numberTurquoise, .numberGreen]
+        
+        let newCellColor: UIColor
+        let newNumberColor: UIColor
+        
+        switch style {
+        case .defaultWithWhiteNumber:
+            newCellColor = .cellGrey
+            newNumberColor = .white
+        case .defaultWithBlackNumber:
+            newCellColor = .cellGrey
+            newNumberColor = .black
+        case .colorfulWithWhiteNumber:
+            newCellColor = cellColors[Int.random(in: cellColors.indices)]
+            newNumberColor = .white
+        case .colorfulWithColorfulNumber:
+            newCellColor = cellColors[Int.random(in: cellColors.indices)]
+            let index = cellColors.firstIndex(of: newCellColor)!
+            numberColors.remove(at: index)
+            newNumberColor = numberColors[Int.random(in: numberColors.indices)]
+        }
+        
+        if !animated {
+            cellView.backgroundColor = newCellColor
+            self.setTitleColor(newNumberColor, for: .normal)
+            return
+        }
+        
+        UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.2,
+                                                       delay: 0,
+                                                       options: .curveEaseOut,
+                                                       animations: {
+                                                        self.cellView.backgroundColor = newCellColor
+                                                        self.setTitleColor(newNumberColor, for: .normal)
+        })
+    }
     
-    // MARK: - Cell
+    func setCornerRadius(cornerRadius: CGFloat) {
+        cellView.layer.cornerRadius = cornerRadius
+    }
     
-    func compress(numberFeedback: Bool) {
-        self.numberFeedback = numberFeedback
+    func showNumber(animated: Bool) {
+        isEnabled = true
         
-        cellFrameX = self.frame.minX
-        cellFrameY = self.frame.minY
-        cellFrameWidth = self.frame.width
-        cellFrameHeight = self.frame.height
+        if !animated {
+            titleLabel?.alpha = 1.0
+            numberState = .visible
+            return
+        }
         
-        let compressionRatio = ViewConstants.CompressionRatio
+        numberState = .appearing
         
-        let newCellFrameX = self.frame.minX + self.frame.width * CGFloat(1 - compressionRatio) / 2
-        let newCellFrameY = self.frame.minY + self.frame.height * CGFloat(1 - compressionRatio) / 2
-        let newCellFrameWidth = self.frame.width * CGFloat(compressionRatio)
-        let newCellFrameHeight = self.frame.height * CGFloat(compressionRatio)
-        
-        let duration: Double = 0.05
+        let duration: Double = 0.2
         let delay: Double = 0.0
         
         UIViewPropertyAnimator.runningPropertyAnimator(
             withDuration: duration,
             delay: delay,
-            options: [],
+            options: .curveEaseIn,
             animations: {
-                self.frame = CGRect(
-                    x: newCellFrameX,
-                    y: newCellFrameY,
-                    width: newCellFrameWidth,
-                    height: newCellFrameHeight
-                )
-                if self.numberFeedback {
-                    self.titleLabel?.alpha = 0.2
-                }
+                self.titleLabel?.alpha = 1.0
+        }, completion: { (_) in
+            self.numberState = .visible
         })
-        
-        /// Plays selection haptic feedback (only on devices with Haptic Feedback)
-        feedbackGenerator.playSelectionHapticFeedback()
-    }
-    
-    func uncompress(hapticFeedback: Bool? = nil, hiddenNumber: Bool = false) {
-        let duration: Double = 0.4
-        let delay: Double = 0.0
-        
-        if  let cellFrameX = self.cellFrameX,
-            let cellFrameY = self.cellFrameY,
-            let cellFrameWidth = self.cellFrameWidth,
-            let cellFrameHeight = self.cellFrameHeight {
-            UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: duration,
-                delay: delay,
-                options: .curveEaseOut,
-                animations: {
-                    self.frame = CGRect(
-                        x: cellFrameX,
-                        y: cellFrameY,
-                        width: cellFrameWidth,
-                        height: cellFrameHeight
-                    )
-                    if self.numberFeedback && !hiddenNumber {
-                        self.titleLabel?.alpha = 1.0
-                    }
-            })
-            self.cellFrameX = nil
-            self.cellFrameY = nil
-            self.cellFrameWidth = nil
-            self.cellFrameHeight = nil
-        }
-        
-        /// If user tapped right number it plays selection haptic feedback (only on devices with Haptic Feedback) otherwise it plays error haptic feedback
-        if let hapticFeedback = hapticFeedback {
-            if hapticFeedback {
-                self.feedbackGenerator.playSelectionHapticFeedback()
-            } else {
-                self.feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .error)
-            }
-        }
-    }
-    
-    func setBackgroundColor(to color: UIColor, animated: Bool) {
-        let duration: Double = 0.2
-        let delay: Double = 0.0
-        
-        if animated {
-            UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: duration,
-                delay: delay,
-                options: [],
-                animations: {
-                    self.cellView.backgroundColor = color
-            })
-        } else {
-            self.cellView.backgroundColor = color
-        }
-    }
-    
-    func setCornerRadius(to cornerRadius: CGFloat) {
-        self.cellView.layer.cornerRadius = cornerRadius
-    }
-    
-    // MARK: - Number
-    
-    func showNumber(animated: Bool) {
-        self.isEnabled = true
-
-        if animated {
-            let duration: Double = 0.2
-            let delay: Double = 0.0
-            
-            UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: duration,
-                delay: delay,
-                options: .curveEaseIn,
-                animations: {
-                    self.titleLabel?.alpha = 1.0
-            })
-        } else {
-            self.titleLabel?.alpha = 1.0
-        }
     }
     
     func hideNumber(animated: Bool) {
-        self.isEnabled = false
+        isEnabled = false
         
-        if animated {
-            let duration = 0.2
-            let delay = 0.0
-            
-            UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: duration,
-                delay: delay,
-                options: .curveEaseIn,
-                animations: {
-                    self.titleLabel?.alpha = 0.0
-            })
-        } else {
+        if !animated {
+            titleLabel?.alpha = 0.0
+            numberState = .invisible
+            return
+        }
+        
+        numberState = .disappearing
+        
+        let duration = 0.2
+        let delay = 0.0
+        
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: duration,
+            delay: delay,
+            options: .curveEaseIn,
+            animations: {
+                self.titleLabel?.alpha = 0.0
+        }, completion: { _ in
+            self.numberState = .invisible
+        })
+    }
+    
+    func wink() {
+        let easeIn = UICubicTimingParameters(animationCurve: .easeIn)
+        let easeOut = UICubicTimingParameters(animationCurve: .easeOut)
+        
+        disappearingAnimator = UIViewPropertyAnimator(duration: 0.7, timingParameters: easeIn)
+        
+        disappearingAnimator?.addAnimations {
             self.titleLabel?.alpha = 0.0
         }
-    }
-    
-    func winkNumber(completion: (() -> Void)?) {
-        if  self.disappearingWinkAnimator.state != .stopped &&
-            self.appearingWinkAnimator.state != .stopped &&
-            !self.setAnimator.isRunning {
-            let duration = 1.0
-            let delay = 1.0
-            let timing = UICubicTimingParameters(animationCurve: .easeInOut)
-            
-            /// Disappearing animation
-            self.disappearingWinkAnimator = UIViewPropertyAnimator(duration: duration, timingParameters: timing)
-            
-            self.disappearingWinkAnimator.addAnimations {
-                self.titleLabel?.alpha = 0.0
-            }
-            
-            self.disappearingWinkAnimator.addCompletion { (_) in
-                /// Appearing animation
-                self.appearingWinkAnimator = UIViewPropertyAnimator(duration: duration, timingParameters: timing)
-                
-                self.appearingWinkAnimator.addAnimations {
-                    self.titleLabel?.alpha = 1.0
-                }
-                
-                self.appearingWinkAnimator.addCompletion { (_) in
-                    self.winkPhase = nil
-                    guard let completion = completion else { return }
-                    completion()
-                }
-                
-                self.winkPhase = .disappeared
-                
-                self.appearingWinkAnimator.startAnimation(afterDelay: 1.0)
-                DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
-                    self.winkPhase = .appearing
-                })
-            }
-            self.disappearingWinkAnimator.startAnimation()
-            self.winkPhase = .disappearing
-        } else {
-            guard let completion = completion else { return }
-            completion()
-        }
-    }
-    
-    func setNumber(_ number: Int, animated: Bool) {
-        self.tag = number
-        if animated {
-            let durationIn = 0.1
-            let durationOut = 0.4
-            let timing = UICubicTimingParameters(animationCurve: .easeOut)
-            
-            /// Disappearing animation
-            self.setAnimator = UIViewPropertyAnimator(duration: durationIn, timingParameters: timing)
-            
-            self.setAnimator.addAnimations {
-                self.titleLabel?.alpha = 0.0
-            }
-            
-            self.setAnimator.addCompletion { (_) in
-                self.setTitle(String(number), for: .normal)
-                
-                /// Appearing animation
-                self.setAnimator = UIViewPropertyAnimator(duration: durationOut, timingParameters: timing)
-                
-                self.setAnimator.addAnimations {
-                    self.titleLabel?.alpha = 1.0
-                }
-                
-                self.setAnimator.addCompletion({ (_) in
-                    if self.appearingWinkAnimator.state == .stopped {
-                        self.appearingWinkAnimator.finishAnimation(at: .end)
-                    }
-                })
-                
-                switch self.winkPhase {
-                case .disappearing?:
-                    self.disappearingWinkAnimator.finishAnimation(at: .end)
-                case .appearing?:
-                    self.setAnimator.startAnimation()
-                case nil:
-                    self.setAnimator.startAnimation()
-                default:
-                    break
-                }
-                
-            }
-            
-            if self.winkPhase == .disappeared {
-                self.setTitle(String(number), for: .normal)
-                self.tag = number
-                return
-            } else if self.disappearingWinkAnimator.state == .active, self.disappearingWinkAnimator.isRunning {
-                self.disappearingWinkAnimator.stopAnimation(false)
-            } else if self.appearingWinkAnimator.state == .active, self.appearingWinkAnimator.isRunning {
-                self.appearingWinkAnimator.stopAnimation(false)
-            }
-            self.setAnimator.startAnimation()
-        } else {
-            self.setTitle(String(number), for: .normal)
-        }
-    }
-    
-    func setNumberColor(to color: UIColor, animated: Bool) {
-        let duration: Double = 0.2
-        let delay: Double = 0.0
         
-        if animated {
-            UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: duration,
-                delay: delay,
-                options: .curveEaseInOut,
-                animations: {
-                    self.setTitleColor(color, for: .normal)
+        disappearingAnimator?.addCompletion { (_) in
+            /// Phase 2 (invisible)
+            self.numberState = .invisible
+            if !self.isAnimating { return }
+            /// Phase 3 (appearing)
+            let delay = 2.0
+            self.appearingAnimator?.startAnimation(afterDelay: delay)
+            self.isAnimating = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
+                self.numberState = .appearing
             })
-        } else {
-            self.setTitleColor(color, for: .normal)
         }
+        
+        appearingAnimator = UIViewPropertyAnimator(duration: 0.7, timingParameters: easeOut)
+        
+        appearingAnimator?.addAnimations {
+            self.titleLabel?.alpha = 1.0
+        }
+        
+        appearingAnimator?.addCompletion { (_) in
+            /// Final (visible)
+            self.numberState = .visible
+            self.isAnimating = false
+        }
+        
+        if isAnimating { return }
+        /// Phase 1 (disappearing)
+        disappearingAnimator?.startAnimation()
+        isAnimating = true
+        numberState = .disappearing
     }
-}
-
-extension CellView {
-    // MARK: - Helping Methods
     
-    private func setupInputComponents() {
-        self.addSubview(cellView)
+    func stopAnimations() {
+        isAnimating = false
         
-        self.backgroundColor = .clear
+        appearingAnimator?.stopAnimation(false)
+        disappearingAnimator?.stopAnimation(false)
+        settingAnimator?.stopAnimation(false)
         
-        self.titleLabel?.textAlignment = .center
-        self.titleLabel?.alpha = 0.0
+        appearingAnimator?.finishAnimation(at: .end)
+        disappearingAnimator?.finishAnimation(at: .end)
+        settingAnimator?.finishAnimation(at: .end)
         
-        // cellView constraints
-        self.cellView.translatesAutoresizingMaskIntoConstraints = false
-        let cellViewTopConstraint = cellView.topAnchor.constraint(equalTo: self.topAnchor, constant: inset)
-        let cellViewBottomConstraint = cellView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -inset)
-        let cellViewTrailingConstraint = cellView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -inset)
-        let cellViewLeadingConstraint = cellView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: inset)
-        NSLayoutConstraint.activate([cellViewTopConstraint, cellViewBottomConstraint, cellViewTrailingConstraint, cellViewLeadingConstraint])
+        appearingAnimator = nil
+        disappearingAnimator = nil
+        settingAnimator = nil
     }
+    
+    // MARK: - Private Methods
+    
+    private func setupUI() {
+        self.addSubview(cellView)
+        self.backgroundColor = .clear
+        self.titleLabel?.textAlignment = .center
+        
+        cellView.translatesAutoresizingMaskIntoConstraints = false
+        cellView.topAnchor.constraint(equalTo: self.topAnchor, constant: inset).isActive = true
+        cellView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -inset).isActive = true
+        cellView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -inset).isActive = true
+        cellView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: inset).isActive = true
+    }
+    
     
 }
