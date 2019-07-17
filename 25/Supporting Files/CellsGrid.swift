@@ -17,24 +17,25 @@ class CellsGrid: UIStackView {
     
     weak var delegate: CellsGridDelegate?
     
-    var cells: [CellView] = [] {
-        didSet {
-            delegate?.cellsCountDidChange(cells: cells)
-        }
-    }
+    var cells: [CellView] = []
     
-    let rowSize: Int
-    let rowHeight: CGFloat
+    let rowsCount: Int
     
     var heightConstraint: NSLayoutConstraint?
     var widthConstraint: NSLayoutConstraint?
     
+    var orientation: Orientation = .portrait
+    
     private var currentRow: UIStackView?
     private var lastRowIndex: Int!
     
-    init(rowSize: Int, rowHeight: CGFloat) {
-        self.rowSize = rowSize
-        self.rowHeight = rowHeight
+    private var rowHeight: CGFloat {
+        return (UIScreen.main.bounds.width - 2.0) / CGFloat(rowsCount)
+        #warning("Replace cell inset (2.0)")
+    }
+    
+    init(rowSize: Int) {
+        self.rowsCount = rowSize
         super.init(frame: .zero)
         self.axis = .vertical
         self.distribution = .fillEqually
@@ -47,9 +48,14 @@ class CellsGrid: UIStackView {
     // MARK: - Public Methods
     
     func addRows(count: Int, animated: Bool) {
-        assert(count.isMultiple(of: 5), "Reason: invalid number of views. Provide a multiple of five number.")
-        addCells(count: count * rowSize, animated: animated)
+        addCells(count: count * rowsCount, animated: animated)
         lastRowIndex = arrangedSubviews.count - 1
+        
+        if orientation == .portrait {
+            heightConstraint?.constant += rowHeight
+        } else {
+            widthConstraint?.constant += rowHeight
+        }
     }
     
     func removeRows(count: Int, animated: Bool) {
@@ -63,11 +69,20 @@ class CellsGrid: UIStackView {
                     self.cells.remove(at: index)
                 }
             }
+        
             lastRowIndex -= count
+
+            if orientation == .portrait {
+                heightConstraint?.constant -= rowHeight
+            } else {
+                widthConstraint?.constant -= rowHeight
+            }
+            
             if !animated {
                 lastRow?.removeFromSuperview()
                 return
             }
+            
             UIView.animate(withDuration: 0.3,
                            animations: {
                             lastRow?.alpha = 0.0
@@ -79,30 +94,38 @@ class CellsGrid: UIStackView {
                 })
             }
         }
+        delegate?.cellsCountDidChange(cells: cells)
     }
     
-    func switchAxis(to axis: NSLayoutConstraint.Axis) {
+    func setOrientation(to orientation: Orientation) {
         for row in arrangedSubviews where row is UIStackView {
             let stackView = row as! UIStackView
-            if axis == .vertical {
+            if orientation == .portrait {
                 stackView.axis = .horizontal
             } else {
                 stackView.axis = .vertical
             }
         }
         
-        self.axis = axis
+        self.axis = orientation == .portrait ? .vertical : .horizontal
+        
+        guard let heightConstraintConstant = heightConstraint?.constant else { return }
+        guard let widthConstraintConstant = widthConstraint?.constant else { return }
+                
+        heightConstraint?.constant = widthConstraintConstant
+        widthConstraint?.constant = heightConstraintConstant
     }
     
     // MARK: - Private Methods
     
     private func addCells(count: Int, animated: Bool) {
+        assert(count.isMultiple(of: rowsCount), "Reason: invalid number of views. Provide a multiple of row size (\(rowsCount)) number.")
         for _ in 0..<count {
             let cell = CellView(inset: 2.0)
             cell.setCornerRadius(cornerRadius: 7.0)
             cell.titleLabel?.font = .systemFont(ofSize: 35.0)
             
-            let firstCellInRow = cells.count % rowSize == 0
+            let firstCellInRow = cells.count % rowsCount == 0
             if currentRow == nil || firstCellInRow {
                 currentRow = preapreRow()
                 addArrangedSubview(self.currentRow!)
@@ -116,11 +139,7 @@ class CellsGrid: UIStackView {
                     })
                 }
             }
-            
-            cell.translatesAutoresizingMaskIntoConstraints = false
-            cell.heightAnchor.constraint(equalToConstant: rowHeight).isActive = true
-            cell.widthAnchor.constraint(equalToConstant: rowHeight).isActive = true
-            
+
             cells.append(cell)
             currentRow!.addArrangedSubview(cell)
             
@@ -136,11 +155,11 @@ class CellsGrid: UIStackView {
                 cell.alpha = 1.0
             }
         }
+        delegate?.cellsCountDidChange(cells: cells)
     }
     
     private func preapreRow() -> UIStackView {
         let row = UIStackView(arrangedSubviews: [])
-        row.translatesAutoresizingMaskIntoConstraints = false
         row.axis = self.axis == .vertical ? .horizontal : .vertical
         row.distribution = .fillEqually
         return row

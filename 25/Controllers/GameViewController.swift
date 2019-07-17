@@ -8,59 +8,64 @@
 
 import UIKit
 
+enum Orientation {
+    case portrait
+    case landscape
+}
+
+var orientation: Orientation {
+    return UIScreen.main.bounds.width < UIScreen.main.bounds.height ? .portrait : .landscape
+}
+
 class GameViewController: UIViewController {
     
     private var cells = [CellView]()
     
     private let game = Game()
-    private lazy var cellsGrid = CellsGrid(rowSize: 0, rowHeight: 0.0)
+    private lazy var cellsGrid = CellsGrid(rowSize: 5)
     private lazy var cellsManager = CellsManager(with: cellsGrid.cells)
     
-    private var axis: NSLayoutConstraint.Axis {
-        return UIScreen.main.bounds.width > UIScreen.main.bounds.height ? .horizontal : .vertical
-    }
-    
-    private var cellInset: CGFloat {
-        return 2.0 // TODO: Make different for iPad
-    }
-    
-    private var cornerRadius: CGFloat {
-        return 7.0 // TODO: Make different for iPad
-    }
-    
-    private var numberFontSize: CGFloat {
-        return 35.0 // TODO: Make different for iPad
-    }
-    
     private var feedbackView = FeedbackView()
-    
+    private var firstTime = true
     private var startGameView: StartGameView!
+    
     private var startGameViewEstimatedSize: CGSize {
-        if cells.isEmpty { return .zero }
+        //        if cells.isEmpty { return .zero }
+        //
+        //        let cellHeight = cells.first!.frame.height
+        //        let rows = cells.count / cellsGrid.rowsCount
+        //        let height: CGFloat
+        //        let width: CGFloat
+        //
+        //        switch (orientation, rows.isMultiple(of: 2)) {
+        //        case (.portrait, true):
+        //            height = cellHeight * 2 - cellInset * 2
+        //            width = cellHeight * 3 - cellInset * 2
+        //        case (.portrait, false), (.landscape, false):
+        //            height = cellHeight - cellInset * 2
+        //            width = cellHeight * 3 - cellInset * 2
+        //        case (.landscape, true):
+        //            height = cellHeight - cellInset * 2.5
+        //            width = cellHeight * 2 - cellInset * 2.5
+        //        }
         
-        let cellHeight = cells.first!.frame.height
-        let rows = cells.count / cellsGrid.rowSize
-        let height: CGFloat
-        let width: CGFloat
+        return .zero //CGSize(width: lroundf(Float(width)), height: lroundf(Float(height)))
+    }
+    
+    private var cellsStyle: CellView.Style {
+        var style: CellView.Style
         
-        switch (axis, rows.isMultiple(of: 2)) {
-        case (.vertical, true):
-            height = cellHeight * 2 - cellInset * 2
-            width = cellHeight * 3 - cellInset * 2
-        case (.vertical, false), (.horizontal, false):
-            height = cellHeight - cellInset * 2
-            width = cellHeight * 3 - cellInset * 2
-        case (.horizontal, true):
-            height = cellHeight - cellInset * 2.5
-            width = cellHeight * 2 - cellInset * 2.5
+        switch (game.level.colorModeFor.cells, game.level.colorModeFor.numbers) {
+        case (true, true):
+            style = .colorfulWithColorfulNumber
+        case (true, false):
+            style = .colorfulWithWhiteNumber
         default:
-            return .zero
+            style = traitCollection.userInterfaceStyle == .light ? .defaultWithBlackNumber : .defaultWithWhiteNumber
         }
         
-        return CGSize(width: lroundf(Float(width)), height: lroundf(Float(height)))
+        return style
     }
-    
-    private var firstTime = true
     
     // MARK: - Lifecycle
     
@@ -76,9 +81,17 @@ class GameViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        updateGridAxis()
+        if firstTime {
+            cellsGrid.setOrientation(to: orientation)
+            updateStartGameViewFrame()
+            firstTime = false
+        }
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        cellsGrid.setOrientation(to: orientation)
         updateStartGameViewFrame()
-        firstTime = false
     }
     
     deinit {
@@ -86,6 +99,19 @@ class GameViewController: UIViewController {
     }
     
     // MARK: - Actions
+    
+    @IBAction func plusButtonPressed(_ sender: UIButton) {
+        game.newGame(numbers: cellsGrid.cells.count + cellsGrid.rowsCount)
+        cellsGrid.addRows(count: 1, animated: true)
+        cellsManager.setStyle(to: cellsStyle, animated: false)
+        cellsManager.setNumbers(game.numbers, animated: false)
+    }
+    
+    @IBAction func minusButtonPressed(_ sender: UIButton) {
+        game.newGame(numbers: cellsGrid.cells.count - cellsGrid.rowsCount)
+        cellsGrid.removeRows(count: 1, animated: true)
+        cellsManager.setNumbers(game.numbers, animated: false)
+    }
     
     @objc private func startGame() {
         game.startGame()
@@ -116,7 +142,7 @@ class GameViewController: UIViewController {
     
     private func setupUI() {
         setupFeedbackView()
-        setupGrid()
+        setupCellsGrid()
         setupStartGameView()
         setupGestureRecognizers()
     }
@@ -150,43 +176,53 @@ class GameViewController: UIViewController {
         }
     }
     
+    private func estimateCellGridSize(orientation: Orientation, inset: CGFloat) -> (width: CGFloat, height: CGFloat) {
+        var height: CGFloat
+        var width: CGFloat
+        
+        if orientation == .portrait {
+            height = UIScreen.main.bounds.width / CGFloat(cellsGrid.rowsCount) * CGFloat(cellsGrid.cells.count / cellsGrid.rowsCount) - inset
+            width = UIScreen.main.bounds.width - inset
+        } else {
+            height = UIScreen.main.bounds.width - inset
+            width = UIScreen.main.bounds.width / CGFloat(cellsGrid.rowsCount) * CGFloat(cellsGrid.cells.count / cellsGrid.rowsCount) - inset
+        }
+        
+        return (width: width, height: height)
+    }
+    
 }
 
 // MARK: - UI Managment
 
 extension GameViewController {
     
-    private func setupGrid() {
+    private func setupCellsGrid() {
         let rowSize = 5
         var rowHeight: CGFloat
         
-        if axis == .vertical {
+        if orientation == .portrait {
             rowHeight = UIScreen.main.bounds.width / CGFloat(rowSize)
         } else {
             rowHeight = UIScreen.main.bounds.height / CGFloat(rowSize)
         }
         
-        cellsGrid = CellsGrid(rowSize: rowSize, rowHeight: rowHeight)
+        /// Create CellGrid
+        cellsGrid = CellsGrid(rowSize: 5)
         self.view.addSubview(cellsGrid)
         cellsGrid.translatesAutoresizingMaskIntoConstraints = false
         cellsGrid.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         cellsGrid.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
-        cellsGrid.heightConstraint = cellsGrid.heightAnchor.constraint(equalTo: view.heightAnchor, constant: -cellInset)
-        cellsGrid.widthConstraint = cellsGrid.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -cellInset)
         
         cellsGrid.addRows(count: game.numbers.count / rowSize, animated: false)
         
-        /// Set cells style
-        var cellsStyle: CellView.Style
+        let cellsGridEstimatedSize = estimateCellGridSize(orientation: orientation, inset: 2.0)
         
-        switch (game.level.colorModeFor.cells, game.level.colorModeFor.numbers) {
-        case (true, true):
-            cellsStyle = .colorfulWithColorfulNumber
-        case (true, false):
-            cellsStyle = .colorfulWithWhiteNumber
-        default:
-            cellsStyle = traitCollection.userInterfaceStyle == .light ? .defaultWithBlackNumber : .defaultWithWhiteNumber
-        }
+        cellsGrid.heightConstraint = cellsGrid.heightAnchor.constraint(equalToConstant: cellsGridEstimatedSize.height)
+        cellsGrid.widthConstraint = cellsGrid.widthAnchor.constraint(equalToConstant: cellsGridEstimatedSize.width)
+        
+        cellsGrid.heightConstraint?.isActive = true
+        cellsGrid.widthConstraint?.isActive = true
         
         cellsManager.setStyle(to: cellsStyle, animated: false)
     }
@@ -212,7 +248,7 @@ extension GameViewController {
         
         self.view.addSubview(startGameView)
         
-        startGameView.layer.cornerRadius = cornerRadius
+        startGameView.layer.cornerRadius = 7.0
         startGameView.clipsToBounds = true
         startGameView.translatesAutoresizingMaskIntoConstraints = false
         startGameView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
@@ -224,7 +260,7 @@ extension GameViewController {
         startGameView.widthConstraint?.isActive = true
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(startGame))
-        view.addGestureRecognizer(tap) // TODO: Check is it works with swipe up
+        view.addGestureRecognizer(tap) // TODO: Check if it works with swipe up
     }
     
     private func setupGestureRecognizers() {
@@ -244,18 +280,6 @@ extension GameViewController {
         self.view.addGestureRecognizer(down)
         self.view.addGestureRecognizer(right)
         self.view.addGestureRecognizer(left)
-    }
-    
-    private func updateGridAxis() {
-        if cellsGrid.axis == axis && !firstTime { return }
-        cellsGrid.switchAxis(to: axis)
-        if axis == .horizontal {
-            cellsGrid.heightConstraint?.isActive = true
-            cellsGrid.widthConstraint?.isActive = false
-        } else {
-            cellsGrid.heightConstraint?.isActive = false
-            cellsGrid.widthConstraint?.isActive = true
-        }
     }
     
     private func updateStartGameViewFrame() {
@@ -292,12 +316,6 @@ extension GameViewController: CellsManagerDelegate {
         }
     }
 }
-
-//// MARK: - CellsManagerDelegate
-//
-//extension GameViewController: CellsGridDelegate {
-//
-//}
 
 // MARK: - Navigation
 

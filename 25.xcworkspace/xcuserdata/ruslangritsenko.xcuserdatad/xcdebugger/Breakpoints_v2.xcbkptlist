@@ -7,16 +7,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "5B006863-03C4-496C-86C2-8C2BC0058053"
-            shouldBeEnabled = "Yes"
+            uuid = "F90B9E66-1184-4E6E-9C14-FF56DD9A9497"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "25/Supporting Files/CellsManager.swift"
+            filePath = "25/Controllers/GameViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "138"
-            endingLineNumber = "138"
-            landmarkName = "cellsCountDidChange(cells:)"
+            startingLineNumber = "221"
+            endingLineNumber = "221"
+            landmarkName = "setupCellsGrid()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

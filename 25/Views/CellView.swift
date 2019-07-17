@@ -25,6 +25,10 @@ class CellView: UIButton {
     var isAnimating = false
     var number = 0
     
+    override var description: String {
+        return "|\(number)|"
+    }
+    
     private enum NumberState {
         case visible
         case invisible
@@ -36,7 +40,7 @@ class CellView: UIButton {
     private var appearingAnimator: UIViewPropertyAnimator?
     private var settingAnimator: UIViewPropertyAnimator?
     
-    private var cellView: UIView = {
+    private var childView: UIView = {
         let view = UIView()
         view.isUserInteractionEnabled = false
         return view
@@ -154,7 +158,7 @@ class CellView: UIButton {
         }
         
         if !animated {
-            cellView.backgroundColor = newCellColor
+            childView.backgroundColor = newCellColor
             self.setTitleColor(newNumberColor, for: .normal)
             return
         }
@@ -163,13 +167,13 @@ class CellView: UIButton {
                                                        delay: 0,
                                                        options: .curveEaseOut,
                                                        animations: {
-                                                        self.cellView.backgroundColor = newCellColor
+                                                        self.childView.backgroundColor = newCellColor
                                                         self.setTitleColor(newNumberColor, for: .normal)
         })
     }
     
     func setCornerRadius(cornerRadius: CGFloat) {
-        cellView.layer.cornerRadius = cornerRadius
+        childView.layer.cornerRadius = cornerRadius
     }
     
     func showNumber(animated: Bool) {
@@ -283,15 +287,15 @@ class CellView: UIButton {
     // MARK: - Private Methods
     
     private func setupUI() {
-        self.addSubview(cellView)
+        self.addSubview(childView)
         self.backgroundColor = .clear
         self.titleLabel?.textAlignment = .center
         
-        cellView.translatesAutoresizingMaskIntoConstraints = false
-        cellView.topAnchor.constraint(equalTo: self.topAnchor, constant: inset).isActive = true
-        cellView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -inset).isActive = true
-        cellView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -inset).isActive = true
-        cellView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: inset).isActive = true
+        childView.translatesAutoresizingMaskIntoConstraints = false
+        childView.topAnchor.constraint(equalTo: self.topAnchor, constant: inset).isActive = true
+        childView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -inset).isActive = true
+        childView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -inset).isActive = true
+        childView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: inset).isActive = true
     }
     
     

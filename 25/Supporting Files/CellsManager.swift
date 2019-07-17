@@ -129,7 +129,6 @@ final class CellsManager {
         timer?.invalidate()
         timer = nil
     }
-    
 }
 
 extension CellsManager: CellsGridDelegate {
