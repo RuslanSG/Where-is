@@ -22,12 +22,12 @@ class GameViewController: UIViewController {
     private var cells = [CellView]()
     
     private let game = Game()
-    private lazy var cellsGrid = CellsGrid(rowSize: 5)
+    private var cellsGrid: CellsGrid!
     private lazy var cellsManager = CellsManager(with: cellsGrid.cells)
-    
     private var feedbackView = FeedbackView()
     private var firstTime = true
     private var startGameView: StartGameView!
+    private let rowSize = 5
     
     private var startGameViewEstimatedSize: CGSize {
         //        if cells.isEmpty { return .zero }
@@ -52,7 +52,7 @@ class GameViewController: UIViewController {
         return .zero //CGSize(width: lroundf(Float(width)), height: lroundf(Float(height)))
     }
     
-    private var cellsStyle: CellView.Style {
+    private var cellStyle: CellView.Style {
         var style: CellView.Style
         
         switch (game.level.colorModeFor.cells, game.level.colorModeFor.numbers) {
@@ -65,6 +65,15 @@ class GameViewController: UIViewController {
         }
         
         return style
+    }
+    
+    private var cellHeight: CGFloat {
+        if orientation == .portrait {
+            return (UIScreen.main.bounds.width - 2.0) / CGFloat(rowSize)
+        } else {
+            return (UIScreen.main.bounds.height - 2.0) / CGFloat(rowSize)
+        }
+        #warning("Replace cell inset (2.0)")
     }
     
     // MARK: - Lifecycle
@@ -101,14 +110,14 @@ class GameViewController: UIViewController {
     // MARK: - Actions
     
     @IBAction func plusButtonPressed(_ sender: UIButton) {
-        game.newGame(numbers: cellsGrid.cells.count + cellsGrid.rowsCount)
+        game.newGame(numbers: cellsGrid.cells.count + rowSize)
         cellsGrid.addRows(count: 1, animated: true)
-        cellsManager.setStyle(to: cellsStyle, animated: false)
+        cellsManager.setStyle(to: cellStyle, animated: false)
         cellsManager.setNumbers(game.numbers, animated: false)
     }
     
     @IBAction func minusButtonPressed(_ sender: UIButton) {
-        game.newGame(numbers: cellsGrid.cells.count - cellsGrid.rowsCount)
+        game.newGame(numbers: cellsGrid.cells.count - rowSize)
         cellsGrid.removeRows(count: 1, animated: true)
         cellsManager.setNumbers(game.numbers, animated: false)
     }
@@ -176,21 +185,6 @@ class GameViewController: UIViewController {
         }
     }
     
-    private func estimateCellGridSize(orientation: Orientation, inset: CGFloat) -> (width: CGFloat, height: CGFloat) {
-        var height: CGFloat
-        var width: CGFloat
-        
-        if orientation == .portrait {
-            height = UIScreen.main.bounds.width / CGFloat(cellsGrid.rowsCount) * CGFloat(cellsGrid.cells.count / cellsGrid.rowsCount) - inset
-            width = UIScreen.main.bounds.width - inset
-        } else {
-            height = UIScreen.main.bounds.width - inset
-            width = UIScreen.main.bounds.width / CGFloat(cellsGrid.rowsCount) * CGFloat(cellsGrid.cells.count / cellsGrid.rowsCount) - inset
-        }
-        
-        return (width: width, height: height)
-    }
-    
 }
 
 // MARK: - UI Managment
@@ -198,33 +192,13 @@ class GameViewController: UIViewController {
 extension GameViewController {
     
     private func setupCellsGrid() {
-        let rowSize = 5
-        var rowHeight: CGFloat
-        
-        if orientation == .portrait {
-            rowHeight = UIScreen.main.bounds.width / CGFloat(rowSize)
-        } else {
-            rowHeight = UIScreen.main.bounds.height / CGFloat(rowSize)
-        }
-        
-        /// Create CellGrid
-        cellsGrid = CellsGrid(rowSize: 5)
+        cellsGrid = CellsGrid(rowSize: 5, rowHeight: cellHeight)
         self.view.addSubview(cellsGrid)
         cellsGrid.translatesAutoresizingMaskIntoConstraints = false
         cellsGrid.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         cellsGrid.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
-        
         cellsGrid.addRows(count: game.numbers.count / rowSize, animated: false)
-        
-        let cellsGridEstimatedSize = estimateCellGridSize(orientation: orientation, inset: 2.0)
-        
-        cellsGrid.heightConstraint = cellsGrid.heightAnchor.constraint(equalToConstant: cellsGridEstimatedSize.height)
-        cellsGrid.widthConstraint = cellsGrid.widthAnchor.constraint(equalToConstant: cellsGridEstimatedSize.width)
-        
-        cellsGrid.heightConstraint?.isActive = true
-        cellsGrid.widthConstraint?.isActive = true
-        
-        cellsManager.setStyle(to: cellsStyle, animated: false)
+        cellsManager.setStyle(to: cellStyle, animated: false)
     }
     
     private func setupFeedbackView() {
