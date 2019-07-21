@@ -22,7 +22,7 @@ class CellsGrid: UIStackView {
     var heightConstraint: NSLayoutConstraint?
     var widthConstraint: NSLayoutConstraint?
     
-    var orientation: Orientation = .portrait
+    var gridOrientation: Orientation = .portrait
     
     private var currentRow: UIStackView?
     private var lastRowIndex: Int!
@@ -47,14 +47,10 @@ class CellsGrid: UIStackView {
         addCells(count: count * rowSize, animated: animated)
         lastRowIndex = arrangedSubviews.count - 1
         
-        if orientation == .portrait {
+        if gridOrientation == .portrait {
             heightConstraint?.constant += rowHeight
         } else {
             widthConstraint?.constant += rowHeight
-        }
-        
-        UIView.animate(withDuration: 0.3) {
-            self.layoutIfNeeded()
         }
     }
     
@@ -72,7 +68,7 @@ class CellsGrid: UIStackView {
         
             lastRowIndex -= count
 
-            if orientation == .portrait {
+            if gridOrientation == .portrait {
                 heightConstraint?.constant -= rowHeight
             } else {
                 widthConstraint?.constant -= rowHeight
@@ -113,6 +109,51 @@ class CellsGrid: UIStackView {
                 
         heightConstraint?.constant = widthConstraintConstant
         widthConstraint?.constant = heightConstraintConstant
+    }
+    
+    func getCell(at point: CGPoint) -> CellView? {
+        let index: Int
+        
+        if orientation == .portrait {
+            index = Int(point.y - 1) * rowSize + Int(point.x - 1)
+        } else {
+            index = Int(point.x - 1) * rowSize + Int(point.y - 1)
+        }
+        
+        guard index <= cells.count - 1 && index >= 0 else {
+            return nil
+        }
+        
+        return cells[index]
+    }
+    
+    func getCells(origin: CGPoint, width: Int, height: Int) -> [CellView]? {
+        let xAxisIsValid: Bool
+        let yAxisIsValid: Bool
+        
+        if orientation == .portrait {
+            xAxisIsValid = origin.x + CGFloat(width - 1) <= CGFloat(rowSize)
+            yAxisIsValid = origin.y + CGFloat(height - 1) <= CGFloat(cells.count / rowSize)
+        } else {
+            xAxisIsValid = origin.x + CGFloat(width - 1) <= CGFloat(cells.count / rowSize)
+            yAxisIsValid = origin.y + CGFloat(height - 1) <= CGFloat(rowSize)
+        }
+        
+        guard xAxisIsValid && yAxisIsValid else {
+            return nil
+        }
+        
+        var cells = [CellView]()
+        
+        for i in 0..<height {
+            let y = origin.y + CGFloat(i)
+            for j in 0..<width {
+                let x = origin.x + CGFloat(j)
+                cells.append(getCell(at: CGPoint(x: x, y: y))!)
+            }
+        }
+        
+        return cells
     }
     
     // MARK: - Private Methods
@@ -167,4 +208,19 @@ class CellsGrid: UIStackView {
         return row
     }
     
+}
+
+extension CellsGrid {
+    
+    override var description: String {
+        var result = ""
+        for i in 1...cells.count {
+            if i % rowSize == 0 {
+                result += "\(cells[i - 1])\n"
+            } else {
+                result += "\(cells[i - 1])\t"
+            }
+        }
+        return result
+    }
 }

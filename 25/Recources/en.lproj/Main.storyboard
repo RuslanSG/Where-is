@@ -34,13 +34,22 @@
                                     <action selector="minusButtonPressed:" destination="cDZ-NU-Ty3" eventType="touchUpInside" id="HyY-QO-AqJ"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5b6-UW-WEm">
+                                <rect key="frame" x="20" y="617" width="44" height="30"/>
+                                <state key="normal" title="Action"/>
+                                <connections>
+                                    <action selector="actionButtonPressed:" destination="cDZ-NU-Ty3" eventType="touchUpInside" id="5DE-Cy-zNM"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="WiQ-h5-S83" firstAttribute="height" secondItem="K0N-uk-gs2" secondAttribute="height" id="71i-5V-Usi"/>
                             <constraint firstItem="mqg-Sq-hmp" firstAttribute="trailing" secondItem="K0N-uk-gs2" secondAttribute="trailing" constant="24" id="Ht9-Fj-hh0"/>
                             <constraint firstItem="WiQ-h5-S83" firstAttribute="width" secondItem="K0N-uk-gs2" secondAttribute="width" id="I9f-2e-hOl"/>
+                            <constraint firstItem="mqg-Sq-hmp" firstAttribute="bottom" secondItem="5b6-UW-WEm" secondAttribute="bottom" constant="20" id="OuH-8S-E8Z"/>
                             <constraint firstItem="mqg-Sq-hmp" firstAttribute="bottom" secondItem="K0N-uk-gs2" secondAttribute="bottom" constant="20" id="X7E-na-mbI"/>
+                            <constraint firstItem="5b6-UW-WEm" firstAttribute="leading" secondItem="mqg-Sq-hmp" secondAttribute="leading" constant="20" id="YeZ-dE-LfK"/>
                             <constraint firstItem="K0N-uk-gs2" firstAttribute="leading" secondItem="WiQ-h5-S83" secondAttribute="trailing" constant="24" id="lqV-hq-ecH"/>
                             <constraint firstItem="mqg-Sq-hmp" firstAttribute="bottom" secondItem="WiQ-h5-S83" secondAttribute="bottom" constant="20" id="ufF-65-m42"/>
                         </constraints>

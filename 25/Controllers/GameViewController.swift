@@ -109,6 +109,10 @@ class GameViewController: UIViewController {
     
     // MARK: - Actions
     
+    @IBAction func actionButtonPressed(_ sender: UIButton) {
+        print(cellsGrid.getCells(origin: CGPoint(x: 2, y: 3), width: 5, height: 2))
+    }
+    
     @IBAction func plusButtonPressed(_ sender: UIButton) {
         game.newGame(numbers: cellsGrid.cells.count + rowSize)
         cellsGrid.addRows(count: 1, animated: true)

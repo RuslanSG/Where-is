@@ -74,7 +74,7 @@ class Game {
         for i in 1...count {
             numbers.append(i)
         }
-        numbers.shuffle()
+//        numbers.shuffle()
     }
     
     private func setLevels() {
