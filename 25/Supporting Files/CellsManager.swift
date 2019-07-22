@@ -48,6 +48,18 @@ final class CellsManager {
         }
     }
     
+    func showNumbers(animated: Bool) {
+        for cell in cells {
+            cell.showNumber(animated: animated)
+        }
+    }
+    
+    func hideNumbers(animated: Bool) {
+        for cell in cells {
+            cell.hideNumber(animated: animated)
+        }
+    }
+    
     func updateCellsStyle(to style: CellView.Style, animated: Bool) {
         cells.forEach { (cell) in
             cell.setStyle(style, animated: animated)
@@ -82,9 +94,11 @@ final class CellsManager {
     
     @objc private func cellPressed(_ cell: CellView) {
         delegate?.cellPressed(cell)
+        cell.compress()
     }
     
     @objc private func cellReleased(_ cell: CellView) {
+        cell.uncompress()
         delegate?.cellReleased(cell)
     }
     

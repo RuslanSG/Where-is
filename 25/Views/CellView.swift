@@ -284,6 +284,18 @@ class CellView: UIButton {
         settingAnimator = nil
     }
     
+    func compress() {
+        UIView.animate(withDuration: 0.05) {
+            self.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+        }
+    }
+    
+    func uncompress() {
+        UIView.animate(withDuration: 0.2) {
+            self.transform = CGAffineTransform.identity
+        }
+    }
+    
     // MARK: - Private Methods
     
     private func setupUI() {

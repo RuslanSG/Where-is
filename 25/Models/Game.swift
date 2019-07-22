@@ -13,8 +13,9 @@ class Game {
     var numbers = [Int]()
     var nextNumber = 1
     var isRunning = false
+    var selectedNumberIsRight = false
     var level: Level {
-        return levels[currentLevelIndex]
+        return levels[0] //levels[currentLevelIndex]
     }
     
     private var levels = [Level]()
@@ -40,12 +41,17 @@ class Game {
     
     func numberSelected(_ number: Int) {
         if number == nextNumber {
+            selectedNumberIsRight = true
             nextNumber += 1
+            guard let index = numbers.firstIndex(of: number) else { return }
+            numbers[index] = number + numbers.count
+        } else {
+            selectedNumberIsRight = false
         }
     }
     
-    func newGame(numbers: Int) {
-        setNumbers(count: numbers)
+    func newGame() {
+        setNumbers(count: level.numbers)
         nextNumber = 1
         isRunning = false
     }
@@ -74,7 +80,7 @@ class Game {
         for i in 1...count {
             numbers.append(i)
         }
-//        numbers.shuffle()
+        numbers.shuffle()
     }
     
     private func setLevels() {
@@ -88,7 +94,7 @@ class Game {
             let winkMode = parameters.winkModeForLevel[i]!
             let swapMode = parameters.swapModeForLevel[i]!
             let shuffleMode = parameters.shuffleModeForLevel[i]!
-            
+
             let level = Level(index: index,
                               numbersCount: numbersCount,
                               goal: goal,
@@ -96,7 +102,7 @@ class Game {
                               winkMode: winkMode,
                               swapMode: swapMode,
                               shuffleMode: shuffleMode)
-            
+
             levels.append(level)
         }
     }

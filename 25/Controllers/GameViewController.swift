@@ -25,8 +25,6 @@ class GameViewController: UIViewController {
         case twoToOne
     }
     
-    private var cells = [CellView]()
-    
     private let game = Game()
     private var cellsGrid: CellsGrid!
     private lazy var cellsManager = CellsManager(with: cellsGrid.cells)
@@ -34,6 +32,7 @@ class GameViewController: UIViewController {
     private var firstTime = true
     private var startGameView: StartGameView!
     private let rowSize = 5
+    private var lastPressedCell: CellView?
     
     private var cellStyle: CellView.Style {
         var style: CellView.Style
@@ -95,29 +94,10 @@ class GameViewController: UIViewController {
     
     // MARK: - Actions
     
-    @IBAction func actionButtonPressed(_ sender: UIButton) {
-        
-    }
-    
-    @IBAction func plusButtonPressed(_ sender: UIButton) {
-        game.newGame(numbers: cellsGrid.cells.count + rowSize)
-        cellsGrid.addRows(count: 1, animated: true)
-        cellsManager.setStyle(to: cellStyle, animated: false)
-        cellsManager.setNumbers(game.numbers, animated: false)
-        updateStartGameViewFrame(animated: true)
-    }
-    
-    @IBAction func minusButtonPressed(_ sender: UIButton) {
-        game.newGame(numbers: cellsGrid.cells.count - rowSize)
-        cellsGrid.removeRows(count: 1, animated: true)
-        cellsManager.setNumbers(game.numbers, animated: false)
-        updateStartGameViewFrame(animated: true)
-    }
-    
     @objc private func startGame() {
         game.startGame()
         startGameView.hide()
-        cells.forEach { $0.showNumber(animated: true) }
+        cellsManager.showNumbers(animated: true)
         if game.level.winkMode { cellsManager.startWinking() }
         if game.level.swapMode { cellsManager.startSwapping() }
         freezeUI(for: 0.2)
@@ -125,18 +105,22 @@ class GameViewController: UIViewController {
     
     @objc func swipeUp() {
         showSettings()
+        lastPressedCell?.uncompress()
     }
     
     @objc func swipeDown() {
         prepareForNewGame()
+        lastPressedCell?.uncompress()
     }
     
     @objc func swipeRight() {
         print("Swipe Right")
+        lastPressedCell?.uncompress()
     }
     
     @objc func swipeLeft() {
         print("Swipe Left")
+        lastPressedCell?.uncompress()
     }
     
     // MARK: - Helper Methods
@@ -150,7 +134,7 @@ class GameViewController: UIViewController {
     }
     
     private func prepareForNewGame() {
-        game.newGame(numbers: cells.count)
+        game.newGame()
         
         if game.level.winkMode {
             cellsManager.stopWinking()
@@ -160,13 +144,8 @@ class GameViewController: UIViewController {
             cellsManager.stopSwapping()
         }
         
+        cellsManager.hideNumbers(animated: false)
         cellsManager.updateNumbers(with: game.numbers, animated: false)
-        
-        for cell in cells {
-            #warning("Fix animation on Swap Mode")
-            if game.level.winkMode || game.level.swapMode { cell.stopAnimations() }
-            cell.hideNumber(animated: false)
-        }
         
         startGameView.show()
     }
@@ -253,9 +232,7 @@ extension GameViewController {
         guard let centralCells = cellsGrid.getCells(origin: origin, size: size) else {
             return .zero
         }
-        
-        print(centralCells)
-        
+                
         var rect: CGRect = .zero
         
         for cell in centralCells {
@@ -321,17 +298,23 @@ extension GameViewController: CellsManagerDelegate {
             prepareForNewGame()
             return
         }
+        lastPressedCell = cell
         freezeUI(for: 0.17)
+        cell.hideNumber(animated: false)
     }
     
     internal func cellReleased(_ cell: CellView) {
         if !game.isRunning { return }
         
-        if cell.number != game.nextNumber {
+        game.numberSelected(cell.number)
+
+        if game.selectedNumberIsRight {
+            cell.setNumber(cell.number + game.numbers.count, animated: false)
+        } else  {
             feedbackView.playErrorFeedback()
         }
         
-        game.numberSelected(cell.number)
+        cell.showNumber(animated: true)
         
         if game.level.shuffleMode {
             game.shuffleNumbers()
