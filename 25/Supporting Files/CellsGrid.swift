@@ -81,13 +81,9 @@ class CellsGrid: UIStackView {
             
             UIView.animate(withDuration: 0.3,
                            animations: {
-                            lastRow?.alpha = 0.0
-            }) { (_) in
-                lastRow?.removeFromSuperview()
-                UIView.animate(withDuration: 0.3) {
-                    self.layoutIfNeeded()
-                }
-            }
+                            lastRow?.removeFromSuperview()
+                            self.layoutIfNeeded()
+            })
         }
         delegate?.cellsCountDidChange(cells: cells)
     }
@@ -127,16 +123,16 @@ class CellsGrid: UIStackView {
         return cells[index]
     }
     
-    func getCells(origin: CGPoint, width: Int, height: Int) -> [CellView]? {
+    func getCells(origin: CGPoint, size: CGSize) -> [CellView]? {
         let xAxisIsValid: Bool
         let yAxisIsValid: Bool
         
         if orientation == .portrait {
-            xAxisIsValid = origin.x + CGFloat(width - 1) <= CGFloat(rowSize)
-            yAxisIsValid = origin.y + CGFloat(height - 1) <= CGFloat(cells.count / rowSize)
+            xAxisIsValid = origin.x + size.width - 1 <= CGFloat(rowSize)
+            yAxisIsValid = origin.y + size.height - 1 <= CGFloat(cells.count / rowSize)
         } else {
-            xAxisIsValid = origin.x + CGFloat(width - 1) <= CGFloat(cells.count / rowSize)
-            yAxisIsValid = origin.y + CGFloat(height - 1) <= CGFloat(rowSize)
+            xAxisIsValid = origin.x + size.width - 1 <= CGFloat(cells.count / rowSize)
+            yAxisIsValid = origin.y + size.height - 1 <= CGFloat(rowSize)
         }
         
         guard xAxisIsValid && yAxisIsValid else {
@@ -145,9 +141,9 @@ class CellsGrid: UIStackView {
         
         var cells = [CellView]()
         
-        for i in 0..<height {
+        for i in 0..<Int(size.height) {
             let y = origin.y + CGFloat(i)
-            for j in 0..<width {
+            for j in 0..<Int(size.width) {
                 let x = origin.x + CGFloat(j)
                 cells.append(getCell(at: CGPoint(x: x, y: y))!)
             }

@@ -19,6 +19,12 @@ var orientation: Orientation {
 
 class GameViewController: UIViewController {
     
+    private enum StartGameViewAcpectRatio {
+        case threeToOne
+        case threeToTwo
+        case twoToOne
+    }
+    
     private var cells = [CellView]()
     
     private let game = Game()
@@ -28,29 +34,6 @@ class GameViewController: UIViewController {
     private var firstTime = true
     private var startGameView: StartGameView!
     private let rowSize = 5
-    
-    private var startGameViewEstimatedSize: CGSize {
-        //        if cells.isEmpty { return .zero }
-        //
-        //        let cellHeight = cells.first!.frame.height
-        //        let rows = cells.count / cellsGrid.rowsCount
-        //        let height: CGFloat
-        //        let width: CGFloat
-        //
-        //        switch (orientation, rows.isMultiple(of: 2)) {
-        //        case (.portrait, true):
-        //            height = cellHeight * 2 - cellInset * 2
-        //            width = cellHeight * 3 - cellInset * 2
-        //        case (.portrait, false), (.landscape, false):
-        //            height = cellHeight - cellInset * 2
-        //            width = cellHeight * 3 - cellInset * 2
-        //        case (.landscape, true):
-        //            height = cellHeight - cellInset * 2.5
-        //            width = cellHeight * 2 - cellInset * 2.5
-        //        }
-        
-        return .zero //CGSize(width: lroundf(Float(width)), height: lroundf(Float(height)))
-    }
     
     private var cellStyle: CellView.Style {
         var style: CellView.Style
@@ -91,16 +74,19 @@ class GameViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         if firstTime {
-            cellsGrid.setOrientation(to: orientation)
-            updateStartGameViewFrame()
+            cellsGrid.layoutIfNeeded()
+            updateStartGameViewFrame(animated: false)
             firstTime = false
         }
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        cellsGrid.setOrientation(to: orientation)
-        updateStartGameViewFrame()
+        coordinator.animate(alongsideTransition: { (context) in
+            self.cellsGrid.setOrientation(to: orientation)
+            self.cellsGrid.layoutIfNeeded()
+            self.updateStartGameViewFrame(animated: false)
+        })
     }
     
     deinit {
@@ -110,7 +96,7 @@ class GameViewController: UIViewController {
     // MARK: - Actions
     
     @IBAction func actionButtonPressed(_ sender: UIButton) {
-        print(cellsGrid.getCells(origin: CGPoint(x: 2, y: 3), width: 5, height: 2))
+        
     }
     
     @IBAction func plusButtonPressed(_ sender: UIButton) {
@@ -118,12 +104,14 @@ class GameViewController: UIViewController {
         cellsGrid.addRows(count: 1, animated: true)
         cellsManager.setStyle(to: cellStyle, animated: false)
         cellsManager.setNumbers(game.numbers, animated: false)
+        updateStartGameViewFrame(animated: true)
     }
     
     @IBAction func minusButtonPressed(_ sender: UIButton) {
         game.newGame(numbers: cellsGrid.cells.count - rowSize)
         cellsGrid.removeRows(count: 1, animated: true)
         cellsManager.setNumbers(game.numbers, animated: false)
+        updateStartGameViewFrame(animated: true)
     }
     
     @objc private func startGame() {
@@ -156,6 +144,7 @@ class GameViewController: UIViewController {
     private func setupUI() {
         setupFeedbackView()
         setupCellsGrid()
+        cellsGrid.setOrientation(to: orientation)
         setupStartGameView()
         setupGestureRecognizers()
     }
@@ -228,17 +217,57 @@ extension GameViewController {
         
         startGameView.layer.cornerRadius = 7.0
         startGameView.clipsToBounds = true
-        startGameView.translatesAutoresizingMaskIntoConstraints = false
-        startGameView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        startGameView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
-        startGameView.heightConstraint = startGameView.heightAnchor.constraint(equalToConstant: startGameViewEstimatedSize.height)
-        startGameView.widthConstraint = startGameView.widthAnchor.constraint(equalToConstant: startGameViewEstimatedSize.width)
-        
-        startGameView.heightConstraint?.isActive = true
-        startGameView.widthConstraint?.isActive = true
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(startGame))
         view.addGestureRecognizer(tap) // TODO: Check if it works with swipe up
+    }
+    
+    private func startGameViewRect(aspectRatio: StartGameViewAcpectRatio) -> CGRect {
+        let origin: CGPoint
+        let size: CGSize
+        
+        switch aspectRatio {
+        case .threeToOne:
+            if orientation == .portrait {
+                origin = CGPoint(x: 2, y: cellsGrid.cells.count / 5 / 2 + 1)
+            } else {
+                origin = CGPoint(x: cellsGrid.cells.count / 5 / 2, y: 3)
+            }
+            size = CGSize(width: 3, height: 1)
+        case .threeToTwo:
+            if orientation == .portrait {
+                origin = CGPoint(x: 2, y: cellsGrid.cells.count / 5 / 2)
+            } else {
+                origin = CGPoint(x: cellsGrid.cells.count / 5 / 2, y: 2)
+            }
+            size = CGSize(width: 3, height: 2)
+        case .twoToOne:
+            if orientation == .portrait {
+                origin = CGPoint(x: 2, y: cellsGrid.cells.count / 5 / 2 + 1)
+            } else {
+                origin = CGPoint(x: cellsGrid.cells.count / 5 / 2, y: 3)
+            }
+            size = CGSize(width: 2, height: 1)
+        }
+        
+        guard let centralCells = cellsGrid.getCells(origin: origin, size: size) else {
+            return .zero
+        }
+        
+        print(centralCells)
+        
+        var rect: CGRect = .zero
+        
+        for cell in centralCells {
+            let cellFrame = self.view.convert(cell.bounds, from: cell)
+            if rect == .zero {
+                rect = cellFrame
+            } else {
+                rect = rect.union(cellFrame)
+            }
+        }
+        
+        return rect.inset(by: UIEdgeInsets(top: 2.0, left: 2.0, bottom: 2.0, right: 2.0))
     }
     
     private func setupGestureRecognizers() {
@@ -260,9 +289,25 @@ extension GameViewController {
         self.view.addGestureRecognizer(left)
     }
     
-    private func updateStartGameViewFrame() {
-        startGameView.widthConstraint?.constant = startGameViewEstimatedSize.width
-        startGameView.heightConstraint?.constant = startGameViewEstimatedSize.height
+    private func updateStartGameViewFrame(animated: Bool) {
+        let aspectRatio: StartGameViewAcpectRatio
+        
+        switch (orientation, cellsGrid.cells.count.isMultiple(of: 10)) {
+        case (.portrait, true):
+            aspectRatio = .threeToTwo
+        case (.portrait, false), (.landscape, false):
+            aspectRatio = .threeToOne
+        case (.landscape, true):
+            aspectRatio = .twoToOne
+        }
+        
+        if animated {
+            UIView.animate(withDuration: 0.3) {
+                self.startGameView.frame = self.startGameViewRect(aspectRatio: aspectRatio)
+            }
+        } else {
+            startGameView.frame = startGameViewRect(aspectRatio: aspectRatio)
+        }
     }
 }
 
