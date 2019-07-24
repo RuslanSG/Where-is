@@ -94,6 +94,10 @@ class GameViewController: UIViewController {
     
     // MARK: - Actions
     
+    @IBAction func showResults(_ sender: UIButton) {
+        performSegue(withIdentifier: "ShowResults", sender: sender)
+    }
+    
     @objc private func startGame() {
         game.startGame()
         startGameView.hide()
@@ -183,14 +187,9 @@ extension GameViewController {
     }
     
     private func setupStartGameView() {
-        let style: StartGameView.Style
-        if game.level.colorModeFor.cells {
-            style = .lightWithWhiteText
-        } else {
-            style = .lightWithBlackText
-        }
+        let style: StartGameView.Style = .light
         
-        startGameView = StartGameView(goal: 166.2, style: style)
+        startGameView = StartGameView(interval: 5.0, style: style)
         
         self.view.addSubview(startGameView)
         

@@ -134,8 +134,8 @@ class CellView: UIButton {
     }
     
     func setStyle(_ style: CellView.Style, animated: Bool) {
-        let cellColors: [UIColor] = [.cellBlue, .cellTurquoise, .cellGreen]
-        var numberColors: [UIColor] = [.numberBlue, .numberTurquoise, .numberGreen]
+        let cellColors: [UIColor] = [.red, .orange, .yellow] //[.cellBlue, .cellTurquoise, .cellGreen]
+        var numberColors: [UIColor] = [.red, .orange, .yellow] //[.numberBlue, .numberTurquoise, .numberGreen]
         
         let newCellColor: UIColor
         let newNumberColor: UIColor

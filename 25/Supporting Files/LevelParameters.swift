@@ -10,7 +10,7 @@ import Foundation
 
 struct LevelParameters {
     
-    let colorModeFor = (cellsForLevel: [0  : false,
+    let colorModeFor = (cellsForLevel: [0  : true,
                                         1  : false,
                                         2  : true,
                                         3  : false,
@@ -42,7 +42,7 @@ struct LevelParameters {
                                         29 : true,
                                         30 : true],
                         
-                        numbersForLevel: [0  : false,
+                        numbersForLevel: [0  : true,
                                           1  : false,
                                           2  : false,
                                           3  : false,

@@ -11,6 +11,8 @@
 		2A118DBE211A13300059E252 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2A118DBD211A13300059E252 /* Assets.xcassets */; };
 		2A118DC1211A13300059E252 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2A118DBF211A13300059E252 /* LaunchScreen.storyboard */; };
 		2A118DCA211A1BD50059E252 /* UIDevice+Info.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A118DC9211A1BD50059E252 /* UIDevice+Info.swift */; };
+		2A3271DF22E8685A00F303A5 /* BlurryPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3271DE22E8685A00F303A5 /* BlurryPresentationController.swift */; };
+		2A527BAF22E7856900F68407 /* ResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A527BAE22E7856900F68407 /* ResultsViewController.swift */; };
 		2A8F0992226519C000CF9A04 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2A8F0991226519C000CF9A04 /* GoogleService-Info.plist */; };
 		2ACDF75C213D5B43004FEA1B /* FeedbackGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ACDF75B213D5B43004FEA1B /* FeedbackGenerator.swift */; };
 		2AE841EA22DE38D800D724E0 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE841E922DE38D800D724E0 /* GameViewController.swift */; };
@@ -35,6 +37,8 @@
 		2A118DBD211A13300059E252 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2A118DC2211A13300059E252 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2A118DC9211A1BD50059E252 /* UIDevice+Info.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Info.swift"; sourceTree = "<group>"; };
+		2A3271DE22E8685A00F303A5 /* BlurryPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurryPresentationController.swift; sourceTree = "<group>"; };
+		2A527BAE22E7856900F68407 /* ResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsViewController.swift; sourceTree = "<group>"; };
 		2A8F0991226519C000CF9A04 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2ACDF75B213D5B43004FEA1B /* FeedbackGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackGenerator.swift; sourceTree = "<group>"; };
 		2AE841E622DE36CA00D724E0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -91,11 +95,13 @@
 			isa = PBXGroup;
 			children = (
 				2A002767216D1DC500969CB2 /* 25.entitlements */,
+				2AE8420622DE3BE900D724E0 /* AppDelegate.swift */,
 				2AE841EE22DE396B00D724E0 /* Models */,
 				2AE841F322DE39AC00D724E0 /* Views */,
 				2AE841ED22DE395700D724E0 /* Controllers */,
 				2A118DC8211A13450059E252 /* Supporting Files */,
 				2AE841FC22DE3A9B00D724E0 /* Extentions */,
+				2A527BD022E795E000F68407 /* Interface Builder */,
 				2AE8420522DE3BCB00D724E0 /* Recources */,
 				2A118DC2211A13300059E252 /* Info.plist */,
 				2A8F0991226519C000CF9A04 /* GoogleService-Info.plist */,
@@ -107,6 +113,7 @@
 			isa = PBXGroup;
 			children = (
 				2AE841FA22DE3A2600D724E0 /* CellsGrid.swift */,
+				2A3271DE22E8685A00F303A5 /* BlurryPresentationController.swift */,
 				2AE841FD22DE3ABC00D724E0 /* CellsManager.swift */,
 				2AE841FF22DE3AD800D724E0 /* LevelParameters.swift */,
 				2ACDF75B213D5B43004FEA1B /* FeedbackGenerator.swift */,
@@ -114,10 +121,20 @@
 			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		2A527BD022E795E000F68407 /* Interface Builder */ = {
+			isa = PBXGroup;
+			children = (
+				2A118DB7211A132F0059E252 /* Main.storyboard */,
+				2A118DBF211A13300059E252 /* LaunchScreen.storyboard */,
+			);
+			path = "Interface Builder";
+			sourceTree = "<group>";
+		};
 		2AE841ED22DE395700D724E0 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				2AE841E922DE38D800D724E0 /* GameViewController.swift */,
+				2A527BAE22E7856900F68407 /* ResultsViewController.swift */,
 				2AE841EB22DE394600D724E0 /* SettingsViewController.swift */,
 			);
 			path = Controllers;
@@ -155,10 +172,7 @@
 		2AE8420522DE3BCB00D724E0 /* Recources */ = {
 			isa = PBXGroup;
 			children = (
-				2AE8420622DE3BE900D724E0 /* AppDelegate.swift */,
-				2A118DB7211A132F0059E252 /* Main.storyboard */,
 				2A118DBD211A13300059E252 /* Assets.xcassets */,
-				2A118DBF211A13300059E252 /* LaunchScreen.storyboard */,
 			);
 			path = Recources;
 			sourceTree = "<group>";
@@ -312,10 +326,12 @@
 				2AE841F222DE399400D724E0 /* Level.swift in Sources */,
 				2AE841F722DE39DD00D724E0 /* StartGameView.swift in Sources */,
 				2AE841F922DE39F900D724E0 /* FeedbackView.swift in Sources */,
+				2A3271DF22E8685A00F303A5 /* BlurryPresentationController.swift in Sources */,
 				2AE8420722DE3BE900D724E0 /* AppDelegate.swift in Sources */,
 				2AE8420422DE3B0D00D724E0 /* UIColor+CellColor.swift in Sources */,
 				2A118DCA211A1BD50059E252 /* UIDevice+Info.swift in Sources */,
 				2AE841F022DE398600D724E0 /* Game.swift in Sources */,
+				2A527BAF22E7856900F68407 /* ResultsViewController.swift in Sources */,
 				2AE8420222DE3AFB00D724E0 /* UserDefaults+Key.swift in Sources */,
 				2AE841FE22DE3ABC00D724E0 /* CellsManager.swift in Sources */,
 				2AE841FB22DE3A2600D724E0 /* CellsGrid.swift in Sources */,
