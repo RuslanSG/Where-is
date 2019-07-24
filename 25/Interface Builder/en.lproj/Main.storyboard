@@ -15,20 +15,7 @@
                     <view key="view" contentMode="scaleToFill" id="Tm3-05-NvG">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jld-iB-PoV">
-                                <rect key="frame" x="141.5" y="627" width="92" height="30"/>
-                                <state key="normal" title="Show Results"/>
-                                <connections>
-                                    <action selector="showResults:" destination="cDZ-NU-Ty3" eventType="touchUpInside" id="BIO-4n-V4O"/>
-                                </connections>
-                            </button>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="Jld-iB-PoV" firstAttribute="centerX" secondItem="Tm3-05-NvG" secondAttribute="centerX" id="Zbm-SU-gGj"/>
-                            <constraint firstItem="mqg-Sq-hmp" firstAttribute="bottom" secondItem="Jld-iB-PoV" secondAttribute="bottom" constant="10" id="xQl-PK-Kv0"/>
-                        </constraints>
                         <viewLayoutGuide key="safeArea" id="mqg-Sq-hmp"/>
                     </view>
                     <connections>
@@ -126,6 +113,7 @@
                     </view>
                     <connections>
                         <outlet property="numbersCountLabel" destination="gMN-x5-Y71" id="bkd-Kd-gOo"/>
+                        <outlet property="titleLabel" destination="2ZI-Lx-0ZB" id="XTk-nn-szO"/>
                         <outlet property="vibrancyEffectView" destination="56z-Nl-0YF" id="nS1-tu-lep"/>
                         <outlet property="visualEffectView" destination="ARe-bx-SZH" id="eZP-sg-dcG"/>
                         <outletCollection property="labels" destination="2ZI-Lx-0ZB" collectionClass="NSMutableArray" id="RzS-jw-ZjM"/>

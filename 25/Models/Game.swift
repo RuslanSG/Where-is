@@ -8,16 +8,31 @@
 
 import Foundation
 
-class Game {
+enum GameFinishingReason {
+    case wrongNumberTapped, timeIsOver
+}
+
+protocol GameDelegate: class {
     
-    var numbers = [Int]()
-    var nextNumber = 1
-    var isRunning = false
-    var selectedNumberIsRight = false
+    func gameFinished(reason: GameFinishingReason, numbersFound: Int)
+}
+
+final class Game {
+    
+    weak var delegate: GameDelegate?
+    
+    private(set) var numbers = [Int]()
+    private(set) var nextNumber = 1
+    private(set) var isRunning = false
+    private(set) var selectedNumberIsRight = false
+    private(set) var numbersFound = 0
+    private(set) var interval = 5.0
+    
     var level: Level {
         return levels[0] //levels[currentLevelIndex]
     }
     
+    private var timer: Timer?
     private var levels = [Level]()
     private var maxLevel = 30
     private var currentLevelIndex: Int {
@@ -37,31 +52,44 @@ class Game {
         registerDefaults()
     }
     
+    // MARK: - Actions
+    
+    @objc internal func timerSceduled(_ timer: Timer) {
+        delegate?.gameFinished(reason: .timeIsOver, numbersFound: numbersFound)
+    }
+    
     // MARK: - Public Methods
     
     func numberSelected(_ number: Int) {
         if number == nextNumber {
             selectedNumberIsRight = true
+            numbersFound += 1
             nextNumber += 1
             guard let index = numbers.firstIndex(of: number) else { return }
             numbers[index] = number + numbers.count
+            timer?.invalidate()
+            setTimer(to: interval)
         } else {
+            delegate?.gameFinished(reason: .wrongNumberTapped, numbersFound: numbersFound)
             selectedNumberIsRight = false
         }
     }
     
     func newGame() {
+        finishGame()
         setNumbers(count: level.numbers)
         nextNumber = 1
-        isRunning = false
+        numbersFound = 0
     }
     
     func startGame() {
         isRunning = true
+        setTimer(to: interval)
     }
     
     func finishGame() {
         isRunning = false
+        timer?.invalidate()
     }
     
     func shuffleNumbers() {
@@ -113,6 +141,14 @@ class Game {
         let key = UserDefaults.Key.levelIndex
         let dictionary: [String: Any] = [key: 1]
         UserDefaults.standard.register(defaults: dictionary)
+    }
+    
+    private func setTimer(to time: Double) {
+        timer = Timer.scheduledTimer(timeInterval: time,
+                                     target: self,
+                                     selector: #selector(timerSceduled(_:)),
+                                     userInfo: nil,
+                                     repeats: false)
     }
     
 }

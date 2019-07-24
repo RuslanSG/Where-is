@@ -19,10 +19,12 @@ final class CellsManager {
     weak var delegate: CellsManagerDelegate?
     
     private var cells: [CellView]
+    private var game: Game
     private var timer: Timer?
     
-    init(with cells: [CellView]) {
+    init(with cells: [CellView], game: Game) {
         self.cells = cells
+        self.game = game
         setTarget(to: cells)
     }
     
@@ -98,21 +100,19 @@ final class CellsManager {
     }
     
     @objc private func cellReleased(_ cell: CellView) {
-        cell.uncompress()
+        cell.uncompress(hiddenNumber: !game.isRunning)
         delegate?.cellReleased(cell)
     }
     
     @objc private func winkRandomNumber() {
-//        if !game.isRunning { return }
-        #warning("Fix this")
+        guard game.isRunning else { return }
         let cellsNotAnimating = cells.filter { !$0.isAnimating }
         let cellToWink = cellsNotAnimating.randomElement()
         cellToWink?.wink()
     }
     
     @objc private func swapRandomNumbers() {
-//        if !game.isRunning { return }
-        #warning("Fix this")
+        guard game.isRunning else { return }
         var cellsNotAnimating = cells.filter { !$0.isAnimating }
         if cellsNotAnimating.count < 2 { return }
         

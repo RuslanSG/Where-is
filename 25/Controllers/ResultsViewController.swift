@@ -10,27 +10,37 @@ import UIKit
 
 class ResultsViewController: UIViewController {
     
-    @IBOutlet weak var visualEffectView: UIVisualEffectView!
-    @IBOutlet weak var vibrancyEffectView: UIVisualEffectView!
-    @IBOutlet weak var numbersCountLabel: UILabel!
-    @IBOutlet var labels: [UILabel]!
-
+    var numbersFound: Int!
+    var gameFinishingReason: GameFinishingReason!
+    
+    @IBOutlet private weak var visualEffectView: UIVisualEffectView!
+    @IBOutlet private weak var vibrancyEffectView: UIVisualEffectView!
+    @IBOutlet private weak var numbersCountLabel: UILabel!
+    @IBOutlet private weak var titleLabel: UILabel!
+    @IBOutlet private var labels: [UILabel]!
+    
+    // MARK: - Lifecycle
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        modalPresentationStyle = .custom
+        transitioningDelegate = self
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
+        numbersCountLabel.text = String(numbersFound)
+        if gameFinishingReason == .timeIsOver {
+            titleLabel.text = "Time Is Over!"
+        } else {
+            titleLabel.text = "Wrong Number Tapped!"
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         showUIElements()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        modalPresentationStyle = .custom
-        transitioningDelegate = self
     }
 
     // MARK: - Actions
@@ -48,20 +58,8 @@ class ResultsViewController: UIViewController {
         vibrancyEffectView.effect = nil
         labels.forEach { $0.alpha = 0 }
         
-        
-        let blur: UIBlurEffect
-        let vibrancy: UIVibrancyEffect?
-        
-//        if #available(iOS 13.0, *) {
-//            blur = UIBlurEffect(style: .systemThickMaterial)
-//            vibrancy = UIVibrancyEffect(blurEffect: blur, style: .label)
-//        } else {
-//            blur = UIBlurEffect(style: .light)
-//            vibrancy = nil
-//        }
-        
-        blur = UIBlurEffect(style: .light)
-        vibrancy = UIVibrancyEffect(blurEffect: UIBlurEffect(style: .extraLight))
+        let blur = UIBlurEffect(style: .light)
+        let vibrancy = UIVibrancyEffect(blurEffect: UIBlurEffect(style: .extraLight))
         
         UIView.animate(withDuration: 0.5,
                        delay: 0,

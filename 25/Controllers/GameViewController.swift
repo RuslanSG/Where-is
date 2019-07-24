@@ -27,12 +27,16 @@ class GameViewController: UIViewController {
     
     private let game = Game()
     private var cellsGrid: CellsGrid!
-    private lazy var cellsManager = CellsManager(with: cellsGrid.cells)
+    private lazy var cellsManager = CellsManager(with: cellsGrid.cells, game: game)
     private var feedbackView = FeedbackView()
     private var firstTime = true
     private var startGameView: StartGameView!
     private let rowSize = 5
     private var lastPressedCell: CellView?
+    private var gameFinishingReason: GameFinishingReason!
+    private var numbersFound = 0
+    private var swipeUpGestureRecognizer: UISwipeGestureRecognizer!
+    private var swipeDownGestureRecognizer: UISwipeGestureRecognizer!
     
     private var cellStyle: CellView.Style {
         var style: CellView.Style
@@ -66,6 +70,7 @@ class GameViewController: UIViewController {
         setupUI()
         prepareForNewGame()
         
+        game.delegate = self
         cellsManager.delegate = self
         cellsGrid.delegate = cellsManager
     }
@@ -94,10 +99,6 @@ class GameViewController: UIViewController {
     
     // MARK: - Actions
     
-    @IBAction func showResults(_ sender: UIButton) {
-        performSegue(withIdentifier: "ShowResults", sender: sender)
-    }
-    
     @objc private func startGame() {
         game.startGame()
         startGameView.hide()
@@ -105,26 +106,19 @@ class GameViewController: UIViewController {
         if game.level.winkMode { cellsManager.startWinking() }
         if game.level.swapMode { cellsManager.startSwapping() }
         freezeUI(for: 0.2)
+        swipeUpGestureRecognizer.isEnabled = false
+        swipeDownGestureRecognizer.isEnabled = true
     }
     
     @objc func swipeUp() {
-        showSettings()
+        performSegue(withIdentifier: "ShowSettings", sender: nil)
         lastPressedCell?.uncompress()
+        prepareForNewGame()
     }
     
     @objc func swipeDown() {
         prepareForNewGame()
-        lastPressedCell?.uncompress()
-    }
-    
-    @objc func swipeRight() {
-        print("Swipe Right")
-        lastPressedCell?.uncompress()
-    }
-    
-    @objc func swipeLeft() {
-        print("Swipe Left")
-        lastPressedCell?.uncompress()
+        lastPressedCell?.uncompress(hiddenNumber: true)
     }
     
     // MARK: - Helper Methods
@@ -150,6 +144,9 @@ class GameViewController: UIViewController {
         
         cellsManager.hideNumbers(animated: false)
         cellsManager.updateNumbers(with: game.numbers, animated: false)
+        
+        swipeUpGestureRecognizer.isEnabled = true
+        swipeDownGestureRecognizer.isEnabled = false
         
         startGameView.show()
     }
@@ -243,26 +240,22 @@ extension GameViewController {
             }
         }
         
+        #warning("Insets!")
         return rect.inset(by: UIEdgeInsets(top: 2.0, left: 2.0, bottom: 2.0, right: 2.0))
     }
     
     private func setupGestureRecognizers() {
-        let up = UISwipeGestureRecognizer(target: self, action: #selector(swipeUp))
-        up.direction = .up
+        swipeUpGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(swipeUp))
+        swipeUpGestureRecognizer.direction = .up
+        swipeUpGestureRecognizer.cancelsTouchesInView = false
         
-        let down = UISwipeGestureRecognizer(target: self, action: #selector(swipeDown))
-        down.direction = .down
+        swipeDownGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(swipeDown))
+        swipeDownGestureRecognizer.direction = .down
+        swipeDownGestureRecognizer.cancelsTouchesInView = false
+        swipeDownGestureRecognizer.isEnabled = false
         
-        let right = UISwipeGestureRecognizer(target: self, action: #selector(swipeRight))
-        right.direction = .right
-        
-        let left = UISwipeGestureRecognizer(target: self, action: #selector(swipeLeft))
-        left.direction = .left
-        
-        self.view.addGestureRecognizer(up)
-        self.view.addGestureRecognizer(down)
-        self.view.addGestureRecognizer(right)
-        self.view.addGestureRecognizer(left)
+        self.view.addGestureRecognizer(swipeUpGestureRecognizer)
+        self.view.addGestureRecognizer(swipeDownGestureRecognizer)
     }
     
     private func updateStartGameViewFrame(animated: Bool) {
@@ -299,7 +292,6 @@ extension GameViewController: CellsManagerDelegate {
         }
         lastPressedCell = cell
         freezeUI(for: 0.17)
-        cell.hideNumber(animated: false)
     }
     
     internal func cellReleased(_ cell: CellView) {
@@ -313,8 +305,6 @@ extension GameViewController: CellsManagerDelegate {
             feedbackView.playErrorFeedback()
         }
         
-        cell.showNumber(animated: true)
-        
         if game.level.shuffleMode {
             game.shuffleNumbers()
             cellsManager.updateNumbers(with: game.numbers, animated: true)
@@ -322,19 +312,31 @@ extension GameViewController: CellsManagerDelegate {
     }
 }
 
+// MARK: - GameDelegate
+
+extension GameViewController: GameDelegate {
+    
+    internal func gameFinished(reason: GameFinishingReason, numbersFound: Int) {
+        gameFinishingReason = reason
+        self.numbersFound = numbersFound
+        prepareForNewGame()
+        performSegue(withIdentifier: "ShowResults", sender: nil)
+    }
+}
+
 // MARK: - Navigation
 
 extension GameViewController {
-    
-    private func showSettings() {
-        performSegue(withIdentifier: "ShowSettings", sender: nil)
-    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "ShowSettings" {
             let navigationController = segue.destination as! UINavigationController
             let settingsViewContoller = navigationController.viewControllers.first! as! SettingsViewController
             settingsViewContoller.game = game
+        } else if segue.identifier == "ShowResults" {
+            let resultsViewController = segue.destination as! ResultsViewController
+            resultsViewController.numbersFound = numbersFound
+            resultsViewController.gameFinishingReason = gameFinishingReason
         }
     }
     

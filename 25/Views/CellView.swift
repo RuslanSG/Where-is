@@ -288,11 +288,15 @@ class CellView: UIButton {
         UIView.animate(withDuration: 0.05) {
             self.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
         }
+        hideNumber(animated: false)
     }
     
-    func uncompress() {
+    func uncompress(hiddenNumber: Bool = false) {
         UIView.animate(withDuration: 0.2) {
             self.transform = CGAffineTransform.identity
+        }
+        if !hiddenNumber {
+            showNumber(animated: true)
         }
     }
     
