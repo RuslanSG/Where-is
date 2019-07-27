@@ -79,7 +79,7 @@ class GameViewController: UIViewController {
         super.viewDidLayoutSubviews()
         if firstTime {
             cellsGrid.layoutIfNeeded()
-            updateStartGameViewFrame(animated: false)
+            updateStartGameViewFrame()
             firstTime = false
         }
     }
@@ -89,7 +89,7 @@ class GameViewController: UIViewController {
         coordinator.animate(alongsideTransition: { (context) in
             self.cellsGrid.setOrientation(to: orientation)
             self.cellsGrid.layoutIfNeeded()
-            self.updateStartGameViewFrame(animated: false)
+            self.updateStartGameViewFrame()
         })
     }
     
@@ -166,10 +166,19 @@ extension GameViewController {
     
     private func setupCellsGrid() {
         cellsGrid = CellsGrid(rowSize: 5, rowHeight: cellHeight)
+        
         self.view.addSubview(cellsGrid)
+        
         cellsGrid.translatesAutoresizingMaskIntoConstraints = false
+        
+        let margins = view.layoutMarginsGuide
         cellsGrid.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         cellsGrid.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+
+        cellsGrid.topConstraint = cellsGrid.topAnchor.constraint(greaterThanOrEqualTo: margins.topAnchor, constant: 2.0)
+        cellsGrid.leftConstraint = cellsGrid.leftAnchor.constraint(greaterThanOrEqualTo: margins.leftAnchor)
+        #warning("Insets!")
+        
         cellsGrid.addRows(count: game.numbers.count / rowSize, animated: false)
         cellsManager.setStyle(to: cellStyle, animated: false)
     }
@@ -258,7 +267,7 @@ extension GameViewController {
         self.view.addGestureRecognizer(swipeDownGestureRecognizer)
     }
     
-    private func updateStartGameViewFrame(animated: Bool) {
+    private func updateStartGameViewFrame() {
         let aspectRatio: StartGameViewAcpectRatio
         
         switch (orientation, cellsGrid.cells.count.isMultiple(of: 10)) {
@@ -269,14 +278,8 @@ extension GameViewController {
         case (.landscape, true):
             aspectRatio = .twoToOne
         }
-        
-        if animated {
-            UIView.animate(withDuration: 0.3) {
-                self.startGameView.frame = self.startGameViewRect(aspectRatio: aspectRatio)
-            }
-        } else {
-            startGameView.frame = startGameViewRect(aspectRatio: aspectRatio)
-        }
+       
+        startGameView.frame = startGameViewRect(aspectRatio: aspectRatio)
     }
 }
 

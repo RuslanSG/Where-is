@@ -303,9 +303,12 @@ class CellView: UIButton {
     // MARK: - Private Methods
     
     private func setupUI() {
-        self.addSubview(childView)
-        self.backgroundColor = .clear
-        self.titleLabel?.textAlignment = .center
+        addSubview(childView)
+        backgroundColor = .clear
+        titleLabel?.textAlignment = .center
+        titleLabel?.numberOfLines = 1
+        titleLabel?.adjustsFontSizeToFitWidth = true
+        titleLabel?.minimumScaleFactor = 0.5
         
         childView.translatesAutoresizingMaskIntoConstraints = false
         childView.topAnchor.constraint(equalTo: self.topAnchor, constant: inset).isActive = true

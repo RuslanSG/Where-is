@@ -17,12 +17,13 @@ class CellsGrid: UIStackView {
     
     weak var delegate: CellsGridDelegate?
     
-    var cells: [CellView] = []
-        
-    var heightConstraint: NSLayoutConstraint?
-    var widthConstraint: NSLayoutConstraint?
+    var topConstraint: NSLayoutConstraint?
+    var bottomConstraint: NSLayoutConstraint?
+    var rightConstraint: NSLayoutConstraint?
+    var leftConstraint: NSLayoutConstraint?
     
-    var gridOrientation: Orientation = .portrait
+    private(set) var cells: [CellView] = []
+    private(set) var gridOrientation: Orientation = .portrait
     
     private var currentRow: UIStackView?
     private var lastRowIndex: Int!
@@ -46,12 +47,6 @@ class CellsGrid: UIStackView {
     func addRows(count: Int, animated: Bool) {
         addCells(count: count * rowSize, animated: animated)
         lastRowIndex = arrangedSubviews.count - 1
-        
-        if gridOrientation == .portrait {
-            heightConstraint?.constant += rowHeight
-        } else {
-            widthConstraint?.constant += rowHeight
-        }
     }
     
     func removeRows(count: Int, animated: Bool) {
@@ -67,12 +62,6 @@ class CellsGrid: UIStackView {
             }
         
             lastRowIndex -= count
-
-            if gridOrientation == .portrait {
-                heightConstraint?.constant -= rowHeight
-            } else {
-                widthConstraint?.constant -= rowHeight
-            }
             
             if !animated {
                 lastRow?.removeFromSuperview()
@@ -98,13 +87,10 @@ class CellsGrid: UIStackView {
             }
         }
         
-        self.axis = orientation == .portrait ? .vertical : .horizontal
+        axis = orientation == .portrait ? .vertical : .horizontal
         
-        guard let heightConstraintConstant = heightConstraint?.constant else { return }
-        guard let widthConstraintConstant = widthConstraint?.constant else { return }
-                
-        heightConstraint?.constant = widthConstraintConstant
-        widthConstraint?.constant = heightConstraintConstant
+        topConstraint?.isActive = orientation == .portrait
+        leftConstraint?.isActive = orientation == .landscape
     }
     
     func getCell(at point: CGPoint) -> CellView? {
@@ -160,9 +146,6 @@ class CellsGrid: UIStackView {
             let cell = CellView(inset: 2.0)
             cell.setCornerRadius(cornerRadius: 7.0)
             cell.titleLabel?.font = .systemFont(ofSize: 35.0)
-            cell.translatesAutoresizingMaskIntoConstraints = false
-            cell.heightAnchor.constraint(equalToConstant: rowHeight).isActive = true
-            cell.widthAnchor.constraint(equalTo: cell.heightAnchor).isActive = true
             
             let firstCellInRow = cells.count % rowSize == 0
             if currentRow == nil || firstCellInRow {
@@ -178,6 +161,14 @@ class CellsGrid: UIStackView {
                     })
                 }
             }
+            
+            cell.translatesAutoresizingMaskIntoConstraints = false
+            let widthConstraint = cell.widthAnchor.constraint(equalToConstant: rowHeight)
+            let heightConstraint = cell.heightAnchor.constraint(equalToConstant: rowHeight)
+            widthConstraint.priority = UILayoutPriority(rawValue: 999)
+            heightConstraint.priority = UILayoutPriority(rawValue: 999)
+            widthConstraint.isActive = true
+            heightConstraint.isActive = true
 
             cells.append(cell)
             currentRow!.addArrangedSubview(cell)
