@@ -29,6 +29,7 @@ class GameViewController: UIViewController {
     private var cellsGrid: CellsGrid!
     private lazy var cellsManager = CellsManager(with: cellsGrid.cells, game: game)
     private var feedbackView = FeedbackView()
+    private var feedbackGenerator = FeedbackGenerator()
     private var firstTime = true
     private var startGameView: StartGameView!
     private let rowSize = 5
@@ -294,6 +295,7 @@ extension GameViewController: CellsManagerDelegate {
             return
         }
         lastPressedCell = cell
+        feedbackGenerator.playSelectionHapticFeedback()
         freezeUI(for: 0.17)
     }
     
@@ -304,8 +306,10 @@ extension GameViewController: CellsManagerDelegate {
 
         if game.selectedNumberIsRight {
             cell.setNumber(cell.number + game.numbers.count, animated: false)
-        } else  {
+            feedbackGenerator.playSelectionHapticFeedback()
+        } else {
             feedbackView.playErrorFeedback()
+            feedbackGenerator.playVibrationFeedback()
         }
         
         if game.level.shuffleMode {
