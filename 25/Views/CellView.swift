@@ -25,6 +25,16 @@ class CellView: UIButton {
     var isAnimating = false
     var number = 0
     
+    override var backgroundColor: UIColor? {
+        set {
+            childView.backgroundColor = newValue
+        }
+        get {
+            return childView.backgroundColor
+        }
+    }
+    
+    
     override var description: String {
         return "|\(number)|"
     }
@@ -158,7 +168,7 @@ class CellView: UIButton {
         }
         
         if !animated {
-            childView.backgroundColor = newCellColor
+            self.backgroundColor = newCellColor
             self.setTitleColor(newNumberColor, for: .normal)
             return
         }

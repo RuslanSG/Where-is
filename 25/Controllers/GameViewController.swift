@@ -20,24 +20,30 @@ var orientation: Orientation {
 class GameViewController: UIViewController {
     
     private enum StartGameViewAcpectRatio {
-        case threeToOne
-        case threeToTwo
-        case twoToOne
+        case threeToOne, threeToTwo, twoToOne
     }
     
-    private let game = Game()
+    private enum SettingsButtonAspectRatio {
+        case oneToOne, oneToTwo
+    }
+    
     private var cellsGrid: CellsGrid!
+    private var lastPressedCell: CellView?
+    private var cellsUnderSettingsButton = [CellView]()
+    private var startGameButton: StartGameView!
+    private var settingsButton: UIButton!
+    private var swipeDownGestureRecognizer: UISwipeGestureRecognizer!
+    
+    private let game = Game()
     private lazy var cellsManager = CellsManager(with: cellsGrid.cells, game: game)
     private var feedbackView = FeedbackView()
     private var feedbackGenerator = FeedbackGenerator()
-    private var firstTime = true
-    private var startGameView: StartGameView!
-    private let rowSize = 5
-    private var lastPressedCell: CellView?
     private var gameFinishingReason: GameFinishingReason!
+    
+    private let rowSize = 5
     private var numbersFound = 0
-    private var swipeUpGestureRecognizer: UISwipeGestureRecognizer!
-    private var swipeDownGestureRecognizer: UISwipeGestureRecognizer!
+    
+    private var firstTime = true
     
     private var cellStyle: CellView.Style {
         var style: CellView.Style
@@ -74,6 +80,11 @@ class GameViewController: UIViewController {
         game.delegate = self
         cellsManager.delegate = self
         cellsGrid.delegate = cellsManager
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(applicationWillResignActive),
+                                               name: UIApplication.willResignActiveNotification,
+                                               object: nil)
     }
     
     override func viewDidLayoutSubviews() {
@@ -81,6 +92,7 @@ class GameViewController: UIViewController {
         if firstTime {
             cellsGrid.layoutIfNeeded()
             updateStartGameViewFrame()
+            updateSettingsButtonFrameAndBackgroundColor()
             firstTime = false
         }
     }
@@ -91,6 +103,7 @@ class GameViewController: UIViewController {
             self.cellsGrid.setOrientation(to: orientation)
             self.cellsGrid.layoutIfNeeded()
             self.updateStartGameViewFrame()
+            self.updateSettingsButtonFrameAndBackgroundColor()
         })
     }
     
@@ -102,24 +115,39 @@ class GameViewController: UIViewController {
     
     @objc private func startGame() {
         game.startGame()
-        startGameView.hide()
+        startGameButton.hide()
         cellsManager.showNumbers(animated: true)
         if game.level.winkMode { cellsManager.startWinking() }
         if game.level.swapMode { cellsManager.startSwapping() }
         freezeUI(for: 0.2)
-        swipeUpGestureRecognizer.isEnabled = false
         swipeDownGestureRecognizer.isEnabled = true
-    }
-    
-    @objc func swipeUp() {
-        performSegue(withIdentifier: "ShowSettings", sender: nil)
-        lastPressedCell?.uncompress()
-        prepareForNewGame()
+        feedbackGenerator.playSelectionHapticFeedback()
+        
+        UIView.animate(withDuration: 0.2) {
+            self.settingsButton.isHidden = true
+        }
     }
     
     @objc func swipeDown() {
         prepareForNewGame()
-        lastPressedCell?.uncompress(hiddenNumber: true)
+    }
+    
+    @objc func settingsButtonPressed() {
+        UIView.animate(withDuration: 0.05) {
+            self.settingsButton.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+        }
+        cellsUnderSettingsButton.forEach { $0.compress() }
+        feedbackGenerator.playSelectionHapticFeedback()
+    }
+
+    @objc func settingsButtonReleased() {
+        performSegue(withIdentifier: "ShowSettings", sender: nil)
+        prepareForNewGame()
+        UIView.animate(withDuration: 0.2) {
+            self.settingsButton.transform = CGAffineTransform.identity
+        }
+        cellsUnderSettingsButton.forEach { $0.uncompress(hiddenNumber: true) }
+        feedbackGenerator.playSelectionHapticFeedback()
     }
     
     // MARK: - Helper Methods
@@ -128,7 +156,8 @@ class GameViewController: UIViewController {
         setupFeedbackView()
         setupCellsGrid()
         cellsGrid.setOrientation(to: orientation)
-        setupStartGameView()
+        setupStartGameButton()
+        setupSettingsButton()
         setupGestureRecognizers()
     }
     
@@ -146,10 +175,15 @@ class GameViewController: UIViewController {
         cellsManager.hideNumbers(animated: false)
         cellsManager.updateNumbers(with: game.numbers, animated: false)
         
-        swipeUpGestureRecognizer.isEnabled = true
         swipeDownGestureRecognizer.isEnabled = false
         
-        startGameView.show()
+        startGameButton.show()
+        
+        UIView.animate(withDuration: 0.2) {
+            self.settingsButton.isHidden = false
+        }
+        
+        lastPressedCell?.uncompress(hiddenNumber: true)
     }
     
     private func freezeUI(for freezeTime: Double) {
@@ -157,6 +191,21 @@ class GameViewController: UIViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + freezeTime) {
             self.view.isUserInteractionEnabled = true
         }
+    }
+    
+    private func getRectUnion(of cells: [CellView]) -> CGRect {
+        var rect: CGRect = .zero
+        
+        for cell in cells {
+            let cellFrame = self.view.convert(cell.bounds, from: cell)
+            if rect == .zero {
+                rect = cellFrame
+            } else {
+                rect = rect.union(cellFrame)
+            }
+        }
+        
+        return rect
     }
     
 }
@@ -193,18 +242,36 @@ extension GameViewController {
         feedbackView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
     }
     
-    private func setupStartGameView() {
+    private func setupStartGameButton() {
         let style: StartGameView.Style = .light
         
-        startGameView = StartGameView(interval: 5.0, style: style)
+        startGameButton = StartGameView(interval: 5.0, style: style)
         
-        self.view.addSubview(startGameView)
+        self.view.addSubview(startGameButton)
         
-        startGameView.layer.cornerRadius = 7.0
-        startGameView.clipsToBounds = true
+        startGameButton.layer.cornerRadius = 7.0
+        startGameButton.clipsToBounds = true
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(startGame))
         view.addGestureRecognizer(tap) // TODO: Check if it works with swipe up
+    }
+    
+    private func setupSettingsButton() {
+        let gearImage = UIImage(named: "gear")?.withRenderingMode(.alwaysTemplate)
+        
+        settingsButton = UIButton()
+        settingsButton.setImage(gearImage, for: .normal)
+        settingsButton.tintColor = .white
+        settingsButton.imageView?.contentMode = .scaleAspectFit
+        settingsButton.imageEdgeInsets = UIEdgeInsets(top: 17.0, left: 17.0, bottom: 17.0, right: 17.0)
+        settingsButton.backgroundColor = cellsUnderSettingsButton.first?.backgroundColor
+        settingsButton.layer.cornerRadius = 7.0
+        #warning("Corner Radius!")
+        settingsButton.addTarget(self, action: #selector(settingsButtonPressed), for: .touchDown)
+        settingsButton.addTarget(self, action: #selector(settingsButtonReleased), for: .touchUpInside)
+        settingsButton.addTarget(self, action: #selector(settingsButtonReleased), for: .touchUpOutside)
+        
+        view.addSubview(settingsButton)
     }
     
     private func startGameViewRect(aspectRatio: StartGameViewAcpectRatio) -> CGRect {
@@ -214,23 +281,29 @@ extension GameViewController {
         switch aspectRatio {
         case .threeToOne:
             if orientation == .portrait {
-                origin = CGPoint(x: 2, y: cellsGrid.cells.count / 5 / 2 + 1)
+                origin = CGPoint(x: 2,
+                                 y: Int(ceilf(Float(cellsGrid.cells.count) / Float(rowSize) / 2)))
             } else {
-                origin = CGPoint(x: cellsGrid.cells.count / 5 / 2, y: 3)
+                origin = CGPoint(x: cellsGrid.cells.count / rowSize / 2,
+                                 y: 3)
             }
             size = CGSize(width: 3, height: 1)
         case .threeToTwo:
             if orientation == .portrait {
-                origin = CGPoint(x: 2, y: cellsGrid.cells.count / 5 / 2)
+                origin = CGPoint(x: 2,
+                                 y: cellsGrid.cells.count / rowSize / 2)
             } else {
-                origin = CGPoint(x: cellsGrid.cells.count / 5 / 2, y: 2)
+                origin = CGPoint(x: cellsGrid.cells.count / rowSize / 2,
+                                 y: 2)
             }
             size = CGSize(width: 3, height: 2)
         case .twoToOne:
             if orientation == .portrait {
-                origin = CGPoint(x: 2, y: cellsGrid.cells.count / 5 / 2 + 1)
+                origin = CGPoint(x: 2,
+                                 y: Int(ceilf(Float(cellsGrid.cells.count) / Float(rowSize) / 2)))
             } else {
-                origin = CGPoint(x: cellsGrid.cells.count / 5 / 2, y: 3)
+                origin = CGPoint(x: cellsGrid.cells.count / rowSize / 2,
+                                 y: 3)
             }
             size = CGSize(width: 2, height: 1)
         }
@@ -238,33 +311,47 @@ extension GameViewController {
         guard let centralCells = cellsGrid.getCells(origin: origin, size: size) else {
             return .zero
         }
-                
-        var rect: CGRect = .zero
-        
-        for cell in centralCells {
-            let cellFrame = self.view.convert(cell.bounds, from: cell)
-            if rect == .zero {
-                rect = cellFrame
-            } else {
-                rect = rect.union(cellFrame)
-            }
-        }
         
         #warning("Insets!")
-        return rect.inset(by: UIEdgeInsets(top: 2.0, left: 2.0, bottom: 2.0, right: 2.0))
+        return getRectUnion(of: centralCells).inset(by: UIEdgeInsets(top: 2.0,
+                                                                     left: 2.0,
+                                                                     bottom: 2.0,
+                                                                     right: 2.0))
     }
     
-    private func setupGestureRecognizers() {
-        swipeUpGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(swipeUp))
-        swipeUpGestureRecognizer.direction = .up
-        swipeUpGestureRecognizer.cancelsTouchesInView = false
+    private func settingsButtonRect(aspectRatio: SettingsButtonAspectRatio) -> CGRect {
+        let origin: CGPoint
+        let size: CGSize
         
+        switch aspectRatio {
+        case .oneToOne:
+            if orientation == .portrait {
+                origin = CGPoint(x: Int(ceilf(Float(rowSize) / 2)),
+                                 y: cellsGrid.cells.count / rowSize)
+            } else {
+                origin = CGPoint(x: Int(ceilf(Float(cellsGrid.cells.count) / Float(rowSize) / 2)),
+                                 y: rowSize)
+            }
+            size = CGSize(width: 1, height: 1)
+        case .oneToTwo:
+            origin = CGPoint(x: cellsGrid.cells.count / rowSize / 2,
+                             y: rowSize)
+            size = CGSize(width: 2, height: 1)
+        }
+        
+        guard let targetCells = cellsGrid.getCells(origin: origin, size: size) else { return .zero }
+        cellsUnderSettingsButton = targetCells
+        
+        return getRectUnion(of: targetCells).inset(by: UIEdgeInsets(top: 2.0, left: 2.0, bottom: 2.0, right: 2.0))
+    }
+    
+    
+    private func setupGestureRecognizers() {
         swipeDownGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(swipeDown))
         swipeDownGestureRecognizer.direction = .down
         swipeDownGestureRecognizer.cancelsTouchesInView = false
         swipeDownGestureRecognizer.isEnabled = false
         
-        self.view.addGestureRecognizer(swipeUpGestureRecognizer)
         self.view.addGestureRecognizer(swipeDownGestureRecognizer)
     }
     
@@ -280,7 +367,20 @@ extension GameViewController {
             aspectRatio = .twoToOne
         }
        
-        startGameView.frame = startGameViewRect(aspectRatio: aspectRatio)
+        startGameButton.frame = startGameViewRect(aspectRatio: aspectRatio)
+    }
+    
+    private func updateSettingsButtonFrameAndBackgroundColor() {
+        let aspectRatio: SettingsButtonAspectRatio
+        
+        if orientation == .landscape && cellsGrid.cells.count.isMultiple(of: 10) {
+            aspectRatio = .oneToTwo
+        } else {
+            aspectRatio = .oneToOne
+        }
+        
+        settingsButton.frame = settingsButtonRect(aspectRatio: aspectRatio)
+        settingsButton.backgroundColor = cellsUnderSettingsButton.first?.backgroundColor
     }
 }
 
@@ -307,9 +407,6 @@ extension GameViewController: CellsManagerDelegate {
         if game.selectedNumberIsRight {
             cell.setNumber(cell.number + game.numbers.count, animated: false)
             feedbackGenerator.playSelectionHapticFeedback()
-        } else {
-            feedbackView.playErrorFeedback()
-            feedbackGenerator.playVibrationFeedback()
         }
         
         if game.level.shuffleMode {
@@ -326,8 +423,19 @@ extension GameViewController: GameDelegate {
     internal func gameFinished(reason: GameFinishingReason, numbersFound: Int) {
         gameFinishingReason = reason
         self.numbersFound = numbersFound
+        feedbackGenerator.playVibrationFeedback()
         prepareForNewGame()
         performSegue(withIdentifier: "ShowResults", sender: nil)
+    }
+}
+
+// MARK: - Notifications
+
+extension GameViewController {
+    
+    @objc internal func applicationWillResignActive() {
+        cellsUnderSettingsButton.forEach { $0.uncompress() }
+        prepareForNewGame()
     }
 }
 
