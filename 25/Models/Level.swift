@@ -19,12 +19,12 @@ class Level {
             "Colorful Cells: \(colorModeFor.cells)\n" +
             "Wink Mode: \(winkMode)\n" +
             "Swap Mode: \(swapMode)\n" +
-        "Shuffle Mode \(shuffleMode)\n"
+            "Shuffle Mode \(shuffleMode)\n"
     }
     
     var index: Int
     var numbers: Int
-    var goal: Double
+    var interval: Double
     var available: Bool
     var passed: Bool
     
@@ -33,10 +33,10 @@ class Level {
     var swapMode: Bool
     var shuffleMode: Bool
     
-    init(index: Int, numbersCount: Int, goal: Double, colorModeFor: (numbers: Bool, cells: Bool), winkMode: Bool, swapMode: Bool, shuffleMode: Bool) {
+    init(index: Int, numbersCount: Int, interval: Double, colorModeFor: (numbers: Bool, cells: Bool), winkMode: Bool, swapMode: Bool, shuffleMode: Bool) {
         self.index = index
         self.numbers = numbersCount
-        self.goal = goal
+        self.interval = interval
         self.colorModeFor = colorModeFor
         self.winkMode = winkMode
         self.swapMode = swapMode

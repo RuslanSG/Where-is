@@ -144,8 +144,7 @@ class CellView: UIButton {
     }
     
     func setStyle(_ style: CellView.Style, animated: Bool) {
-        let cellColors: [UIColor] = [.red, .orange, .yellow] //[.cellBlue, .cellTurquoise, .cellGreen]
-        var numberColors: [UIColor] = [.red, .orange, .yellow] //[.numberBlue, .numberTurquoise, .numberGreen]
+        var cellColors: [UIColor] = [.cellPurple, .cellRed, .cellYellow]
         
         let newCellColor: UIColor
         let newNumberColor: UIColor
@@ -163,8 +162,8 @@ class CellView: UIButton {
         case .colorfulWithColorfulNumber:
             newCellColor = cellColors[Int.random(in: cellColors.indices)]
             let index = cellColors.firstIndex(of: newCellColor)!
-            numberColors.remove(at: index)
-            newNumberColor = numberColors[Int.random(in: numberColors.indices)]
+            cellColors.remove(at: index)
+            newNumberColor = cellColors[Int.random(in: cellColors.indices)]
         }
         
         if !animated {
@@ -281,13 +280,9 @@ class CellView: UIButton {
     func stopAnimations() {
         isAnimating = false
         
-        appearingAnimator?.stopAnimation(false)
-        disappearingAnimator?.stopAnimation(false)
-        settingAnimator?.stopAnimation(false)
-        
-        appearingAnimator?.finishAnimation(at: .end)
-        disappearingAnimator?.finishAnimation(at: .end)
-        settingAnimator?.finishAnimation(at: .end)
+        appearingAnimator?.stopAnimation(true)
+        disappearingAnimator?.stopAnimation(true)
+        settingAnimator?.stopAnimation(true)
         
         appearingAnimator = nil
         disappearingAnimator = nil

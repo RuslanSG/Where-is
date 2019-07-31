@@ -11,6 +11,6 @@ import Foundation
 extension UserDefaults {
     enum Key {
         static let availableLevels: String = "AvailableLevelsUserDefaultsKey"
-        static let levelIndex: String = "LevelUserDefaultsKey"
+        static let levelIndex: String = "LevelUserDefaultsKeyTest"
     }
 }

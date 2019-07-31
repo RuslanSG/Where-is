@@ -63,16 +63,16 @@ class CellsGrid: UIStackView {
         
             lastRowIndex -= count
             
-            if !animated {
+            if animated {
+                UIView.animate(withDuration: 0.3,
+                               animations: {
+                                lastRow?.removeFromSuperview()
+                                self.layoutIfNeeded()
+                })
+            } else {
                 lastRow?.removeFromSuperview()
-                return
+                layoutIfNeeded()
             }
-            
-            UIView.animate(withDuration: 0.3,
-                           animations: {
-                            lastRow?.removeFromSuperview()
-                            self.layoutIfNeeded()
-            })
         }
         delegate?.cellsCountDidChange(cells: cells)
     }

@@ -74,7 +74,7 @@ struct LevelParameters {
                                           29 : true,
                                           30 : true])
     
-    let numbersCountForLevel = [0  : 30,
+    let numbersCountForLevel = [0  : 35,
                                 1  : 25,
                                 2  : 25,
                                 3  : 25,

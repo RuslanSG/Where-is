@@ -86,10 +86,12 @@ final class CellsManager {
     
     func stopWinking() {
         stopTimer()
+        cells.forEach { $0.stopAnimations() }
     }
     
     func stopSwapping() {
         stopTimer()
+        cells.forEach { $0.stopAnimations() }
     }
     
     // MARK: - Action Methods
@@ -122,8 +124,8 @@ final class CellsManager {
         
         let cell2 = cellsNotAnimating.randomElement()!
         
-        let number1 = cell1.tag
-        let number2 = cell2.tag
+        let number1 = cell1.number
+        let number2 = cell2.number
         
         cell1.setNumber(number2, animated: true, speed: .slow)
         cell2.setNumber(number1, animated: true, speed: .slow)

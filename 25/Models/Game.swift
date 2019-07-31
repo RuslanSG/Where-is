@@ -26,21 +26,23 @@ final class Game {
     private(set) var isRunning = false
     private(set) var selectedNumberIsRight = false
     private(set) var numbersFound = 0
-    private(set) var interval = 5.0
     
     var level: Level {
-        return levels[0] //levels[currentLevelIndex]
+        let index = levels.firstIndex { $0.index == currentLevelIndex }
+        guard let i = index else { return levels.first! }
+        return levels[i]
     }
     
     private var timer: Timer?
     private var levels = [Level]()
-    private var maxLevel = 30
+    private var maxLevel = 5
+//    private var currentLevelIndex = 1
     private var currentLevelIndex: Int {
         get {
             return UserDefaults.standard.integer(forKey: UserDefaults.Key.levelIndex)
         }
         set {
-            UserDefaults.standard.set(level, forKey: UserDefaults.Key.levelIndex)
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.Key.levelIndex)
         }
     }
     
@@ -49,7 +51,7 @@ final class Game {
     init() {
         setLevels()
         setNumbers(count: level.numbers)
-        registerDefaults()
+//        registerDefaults()
     }
     
     // MARK: - Actions
@@ -68,7 +70,7 @@ final class Game {
             guard let index = numbers.firstIndex(of: number) else { return }
             numbers[index] = number + numbers.count
             timer?.invalidate()
-            setTimer(to: interval)
+            setTimer(to: level.interval)
         } else {
             delegate?.gameFinished(reason: .wrongNumberTapped, numbersFound: numbersFound)
             selectedNumberIsRight = false
@@ -84,7 +86,7 @@ final class Game {
     
     func startGame() {
         isRunning = true
-        setTimer(to: interval)
+        setTimer(to: level.interval)
     }
     
     func finishGame() {
@@ -96,7 +98,7 @@ final class Game {
         numbers.shuffle()
     }
     
-    func setLevel(_ levelIndex: Int) {
+    func setLevel(to levelIndex: Int) {
         currentLevelIndex = levelIndex
     }
     
@@ -112,11 +114,11 @@ final class Game {
     }
     
     private func setLevels() {
-        let parameters = LevelParameters()
-        for i in 0...maxLevel {
+        let parameters = LevelParametersTest()
+        for i in 1...maxLevel {
             let index = i
             let numbersCount = parameters.numbersCountForLevel[i]!
-            let goal = parameters.goalForLevel[i]!
+            let interval = parameters.intervalForLevel[i]!
             let colorsModeFor = (numbers: parameters.colorModeFor.numbersForLevel[i]!,
                                  cells: parameters.colorModeFor.cellsForLevel[i]!)
             let winkMode = parameters.winkModeForLevel[i]!
@@ -125,7 +127,7 @@ final class Game {
 
             let level = Level(index: index,
                               numbersCount: numbersCount,
-                              goal: goal,
+                              interval: interval,
                               colorModeFor: colorsModeFor,
                               winkMode: winkMode,
                               swapMode: swapMode,
@@ -137,11 +139,11 @@ final class Game {
     
     // MARK: - Helper Methods
     
-    private func registerDefaults() {
-        let key = UserDefaults.Key.levelIndex
-        let dictionary: [String: Any] = [key: 1]
-        UserDefaults.standard.register(defaults: dictionary)
-    }
+//    private func registerDefaults() {
+//        let key = UserDefaults.Key.levelIndex
+//        let dictionary: [String: Any] = [key: 1]
+//        UserDefaults.standard.register(defaults: dictionary)
+//    }
     
     private func setTimer(to time: Double) {
         timer = Timer.scheduledTimer(timeInterval: time,

@@ -355,6 +355,23 @@ extension GameViewController {
         self.view.addGestureRecognizer(swipeDownGestureRecognizer)
     }
     
+    private func updateViewFromModel() {
+        if cellsGrid.cells.count < game.level.numbers {
+            let numberOfRowsToAdd = (game.level.numbers - cellsGrid.cells.count) / rowSize
+            cellsGrid.addRows(count: numberOfRowsToAdd, animated: false)
+            cellsGrid.layoutIfNeeded()
+        } else if cellsGrid.cells.count > game.level.numbers {
+            let numberOfRowsToRemove = (cellsGrid.cells.count - game.level.numbers) / rowSize
+            cellsGrid.removeRows(count: numberOfRowsToRemove, animated: false)
+            cellsGrid.layoutIfNeeded()
+        }
+        cellsManager.setStyle(to: cellStyle, animated: false)
+        cellsManager.setNumbers(game.numbers, animated: false)
+        cellsManager.hideNumbers(animated: false)
+        updateStartGameViewFrame()
+        updateSettingsButtonFrameAndBackgroundColor()
+    }
+    
     private func updateStartGameViewFrame() {
         let aspectRatio: StartGameViewAcpectRatio
         
@@ -429,6 +446,16 @@ extension GameViewController: GameDelegate {
     }
 }
 
+// MARK: - SettingsViewControllerDelegate
+
+extension GameViewController: SettingsViewControllerDelegate {
+    
+    internal func levelDidChange(to level: Level) {
+        game.newGame()
+        updateViewFromModel()
+    }
+}
+
 // MARK: - Notifications
 
 extension GameViewController {
@@ -448,6 +475,7 @@ extension GameViewController {
             let navigationController = segue.destination as! UINavigationController
             let settingsViewContoller = navigationController.viewControllers.first! as! SettingsViewController
             settingsViewContoller.game = game
+            settingsViewContoller.delegate = self
         } else if segue.identifier == "ShowResults" {
             let resultsViewController = segue.destination as! ResultsViewController
             resultsViewController.numbersFound = numbersFound

@@ -58,8 +58,8 @@ class ResultsViewController: UIViewController {
         vibrancyEffectView.effect = nil
         labels.forEach { $0.alpha = 0 }
         
-        let blur = UIBlurEffect(style: .light)
-        let vibrancy = UIVibrancyEffect(blurEffect: UIBlurEffect(style: .extraLight))
+        let blur = UIBlurEffect(style: .extraLight)
+        let vibrancy = UIVibrancyEffect(blurEffect: blur)
         
         UIView.animate(withDuration: 0.5,
                        delay: 0,
