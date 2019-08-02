@@ -104,8 +104,8 @@
 				2AE841F322DE39AC00D724E0 /* Views */,
 				2AE841ED22DE395700D724E0 /* Controllers */,
 				2A118DC8211A13450059E252 /* Supporting Files */,
-				2AE841FC22DE3A9B00D724E0 /* Extentions */,
 				2A527BD022E795E000F68407 /* Interface Builder */,
+				2AE841FC22DE3A9B00D724E0 /* Extentions */,
 				2AE8420522DE3BCB00D724E0 /* Recources */,
 				2A118DC2211A13300059E252 /* Info.plist */,
 				2A8F0991226519C000CF9A04 /* GoogleService-Info.plist */,
@@ -117,11 +117,11 @@
 			isa = PBXGroup;
 			children = (
 				2AE841FA22DE3A2600D724E0 /* CellsGrid.swift */,
-				2A3271DE22E8685A00F303A5 /* BlurryPresentationController.swift */,
 				2AE841FD22DE3ABC00D724E0 /* CellsManager.swift */,
 				2AE841FF22DE3AD800D724E0 /* LevelParameters.swift */,
 				2A85C82122F1C2EE0039D678 /* LevelParametersTest.swift */,
 				2ACDF75B213D5B43004FEA1B /* FeedbackGenerator.swift */,
+				2A3271DE22E8685A00F303A5 /* BlurryPresentationController.swift */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -495,6 +495,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 88X53XUV8A;
 				ENABLE_BITCODE = YES;
 				GCC_OPTIMIZATION_LEVEL = s;
@@ -518,6 +519,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 88X53XUV8A;
 				ENABLE_BITCODE = YES;
 				GCC_OPTIMIZATION_LEVEL = s;

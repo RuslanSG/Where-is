@@ -60,6 +60,7 @@ class StartGameView: UIVisualEffectView {
     func show() {
         guard isHidden else { return }
         isHidden = false
+        isUserInteractionEnabled = true
         
         UIView.animate(withDuration: 0.5,
                        delay: 0,
@@ -75,6 +76,8 @@ class StartGameView: UIVisualEffectView {
     
     func hide() {
         guard !isHidden else { return }
+        isUserInteractionEnabled = false
+        
         UIView.animate(withDuration: 0.15,
                        delay: 0,
                        usingSpringWithDamping: 1,

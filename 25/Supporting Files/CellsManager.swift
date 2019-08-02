@@ -21,6 +21,8 @@ final class CellsManager {
     private var cells: [CellView]
     private var game: Game
     private var timer: Timer?
+    private var isWinking = false
+    private var isSwapping = false
     
     init(with cells: [CellView], game: Game) {
         self.cells = cells
@@ -69,7 +71,11 @@ final class CellsManager {
     }
     
     func startWinking() {
-        timer = Timer.scheduledTimer(timeInterval: 0.1,
+        guard !isWinking else { return }
+        isWinking = true
+        let winkingSpeed = 3.0 // less = faster
+        let interval = winkingSpeed / Double(cells.count)
+        timer = Timer.scheduledTimer(timeInterval: interval,
                                      target: self,
                                      selector: #selector(winkRandomNumber),
                                      userInfo: nil,
@@ -77,7 +83,11 @@ final class CellsManager {
     }
     
     func startSwapping() {
-        timer = Timer.scheduledTimer(timeInterval: 0.2,
+        guard !isSwapping else { return }
+        isSwapping = true
+        let swappingSpeed = 8.0 // less = faster
+        let interval = swappingSpeed / Double(cells.count)
+        timer = Timer.scheduledTimer(timeInterval: interval,
                                      target: self,
                                      selector: #selector(swapRandomNumbers),
                                      userInfo: nil,
@@ -85,13 +95,21 @@ final class CellsManager {
     }
     
     func stopWinking() {
-        stopTimer()
-        cells.forEach { $0.stopAnimations() }
+        isWinking = false
+        stopAnimations()
     }
     
     func stopSwapping() {
-        stopTimer()
-        cells.forEach { $0.stopAnimations() }
+        isSwapping = false 
+        stopAnimations()
+    }
+    
+    func enableCells() {
+        cells.forEach { $0.isUserInteractionEnabled = true }
+    }
+    
+    func disableCells() {
+        cells.forEach { $0.isUserInteractionEnabled = false }
     }
     
     // MARK: - Action Methods
@@ -102,14 +120,16 @@ final class CellsManager {
     }
     
     @objc private func cellReleased(_ cell: CellView) {
-        cell.uncompress(hiddenNumber: !game.isRunning)
+        let hideNumberNeeded = game.level.shuffleMode || !game.isRunning
+        cell.uncompress(hideNumber: hideNumberNeeded)
         delegate?.cellReleased(cell)
     }
     
     @objc private func winkRandomNumber() {
         guard game.isRunning else { return }
-        let cellsNotAnimating = cells.filter { !$0.isAnimating }
-        let cellToWink = cellsNotAnimating.randomElement()
+        let cellsToWink = cells.filter { $0.winkEnabled }
+        print(cellsToWink)
+        let cellToWink = cellsToWink.randomElement()
         cellToWink?.wink()
     }
     
@@ -144,6 +164,11 @@ final class CellsManager {
     private func stopTimer() {
         timer?.invalidate()
         timer = nil
+    }
+    
+    private func stopAnimations() {
+        stopTimer()
+        cells.forEach { $0.stopAnimations() }
     }
 }
 

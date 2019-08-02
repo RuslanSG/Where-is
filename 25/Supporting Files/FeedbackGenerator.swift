@@ -49,9 +49,6 @@ final class FeedbackGenerator {
         if UIDevice.current.hasHapticFeedback {
             feedbackGenerator.selection.selectionChanged()
             feedbackGenerator.selection.prepare()
-        } else if UIDevice.current.hasTapticEngine {
-            let peek = SystemSoundID(1519)
-            AudioServicesPlaySystemSound(peek)
         }
     }
     

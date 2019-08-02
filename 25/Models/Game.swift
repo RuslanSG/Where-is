@@ -9,7 +9,7 @@
 import Foundation
 
 enum GameFinishingReason {
-    case wrongNumberTapped, timeIsOver
+    case wrongNumberTapped, timeIsOver, levelPassed
 }
 
 protocol GameDelegate: class {
@@ -21,17 +21,18 @@ final class Game {
     
     weak var delegate: GameDelegate?
     
-    private(set) var numbers = [Int]()
-    private(set) var nextNumber = 1
-    private(set) var isRunning = false
-    private(set) var selectedNumberIsRight = false
-    private(set) var numbersFound = 0
-    
     var level: Level {
         let index = levels.firstIndex { $0.index == currentLevelIndex }
         guard let i = index else { return levels.first! }
         return levels[i]
     }
+    
+    private(set) var numbers = [Int]()
+    private(set) var nextNumber = 1
+    private(set) var numberToSet = 0
+    private(set) var isRunning = false
+    private(set) var selectedNumberIsRight = false
+    private(set) var numbersFound = 0
     
     private var timer: Timer?
     private var levels = [Level]()
@@ -64,9 +65,14 @@ final class Game {
     
     func numberSelected(_ number: Int) {
         if number == nextNumber {
+            if number == numbers.max() {
+                delegate?.gameFinished(reason: .levelPassed, numbersFound: numbersFound + 1)
+                return
+            }
             selectedNumberIsRight = true
             numbersFound += 1
             nextNumber += 1
+            numberToSet = number + level.numbers
             guard let index = numbers.firstIndex(of: number) else { return }
             numbers[index] = number + numbers.count
             timer?.invalidate()
@@ -86,7 +92,7 @@ final class Game {
     
     func startGame() {
         isRunning = true
-        setTimer(to: level.interval)
+//        setTimer(to: level.interval)
     }
     
     func finishGame() {

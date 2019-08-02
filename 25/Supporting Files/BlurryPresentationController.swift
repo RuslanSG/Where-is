@@ -13,5 +13,4 @@ class BlurryPresentationController: UIPresentationController {
     override var shouldRemovePresentersView: Bool {
         return false
     }
-    
 }

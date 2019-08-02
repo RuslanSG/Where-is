@@ -117,6 +117,7 @@ class GameViewController: UIViewController {
         game.startGame()
         startGameButton.hide()
         cellsManager.showNumbers(animated: true)
+        cellsManager.enableCells()
         if game.level.winkMode { cellsManager.startWinking() }
         if game.level.swapMode { cellsManager.startSwapping() }
         freezeUI(for: 0.2)
@@ -146,7 +147,7 @@ class GameViewController: UIViewController {
         UIView.animate(withDuration: 0.2) {
             self.settingsButton.transform = CGAffineTransform.identity
         }
-        cellsUnderSettingsButton.forEach { $0.uncompress(hiddenNumber: true) }
+        cellsUnderSettingsButton.forEach { $0.uncompress(hideNumber: true) }
         feedbackGenerator.playSelectionHapticFeedback()
     }
     
@@ -172,6 +173,7 @@ class GameViewController: UIViewController {
             cellsManager.stopSwapping()
         }
         
+        cellsManager.disableCells()
         cellsManager.hideNumbers(animated: false)
         cellsManager.updateNumbers(with: game.numbers, animated: false)
         
@@ -183,7 +185,7 @@ class GameViewController: UIViewController {
             self.settingsButton.isHidden = false
         }
         
-        lastPressedCell?.uncompress(hiddenNumber: true)
+        lastPressedCell?.uncompress(hideNumber: true)
     }
     
     private func freezeUI(for freezeTime: Double) {
@@ -207,7 +209,6 @@ class GameViewController: UIViewController {
         
         return rect
     }
-    
 }
 
 // MARK: - UI Managment
@@ -253,7 +254,7 @@ extension GameViewController {
         startGameButton.clipsToBounds = true
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(startGame))
-        view.addGestureRecognizer(tap) // TODO: Check if it works with swipe up
+        startGameButton.addGestureRecognizer(tap)
     }
     
     private func setupSettingsButton() {
@@ -406,14 +407,9 @@ extension GameViewController {
 extension GameViewController: CellsManagerDelegate {
     
     internal func cellPressed(_ cell: CellView) {
-        if cell.number == game.numbers.max() {
-            game.finishGame()
-            prepareForNewGame()
-            return
-        }
         lastPressedCell = cell
         feedbackGenerator.playSelectionHapticFeedback()
-        freezeUI(for: 0.17)
+        freezeUI(for: 0.1)
     }
     
     internal func cellReleased(_ cell: CellView) {
@@ -422,7 +418,7 @@ extension GameViewController: CellsManagerDelegate {
         game.numberSelected(cell.number)
 
         if game.selectedNumberIsRight {
-            cell.setNumber(cell.number + game.numbers.count, animated: false)
+            cell.setNumber(game.numberToSet, animated: false)
             feedbackGenerator.playSelectionHapticFeedback()
         }
         
@@ -461,7 +457,7 @@ extension GameViewController: SettingsViewControllerDelegate {
 extension GameViewController {
     
     @objc internal func applicationWillResignActive() {
-        cellsUnderSettingsButton.forEach { $0.uncompress() }
+        cellsUnderSettingsButton.forEach { $0.uncompress(hideNumber: true) }
         prepareForNewGame()
     }
 }
