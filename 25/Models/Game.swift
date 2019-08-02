@@ -64,7 +64,7 @@ final class Game {
     // MARK: - Public Methods
     
     func numberSelected(_ number: Int) {
-        if number == nextNumber {
+//        if number == nextNumber {
             if number == numbers.max() {
                 delegate?.gameFinished(reason: .levelPassed, numbersFound: numbersFound + 1)
                 return
@@ -75,12 +75,12 @@ final class Game {
             numberToSet = number + level.numbers
             guard let index = numbers.firstIndex(of: number) else { return }
             numbers[index] = number + numbers.count
-            timer?.invalidate()
-            setTimer(to: level.interval)
-        } else {
-            delegate?.gameFinished(reason: .wrongNumberTapped, numbersFound: numbersFound)
-            selectedNumberIsRight = false
-        }
+//            timer?.invalidate()
+//            setTimer(to: level.interval)
+//        } else {
+//            delegate?.gameFinished(reason: .wrongNumberTapped, numbersFound: numbersFound)
+//            selectedNumberIsRight = false
+//        }
     }
     
     func newGame() {

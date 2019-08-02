@@ -114,6 +114,7 @@ class CellView: UIButton {
                 self.isAnimating = false
                 self.winkEnabled = true
             }
+            self.disappearingAnimator = nil
         }
         
         animator2.addAnimations {
@@ -121,7 +122,7 @@ class CellView: UIButton {
             self.titleLabel?.alpha = 1.0
         }
         
-        animator2.addCompletion { (_) in
+        animator2.addCompletion { [unowned self] (_) in
             /// Phase 4 (visible)
             self.numberState = .visible
             self.isAnimating = false
