@@ -32,19 +32,19 @@ final class CellsManager {
     
     // MARK: - Public Methods
     
-    func setStyle(to style: CellView.Style, animated: Bool) {
-        cells.forEach { $0.setStyle(style, animated: animated) }
+    func setStyle(to style: CellView.Style, palette: CellView.Palette, animated: Bool) {
+        cells.forEach { $0.setStyle(style, palette: palette, animated: animated) }
     }
     
     func setNumbers(_ numbers: [Int], animated: Bool) {
-        assert(cells.count == numbers.count, "Cells count must be equal to numbers count provided")
+        assert(cells.count == numbers.count, "Cells count must be equal to numbers count provided (cells: \(cells.count), numbers: \(numbers.count)")
         for i in cells.indices {
             cells[i].setNumber(numbers[i], animated: animated)
         }
     }
     
     func updateNumbers(with numbers: [Int], animated: Bool) {
-        if cells.isEmpty, numbers.isEmpty { return }
+        guard !cells.isEmpty, !numbers.isEmpty else { return }
         for i in cells.indices {
             let cell = cells[i]
             let number = numbers[i]
@@ -66,7 +66,7 @@ final class CellsManager {
     
     func updateCellsStyle(to style: CellView.Style, animated: Bool) {
         cells.forEach { (cell) in
-            cell.setStyle(style, animated: animated)
+            cell.setStyle(style, palette: .hot, animated: animated)
         }
     }
     
@@ -115,8 +115,8 @@ final class CellsManager {
     // MARK: - Action Methods
     
     @objc private func cellPressed(_ cell: CellView) {
-        delegate?.cellPressed(cell)
         cell.compress()
+        delegate?.cellPressed(cell)
     }
     
     @objc private func cellReleased(_ cell: CellView) {
@@ -128,7 +128,6 @@ final class CellsManager {
     @objc private func winkRandomNumber() {
         guard game.isRunning else { return }
         let cellsToWink = cells.filter { $0.winkEnabled }
-        print(cellsToWink)
         let cellToWink = cellsToWink.randomElement()
         cellToWink?.wink()
     }

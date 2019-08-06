@@ -42,6 +42,10 @@ class ResultsViewController: UIViewController {
         
         showUIElements()
     }
+    
+    deinit {
+        print("deinit \(self)")
+    }
 
     // MARK: - Actions
     

@@ -45,6 +45,10 @@ class SettingsViewController: UITableViewController {
         
         highlightLevelButton(for: game.level)
     }
+    
+    deinit {
+        print("deinit: \(self)")
+    }
 
     // MARK: - Actions
     

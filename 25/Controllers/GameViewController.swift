@@ -154,6 +154,9 @@ class GameViewController: UIViewController {
     // MARK: - Helper Methods
     
     private func setupUI() {
+        if #available(iOS 13.0, *) {
+            view.backgroundColor = .systemBackground
+        }
         setupFeedbackView()
         setupCellsGrid()
         cellsGrid.setOrientation(to: orientation)
@@ -231,7 +234,7 @@ extension GameViewController {
         #warning("Insets!")
         
         cellsGrid.addRows(count: game.numbers.count / rowSize, animated: false)
-        cellsManager.setStyle(to: cellStyle, animated: false)
+        cellsManager.setStyle(to: cellStyle, palette: .cold, animated: false)
     }
     
     private func setupFeedbackView() {
@@ -366,7 +369,7 @@ extension GameViewController {
             cellsGrid.removeRows(count: numberOfRowsToRemove, animated: false)
             cellsGrid.layoutIfNeeded()
         }
-        cellsManager.setStyle(to: cellStyle, animated: false)
+        cellsManager.setStyle(to: cellStyle, palette: .hot, animated: false)
         cellsManager.setNumbers(game.numbers, animated: false)
         cellsManager.hideNumbers(animated: false)
         updateStartGameViewFrame()
@@ -413,14 +416,14 @@ extension GameViewController: CellsManagerDelegate {
     }
     
     internal func cellReleased(_ cell: CellView) {
-        if !game.isRunning { return }
+        guard game.isRunning else { return }
         
         game.numberSelected(cell.number)
 
-        if game.selectedNumberIsRight {
-            cell.setNumber(game.numberToSet, animated: false)
-            feedbackGenerator.playSelectionHapticFeedback()
-        }
+        guard game.selectedNumberIsRight else { return }
+        
+        cell.setNumber(game.numberToSet, animated: false)
+        feedbackGenerator.playSelectionHapticFeedback()
         
         if game.level.shuffleMode {
             game.shuffleNumbers()

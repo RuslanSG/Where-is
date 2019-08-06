@@ -11,15 +11,15 @@ import UIKit
 class CellView: UIButton {
     
     enum Style {
-        case defaultWithWhiteNumber
-        case defaultWithBlackNumber
-        case colorfulWithWhiteNumber
-        case colorfulWithColorfulNumber
+        case defaultWithWhiteNumber, defaultWithBlackNumber, colorfulWithWhiteNumber, colorfulWithColorfulNumber
+    }
+    
+    enum Palette {
+        case hot, cold, green, grey
     }
     
     enum AnimationSpeed {
-        case slow
-        case fast
+        case slow, fast
     }
     
     var isAnimating = false
@@ -122,7 +122,7 @@ class CellView: UIButton {
             self.titleLabel?.alpha = 1.0
         }
         
-        animator2.addCompletion { [unowned self] (_) in
+        animator2.addCompletion { (_) in
             /// Phase 4 (visible)
             self.numberState = .visible
             self.isAnimating = false
@@ -133,7 +133,9 @@ class CellView: UIButton {
         switch numberState {
         case .disappearing:
             disappearingAnimator?.stopAnimation(false)
-            disappearingAnimator?.finishAnimation(at: .current)
+            if disappearingAnimator?.state == .stopped {
+                disappearingAnimator?.finishAnimation(at: .current)
+            }
         case .invisible:
             setTitle(String(number), for: .normal)
         case .appearing:
@@ -153,27 +155,43 @@ class CellView: UIButton {
         winkEnabled = false
     }
     
-    func setStyle(_ style: CellView.Style, animated: Bool) {
-        var cellColors: [UIColor] = [.cellPurple, .cellRed, .cellYellow]
+    func setStyle(_ style: Style, palette: Palette, animated: Bool) {
+        let hotColors: [UIColor] = [.cellRed, .cellYellow, .cellPurple]
+        let coldColors: [UIColor] = [.cellDarkBlue, .cellBlue, .cellTurquoise]
+        let greenColors: [UIColor] = [.cellDarkGreen, .cellGreen, .cellLightGreen]
+        let greyColors: [UIColor] = [.cellDarkGrey, .cellGrey, .cellLightGrey]
+        
+        var colorsForCells: [UIColor]
+        
+        switch palette {
+        case .hot:
+            colorsForCells = hotColors
+        case .cold:
+            colorsForCells = coldColors
+        case .green:
+            colorsForCells = greenColors
+        case .grey:
+            colorsForCells = greyColors
+        }
         
         let newCellColor: UIColor
         let newNumberColor: UIColor
         
         switch style {
         case .defaultWithWhiteNumber:
-            newCellColor = .cellGrey
+            newCellColor = .cellDefault
             newNumberColor = .white
         case .defaultWithBlackNumber:
-            newCellColor = .cellGrey
+            newCellColor = .cellDefault
             newNumberColor = .black
         case .colorfulWithWhiteNumber:
-            newCellColor = cellColors[Int.random(in: cellColors.indices)]
+            newCellColor = colorsForCells[Int.random(in: colorsForCells.indices)]
             newNumberColor = .white
         case .colorfulWithColorfulNumber:
-            newCellColor = cellColors[Int.random(in: cellColors.indices)]
-            let index = cellColors.firstIndex(of: newCellColor)!
-            cellColors.remove(at: index)
-            newNumberColor = cellColors[Int.random(in: cellColors.indices)]
+            newCellColor = colorsForCells[Int.random(in: colorsForCells.indices)]
+            let index = colorsForCells.firstIndex(of: newCellColor)!
+            colorsForCells.remove(at: index)
+            newNumberColor = colorsForCells[Int.random(in: colorsForCells.indices)]
         }
         
         if !animated {
@@ -208,8 +226,8 @@ class CellView: UIButton {
         winkEnabled = false
         numberState = .appearing
         
-        let duration: Double = 0.2
-        let delay: Double = 0.0
+        let duration = 0.2
+        let delay = 0.0
         
         UIViewPropertyAnimator.runningPropertyAnimator(
             withDuration: duration,
