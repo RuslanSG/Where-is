@@ -422,7 +422,7 @@ extension GameViewController: CellsManagerDelegate {
 
         guard game.selectedNumberIsRight else { return }
         
-        cell.setNumber(game.numberToSet, animated: false)
+        cell.setNumber(game.numberToSet, animateIfNeeded: false)
         feedbackGenerator.playSelectionHapticFeedback()
         
         if game.level.shuffleMode {

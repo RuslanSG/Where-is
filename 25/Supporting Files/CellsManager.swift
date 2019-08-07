@@ -39,7 +39,7 @@ final class CellsManager {
     func setNumbers(_ numbers: [Int], animated: Bool) {
         assert(cells.count == numbers.count, "Cells count must be equal to numbers count provided (cells: \(cells.count), numbers: \(numbers.count)")
         for i in cells.indices {
-            cells[i].setNumber(numbers[i], animated: animated)
+            cells[i].setNumber(numbers[i], animateIfNeeded: animated)
         }
     }
     
@@ -48,7 +48,7 @@ final class CellsManager {
         for i in cells.indices {
             let cell = cells[i]
             let number = numbers[i]
-            cell.setNumber(number, animated: animated)
+            cell.setNumber(number, animateIfNeeded: animated)
         }
     }
     
@@ -134,7 +134,7 @@ final class CellsManager {
     
     @objc private func swapRandomNumbers() {
         guard game.isRunning else { return }
-        var cellsNotAnimating = cells.filter { !$0.isAnimating }
+        var cellsNotAnimating = cells.filter { !$0.swapEnabled }
         if cellsNotAnimating.count < 2 { return }
         
         let cell1 = cellsNotAnimating.randomElement()!
@@ -146,8 +146,8 @@ final class CellsManager {
         let number1 = cell1.number
         let number2 = cell2.number
         
-        cell1.setNumber(number2, animated: true, speed: .slow)
-        cell2.setNumber(number1, animated: true, speed: .slow)
+        cell1.setNumber(number2, animateIfNeeded: true, animationSpeed: .slow)
+        cell2.setNumber(number1, animateIfNeeded: true, animationSpeed: .slow)
     }
     
     // MARK: - Private Methods
@@ -167,7 +167,7 @@ final class CellsManager {
     
     private func stopAnimations() {
         stopTimer()
-        cells.forEach { $0.stopAnimations() }
+        cells.forEach { $0.removeAllAnimations() }
     }
 }
 
