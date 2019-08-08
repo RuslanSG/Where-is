@@ -57,16 +57,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "E43E8AA2-444B-4852-8D02-FAF12A843CE9"
-            shouldBeEnabled = "No"
+            uuid = "DEBCDA38-E244-49A5-BD77-DACFC3965E90"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "25/Views/CellView.swift"
+            filePath = "25/Controllers/GameViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "206"
-            endingLineNumber = "206"
-            landmarkName = "showNumber(animated:)"
+            startingLineNumber = "427"
+            endingLineNumber = "427"
+            landmarkName = "cellReleased(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

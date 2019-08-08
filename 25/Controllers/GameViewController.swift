@@ -168,14 +168,8 @@ class GameViewController: UIViewController {
     private func prepareForNewGame() {
         game.newGame()
         
-        if game.level.winkMode {
-            cellsManager.stopWinking()
-        }
-        
-        if game.level.swapMode {
-            cellsManager.stopSwapping()
-        }
-        
+        cellsManager.stopWinking()
+        cellsManager.stopSwapping()
         cellsManager.disableCells()
         cellsManager.hideNumbers(animated: false)
         cellsManager.updateNumbers(with: game.numbers, animated: false)
@@ -419,15 +413,18 @@ extension GameViewController: CellsManagerDelegate {
         guard game.isRunning else { return }
         
         game.numberSelected(cell.number)
-
-        guard game.selectedNumberIsRight else { return }
-        
-        cell.setNumber(game.numberToSet, animateIfNeeded: false)
-        feedbackGenerator.playSelectionHapticFeedback()
         
         if game.level.shuffleMode {
             game.shuffleNumbers()
             cellsManager.updateNumbers(with: game.numbers, animated: true)
+        }
+        
+        feedbackGenerator.playSelectionHapticFeedback()
+
+        guard game.selectedNumberIsRight else { return }
+        
+        if !game.level.shuffleMode {
+            cell.setNumber(game.numberToSet, animateIfNeeded: false)
         }
     }
 }

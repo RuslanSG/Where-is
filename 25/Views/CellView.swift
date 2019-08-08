@@ -18,12 +18,9 @@ class CellView: UIButton {
         case hot, cold, green, grey
     }
     
-    enum AnimationSpeed {
-        case slow, fast
-    }
-    
-    var winkEnabled = true
-    var swapEnabled = true
+    var isSetEnabled = true
+    var isWinkEnabled = true
+    var isSwapEnabled = true
     var number = 0
     
     override var backgroundColor: UIColor? {
@@ -34,7 +31,6 @@ class CellView: UIButton {
             return childView.backgroundColor
         }
     }
-    
     
     override var description: String {
         return "|\(number)|"
@@ -80,55 +76,48 @@ class CellView: UIButton {
     
     // MARK: - Public Methods
     
-    func setNumber(_ number: Int, animateIfNeeded: Bool, animationSpeed: CellView.AnimationSpeed = .fast) {
+    func setNumber(_ number: Int, animateIfNeeded: Bool) {
         self.number = number
         
-        if !animateIfNeeded || numberState == .invisible {
+        if !animateIfNeeded || (numberState == .invisible && isWinking) {
             setTitle(String(number), for: .normal)
             return
-        }
-        
-        let duranion1: Double
-        let duration2: Double
-        
-        switch animationSpeed {
-        case .slow:
-            duranion1 = 0.3
-            duration2 = 0.6
-        case .fast:
-            duranion1 = 0.1
-            duration2 = 0.3
+        } else if numberState == .invisible {
+            setTitle(String(number), for: .normal)
+            isSetEnabled = false
+            showNumber(animated: true) {
+                self.isSetEnabled = true
+            }
+            return
         }
         
         let isWinking = self.isWinking
         let numberState = self.numberState
         
-        removeWinkAnimations()
-        
-        setDisappearingAnimator = UIViewPropertyAnimator(duration: duranion1, curve: .easeInOut) {
+        setDisappearingAnimator = UIViewPropertyAnimator(duration: 0.1, curve: .easeInOut) {
             self.titleLabel?.alpha = 0.0
         }
         
-        setAppearingAnimator = UIViewPropertyAnimator(duration: duration2, curve: .easeInOut) {
-            self.titleLabel?.alpha = self.numberCurrentAlpha
+        setAppearingAnimator = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) {
+            self.titleLabel?.alpha = isWinking ? self.numberCurrentAlpha : 1.0
         }
         
         setDisappearingAnimator?.addCompletion { (_) in
             self.setTitle(String(number), for: .normal)
             
-            /// Phase 2 (invisible)
-            if self.isSetting {
-                /// Phase 3 (appearing)
+//            if self.isSetting {
+                /// Phase 2 (appearing)
                 self.setAppearingAnimator?.startAnimation()
-            } else {
-                self.winkEnabled = true
-            }
+//            } else {
+//                self.isWinkEnabled = true
+//            }
         }
         
         setAppearingAnimator?.addCompletion { (_) in
-            /// Phase 4 (visible)
+            /// Phase 3 (visible)
             self.numberState = .visible
-            self.winkEnabled = true
+            self.isWinkEnabled = true
+            self.isSetting = false
             
             if isWinking {
                 self.wink(from: numberState, fractionComplete: 1.0)
@@ -136,12 +125,13 @@ class CellView: UIButton {
         }
         
         numberCurrentAlpha = titleLabel!.alpha
+        removeWinkAnimations()
         
         /// Phase 1 (disappearing)
         setDisappearingAnimator?.startAnimation()
         
         isSetting = true
-        winkEnabled = false
+        isWinkEnabled = false
     }
     
     func setStyle(_ style: Style, palette: Palette, animated: Bool) {
@@ -202,7 +192,7 @@ class CellView: UIButton {
         childView.layer.cornerRadius = cornerRadius
     }
     
-    func showNumber(animated: Bool) {
+    func showNumber(animated: Bool, completion: (() -> Void)? = nil) {
         isEnabled = true
         
         if !animated {
@@ -211,15 +201,16 @@ class CellView: UIButton {
             return
         }
         
-        winkEnabled = false
+        isWinkEnabled = false
         numberState = .appearing
         
         let show = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) {
             self.titleLabel?.alpha = 1.0
         }
         show.addCompletion { (_) in
-            self.winkEnabled = true
+            self.isWinkEnabled = true
             self.numberState = .visible
+            completion?()
         }
         show.startAnimation()
     }
@@ -231,14 +222,14 @@ class CellView: UIButton {
             return
         }
         
-        winkEnabled = false
+        isWinkEnabled = false
         numberState = .disappearing
 
         let hide = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) {
             self.titleLabel?.alpha = 0.0
         }
         hide.addCompletion { _ in
-            self.winkEnabled = true
+            self.isWinkEnabled = true
             self.numberState = .invisible
         }
         hide.startAnimation()
@@ -255,7 +246,7 @@ class CellView: UIButton {
     
     func compress() {
         transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-//        hideNumber(animated: false)
+        hideNumber(animated: false)
         #warning("Fix number hiding on shuffle mode")
     }
     
@@ -286,7 +277,7 @@ class CellView: UIButton {
     }
     
     private func wink(from state: NumberState = .visible, fractionComplete: CGFloat = 1.0) {
-        guard winkEnabled else { return }
+        guard isWinkEnabled else { return }
         
         let disappearingDuration = 0.5 * Double(fractionComplete)
         let disappearedDuration = 1.5
@@ -322,7 +313,7 @@ class CellView: UIButton {
             self.winkAppearingAnimator = nil
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
-                self.winkEnabled = true
+                self.isWinkEnabled = true
             })
         }
         
@@ -335,12 +326,12 @@ class CellView: UIButton {
         }
         
         isWinking = true
-        winkEnabled = false
+        isWinkEnabled = false
     }
     
     private func removeWinkAnimations() {
         isWinking = false
-        winkEnabled = true
+        isWinkEnabled = true
         
         winkAppearingAnimator?.stopAnimation(true)
         winkDisappearingAnimator?.stopAnimation(true)
@@ -351,7 +342,7 @@ class CellView: UIButton {
     
     private func removeSetAnimations() {
         isSetting = false
-        winkEnabled = true
+        isWinkEnabled = true
         
         setAppearingAnimator?.stopAnimation(true)
         setDisappearingAnimator?.stopAnimation(true)

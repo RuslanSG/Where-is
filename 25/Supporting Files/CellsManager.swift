@@ -115,11 +115,13 @@ final class CellsManager {
     // MARK: - Action Methods
     
     @objc private func cellPressed(_ cell: CellView) {
+        guard cell.isSetEnabled else { return }
         cell.compress()
         delegate?.cellPressed(cell)
     }
     
     @objc private func cellReleased(_ cell: CellView) {
+        guard cell.isSetEnabled else { return }
         let hideNumberNeeded = game.level.shuffleMode || !game.isRunning
         cell.uncompress(hideNumber: hideNumberNeeded)
         delegate?.cellReleased(cell)
@@ -127,27 +129,27 @@ final class CellsManager {
     
     @objc private func winkRandomNumber() {
         guard game.isRunning else { return }
-        let cellsToWink = cells.filter { $0.winkEnabled }
+        let cellsToWink = cells.filter { $0.isWinkEnabled }
         let cellToWink = cellsToWink.randomElement()
         cellToWink?.wink()
     }
     
     @objc private func swapRandomNumbers() {
-        guard game.isRunning else { return }
-        var cellsNotAnimating = cells.filter { !$0.swapEnabled }
-        if cellsNotAnimating.count < 2 { return }
-        
-        let cell1 = cellsNotAnimating.randomElement()!
-        guard let index1 = cellsNotAnimating.firstIndex(of: cell1) else { return }
-        cellsNotAnimating.remove(at: index1)
-        
-        let cell2 = cellsNotAnimating.randomElement()!
-        
-        let number1 = cell1.number
-        let number2 = cell2.number
-        
-        cell1.setNumber(number2, animateIfNeeded: true, animationSpeed: .slow)
-        cell2.setNumber(number1, animateIfNeeded: true, animationSpeed: .slow)
+//        guard game.isRunning else { return }
+//        var cellsNotAnimating = cells.filter { !$0.swapEnabled }
+//        if cellsNotAnimating.count < 2 { return }
+//
+//        let cell1 = cellsNotAnimating.randomElement()!
+//        guard let index1 = cellsNotAnimating.firstIndex(of: cell1) else { return }
+//        cellsNotAnimating.remove(at: index1)
+//
+//        let cell2 = cellsNotAnimating.randomElement()!
+//
+//        let number1 = cell1.number
+//        let number2 = cell2.number
+//
+//        cell1.setNumber(number2, animateIfNeeded: true, animationSpeed: .slow)
+//        cell2.setNumber(number1, animateIfNeeded: true, animationSpeed: .slow)
     }
     
     // MARK: - Private Methods

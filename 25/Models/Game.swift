@@ -65,10 +65,10 @@ final class Game {
     
     func numberSelected(_ number: Int) {
 //        if number == nextNumber {
-            if number == numbers.max() {
-                delegate?.gameFinished(reason: .levelPassed, numbersFound: numbersFound + 1)
-                return
-            }
+//            if number == numbers.max() {
+//                delegate?.gameFinished(reason: .levelPassed, numbersFound: numbersFound + 1)
+//                return
+//            }
             selectedNumberIsRight = true
             numbersFound += 1
             nextNumber += 1
