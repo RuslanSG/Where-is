@@ -27,6 +27,7 @@ class GameViewController: UIViewController {
     
     private let game = Game()
     private lazy var cellsManager = CellsManager(with: cellsGrid.cells, game: game)
+    private var tipLabel = UILabel()
     private var feedbackView = FeedbackView()
     private var feedbackGenerator = FeedbackGenerator()
     private var gameFinishingReason: GameFinishingReason!
@@ -114,6 +115,8 @@ class GameViewController: UIViewController {
         swipeDownGestureRecognizer.isEnabled = true
         feedbackGenerator.playSelectionHapticFeedback()
         
+        showTipLabel(animated: true)
+        
         UIView.animate(withDuration: 0.2) {
             self.settingsButton.isHidden = true
         }
@@ -167,6 +170,7 @@ class GameViewController: UIViewController {
         swipeDownGestureRecognizer.isEnabled = false
         
         startGameButton.show()
+        hideTipLabel(animated: true)
         
         UIView.animate(withDuration: 0.2) {
             self.settingsButton.isHidden = false
@@ -195,67 +199,6 @@ class GameViewController: UIViewController {
         }
         
         return rect
-    }
-}
-
-// MARK: - UI Managment
-
-extension GameViewController {
-    
-    private func setupCellsGrid() {
-        cellsGrid = CellsGrid(rowSize: 5, rowHeight: cellHeight)
-        
-        view.addSubview(cellsGrid)
-        
-        cellsGrid.translatesAutoresizingMaskIntoConstraints = false
-        
-        let margins = view.layoutMarginsGuide
-        cellsGrid.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        cellsGrid.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
-
-        cellsGrid.topConstraint = cellsGrid.topAnchor.constraint(greaterThanOrEqualTo: margins.topAnchor, constant: globalCellInset)
-        cellsGrid.leftConstraint = cellsGrid.leftAnchor.constraint(greaterThanOrEqualTo: margins.leftAnchor)
-        
-        cellsGrid.addRows(count: game.numbers.count / rowSize, animated: false)
-        cellsManager.setStyle(to: cellStyle, palette: .hot, animated: false)
-    }
-    
-    private func setupFeedbackView() {
-        self.view.addSubview(feedbackView)
-        feedbackView.translatesAutoresizingMaskIntoConstraints = false
-        feedbackView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
-        feedbackView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
-        feedbackView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        feedbackView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
-    }
-    
-    private func setupStartGameButton() {
-        startGameButton = StartGameView()
-        
-        self.view.addSubview(startGameButton)
-        
-        startGameButton.layer.cornerRadius = globalCornerRadius
-        startGameButton.clipsToBounds = true
-        
-        let tap = UITapGestureRecognizer(target: self, action: #selector(startGame))
-        startGameButton.addGestureRecognizer(tap)
-    }
-    
-    private func setupSettingsButton() {
-        let gearImage = UIImage(named: "gear")?.withRenderingMode(.alwaysTemplate)
-        
-        settingsButton = UIButton()
-        settingsButton.setImage(gearImage, for: .normal)
-        settingsButton.tintColor = .white
-        settingsButton.imageView?.contentMode = .scaleAspectFit
-        settingsButton.imageEdgeInsets = UIEdgeInsets(top: 17.0, left: 17.0, bottom: 17.0, right: 17.0)
-        settingsButton.backgroundColor = cellsUnderSettingsButton.first?.backgroundColor
-        settingsButton.layer.cornerRadius = globalCornerRadius
-        settingsButton.addTarget(self, action: #selector(settingsButtonPressed), for: .touchDown)
-        settingsButton.addTarget(self, action: #selector(settingsButtonReleased), for: .touchUpInside)
-        settingsButton.addTarget(self, action: #selector(settingsButtonReleased), for: .touchUpOutside)
-        
-        view.addSubview(settingsButton)
     }
     
     private func startGameViewRect(aspectRatio: StartGameViewAcpectRatio) -> CGRect {
@@ -330,7 +273,114 @@ extension GameViewController {
                                                                     bottom: globalCellInset,
                                                                     right: globalCellInset))
     }
+}
+
+// MARK: - UI Managment
+
+extension GameViewController {
     
+    private func setupCellsGrid() {
+        cellsGrid = CellsGrid(rowSize: 5, rowHeight: cellHeight)
+        
+        view.addSubview(cellsGrid)
+        
+        cellsGrid.translatesAutoresizingMaskIntoConstraints = false
+        
+        let margins = view.layoutMarginsGuide
+        cellsGrid.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        cellsGrid.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+
+        cellsGrid.topConstraint = cellsGrid.topAnchor.constraint(greaterThanOrEqualTo: margins.topAnchor, constant: globalCellInset)
+        cellsGrid.leftConstraint = cellsGrid.leftAnchor.constraint(greaterThanOrEqualTo: margins.leftAnchor)
+        
+        cellsGrid.addRows(count: game.numbers.count / rowSize, animated: false)
+        cellsManager.setStyle(to: cellStyle, palette: .hot, animated: false)
+    }
+    
+    private func setupFeedbackView() {
+        self.view.addSubview(feedbackView)
+        feedbackView.translatesAutoresizingMaskIntoConstraints = false
+        feedbackView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+        feedbackView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+        feedbackView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
+        feedbackView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
+    }
+    
+    private func setupStartGameButton() {
+        startGameButton = StartGameView()
+        
+        self.view.addSubview(startGameButton)
+        
+        startGameButton.layer.cornerRadius = globalCornerRadius
+        startGameButton.clipsToBounds = true
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(startGame))
+        startGameButton.addGestureRecognizer(tap)
+    }
+    
+    private func setupSettingsButton() {
+        let gearImage = UIImage(named: "gear")?.withRenderingMode(.alwaysTemplate)
+        
+        settingsButton = UIButton()
+        settingsButton.setImage(gearImage, for: .normal)
+        settingsButton.tintColor = .white
+        settingsButton.imageView?.contentMode = .scaleAspectFit
+        settingsButton.imageEdgeInsets = UIEdgeInsets(top: 17.0, left: 17.0, bottom: 17.0, right: 17.0)
+        settingsButton.backgroundColor = cellsUnderSettingsButton.first?.backgroundColor
+        settingsButton.layer.cornerRadius = globalCornerRadius
+        settingsButton.addTarget(self, action: #selector(settingsButtonPressed), for: .touchDown)
+        settingsButton.addTarget(self, action: #selector(settingsButtonReleased), for: .touchUpInside)
+        settingsButton.addTarget(self, action: #selector(settingsButtonReleased), for: .touchUpOutside)
+        
+        view.addSubview(settingsButton)
+    }
+    
+    private func showTipLabel(animated: Bool) {
+        let labelTextColor: UIColor
+        
+        if #available (iOS 13.0, *) {
+            labelTextColor = .label
+        } else {
+            labelTextColor = .black
+        }
+        
+        tipLabel.text = "↓ Swipe down to stop"
+        tipLabel.textColor = labelTextColor
+        tipLabel.adjustsFontSizeToFitWidth = true
+        tipLabel.font = UIFont.boldSystemFont(ofSize: 15)
+        tipLabel.textAlignment = .center
+        tipLabel.alpha = 0
+        
+        view.addSubview(tipLabel)
+        
+        tipLabel.translatesAutoresizingMaskIntoConstraints = false
+        tipLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -7.0).isActive = true
+        tipLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 7.0).isActive = true
+        tipLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -7.0).isActive = true
+        
+        if animated {
+            let show = UIViewPropertyAnimator(duration: 0.2, curve: .easeOut) {
+                self.tipLabel.alpha = 1
+            }
+            show.startAnimation()
+        } else {
+            tipLabel.alpha = 1
+        }
+    }
+    
+    private func hideTipLabel(animated: Bool) {
+        if animated {
+            let hide = UIViewPropertyAnimator(duration: 0.2, curve: .easeOut) {
+                self.tipLabel.alpha = 0
+            }
+            hide.addCompletion { (_) in
+                self.tipLabel.removeFromSuperview()
+            }
+            hide.startAnimation()
+        } else {
+            tipLabel.removeFromSuperview()
+        }
+    }
     
     private func setupGestureRecognizers() {
         swipeDownGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(swipeDown))
