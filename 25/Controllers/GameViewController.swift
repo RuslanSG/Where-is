@@ -115,10 +115,16 @@ class GameViewController: UIViewController {
         swipeDownGestureRecognizer.isEnabled = true
         feedbackGenerator.playSelectionHapticFeedback()
         
-        showTipLabel(animated: true)
-        
         UIView.animate(withDuration: 0.2) {
             self.settingsButton.isHidden = true
+        }
+        
+        /// Disables orientation change when game is started
+        if orientation == .portrait {
+            (UIApplication.shared.delegate as! AppDelegate).restrictRotation = .portrait
+            showTipLabel(animated: true)
+        } else {
+            (UIApplication.shared.delegate as! AppDelegate).restrictRotation = .landscape
         }
     }
     
@@ -177,6 +183,9 @@ class GameViewController: UIViewController {
         }
         
         lastPressedCell?.uncompress(hideNumber: true)
+        
+        /// Enables orientation change when game is finished
+        (UIApplication.shared.delegate as! AppDelegate).restrictRotation = .allButUpsideDown
     }
     
     private func freezeUI(for freezeTime: Double) {
@@ -354,7 +363,7 @@ extension GameViewController {
         view.addSubview(tipLabel)
         
         tipLabel.translatesAutoresizingMaskIntoConstraints = false
-        tipLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -7.0).isActive = true
+        tipLabel.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -7.0).isActive = true
         tipLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 7.0).isActive = true
         tipLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -7.0).isActive = true
         
