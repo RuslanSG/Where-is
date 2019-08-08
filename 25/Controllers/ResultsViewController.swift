@@ -39,7 +39,7 @@ class ResultsViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        showUIElements()
+        show()
     }
     
     deinit {
@@ -49,14 +49,14 @@ class ResultsViewController: UIViewController {
     // MARK: - Actions
     
     @IBAction func close() {
-        hideUIElements {
+        hide {
             self.dismiss(animated: false, completion: nil)
         }
     }
     
     // MARK: - Private Methods
     
-    private func showUIElements() {
+    private func show() {
         visualEffectView.effect = nil
         vibrancyEffectView.effect = nil
         labels.forEach { $0.alpha = 0 }
@@ -70,6 +70,7 @@ class ResultsViewController: UIViewController {
         } else {
             blurEffect = UIBlurEffect(style: .light)
             vibrancyEffect = UIVibrancyEffect(blurEffect: UIBlurEffect(style: .extraLight))
+            visualEffectView.contentView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.07)
         }
         
         let blurAnimator = UIViewPropertyAnimator(duration: 0.2, curve: .easeOut) {
@@ -80,7 +81,7 @@ class ResultsViewController: UIViewController {
         blurAnimator.startAnimation()
     }
     
-    private func hideUIElements(completion: @escaping () -> Void) {
+    private func hide(completion: @escaping () -> Void) {
         let blurAnimator = UIViewPropertyAnimator(duration: 0.2, curve: .easeOut) {
             self.visualEffectView.effect = nil
             self.labels.forEach { $0.alpha = 0 }
