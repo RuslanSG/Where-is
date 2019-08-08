@@ -64,23 +64,23 @@ final class Game {
     // MARK: - Public Methods
     
     func numberSelected(_ number: Int) {
-//        if number == nextNumber {
-//            if number == numbers.max() {
-//                delegate?.gameFinished(reason: .levelPassed, numbersFound: numbersFound + 1)
-//                return
-//            }
+        if number == nextNumber {
+            if number == numbers.max() {
+                delegate?.gameFinished(reason: .levelPassed, numbersFound: numbersFound + 1)
+                return
+            }
             selectedNumberIsRight = true
             numbersFound += 1
             nextNumber += 1
             numberToSet = number + level.numbers
             guard let index = numbers.firstIndex(of: number) else { return }
             numbers[index] = number + numbers.count
-//            timer?.invalidate()
-//            setTimer(to: level.interval)
-//        } else {
-//            delegate?.gameFinished(reason: .wrongNumberTapped, numbersFound: numbersFound)
-//            selectedNumberIsRight = false
-//        }
+            timer?.invalidate()
+            setTimer(to: level.interval)
+        } else {
+            delegate?.gameFinished(reason: .wrongNumberTapped, numbersFound: numbersFound)
+            selectedNumberIsRight = false
+        }
     }
     
     func newGame() {

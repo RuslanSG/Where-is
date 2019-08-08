@@ -39,7 +39,6 @@ class ResultsViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
         showUIElements()
     }
     
@@ -62,34 +61,34 @@ class ResultsViewController: UIViewController {
         vibrancyEffectView.effect = nil
         labels.forEach { $0.alpha = 0 }
         
-        let blur = UIBlurEffect(style: .extraLight)
-        let vibrancy = UIVibrancyEffect(blurEffect: blur)
+        var blurEffect: UIBlurEffect
+        var vibrancyEffect: UIVibrancyEffect
         
-        UIView.animate(withDuration: 0.5,
-                       delay: 0,
-                       usingSpringWithDamping: 1,
-                       initialSpringVelocity: 1,
-                       options: .curveEaseInOut,
-                       animations: {
-                        self.visualEffectView.effect = blur
-                        self.vibrancyEffectView.effect = vibrancy
-                        self.labels.forEach { $0.alpha = 1 }
-        })
+        if #available(iOS 13.0, *) {
+            blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+            vibrancyEffect = UIVibrancyEffect(blurEffect: blurEffect, style: .secondaryLabel)
+        } else {
+            blurEffect = UIBlurEffect(style: .light)
+            vibrancyEffect = UIVibrancyEffect(blurEffect: UIBlurEffect(style: .extraLight))
+        }
+        
+        let blurAnimator = UIViewPropertyAnimator(duration: 0.2, curve: .easeOut) {
+            self.visualEffectView.effect = blurEffect
+            self.vibrancyEffectView.effect = vibrancyEffect
+            self.labels.forEach { $0.alpha = 1 }
+        }
+        blurAnimator.startAnimation()
     }
     
     private func hideUIElements(completion: @escaping () -> Void) {
-        UIView.animate(withDuration: 0.3,
-                       delay: 0,
-                       usingSpringWithDamping: 1,
-                       initialSpringVelocity: 1,
-                       options: .curveEaseInOut,
-                       animations: {
-                        self.visualEffectView.effect = nil
-                        self.labels.forEach { $0.alpha = 0 }
-        },
-                       completion: { (_) in
-                        completion()
-        })
+        let blurAnimator = UIViewPropertyAnimator(duration: 0.2, curve: .easeOut) {
+            self.visualEffectView.effect = nil
+            self.labels.forEach { $0.alpha = 0 }
+        }
+        blurAnimator.addCompletion { (_) in
+            completion()
+        }
+        blurAnimator.startAnimation()
     }
 
 }

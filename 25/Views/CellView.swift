@@ -247,7 +247,6 @@ class CellView: UIButton {
     func compress() {
         transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
         hideNumber(animated: false)
-        #warning("Fix number hiding on shuffle mode")
     }
     
     func uncompress(hideNumber: Bool = false) {

@@ -10,31 +10,14 @@ import UIKit
 
 class StartGameView: UIVisualEffectView {
     
-    enum Style {
-        case light
-        case dark
-    }
-    
     private enum Strings {
         static let startButtonText = NSLocalizedString("Start", comment: "Start gmae button")
         static let goalText = NSLocalizedString("Time: ", comment: "Time given to find all of the numbers")
     }
     
-    private var interval: Double
+    var interval = 0.0
     
-    private var blurEffect = UIBlurEffect() {
-        didSet {
-            effect = blurEffect
-        }
-    }
-    private var vibrancyEffect = UIVibrancyEffect() {
-        didSet {
-            vibrancyView.effect = vibrancyEffect
-        }
-    }
-    
-    private let vibrancyView = UIVisualEffectView()
-    
+    private var vibrancyEffectView = UIVisualEffectView()
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = Strings.startButtonText
@@ -44,11 +27,9 @@ class StartGameView: UIVisualEffectView {
         return label
     }()
     
-    init(interval: Double, style: StartGameView.Style) {
-        self.interval = interval
+    init() {
         super.init(effect: nil)
-        setupInputComponents()
-        setStyle(style)
+        configureUI()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -62,68 +43,66 @@ class StartGameView: UIVisualEffectView {
         isHidden = false
         isUserInteractionEnabled = true
         
-        UIView.animate(withDuration: 0.5,
-                       delay: 0,
-                       usingSpringWithDamping: 1,
-                       initialSpringVelocity: 1,
-                       options: .curveEaseInOut,
-                       animations: {
-                        self.effect = self.blurEffect
-                        self.vibrancyView.effect = self.vibrancyEffect
-                        self.titleLabel.alpha = 1.0
-        })
+        let effects = getEffects()
+        
+        let blurAnimator = UIViewPropertyAnimator(duration: 0.2, curve: .easeOut) {
+            self.effect = effects.blur
+            self.vibrancyEffectView.effect = effects.vibrancy
+            self.titleLabel.alpha = 1
+        }
+        
+        blurAnimator.startAnimation()
     }
     
     func hide() {
         guard !isHidden else { return }
         isUserInteractionEnabled = false
         
-        UIView.animate(withDuration: 0.15,
-                       delay: 0,
-                       usingSpringWithDamping: 1,
-                       initialSpringVelocity: 1,
-                       options: .curveEaseInOut,
-                       animations: {
-                        self.effect = nil
-                        self.titleLabel.alpha = 0.0
-        },
-                       completion: { (_) in
-                        self.isHidden = true
-        })
-    }
-    
-    func setStyle(_ style: StartGameView.Style) {
-        let blurStyle: UIBlurEffect.Style
-        let vibrancyStyle: UIBlurEffect.Style
-        
-        switch style {
-        case .light:
-            blurStyle = .light
-            vibrancyStyle = .extraLight
-        case .dark:
-            blurStyle = .dark
-            vibrancyStyle = .dark
+        let blurAnimator = UIViewPropertyAnimator(duration: 0.1, curve: .easeOut) {
+            self.effect = nil
+            self.titleLabel.alpha = 0
         }
-        
-        blurEffect = UIBlurEffect(style: blurStyle)
-        vibrancyEffect = UIVibrancyEffect(blurEffect: UIBlurEffect(style: vibrancyStyle))
+        blurAnimator.addCompletion { (_) in
+            self.isHidden = true
+        }
+        blurAnimator.startAnimation()
     }
     
     // MARK: - Private Methods
     
-    private func setupInputComponents() {
-        vibrancyView.contentView.addSubview(titleLabel)
-        contentView.addSubview(vibrancyView)
+    private func configureUI() {
+        let effects = getEffects()
         
-        vibrancyView.translatesAutoresizingMaskIntoConstraints = false
-        vibrancyView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-        vibrancyView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
-        vibrancyView.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
-        vibrancyView.rightAnchor.constraint(equalTo: contentView.rightAnchor).isActive = true
+        effect = effects.blur
+        vibrancyEffectView.effect = effects.vibrancy
+        
+        contentView.addSubview(vibrancyEffectView)
+        vibrancyEffectView.contentView.addSubview(titleLabel)
+        
+        vibrancyEffectView.translatesAutoresizingMaskIntoConstraints = false
+        vibrancyEffectView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+        vibrancyEffectView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+        vibrancyEffectView.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
+        vibrancyEffectView.rightAnchor.constraint(equalTo: contentView.rightAnchor).isActive = true
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
         titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+    }
+    
+    private func getEffects() -> (blur: UIBlurEffect, vibrancy: UIVibrancyEffect) {
+        var blurEffect: UIBlurEffect
+        var vibrancyEffect: UIVibrancyEffect
+        
+        if #available(iOS 13.0, *) {
+            blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+            vibrancyEffect = UIVibrancyEffect(blurEffect: blurEffect, style: .secondaryLabel)
+        } else {
+            blurEffect = UIBlurEffect(style: .light)
+            vibrancyEffect = UIVibrancyEffect(blurEffect: blurEffect)
+        }
+        
+        return (blur: blurEffect, vibrancy: vibrancyEffect)
     }
     
 }

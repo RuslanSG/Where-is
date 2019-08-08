@@ -8,15 +8,6 @@
 
 import UIKit
 
-enum Orientation {
-    case portrait
-    case landscape
-}
-
-var orientation: Orientation {
-    return UIScreen.main.bounds.width < UIScreen.main.bounds.height ? .portrait : .landscape
-}
-
 class GameViewController: UIViewController {
     
     private enum StartGameViewAcpectRatio {
@@ -62,11 +53,10 @@ class GameViewController: UIViewController {
     
     private var cellHeight: CGFloat {
         if orientation == .portrait {
-            return (UIScreen.main.bounds.width - 2.0) / CGFloat(rowSize)
+            return (UIScreen.main.bounds.width - globalCellInset) / CGFloat(rowSize)
         } else {
-            return (UIScreen.main.bounds.height - 2.0) / CGFloat(rowSize)
+            return (UIScreen.main.bounds.height - globalCellInset) / CGFloat(rowSize)
         }
-        #warning("Replace cell inset (2.0)")
     }
     
     // MARK: - Lifecycle
@@ -215,7 +205,7 @@ extension GameViewController {
     private func setupCellsGrid() {
         cellsGrid = CellsGrid(rowSize: 5, rowHeight: cellHeight)
         
-        self.view.addSubview(cellsGrid)
+        view.addSubview(cellsGrid)
         
         cellsGrid.translatesAutoresizingMaskIntoConstraints = false
         
@@ -223,12 +213,11 @@ extension GameViewController {
         cellsGrid.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         cellsGrid.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
 
-        cellsGrid.topConstraint = cellsGrid.topAnchor.constraint(greaterThanOrEqualTo: margins.topAnchor, constant: 2.0)
+        cellsGrid.topConstraint = cellsGrid.topAnchor.constraint(greaterThanOrEqualTo: margins.topAnchor, constant: globalCellInset)
         cellsGrid.leftConstraint = cellsGrid.leftAnchor.constraint(greaterThanOrEqualTo: margins.leftAnchor)
-        #warning("Insets!")
         
         cellsGrid.addRows(count: game.numbers.count / rowSize, animated: false)
-        cellsManager.setStyle(to: cellStyle, palette: .cold, animated: false)
+        cellsManager.setStyle(to: cellStyle, palette: .hot, animated: false)
     }
     
     private func setupFeedbackView() {
@@ -241,13 +230,11 @@ extension GameViewController {
     }
     
     private func setupStartGameButton() {
-        let style: StartGameView.Style = .light
-        
-        startGameButton = StartGameView(interval: 5.0, style: style)
+        startGameButton = StartGameView()
         
         self.view.addSubview(startGameButton)
         
-        startGameButton.layer.cornerRadius = 7.0
+        startGameButton.layer.cornerRadius = globalCornerRadius
         startGameButton.clipsToBounds = true
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(startGame))
@@ -263,8 +250,7 @@ extension GameViewController {
         settingsButton.imageView?.contentMode = .scaleAspectFit
         settingsButton.imageEdgeInsets = UIEdgeInsets(top: 17.0, left: 17.0, bottom: 17.0, right: 17.0)
         settingsButton.backgroundColor = cellsUnderSettingsButton.first?.backgroundColor
-        settingsButton.layer.cornerRadius = 7.0
-        #warning("Corner Radius!")
+        settingsButton.layer.cornerRadius = globalCornerRadius
         settingsButton.addTarget(self, action: #selector(settingsButtonPressed), for: .touchDown)
         settingsButton.addTarget(self, action: #selector(settingsButtonReleased), for: .touchUpInside)
         settingsButton.addTarget(self, action: #selector(settingsButtonReleased), for: .touchUpOutside)
@@ -310,11 +296,10 @@ extension GameViewController {
             return .zero
         }
         
-        #warning("Insets!")
-        return getRectUnion(of: centralCells).inset(by: UIEdgeInsets(top: 2.0,
-                                                                     left: 2.0,
-                                                                     bottom: 2.0,
-                                                                     right: 2.0))
+        return getRectUnion(of: centralCells).inset(by: UIEdgeInsets(top: globalCellInset,
+                                                                     left: globalCellInset,
+                                                                     bottom: globalCellInset,
+                                                                     right: globalCellInset))
     }
     
     private func settingsButtonRect(aspectRatio: SettingsButtonAspectRatio) -> CGRect {
@@ -340,7 +325,10 @@ extension GameViewController {
         guard let targetCells = cellsGrid.getCells(origin: origin, size: size) else { return .zero }
         cellsUnderSettingsButton = targetCells
         
-        return getRectUnion(of: targetCells).inset(by: UIEdgeInsets(top: 2.0, left: 2.0, bottom: 2.0, right: 2.0))
+        return getRectUnion(of: targetCells).inset(by: UIEdgeInsets(top: globalCellInset,
+                                                                    left: globalCellInset,
+                                                                    bottom: globalCellInset,
+                                                                    right: globalCellInset))
     }
     
     
