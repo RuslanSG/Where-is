@@ -10,19 +10,11 @@ import UIKit
 
 class GameViewController: UIViewController {
     
-    private enum StartGameViewAcpectRatio {
-        case threeToOne, threeToTwo, twoToOne
-    }
-    
-    private enum SettingsButtonAspectRatio {
-        case oneToOne, oneToTwo
-    }
-    
-    private var cellsGrid: CellsGrid!
+    internal var cellsGrid: CellsGrid!
     private var lastPressedCell: CellView?
-    private var cellsUnderSettingsButton = [CellView]()
-    private var startGameButton: StartGameView!
-    private var settingsButton: UIButton!
+    internal var cellsUnderSettingsButton = [CellView]()
+    internal var startGameButton: StartGameView!
+    internal var settingsButton: UIButton!
     private var swipeDownGestureRecognizer: UISwipeGestureRecognizer!
     
     private let game = Game()
@@ -32,7 +24,7 @@ class GameViewController: UIViewController {
     private var feedbackGenerator = FeedbackGenerator()
     private var gameFinishingReason: GameFinishingReason!
     
-    private let rowSize = 5
+    internal let rowSize = 5
     private var numbersFound = 0
     
     private var firstTime = true
@@ -170,8 +162,8 @@ class GameViewController: UIViewController {
         cellsManager.stopWinking()
         cellsManager.stopSwapping()
         cellsManager.disableCells()
-        cellsManager.hideNumbers(animated: false)
         cellsManager.updateNumbers(with: game.numbers, animated: false)
+        cellsManager.hideNumbers(animated: false)
         
         swipeDownGestureRecognizer.isEnabled = false
         
@@ -193,94 +185,6 @@ class GameViewController: UIViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + freezeTime) {
             self.view.isUserInteractionEnabled = true
         }
-    }
-    
-    private func getRectUnion(of cells: [CellView]) -> CGRect {
-        var rect: CGRect = .zero
-        
-        for cell in cells {
-            let cellFrame = self.view.convert(cell.bounds, from: cell)
-            if rect == .zero {
-                rect = cellFrame
-            } else {
-                rect = rect.union(cellFrame)
-            }
-        }
-        
-        return rect
-    }
-    
-    private func startGameViewRect(aspectRatio: StartGameViewAcpectRatio) -> CGRect {
-        let origin: CGPoint
-        let size: CGSize
-        
-        switch aspectRatio {
-        case .threeToOne:
-            if orientation == .portrait {
-                origin = CGPoint(x: 2,
-                                 y: Int(ceilf(Float(cellsGrid.cells.count) / Float(rowSize) / 2)))
-            } else {
-                origin = CGPoint(x: cellsGrid.cells.count / rowSize / 2,
-                                 y: 3)
-            }
-            size = CGSize(width: 3, height: 1)
-        case .threeToTwo:
-            if orientation == .portrait {
-                origin = CGPoint(x: 2,
-                                 y: cellsGrid.cells.count / rowSize / 2)
-            } else {
-                origin = CGPoint(x: cellsGrid.cells.count / rowSize / 2,
-                                 y: 2)
-            }
-            size = CGSize(width: 3, height: 2)
-        case .twoToOne:
-            if orientation == .portrait {
-                origin = CGPoint(x: 2,
-                                 y: Int(ceilf(Float(cellsGrid.cells.count) / Float(rowSize) / 2)))
-            } else {
-                origin = CGPoint(x: cellsGrid.cells.count / rowSize / 2,
-                                 y: 3)
-            }
-            size = CGSize(width: 2, height: 1)
-        }
-        
-        guard let centralCells = cellsGrid.getCells(origin: origin, size: size) else {
-            return .zero
-        }
-        
-        return getRectUnion(of: centralCells).inset(by: UIEdgeInsets(top: globalCellInset,
-                                                                     left: globalCellInset,
-                                                                     bottom: globalCellInset,
-                                                                     right: globalCellInset))
-    }
-    
-    private func settingsButtonRect(aspectRatio: SettingsButtonAspectRatio) -> CGRect {
-        let origin: CGPoint
-        let size: CGSize
-        
-        switch aspectRatio {
-        case .oneToOne:
-            if orientation == .portrait {
-                origin = CGPoint(x: Int(ceilf(Float(rowSize) / 2)),
-                                 y: cellsGrid.cells.count / rowSize)
-            } else {
-                origin = CGPoint(x: Int(ceilf(Float(cellsGrid.cells.count) / Float(rowSize) / 2)),
-                                 y: rowSize)
-            }
-            size = CGSize(width: 1, height: 1)
-        case .oneToTwo:
-            origin = CGPoint(x: cellsGrid.cells.count / rowSize / 2,
-                             y: rowSize)
-            size = CGSize(width: 2, height: 1)
-        }
-        
-        guard let targetCells = cellsGrid.getCells(origin: origin, size: size) else { return .zero }
-        cellsUnderSettingsButton = targetCells
-        
-        return getRectUnion(of: targetCells).inset(by: UIEdgeInsets(top: globalCellInset,
-                                                                    left: globalCellInset,
-                                                                    bottom: globalCellInset,
-                                                                    right: globalCellInset))
     }
 }
 
@@ -461,16 +365,14 @@ extension GameViewController: CellsManagerDelegate {
         
         game.numberSelected(cell.number)
         
-        if game.level.shuffleMode {
-            game.shuffleNumbers()
-            cellsManager.updateNumbers(with: game.numbers, animated: true)
-        }
-        
         feedbackGenerator.playSelectionHapticFeedback()
 
         guard game.selectedNumberIsRight else { return }
         
-        if !game.level.shuffleMode {
+        if game.level.shuffleMode {
+            game.shuffleNumbers()
+            cellsManager.updateNumbers(with: game.numbers, animated: true)
+        } else {
             cell.setNumber(game.numberToSet, animateIfNeeded: false)
         }
     }

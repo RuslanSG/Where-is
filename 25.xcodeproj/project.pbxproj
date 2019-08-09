@@ -14,6 +14,7 @@
 		2A3271DF22E8685A00F303A5 /* BlurryPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3271DE22E8685A00F303A5 /* BlurryPresentationController.swift */; };
 		2A370E7222FC829000E81166 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A370E7122FC829000E81166 /* Helpers.swift */; };
 		2A527BAF22E7856900F68407 /* ResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A527BAE22E7856900F68407 /* ResultsViewController.swift */; };
+		2A5B443D22FD89C800ECF2C7 /* GameViewControllerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5B443C22FD89C800ECF2C7 /* GameViewControllerHelper.swift */; };
 		2A85C82022F098490039D678 /* SettingsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A85C81F22F098490039D678 /* SettingsButton.swift */; };
 		2A85C82222F1C2EE0039D678 /* LevelParametersTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A85C82122F1C2EE0039D678 /* LevelParametersTest.swift */; };
 		2A8F0992226519C000CF9A04 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2A8F0991226519C000CF9A04 /* GoogleService-Info.plist */; };
@@ -43,6 +44,7 @@
 		2A3271DE22E8685A00F303A5 /* BlurryPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurryPresentationController.swift; sourceTree = "<group>"; };
 		2A370E7122FC829000E81166 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		2A527BAE22E7856900F68407 /* ResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsViewController.swift; sourceTree = "<group>"; };
+		2A5B443C22FD89C800ECF2C7 /* GameViewControllerHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewControllerHelper.swift; sourceTree = "<group>"; };
 		2A85C81F22F098490039D678 /* SettingsButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsButton.swift; sourceTree = "<group>"; };
 		2A85C82122F1C2EE0039D678 /* LevelParametersTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelParametersTest.swift; sourceTree = "<group>"; };
 		2A8F0991226519C000CF9A04 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 				2A85C82122F1C2EE0039D678 /* LevelParametersTest.swift */,
 				2ACDF75B213D5B43004FEA1B /* FeedbackGenerator.swift */,
 				2A3271DE22E8685A00F303A5 /* BlurryPresentationController.swift */,
+				2A5B443C22FD89C800ECF2C7 /* GameViewControllerHelper.swift */,
 				2A370E7122FC829000E81166 /* Helpers.swift */,
 			);
 			path = "Supporting Files";
@@ -336,6 +339,7 @@
 				2AE841F722DE39DD00D724E0 /* StartGameView.swift in Sources */,
 				2AE841F922DE39F900D724E0 /* FeedbackView.swift in Sources */,
 				2A370E7222FC829000E81166 /* Helpers.swift in Sources */,
+				2A5B443D22FD89C800ECF2C7 /* GameViewControllerHelper.swift in Sources */,
 				2A3271DF22E8685A00F303A5 /* BlurryPresentationController.swift in Sources */,
 				2AE8420722DE3BE900D724E0 /* AppDelegate.swift in Sources */,
 				2A85C82222F1C2EE0039D678 /* LevelParametersTest.swift in Sources */,

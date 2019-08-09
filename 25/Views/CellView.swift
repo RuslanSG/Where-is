@@ -82,7 +82,9 @@ class CellView: UIButton {
         if !animateIfNeeded || (numberState == .invisible && isWinking) {
             setTitle(String(number), for: .normal)
             return
-        } else if numberState == .invisible {
+        }
+        
+        if numberState == .invisible {
             setTitle(String(number), for: .normal)
             isSetEnabled = false
             showNumber(animated: true) {
@@ -104,13 +106,8 @@ class CellView: UIButton {
         
         setDisappearingAnimator?.addCompletion { (_) in
             self.setTitle(String(number), for: .normal)
-            
-//            if self.isSetting {
-                /// Phase 2 (appearing)
-                self.setAppearingAnimator?.startAnimation()
-//            } else {
-//                self.isWinkEnabled = true
-//            }
+            /// Phase 2 (appearing)
+            self.setAppearingAnimator?.startAnimation()
         }
         
         setAppearingAnimator?.addCompletion { (_) in
@@ -194,8 +191,7 @@ class CellView: UIButton {
     
     func showNumber(animated: Bool, completion: (() -> Void)? = nil) {
         isEnabled = true
-        
-        if !animated {
+                if !animated {
             titleLabel?.alpha = 1.0
             numberState = .visible
             return
