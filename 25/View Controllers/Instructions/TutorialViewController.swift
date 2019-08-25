@@ -16,6 +16,7 @@ protocol TutorialViewControllerDelegate: class {
 class TutorialViewController: UIViewController {
     
     @IBOutlet var cells: [CellView]!
+    @IBOutlet var labels: [UILabel]!
     @IBOutlet weak var findNumberLabel: UILabel!
     @IBOutlet weak var doneButton: UIButton!
     
@@ -31,6 +32,12 @@ class TutorialViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureCells()
+        
+        if #available(iOS 13.0, *) {
+            view.backgroundColor = .systemBackground
+            labels.forEach { $0.textColor = .label }
+            doneButton.tintColor = .systemBlue
+        }
     }
     
     // MARK: - Actions

@@ -17,6 +17,9 @@ protocol WelcomeViewControllerDelegate: class {
 class WelcomeViewController: UIViewController {
     
     @IBOutlet weak var welcomeLabel: UILabel!
+    @IBOutlet var labels: [UILabel]!
+    @IBOutlet weak var nextButton: UIButton!
+    @IBOutlet weak var skipButton: UIButton!
     
     weak var delegate: WelcomeViewControllerDelegate?
 
@@ -24,6 +27,14 @@ class WelcomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if #available(iOS 13.0, *) {
+            view.backgroundColor = .systemBackground
+            labels.forEach { $0.textColor = .label }
+            nextButton.tintColor = .systemBlue
+            skipButton.tintColor = .systemBlue
+        }
+        
         setAttributedTextToWelcomeLabel()
     }
     

@@ -196,7 +196,7 @@ class GameViewController: UIViewController {
         let userDefaults = UserDefaults.standard
         userDefaults.register(defaults: [UserDefaults.Key.firstTime: true])
         let needsToShowTutorial = userDefaults.bool(forKey: UserDefaults.Key.firstTime)
-        if true {//needsToShowTutorial {
+        if needsToShowTutorial {
             guard let instructionsViewController = storyboard?.instantiateViewController(withIdentifier: String(describing: InstructionsViewController.self)) as? InstructionsViewController else { return }
             present(instructionsViewController, animated: true)
         }

@@ -6,7 +6,6 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14766.13"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
-        <capability name="iOS 13.0 system colors" minToolsVersion="11.0"/>
     </dependencies>
     <scenes>
         <!--Game-->
@@ -36,7 +35,8 @@
                     <view key="view" contentMode="scaleToFill" id="k4f-qt-Kaa">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="ttn-Jd-Izi"/>
                     </view>
                 </viewController>
@@ -47,15 +47,14 @@
         <!--Instructions Page View Controller-->
         <scene sceneID="bg2-yA-Dqa">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="2uf-iw-v5V" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <pageViewController storyboardIdentifier="InstructionsPageViewController" autoresizesArchivedViewToFullSize="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="Bl0-Wo-DR2" customClass="InstructionsPageViewController" customModule="_5" customModuleProvider="target" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2uf-iw-v5V" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1601" y="863"/>
         </scene>
         <!--Welcome View Controller-->
         <scene sceneID="Wng-ng-En7">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="0dQ-jV-f6T" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="WelcomeViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="pgl-Ng-xcl" customClass="WelcomeViewController" customModule="_5" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="6e1-Ok-luw">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -63,7 +62,7 @@
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cnd-Sf-JON">
                                 <rect key="frame" x="35" y="497" width="250" height="55"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="systemBlueColor"/>
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="55" id="3Sc-of-GKh"/>
                                 </constraints>
@@ -97,7 +96,7 @@
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to Where is?!" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BeB-JF-diK">
                                                 <rect key="frame" x="0.0" y="0.0" width="206" height="84"/>
                                                 <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="35"/>
-                                                <nil key="textColor"/>
+                                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
@@ -105,7 +104,7 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="The best way to develop you attentiveness." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kuo-U7-5dp">
                                         <rect key="frame" x="0.0" y="194" width="223.5" height="41"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
+                                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
@@ -119,13 +118,16 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="cEM-mf-72M"/>
                                 </constraints>
-                                <state key="normal" title="Skip"/>
+                                <color key="tintColor" red="0.0" green="0.46189910169999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Skip">
+                                    <color key="titleColor" red="0.0" green="0.46189910169999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
                                 <connections>
                                     <action selector="skipButtonPressed:" destination="pgl-Ng-xcl" eventType="touchUpInside" id="NWP-XK-afD"/>
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="cnd-Sf-JON" firstAttribute="leading" secondItem="uc3-DS-ja6" secondAttribute="leading" constant="35" id="3Zd-jE-SJd"/>
                             <constraint firstItem="GQy-an-f7l" firstAttribute="centerY" secondItem="6e1-Ok-luw" secondAttribute="centerY" multiplier="0.6" id="6sl-8z-9AJ"/>
@@ -141,16 +143,20 @@
                         <viewLayoutGuide key="safeArea" id="uc3-DS-ja6"/>
                     </view>
                     <connections>
+                        <outlet property="nextButton" destination="cnd-Sf-JON" id="uId-Fe-HAX"/>
+                        <outlet property="skipButton" destination="dE9-Xq-OFc" id="0PJ-70-htY"/>
                         <outlet property="welcomeLabel" destination="BeB-JF-diK" id="pJW-mo-ds5"/>
+                        <outletCollection property="labels" destination="BeB-JF-diK" collectionClass="NSMutableArray" id="e3v-wW-cUQ"/>
+                        <outletCollection property="labels" destination="Kuo-U7-5dp" collectionClass="NSMutableArray" id="QG6-NJ-ixk"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0dQ-jV-f6T" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2518" y="863"/>
         </scene>
         <!--Tutorial View Controller-->
         <scene sceneID="TAM-WP-ZUR">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="F4q-yK-OtU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="TutorialViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="TFQ-AI-hcJ" customClass="TutorialViewController" customModule="_5" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="rQU-Si-1Rl">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -323,12 +329,12 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Find 1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UxF-9W-owG">
                                 <rect key="frame" x="111" y="75" width="98" height="42"/>
                                 <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="35"/>
-                                <nil key="textColor"/>
+                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button hidden="YES" opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HeO-ia-35N">
                                 <rect key="frame" x="35" y="497" width="250" height="55"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="systemBlueColor"/>
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="55" id="t1J-E0-F3y"/>
                                 </constraints>
@@ -348,7 +354,7 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="dPo-6y-PL3" firstAttribute="bottom" secondItem="HeO-ia-35N" secondAttribute="bottom" constant="16" id="Vnp-dR-gtU"/>
                             <constraint firstItem="pW6-LQ-p3I" firstAttribute="centerX" secondItem="rQU-Si-1Rl" secondAttribute="centerX" id="XVv-DO-4o3"/>
@@ -372,8 +378,10 @@
                         <outletCollection property="cells" destination="4d5-xk-wAq" collectionClass="NSMutableArray" id="VIj-Uk-REg"/>
                         <outletCollection property="cells" destination="M5g-ac-X3C" collectionClass="NSMutableArray" id="Val-2b-0iM"/>
                         <outletCollection property="cells" destination="JMj-Hy-0iP" collectionClass="NSMutableArray" id="XOr-Y8-Rsj"/>
+                        <outletCollection property="labels" destination="UxF-9W-owG" collectionClass="NSMutableArray" id="9QQ-JK-Kpc"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="F4q-yK-OtU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3430" y="863"/>
         </scene>
@@ -542,7 +550,7 @@
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show Tutorial" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZCP-fu-Tbr">
                                                     <rect key="frame" x="108" y="11.5" width="104" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="linkColor"/>
+                                                    <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
