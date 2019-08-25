@@ -22,8 +22,8 @@ class InstructionsViewController: UIViewController {
         super.viewDidLoad()
         
         if #available(iOS 13.0, *) {
-            isModalInPresentation = needsToShowWelcome
-            view.backgroundColor = .systemBackground
+//            isModalInPresentation = needsToShowWelcome
+//            view.backgroundColor = .systemBackground
         }
         
         configurePageViewController()

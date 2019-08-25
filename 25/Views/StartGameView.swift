@@ -94,13 +94,13 @@ class StartGameView: UIVisualEffectView {
         var blurEffect: UIBlurEffect
         var vibrancyEffect: UIVibrancyEffect
         
-        if #available(iOS 13.0, *) {
-            blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
-            vibrancyEffect = UIVibrancyEffect(blurEffect: blurEffect, style: .secondaryLabel)
-        } else {
+//        if #available(iOS 13.0, *) {
+//            blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+//            vibrancyEffect = UIVibrancyEffect(blurEffect: blurEffect, style: .secondaryLabel)
+//        } else {
             blurEffect = UIBlurEffect(style: .light)
             vibrancyEffect = UIVibrancyEffect(blurEffect: blurEffect)
-        }
+//        }
         
         return (blur: blurEffect, vibrancy: vibrancyEffect)
     }

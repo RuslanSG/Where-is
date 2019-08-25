@@ -151,7 +151,7 @@ class GameViewController: UIViewController {
     
     private func setupUI() {
         if #available(iOS 13.0, *) {
-            view.backgroundColor = .systemBackground
+//            view.backgroundColor = .systemBackground
         }
         setupFeedbackView()
         setupCellsGrid()
@@ -266,11 +266,11 @@ extension GameViewController {
     private func showTipLabel(animated: Bool) {
         let labelTextColor: UIColor
         
-        if #available (iOS 13.0, *) {
-            labelTextColor = .label
-        } else {
+//        if #available (iOS 13.0, *) {
+//            labelTextColor = .label
+//        } else {
             labelTextColor = .black
-        }
+//        }
         
         tipLabel.text = "↓ Swipe down to stop"
         tipLabel.textColor = labelTextColor

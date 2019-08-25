@@ -34,9 +34,9 @@ class TutorialViewController: UIViewController {
         configureCells()
         
         if #available(iOS 13.0, *) {
-            view.backgroundColor = .systemBackground
-            labels.forEach { $0.textColor = .label }
-            doneButton.tintColor = .systemBlue
+//            view.backgroundColor = .systemBackground
+//            labels.forEach { $0.textColor = .label }
+//            doneButton.tintColor = .systemBlue
         }
     }
     
