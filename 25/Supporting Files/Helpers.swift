@@ -17,5 +17,5 @@ var orientation: Orientation {
     return UIScreen.main.bounds.width < UIScreen.main.bounds.height ? .portrait : .landscape
 }
 
-let globalCellInset: CGFloat = 2.0
+let globalCellInset: CGFloat = 1.5
 let globalCornerRadius: CGFloat = 9.0

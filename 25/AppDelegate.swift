@@ -26,6 +26,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UIView.appearance().isExclusiveTouch = true
         
+        let pageControl = UIPageControl.appearance()
+        pageControl.currentPageIndicatorTintColor = .darkGray
+        pageControl.pageIndicatorTintColor = .lightGray
+        
         return true
     }
     

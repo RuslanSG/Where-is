@@ -12,5 +12,6 @@ extension UserDefaults {
     enum Key {
         static let availableLevels: String = "AvailableLevelsUserDefaultsKey"
         static let levelIndex: String = "LevelUserDefaultsKeyTest"
+        static let firstTime: String = "FirstTimeUserDefaultsKeyTest"
     }
 }

@@ -84,8 +84,6 @@ class SettingsViewController: UITableViewController {
         lastPressedLevelButton = levelButton
     }
     
-    
-    
 //    private func setupLevelButtonsStackView(count: Int) {
 //        let verticalStackView = UIStackView()
 //        verticalStackView.axis = .vertical
@@ -153,21 +151,18 @@ class SettingsViewController: UITableViewController {
     
 }
 
-// MARK: - Table View Delegate
-
 extension SettingsViewController {
     
-//    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        
-//        return 44.0
-//    }
+    // MARK: - Table View Delegate
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == 1, indexPath.row == 0 {
+            guard let instructionsViewController = storyboard?.instantiateViewController(withIdentifier: String(describing: InstructionsViewController.self)) as? InstructionsViewController else { return }
+            instructionsViewController.needsToShowWelcome = false
+            present(instructionsViewController, animated: true)
+        }
+    }
     
 }
 
-// MARK: - Strings
 
-extension SettingsViewController {
-    
-    
-    
-}

@@ -25,10 +25,10 @@ class CellView: UIButton {
     
     override var backgroundColor: UIColor? {
         set {
-            childView.backgroundColor = newValue
+            contentView.backgroundColor = newValue
         }
         get {
-            return childView.backgroundColor
+            return contentView.backgroundColor
         }
     }
     
@@ -50,13 +50,13 @@ class CellView: UIButton {
     private var setDisappearingAnimator: UIViewPropertyAnimator?
     
     
-    private var childView: UIView = {
+    private var contentView: UIView = {
         let view = UIView()
         view.isUserInteractionEnabled = false
         return view
     }()
     
-    private var inset: CGFloat
+    private var contentViewInset: CGFloat = 0.0
     private var numberState: NumberState = .visible
     private var numberCurrentAlpha: CGFloat = 1.0
     private var isWinking = false
@@ -64,14 +64,16 @@ class CellView: UIButton {
     
     // MARK: - Initialization
     
-    init(inset: CGFloat) {
-        self.inset = inset
-        super.init(frame: .zero)
-        setupUI()
+    init(frame: CGRect, contentViewInset: CGFloat) {
+        self.contentViewInset = contentViewInset
+        super.init(frame: frame)
+        setupCellView()
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
+        contentViewInset = globalCellInset
+        setupCellView()
     }
     
     // MARK: - Public Methods
@@ -180,13 +182,13 @@ class CellView: UIButton {
                                                        delay: 0,
                                                        options: .curveEaseOut,
                                                        animations: {
-                                                        self.childView.backgroundColor = newCellColor
+                                                        self.contentView.backgroundColor = newCellColor
                                                         self.setTitleColor(newNumberColor, for: .normal)
         })
     }
     
-    func setCornerRadius(cornerRadius: CGFloat) {
-        childView.layer.cornerRadius = cornerRadius
+    func setCornerRadius(_ cornerRadius: CGFloat) {
+        contentView.layer.cornerRadius = cornerRadius
     }
     
     func showNumber(animated: Bool, completion: (() -> Void)? = nil) {
@@ -245,30 +247,30 @@ class CellView: UIButton {
         hideNumber(animated: false)
     }
     
-    func uncompress(hideNumber: Bool = false) {
+    func uncompress(showNumber: Bool = true) {
         UIView.animate(withDuration: 0.2) {
             self.transform = CGAffineTransform.identity
         }
-        if !hideNumber {
-            showNumber(animated: true)
+        if showNumber {
+            self.showNumber(animated: true)
         }
     }
     
     // MARK: - Private Methods
     
-    private func setupUI() {
-        addSubview(childView)
+    private func setupCellView() {
+        addSubview(contentView)
         backgroundColor = .clear
         titleLabel?.textAlignment = .center
         titleLabel?.numberOfLines = 1
         titleLabel?.adjustsFontSizeToFitWidth = true
         titleLabel?.minimumScaleFactor = 0.5
         
-        childView.translatesAutoresizingMaskIntoConstraints = false
-        childView.topAnchor.constraint(equalTo: self.topAnchor, constant: inset).isActive = true
-        childView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -inset).isActive = true
-        childView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -inset).isActive = true
-        childView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: inset).isActive = true
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.topAnchor.constraint(equalTo: self.topAnchor, constant: contentViewInset).isActive = true
+        contentView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -contentViewInset).isActive = true
+        contentView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -contentViewInset).isActive = true
+        contentView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: contentViewInset).isActive = true
     }
     
     private func wink(from state: NumberState = .visible, fractionComplete: CGFloat = 1.0) {

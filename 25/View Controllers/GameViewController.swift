@@ -80,6 +80,11 @@ class GameViewController: UIViewController {
         }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        showTutorialIfNeeded()
+    }
+    
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         coordinator.animate(alongsideTransition: { (context) in
@@ -138,7 +143,7 @@ class GameViewController: UIViewController {
         UIView.animate(withDuration: 0.2) {
             self.settingsButton.transform = CGAffineTransform.identity
         }
-        cellsUnderSettingsButton.forEach { $0.uncompress(hideNumber: true) }
+        cellsUnderSettingsButton.forEach { $0.uncompress(showNumber: false) }
         feedbackGenerator.playSelectionHapticFeedback()
     }
     
@@ -174,7 +179,7 @@ class GameViewController: UIViewController {
             self.settingsButton.isHidden = false
         }
         
-        lastPressedCell?.uncompress(hideNumber: true)
+        lastPressedCell?.uncompress(showNumber: false)
         
         /// Enables orientation change when game is finished
         (UIApplication.shared.delegate as! AppDelegate).restrictRotation = .allButUpsideDown
@@ -184,6 +189,16 @@ class GameViewController: UIViewController {
         self.view.isUserInteractionEnabled = false
         DispatchQueue.main.asyncAfter(deadline: .now() + freezeTime) {
             self.view.isUserInteractionEnabled = true
+        }
+    }
+    
+    private func showTutorialIfNeeded() {
+        let userDefaults = UserDefaults.standard
+        userDefaults.register(defaults: [UserDefaults.Key.firstTime: true])
+        let needsToShowTutorial = userDefaults.bool(forKey: UserDefaults.Key.firstTime)
+        if true {//needsToShowTutorial {
+            guard let instructionsViewController = storyboard?.instantiateViewController(withIdentifier: String(describing: InstructionsViewController.self)) as? InstructionsViewController else { return }
+            present(instructionsViewController, animated: true)
         }
     }
 }
@@ -406,7 +421,7 @@ extension GameViewController: SettingsViewControllerDelegate {
 extension GameViewController {
     
     @objc internal func applicationWillResignActive() {
-        cellsUnderSettingsButton.forEach { $0.uncompress(hideNumber: true) }
+        cellsUnderSettingsButton.forEach { $0.uncompress(showNumber: false) }
         prepareForNewGame()
     }
 }
