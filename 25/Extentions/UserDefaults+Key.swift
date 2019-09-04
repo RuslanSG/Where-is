@@ -9,9 +9,12 @@
 import Foundation
 
 extension UserDefaults {
+    
     enum Key {
-        static let availableLevels: String = "AvailableLevelsUserDefaultsKey"
-        static let levelIndex: String = "LevelUserDefaultsKeyTest"
-        static let firstTime: String = "FirstTimeUserDefaultsKeyTest"
+        static let availableLevels      = "AvailableLevelsUserDefaultsKey"
+        static let levelIndex           = "LevelUserDefaultsKey"
+        static let firstTime            = "FirstTimeUserDefaultsKey"
+        static let stopGameHintNeeded   = "StopGameHintNeededUserDefaultsKey"
+        static let findNumberHintNeeded = "FindNumberHintNeededUserDefaultsKey"
     }
 }

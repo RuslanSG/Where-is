@@ -22,6 +22,7 @@
 		2A85C82222F1C2EE0039D678 /* LevelParametersTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A85C82122F1C2EE0039D678 /* LevelParametersTest.swift */; };
 		2A8F0992226519C000CF9A04 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2A8F0991226519C000CF9A04 /* GoogleService-Info.plist */; };
 		2ACDF75C213D5B43004FEA1B /* FeedbackGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ACDF75B213D5B43004FEA1B /* FeedbackGenerator.swift */; };
+		2ACF1A6C232049C900183DF4 /* HintLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ACF1A6B232049C900183DF4 /* HintLabel.swift */; };
 		2AE841EA22DE38D800D724E0 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE841E922DE38D800D724E0 /* GameViewController.swift */; };
 		2AE841EC22DE394600D724E0 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE841EB22DE394600D724E0 /* SettingsViewController.swift */; };
 		2AE841F022DE398600D724E0 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE841EF22DE398600D724E0 /* Game.swift */; };
@@ -55,6 +56,7 @@
 		2A85C82122F1C2EE0039D678 /* LevelParametersTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelParametersTest.swift; sourceTree = "<group>"; };
 		2A8F0991226519C000CF9A04 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2ACDF75B213D5B43004FEA1B /* FeedbackGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackGenerator.swift; sourceTree = "<group>"; };
+		2ACF1A6B232049C900183DF4 /* HintLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HintLabel.swift; sourceTree = "<group>"; };
 		2AE841E622DE36CA00D724E0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2AE841E722DE36CB00D724E0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2AE841E922DE38D800D724E0 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
@@ -184,6 +186,7 @@
 				2AE841F422DE39BA00D724E0 /* CellView.swift */,
 				2AE841F622DE39DD00D724E0 /* StartGameView.swift */,
 				2AE841F822DE39F900D724E0 /* FeedbackView.swift */,
+				2ACF1A6B232049C900183DF4 /* HintLabel.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -366,6 +369,7 @@
 				2AE8420422DE3B0D00D724E0 /* UIColor+CellColor.swift in Sources */,
 				2A118DCA211A1BD50059E252 /* UIDevice+Info.swift in Sources */,
 				2AE841F022DE398600D724E0 /* Game.swift in Sources */,
+				2ACF1A6C232049C900183DF4 /* HintLabel.swift in Sources */,
 				2A527BAF22E7856900F68407 /* ResultsViewController.swift in Sources */,
 				2AE8420222DE3AFB00D724E0 /* UserDefaults+Key.swift in Sources */,
 				2AE841FE22DE3ABC00D724E0 /* CellsManager.swift in Sources */,

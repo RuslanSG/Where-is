@@ -59,14 +59,14 @@ class ResultsViewController: UIViewController {
         var blurEffect: UIBlurEffect
         var vibrancyEffect: UIVibrancyEffect
         
-//        if #available(iOS 13.0, *) {
-//            blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
-//            vibrancyEffect = UIVibrancyEffect(blurEffect: blurEffect, style: .secondaryLabel)
-//        } else {
+        if #available(iOS 13.0, *) {
+            blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+            vibrancyEffect = UIVibrancyEffect(blurEffect: blurEffect, style: .secondaryLabel)
+        } else {
             blurEffect = UIBlurEffect(style: .light)
             vibrancyEffect = UIVibrancyEffect(blurEffect: UIBlurEffect(style: .extraLight))
             blurEffectView.contentView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.07)
-//        }
+        }
         
         let blurAnimator = UIViewPropertyAnimator(duration: 0.2, curve: .easeOut) {
             self.blurEffectView.effect = blurEffect

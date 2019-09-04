@@ -19,10 +19,45 @@ class GameViewController: UIViewController {
     
     private let game = Game()
     private lazy var cellsManager = CellsManager(with: cellsGrid.cells, game: game)
-    private var tipLabel = UILabel()
+    
     private var feedbackView = FeedbackView()
     private var feedbackGenerator = FeedbackGenerator()
     private var gameFinishingReason: GameFinishingReason!
+    
+    private lazy var stopGameHintLabel: HintLabel? = {
+        let stopGameHintNeeded = UserDefaults.standard.bool(forKey: UserDefaults.Key.stopGameHintNeeded)
+        
+        if stopGameHintNeeded {
+            let label = HintLabel()
+            
+            label.text = "↓ Swipe down to stop"
+            label.font = UIFont.boldSystemFont(ofSize: 15)
+            
+            return label
+        }
+        
+        return nil
+    }()
+    
+    private lazy var findNumberHintLabels: (title: HintLabel, details: HintLabel)? = {
+        let findNumberHintNeeded = UserDefaults.standard.bool(forKey: UserDefaults.Key.findNumberHintNeeded)
+        
+        if findNumberHintNeeded {
+            let titleLabel = HintLabel()
+            let detailsLabel = HintLabel()
+                    
+            titleLabel.text = "Find 1"
+            titleLabel.font = UIFont.boldSystemFont(ofSize: 25)
+            
+            detailsLabel.text = ""
+            detailsLabel.font = UIFont.systemFont(ofSize: 17)
+            
+            return (title: titleLabel, details: detailsLabel)
+        }
+        
+        return nil
+    }()
+
     
     internal let rowSize = 5
     private var numbersFound = 0
@@ -51,6 +86,11 @@ class GameViewController: UIViewController {
             return (UIScreen.main.bounds.height - globalCellInset) / CGFloat(rowSize)
         }
     }
+    
+    private weak var timer: Timer?
+    private var startTime = 0.0
+    private var timeLeft = 0.0
+    private var time = 0.0
     
     // MARK: - Lifecycle
     
@@ -95,6 +135,11 @@ class GameViewController: UIViewController {
         })
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        timer?.invalidate()
+    }
+    
     deinit {
         print("deinit \(self)")
     }
@@ -116,10 +161,22 @@ class GameViewController: UIViewController {
             self.settingsButton.isHidden = true
         }
         
-        /// Disables orientation change when game is started
         if orientation == .portrait {
             (UIApplication.shared.delegate as! AppDelegate).restrictRotation = .portrait
-            showTipLabel(animated: true)
+            
+            let stopGameHintNeeded = UserDefaults.standard.bool(forKey: UserDefaults.Key.stopGameHintNeeded)
+            
+            if stopGameHintNeeded {
+                stopGameHintLabel?.show(animated: true)
+            }
+            
+            let findNumberHintNeeded = UserDefaults.standard.bool(forKey: UserDefaults.Key.findNumberHintNeeded)
+            
+            if findNumberHintNeeded {
+                findNumberHintLabels?.title.show(animated: true)
+                findNumberHintLabels?.details.show(animated: true)
+                startTimer()
+            }
         } else {
             (UIApplication.shared.delegate as! AppDelegate).restrictRotation = .landscape
         }
@@ -127,6 +184,7 @@ class GameViewController: UIViewController {
     
     @objc func swipeDown() {
         prepareForNewGame()
+        UserDefaults.standard.set(false, forKey: UserDefaults.Key.stopGameHintNeeded)
     }
     
     @objc func settingsButtonPressed() {
@@ -151,7 +209,7 @@ class GameViewController: UIViewController {
     
     private func setupUI() {
         if #available(iOS 13.0, *) {
-//            view.backgroundColor = .systemBackground
+            view.backgroundColor = .systemBackground
         }
         setupFeedbackView()
         setupCellsGrid()
@@ -159,6 +217,7 @@ class GameViewController: UIViewController {
         setupStartGameButton()
         setupSettingsButton()
         setupGestureRecognizers()
+        setupHintLabels()
     }
     
     private func prepareForNewGame() {
@@ -173,7 +232,11 @@ class GameViewController: UIViewController {
         swipeDownGestureRecognizer.isEnabled = false
         
         startGameButton.show()
-        hideTipLabel(animated: true)
+        
+        stopGameHintLabel?.hide(animated: true)
+        findNumberHintLabels?.title.hide(animated: true)
+        findNumberHintLabels?.title.text = "Find 1"
+        findNumberHintLabels?.details.hide(animated: true)
         
         UIView.animate(withDuration: 0.2) {
             self.settingsButton.isHidden = false
@@ -181,7 +244,8 @@ class GameViewController: UIViewController {
         
         lastPressedCell?.uncompress(showNumber: false)
         
-        /// Enables orientation change when game is finished
+        timer?.invalidate()
+        
         (UIApplication.shared.delegate as! AppDelegate).restrictRotation = .allButUpsideDown
     }
     
@@ -194,9 +258,8 @@ class GameViewController: UIViewController {
     
     private func showTutorialIfNeeded() {
         let userDefaults = UserDefaults.standard
-        userDefaults.register(defaults: [UserDefaults.Key.firstTime: true])
-        let needsToShowTutorial = userDefaults.bool(forKey: UserDefaults.Key.firstTime)
-        if needsToShowTutorial {
+        let tutorialNeeded = userDefaults.bool(forKey: UserDefaults.Key.firstTime)
+        if tutorialNeeded {
             guard let instructionsViewController = storyboard?.instantiateViewController(withIdentifier: String(describing: InstructionsViewController.self)) as? InstructionsViewController else { return }
             present(instructionsViewController, animated: true)
         }
@@ -251,7 +314,6 @@ extension GameViewController {
         
         settingsButton = UIButton()
         settingsButton.setImage(gearImage, for: .normal)
-        settingsButton.tintColor = .white
         settingsButton.imageView?.contentMode = .scaleAspectFit
         settingsButton.imageEdgeInsets = UIEdgeInsets(top: 17.0, left: 17.0, bottom: 17.0, right: 17.0)
         settingsButton.backgroundColor = cellsUnderSettingsButton.first?.backgroundColor
@@ -263,53 +325,6 @@ extension GameViewController {
         view.addSubview(settingsButton)
     }
     
-    private func showTipLabel(animated: Bool) {
-        let labelTextColor: UIColor
-        
-//        if #available (iOS 13.0, *) {
-//            labelTextColor = .label
-//        } else {
-            labelTextColor = .black
-//        }
-        
-        tipLabel.text = "↓ Swipe down to stop"
-        tipLabel.textColor = labelTextColor
-        tipLabel.adjustsFontSizeToFitWidth = true
-        tipLabel.font = UIFont.boldSystemFont(ofSize: 15)
-        tipLabel.textAlignment = .center
-        tipLabel.alpha = 0
-        
-        view.addSubview(tipLabel)
-        
-        tipLabel.translatesAutoresizingMaskIntoConstraints = false
-        tipLabel.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -7.0).isActive = true
-        tipLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 7.0).isActive = true
-        tipLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -7.0).isActive = true
-        
-        if animated {
-            let show = UIViewPropertyAnimator(duration: 0.2, curve: .easeOut) {
-                self.tipLabel.alpha = 1
-            }
-            show.startAnimation()
-        } else {
-            tipLabel.alpha = 1
-        }
-    }
-    
-    private func hideTipLabel(animated: Bool) {
-        if animated {
-            let hide = UIViewPropertyAnimator(duration: 0.2, curve: .easeOut) {
-                self.tipLabel.alpha = 0
-            }
-            hide.addCompletion { (_) in
-                self.tipLabel.removeFromSuperview()
-            }
-            hide.startAnimation()
-        } else {
-            tipLabel.removeFromSuperview()
-        }
-    }
-    
     private func setupGestureRecognizers() {
         swipeDownGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(swipeDown))
         swipeDownGestureRecognizer.direction = .down
@@ -317,6 +332,32 @@ extension GameViewController {
         swipeDownGestureRecognizer.isEnabled = false
         
         self.view.addGestureRecognizer(swipeDownGestureRecognizer)
+    }
+    
+    private func setupHintLabels() {
+        if let stopGameHintLabel = stopGameHintLabel {
+            view.addSubview(stopGameHintLabel)
+            
+            stopGameHintLabel.translatesAutoresizingMaskIntoConstraints = false
+            stopGameHintLabel.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -7.0).isActive = true
+            stopGameHintLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 7.0).isActive = true
+            stopGameHintLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -7.0).isActive = true
+        }
+        
+        if let findNumberTipLabels = findNumberHintLabels {
+            let vStackView = UIStackView(arrangedSubviews: [findNumberTipLabels.title, findNumberTipLabels.details])
+            vStackView.axis = .vertical
+            vStackView.spacing = 10
+            
+            view.addSubview(vStackView)
+            
+            let margins = view.layoutMarginsGuide
+            vStackView.translatesAutoresizingMaskIntoConstraints = false
+            vStackView.bottomAnchor.constraint(equalTo: cellsGrid.topAnchor, constant: -16).isActive = true
+            vStackView.leftAnchor.constraint(equalTo: margins.leftAnchor).isActive = true
+            vStackView.rightAnchor.constraint(equalTo: margins.rightAnchor).isActive = true
+            vStackView.topAnchor.constraint(greaterThanOrEqualTo: margins.topAnchor, constant: 16).isActive = true
+        }
     }
     
     private func updateViewFromModel() {
@@ -362,6 +403,35 @@ extension GameViewController {
         
         settingsButton.frame = settingsButtonRect(aspectRatio: aspectRatio)
         settingsButton.backgroundColor = cellsUnderSettingsButton.first?.backgroundColor
+        settingsButton.tintColor = cellsUnderSettingsButton.first?.titleLabel?.textColor
+    }
+    
+    // MARK: - Timer
+    
+    private func startTimer() {
+        startTime = Date().timeIntervalSinceReferenceDate
+        timeLeft = game.level.interval
+        
+        guard let countdownLabel = findNumberHintLabels?.details else { return }
+        let timeString = String(format: "%.2f", game.level.interval)
+        countdownLabel.text = timeString
+        
+        timer = Timer.scheduledTimer(timeInterval: 0.05,
+                                     target: self,
+                                     selector: #selector(advaneTimer(_:)),
+                                     userInfo: nil,
+                                     repeats: true)
+    }
+    
+    @objc private func advaneTimer(_ timer: Timer) {
+        time = Date().timeIntervalSinceReferenceDate - startTime
+        startTime = Date().timeIntervalSinceReferenceDate
+        timeLeft -= time
+
+        let timeString = String(format: "%.2f", timeLeft)
+
+        guard let countdownLabel = findNumberHintLabels?.details else { return }
+        countdownLabel.text = timeString
     }
 }
 
@@ -378,17 +448,26 @@ extension GameViewController: CellsManagerDelegate {
     internal func cellReleased(_ cell: CellView) {
         guard game.isRunning else { return }
         
-        game.numberSelected(cell.number)
-        
         feedbackGenerator.playSelectionHapticFeedback()
-
-        guard game.selectedNumberIsRight else { return }
         
-        if game.level.shuffleMode {
-            game.shuffleNumbers()
-            cellsManager.updateNumbers(with: game.numbers, animated: true)
-        } else {
-            cell.setNumber(game.numberToSet, animateIfNeeded: false)
+        if game.numberSelected(cell.number) {
+            if let findNumberHintLabels = findNumberHintLabels {
+                let newText = findNumberHintLabels.title.text!.components(separatedBy: CharacterSet.decimalDigits).joined() + String(game.nextNumber)
+                findNumberHintLabels.title.text = newText
+                timer?.invalidate()
+                startTimer()
+            }
+            
+            if game.level.shuffleMode {
+                game.shuffleNumbers()
+                cellsManager.updateNumbers(with: game.numbers, animated: true)
+            } else {
+                cell.setNumber(game.numberToSet, animateIfNeeded: false)
+            }
+                    
+            if game.nextNumber == 11 {
+                UserDefaults.standard.set(false, forKey: UserDefaults.Key.findNumberHintNeeded)
+            }
         }
     }
 }

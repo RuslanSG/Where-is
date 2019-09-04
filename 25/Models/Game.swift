@@ -28,10 +28,10 @@ final class Game {
     }
     
     private(set) var numbers = [Int]()
+    private(set) var currentNumber = 0
     private(set) var nextNumber = 1
     private(set) var numberToSet = 0
     private(set) var isRunning = false
-    private(set) var selectedNumberIsRight = false
     private(set) var numbersFound = 0
     
     private var timer: Timer?
@@ -52,7 +52,6 @@ final class Game {
     init() {
         setLevels()
         setNumbers(count: level.numbers)
-//        registerDefaults()
     }
     
     // MARK: - Actions
@@ -63,23 +62,27 @@ final class Game {
     
     // MARK: - Public Methods
     
-    func numberSelected(_ number: Int) {
+    func numberSelected(_ number: Int) -> Bool {
         if number == nextNumber {
             if number == numbers.max() {
                 delegate?.gameFinished(reason: .levelPassed, numbersFound: numbersFound + 1)
-                return
+                return true
             }
-            selectedNumberIsRight = true
+            
             numbersFound += 1
             nextNumber += 1
+            currentNumber += 1
             numberToSet = number + level.numbers
-            guard let index = numbers.firstIndex(of: number) else { return }
+            
+            guard let index = numbers.firstIndex(of: number) else { fatalError("Current number didn't find in numbers array") }
             numbers[index] = number + numbers.count
+            
             timer?.invalidate()
             setTimer(to: level.interval)
+            return true
         } else {
             delegate?.gameFinished(reason: .wrongNumberTapped, numbersFound: numbersFound)
-            selectedNumberIsRight = false
+            return false
         }
     }
     
@@ -92,7 +95,7 @@ final class Game {
     
     func startGame() {
         isRunning = true
-//        setTimer(to: level.interval)
+        setTimer(to: level.interval)
     }
     
     func finishGame() {
@@ -144,12 +147,6 @@ final class Game {
     }
     
     // MARK: - Helper Methods
-    
-//    private func registerDefaults() {
-//        let key = UserDefaults.Key.levelIndex
-//        let dictionary: [String: Any] = [key: 1]
-//        UserDefaults.standard.register(defaults: dictionary)
-//    }
     
     private func setTimer(to time: Double) {
         timer = Timer.scheduledTimer(timeInterval: time,
