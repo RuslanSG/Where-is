@@ -40,8 +40,6 @@ class GameViewController: UIViewController {
     }()
     
     private lazy var findNumberHintLabels: (title: HintLabel, details: HintLabel)? = {
-        let findNumberHintNeeded = UserDefaults.standard.bool(forKey: UserDefaults.Key.findNumberHintNeeded)
-        
         if findNumberHintNeeded {
             let titleLabel = HintLabel()
             let detailsLabel = HintLabel()
@@ -91,6 +89,24 @@ class GameViewController: UIViewController {
     private var startTime = 0.0
     private var timeLeft = 0.0
     private var time = 0.0
+    
+    private var stopGameHintNeeded: Bool {
+        get {
+            return UserDefaults.standard.bool(forKey: UserDefaults.Key.stopGameHintNeeded)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.Key.stopGameHintNeeded)
+        }
+    }
+    
+    private var findNumberHintNeeded: Bool {
+        get {
+            return UserDefaults.standard.bool(forKey: UserDefaults.Key.findNumberHintNeeded)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.Key.findNumberHintNeeded)
+        }
+    }
     
     // MARK: - Lifecycle
     
@@ -163,15 +179,11 @@ class GameViewController: UIViewController {
         
         if orientation == .portrait {
             (UIApplication.shared.delegate as! AppDelegate).restrictRotation = .portrait
-            
-            let stopGameHintNeeded = UserDefaults.standard.bool(forKey: UserDefaults.Key.stopGameHintNeeded)
-            
+                        
             if stopGameHintNeeded {
                 stopGameHintLabel?.show(animated: true)
             }
-            
-            let findNumberHintNeeded = UserDefaults.standard.bool(forKey: UserDefaults.Key.findNumberHintNeeded)
-            
+                        
             if findNumberHintNeeded {
                 findNumberHintLabels?.title.show(animated: true)
                 findNumberHintLabels?.details.show(animated: true)
@@ -428,10 +440,14 @@ extension GameViewController {
         startTime = Date().timeIntervalSinceReferenceDate
         timeLeft -= time
 
-        let timeString = String(format: "%.2f", timeLeft)
+        if timeLeft >= 0 {
+            let timeString = String(format: "%.2f", timeLeft)
 
-        guard let countdownLabel = findNumberHintLabels?.details else { return }
-        countdownLabel.text = timeString
+            guard let countdownLabel = findNumberHintLabels?.details else { return }
+            countdownLabel.text = timeString
+        } else {
+            timer.invalidate()
+        }
     }
 }
 
