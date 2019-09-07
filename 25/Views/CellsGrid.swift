@@ -15,20 +15,24 @@ protocol CellsGridDelegate: class {
 
 class CellsGrid: UIStackView {
     
+    // MARK: - Public Properties
+    
     weak var delegate: CellsGridDelegate?
     
     var topConstraint: NSLayoutConstraint?
-    var bottomConstraint: NSLayoutConstraint?
-    var rightConstraint: NSLayoutConstraint?
     var leftConstraint: NSLayoutConstraint?
     
     private(set) var cells: [CellView] = []
     private(set) var gridOrientation: Orientation = .portrait
     
+    // MARK: - Private Properties
+    
     private var currentRow: UIStackView?
     private var lastRowIndex: Int!
     private let rowSize: Int
     private let rowHeight: CGFloat
+    
+    // MARK: - Initialization
     
     init(rowSize: Int, rowHeight: CGFloat) {
         self.rowHeight = rowHeight
@@ -86,11 +90,16 @@ class CellsGrid: UIStackView {
                 stackView.axis = .vertical
             }
         }
-        
-        axis = orientation == .portrait ? .vertical : .horizontal
-        
-        topConstraint?.isActive = orientation == .portrait
-        leftConstraint?.isActive = orientation == .landscape
+                
+        if orientation == .portrait {
+            axis = .vertical
+            topConstraint?.isActive = true
+            leftConstraint?.isActive = false
+        } else if orientation == .landscape {
+            axis = .horizontal
+            topConstraint?.isActive = false
+            leftConstraint?.isActive = true
+        }
     }
     
     func getCell(at point: CGPoint) -> CellView? {

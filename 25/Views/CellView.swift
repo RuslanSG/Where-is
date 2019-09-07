@@ -10,6 +10,8 @@ import UIKit
 
 class CellView: UIButton {
     
+    // MARK: - Public Properties
+    
     enum Style {
         case defaultWithWhiteNumber, defaultWithBlackNumber, colorfulWithWhiteNumber, colorfulWithColorfulNumber
     }
@@ -32,6 +34,8 @@ class CellView: UIButton {
         }
     }
     
+    // MARK: - Private Properties
+    
     override var description: String {
         return "|\(number)|"
     }
@@ -49,7 +53,6 @@ class CellView: UIButton {
     private var setAppearingAnimator: UIViewPropertyAnimator?
     private var setDisappearingAnimator: UIViewPropertyAnimator?
     
-    
     private var contentView: UIView = {
         let view = UIView()
         view.isUserInteractionEnabled = false
@@ -62,18 +65,18 @@ class CellView: UIButton {
     private var isWinking = false
     private var isSetting = false
     
-    // MARK: - Initialization
+    // MARK: - Lifecycle
     
     init(frame: CGRect, contentViewInset: CGFloat) {
         self.contentViewInset = contentViewInset
         super.init(frame: frame)
-        setupCellView()
+        configure()
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         contentViewInset = globalCellInset
-        setupCellView()
+        configure()
     }
     
     // MARK: - Public Methods
@@ -258,7 +261,7 @@ class CellView: UIButton {
     
     // MARK: - Private Methods
     
-    private func setupCellView() {
+    private func configure() {
         addSubview(contentView)
         backgroundColor = .clear
         titleLabel?.textAlignment = .center
@@ -346,6 +349,5 @@ class CellView: UIButton {
         
         setAppearingAnimator = nil
         setDisappearingAnimator = nil
-        
     }
 }

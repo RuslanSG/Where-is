@@ -14,6 +14,7 @@ class GameViewController: UIViewController {
     private var lastPressedCell: CellView?
     internal var cellsUnderSettingsButton = [CellView]()
     internal var startGameButton: StartGameView!
+    internal var timeLeftProgressView = TimeLeftProgressView()
     internal var settingsButton: UIButton!
     private var swipeDownGestureRecognizer: UISwipeGestureRecognizer!
     
@@ -55,7 +56,9 @@ class GameViewController: UIViewController {
         
         return nil
     }()
-
+    
+    internal var findNumberHintLabelsStackViewTopContsraint: NSLayoutConstraint?
+    internal var findNumberHintLabelsStackViewBottomContsraint: NSLayoutConstraint?
     
     internal let rowSize = 5
     private var numbersFound = 0
@@ -79,9 +82,9 @@ class GameViewController: UIViewController {
     
     private var cellHeight: CGFloat {
         if orientation == .portrait {
-            return (UIScreen.main.bounds.width - globalCellInset) / CGFloat(rowSize)
+            return (view.layoutMarginsGuide.layoutFrame.width - globalCellInset) / CGFloat(rowSize)
         } else {
-            return (UIScreen.main.bounds.height - globalCellInset) / CGFloat(rowSize)
+            return (view.layoutMarginsGuide.layoutFrame.height - globalCellInset) / CGFloat(rowSize)
         }
     }
     
@@ -132,6 +135,7 @@ class GameViewController: UIViewController {
             cellsGrid.layoutIfNeeded()
             updateStartGameViewFrame()
             updateSettingsButtonFrameAndBackgroundColor()
+            timeLeftProgressView.setCornerRadius(timeLeftProgressView.frame.size.height / 2)
             firstTime = false
         }
     }
@@ -149,6 +153,14 @@ class GameViewController: UIViewController {
             self.updateStartGameViewFrame()
             self.updateSettingsButtonFrameAndBackgroundColor()
         })
+        
+        if orientation == .portrait {
+            findNumberHintLabelsStackViewTopContsraint?.constant = 16
+            findNumberHintLabelsStackViewBottomContsraint?.constant = -16
+        } else {
+            findNumberHintLabelsStackViewTopContsraint?.constant = 0
+            findNumberHintLabelsStackViewBottomContsraint?.constant = 0
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -164,13 +176,26 @@ class GameViewController: UIViewController {
     
     @objc private func startGame() {
         game.startGame()
+        
         startGameButton.hide()
+        
         cellsManager.showNumbers(animated: true)
         cellsManager.enableCells()
+        
         if game.level.winkMode { cellsManager.startWinking() }
         if game.level.swapMode { cellsManager.startSwapping() }
+        
+        timeLeftProgressView.show(animated: true)
+        timeLeftProgressView.startAnimation(duration: game.level.interval)
+        
+        UIView.animate(withDuration: 0.2) {
+            self.view.layoutIfNeeded()
+        }
+        
         freezeUI(for: 0.2)
+        
         swipeDownGestureRecognizer.isEnabled = true
+        
         feedbackGenerator.playSelectionHapticFeedback()
         
         UIView.animate(withDuration: 0.2) {
@@ -196,6 +221,11 @@ class GameViewController: UIViewController {
     
     @objc func swipeDown() {
         prepareForNewGame()
+        
+        UIView.animate(withDuration: 0.2) {
+            self.view.layoutIfNeeded()
+        }
+        
         UserDefaults.standard.set(false, forKey: UserDefaults.Key.stopGameHintNeeded)
     }
     
@@ -229,6 +259,7 @@ class GameViewController: UIViewController {
         setupStartGameButton()
         setupSettingsButton()
         setupGestureRecognizers()
+        setupTimeLeftProgressView()
         setupHintLabels()
     }
     
@@ -249,6 +280,9 @@ class GameViewController: UIViewController {
         findNumberHintLabels?.title.hide(animated: true)
         findNumberHintLabels?.title.text = "Find 1"
         findNumberHintLabels?.details.hide(animated: true)
+        
+        timeLeftProgressView.hide(animated: true)
+        timeLeftProgressView.reset()
         
         UIView.animate(withDuration: 0.2) {
             self.settingsButton.isHidden = false
@@ -290,8 +324,8 @@ extension GameViewController {
         cellsGrid.translatesAutoresizingMaskIntoConstraints = false
         
         let margins = view.layoutMarginsGuide
-        cellsGrid.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        cellsGrid.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+        cellsGrid.centerXAnchor.constraint(equalTo: margins.centerXAnchor).isActive = true
+        cellsGrid.centerYAnchor.constraint(equalTo: margins.centerYAnchor).isActive = true
 
         cellsGrid.topConstraint = cellsGrid.topAnchor.constraint(greaterThanOrEqualTo: margins.topAnchor, constant: globalCellInset)
         cellsGrid.leftConstraint = cellsGrid.leftAnchor.constraint(greaterThanOrEqualTo: margins.leftAnchor)
@@ -346,6 +380,19 @@ extension GameViewController {
         self.view.addGestureRecognizer(swipeDownGestureRecognizer)
     }
     
+    private func setupTimeLeftProgressView() {
+        
+        view.addSubview(timeLeftProgressView)
+
+        let margins = view.layoutMarginsGuide
+        timeLeftProgressView.translatesAutoresizingMaskIntoConstraints = false
+        timeLeftProgressView.bottomAnchor.constraint(equalTo: cellsGrid.topAnchor, constant: -globalCellInset).isActive = true
+        timeLeftProgressView.centerXAnchor.constraint(equalTo: cellsGrid.centerXAnchor).isActive = true
+        timeLeftProgressView.widthAnchor.constraint(equalTo: cellsGrid.widthAnchor, constant: -globalCellInset * 2).isActive = true
+        timeLeftProgressView.heightAnchor.constraint(equalToConstant: 5).isActive = true
+        timeLeftProgressView.topAnchor.constraint(greaterThanOrEqualTo: margins.topAnchor, constant: globalCellInset * 2).isActive = true
+    }
+    
     private func setupHintLabels() {
         if let stopGameHintLabel = stopGameHintLabel {
             view.addSubview(stopGameHintLabel)
@@ -365,10 +412,13 @@ extension GameViewController {
             
             let margins = view.layoutMarginsGuide
             vStackView.translatesAutoresizingMaskIntoConstraints = false
-            vStackView.bottomAnchor.constraint(equalTo: cellsGrid.topAnchor, constant: -16).isActive = true
             vStackView.leftAnchor.constraint(equalTo: margins.leftAnchor).isActive = true
             vStackView.rightAnchor.constraint(equalTo: margins.rightAnchor).isActive = true
-            vStackView.topAnchor.constraint(greaterThanOrEqualTo: margins.topAnchor, constant: 16).isActive = true
+            
+            findNumberHintLabelsStackViewBottomContsraint = vStackView.bottomAnchor.constraint(equalTo: cellsGrid.topAnchor, constant: -21)
+            findNumberHintLabelsStackViewTopContsraint = vStackView.topAnchor.constraint(greaterThanOrEqualTo: margins.topAnchor, constant: 16)
+            findNumberHintLabelsStackViewBottomContsraint?.isActive = true
+            findNumberHintLabelsStackViewTopContsraint?.isActive = true
         }
     }
     
@@ -376,12 +426,11 @@ extension GameViewController {
         if cellsGrid.cells.count < game.level.numbers {
             let numberOfRowsToAdd = (game.level.numbers - cellsGrid.cells.count) / rowSize
             cellsGrid.addRows(count: numberOfRowsToAdd, animated: false)
-            cellsGrid.layoutIfNeeded()
         } else if cellsGrid.cells.count > game.level.numbers {
             let numberOfRowsToRemove = (cellsGrid.cells.count - game.level.numbers) / rowSize
             cellsGrid.removeRows(count: numberOfRowsToRemove, animated: false)
-            cellsGrid.layoutIfNeeded()
         }
+        cellsGrid.layoutIfNeeded()
         cellsManager.setStyle(to: cellStyle, palette: .hot, animated: false)
         cellsManager.setNumbers(game.numbers, animated: false)
         cellsManager.hideNumbers(animated: false)
@@ -473,6 +522,9 @@ extension GameViewController: CellsManagerDelegate {
                 timer?.invalidate()
                 startTimer()
             }
+            
+            timeLeftProgressView.reset()
+            timeLeftProgressView.startAnimation(duration: game.level.interval)
             
             if game.level.shuffleMode {
                 game.shuffleNumbers()

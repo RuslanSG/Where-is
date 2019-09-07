@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2A1038B72321AAC10003C09B /* TimeLeftProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1038B62321AAC10003C09B /* TimeLeftProgressView.swift */; };
 		2A118DB9211A132F0059E252 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2A118DB7211A132F0059E252 /* Main.storyboard */; };
 		2A118DBE211A13300059E252 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2A118DBD211A13300059E252 /* Assets.xcassets */; };
 		2A118DC1211A13300059E252 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2A118DBF211A13300059E252 /* LaunchScreen.storyboard */; };
@@ -41,6 +42,7 @@
 
 /* Begin PBXFileReference section */
 		2A002767216D1DC500969CB2 /* 25.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = 25.entitlements; sourceTree = "<group>"; };
+		2A1038B62321AAC10003C09B /* TimeLeftProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLeftProgressView.swift; sourceTree = "<group>"; };
 		2A118DB0211A132F0059E252 /* 25.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 25.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A118DBD211A13300059E252 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2A118DC2211A13300059E252 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -128,7 +130,6 @@
 		2A118DC8211A13450059E252 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				2AE841FA22DE3A2600D724E0 /* CellsGrid.swift */,
 				2AE841FD22DE3ABC00D724E0 /* CellsManager.swift */,
 				2AE841FF22DE3AD800D724E0 /* LevelParameters.swift */,
 				2A85C82122F1C2EE0039D678 /* LevelParametersTest.swift */,
@@ -184,9 +185,11 @@
 			isa = PBXGroup;
 			children = (
 				2AE841F422DE39BA00D724E0 /* CellView.swift */,
+				2AE841FA22DE3A2600D724E0 /* CellsGrid.swift */,
 				2AE841F622DE39DD00D724E0 /* StartGameView.swift */,
 				2AE841F822DE39F900D724E0 /* FeedbackView.swift */,
 				2ACF1A6B232049C900183DF4 /* HintLabel.swift */,
+				2A1038B62321AAC10003C09B /* TimeLeftProgressView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -367,6 +370,7 @@
 				2A85C82222F1C2EE0039D678 /* LevelParametersTest.swift in Sources */,
 				2A68B4242312B97F005DC9AF /* TutorialViewController.swift in Sources */,
 				2AE8420422DE3B0D00D724E0 /* UIColor+CellColor.swift in Sources */,
+				2A1038B72321AAC10003C09B /* TimeLeftProgressView.swift in Sources */,
 				2A118DCA211A1BD50059E252 /* UIDevice+Info.swift in Sources */,
 				2AE841F022DE398600D724E0 /* Game.swift in Sources */,
 				2ACF1A6C232049C900183DF4 /* HintLabel.swift in Sources */,
