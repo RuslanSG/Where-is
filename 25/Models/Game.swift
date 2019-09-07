@@ -36,7 +36,7 @@ final class Game {
     
     private var timer: Timer?
     private var levels = [Level]()
-    private var maxLevel = 5
+    private var maxLevel = 10
 //    private var currentLevelIndex = 1
     private var currentLevelIndex: Int {
         get {
@@ -123,7 +123,7 @@ final class Game {
     }
     
     private func setLevels() {
-        let parameters = LevelParametersTest()
+        let parameters = LevelParameters()
         for i in 1...maxLevel {
             let index = i
             let numbersCount = parameters.numbersCountForLevel[i]!

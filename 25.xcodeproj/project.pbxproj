@@ -20,7 +20,7 @@
 		2A68B4202312AAC9005DC9AF /* InstructionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A68B41F2312AAC9005DC9AF /* InstructionsViewController.swift */; };
 		2A68B4222312B102005DC9AF /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A68B4212312B102005DC9AF /* WelcomeViewController.swift */; };
 		2A68B4242312B97F005DC9AF /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A68B4232312B97F005DC9AF /* TutorialViewController.swift */; };
-		2A85C82222F1C2EE0039D678 /* LevelParametersTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A85C82122F1C2EE0039D678 /* LevelParametersTest.swift */; };
+		2A85C82222F1C2EE0039D678 /* LevelParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A85C82122F1C2EE0039D678 /* LevelParameters.swift */; };
 		2A8F0992226519C000CF9A04 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2A8F0991226519C000CF9A04 /* GoogleService-Info.plist */; };
 		2ACDF75C213D5B43004FEA1B /* FeedbackGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ACDF75B213D5B43004FEA1B /* FeedbackGenerator.swift */; };
 		2ACF1A6C232049C900183DF4 /* HintLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ACF1A6B232049C900183DF4 /* HintLabel.swift */; };
@@ -33,7 +33,6 @@
 		2AE841F922DE39F900D724E0 /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE841F822DE39F900D724E0 /* FeedbackView.swift */; };
 		2AE841FB22DE3A2600D724E0 /* CellsGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE841FA22DE3A2600D724E0 /* CellsGrid.swift */; };
 		2AE841FE22DE3ABC00D724E0 /* CellsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE841FD22DE3ABC00D724E0 /* CellsManager.swift */; };
-		2AE8420022DE3AD800D724E0 /* LevelParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE841FF22DE3AD800D724E0 /* LevelParameters.swift */; };
 		2AE8420222DE3AFB00D724E0 /* UserDefaults+Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE8420122DE3AFB00D724E0 /* UserDefaults+Key.swift */; };
 		2AE8420422DE3B0D00D724E0 /* UIColor+CellColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE8420322DE3B0D00D724E0 /* UIColor+CellColor.swift */; };
 		2AE8420722DE3BE900D724E0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE8420622DE3BE900D724E0 /* AppDelegate.swift */; };
@@ -55,7 +54,7 @@
 		2A68B41F2312AAC9005DC9AF /* InstructionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionsViewController.swift; sourceTree = "<group>"; };
 		2A68B4212312B102005DC9AF /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		2A68B4232312B97F005DC9AF /* TutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
-		2A85C82122F1C2EE0039D678 /* LevelParametersTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelParametersTest.swift; sourceTree = "<group>"; };
+		2A85C82122F1C2EE0039D678 /* LevelParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelParameters.swift; sourceTree = "<group>"; };
 		2A8F0991226519C000CF9A04 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2ACDF75B213D5B43004FEA1B /* FeedbackGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackGenerator.swift; sourceTree = "<group>"; };
 		2ACF1A6B232049C900183DF4 /* HintLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HintLabel.swift; sourceTree = "<group>"; };
@@ -70,7 +69,6 @@
 		2AE841F822DE39F900D724E0 /* FeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackView.swift; sourceTree = "<group>"; };
 		2AE841FA22DE3A2600D724E0 /* CellsGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellsGrid.swift; sourceTree = "<group>"; };
 		2AE841FD22DE3ABC00D724E0 /* CellsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellsManager.swift; sourceTree = "<group>"; };
-		2AE841FF22DE3AD800D724E0 /* LevelParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelParameters.swift; sourceTree = "<group>"; };
 		2AE8420122DE3AFB00D724E0 /* UserDefaults+Key.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Key.swift"; sourceTree = "<group>"; };
 		2AE8420322DE3B0D00D724E0 /* UIColor+CellColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+CellColor.swift"; sourceTree = "<group>"; };
 		2AE8420622DE3BE900D724E0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -131,8 +129,7 @@
 			isa = PBXGroup;
 			children = (
 				2AE841FD22DE3ABC00D724E0 /* CellsManager.swift */,
-				2AE841FF22DE3AD800D724E0 /* LevelParameters.swift */,
-				2A85C82122F1C2EE0039D678 /* LevelParametersTest.swift */,
+				2A85C82122F1C2EE0039D678 /* LevelParameters.swift */,
 				2ACDF75B213D5B43004FEA1B /* FeedbackGenerator.swift */,
 				2A3271DE22E8685A00F303A5 /* BlurryPresentationController.swift */,
 				2A5B443C22FD89C800ECF2C7 /* GameViewControllerHelper.swift */,
@@ -367,7 +364,7 @@
 				2A3271DF22E8685A00F303A5 /* BlurryPresentationController.swift in Sources */,
 				2A68B41B23129A7D005DC9AF /* InstructionsPageViewController.swift in Sources */,
 				2AE8420722DE3BE900D724E0 /* AppDelegate.swift in Sources */,
-				2A85C82222F1C2EE0039D678 /* LevelParametersTest.swift in Sources */,
+				2A85C82222F1C2EE0039D678 /* LevelParameters.swift in Sources */,
 				2A68B4242312B97F005DC9AF /* TutorialViewController.swift in Sources */,
 				2AE8420422DE3B0D00D724E0 /* UIColor+CellColor.swift in Sources */,
 				2A1038B72321AAC10003C09B /* TimeLeftProgressView.swift in Sources */,
@@ -379,7 +376,6 @@
 				2AE841FE22DE3ABC00D724E0 /* CellsManager.swift in Sources */,
 				2AE841FB22DE3A2600D724E0 /* CellsGrid.swift in Sources */,
 				2AE841EA22DE38D800D724E0 /* GameViewController.swift in Sources */,
-				2AE8420022DE3AD800D724E0 /* LevelParameters.swift in Sources */,
 				2ACDF75C213D5B43004FEA1B /* FeedbackGenerator.swift in Sources */,
 				2AE841EC22DE394600D724E0 /* SettingsViewController.swift in Sources */,
 				2A68B4202312AAC9005DC9AF /* InstructionsViewController.swift in Sources */,

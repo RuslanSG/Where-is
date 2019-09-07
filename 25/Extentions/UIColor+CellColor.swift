@@ -35,7 +35,7 @@ extension UIColor {
                 if traitCollection.userInterfaceStyle == .light {
                     return #colorLiteral(red: 0.9745706916, green: 0.7254121304, blue: 0.2632409632, alpha: 1)
                 } else {
-                    return #colorLiteral(red: 0.9198271632, green: 0.2157960534, blue: 0.09633565694, alpha: 1)
+                    return #colorLiteral(red: 0.9889556766, green: 0.5467290282, blue: 0.005224304274, alpha: 1)
                 }
             }
             return dynamicColor
