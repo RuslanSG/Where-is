@@ -11,10 +11,9 @@ import Foundation
 extension UserDefaults {
     
     enum Key {
-        static let availableLevels      = "AvailableLevelsUserDefaultsKey"
-        static let levelIndex           = "LevelUserDefaultsKey"
         static let firstTime            = "FirstTimeUserDefaultsKey"
         static let stopGameHintNeeded   = "StopGameHintNeededUserDefaultsKey"
         static let findNumberHintNeeded = "FindNumberHintNeededUserDefaultsKey"
+        static let levels               = "LevelsUserDefaultsKey"
     }
 }

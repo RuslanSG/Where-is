@@ -8,19 +8,12 @@
 
 import UIKit
 
-protocol SettingsViewControllerDelegate: class {
-    
-    func levelDidChange(to level: Level)
-}
-
 typealias LevelButton = UIButton
 
 class SettingsViewController: UITableViewController {
     
     // MARK: - Public Properties
-    
-    weak var delegate: SettingsViewControllerDelegate?
-    
+        
     var game: Game!
     
     // MARK: - Private Properties
@@ -52,7 +45,7 @@ class SettingsViewController: UITableViewController {
         super.viewDidLayoutSubviews()
         if firstTime {
             configureLevelButtonsStackView()
-            selectLevelButton(levelButtons[game.level.index - 1], animated: false)
+            selectLevelButton(levelButtons[game.currentLevel.index], animated: false)
             firstTime = false
         }
     }
@@ -61,7 +54,6 @@ class SettingsViewController: UITableViewController {
         updateLevelButtonsStackViewConfiguration()
     }
     
-    
     deinit {
         print("deinit: \(self)")
     }
@@ -69,8 +61,7 @@ class SettingsViewController: UITableViewController {
     // MARK: - Actions
     
     @objc private func levelButtonPressed(_ sender: LevelButton) {
-        game.setLevel(to: sender.tag)
-        delegate?.levelDidChange(to: game.level)
+        game.setCurrentLevel(index: sender.tag)
         
         if sender !== selectedLevelButton {
             if let selectedLevelButton = selectedLevelButton {
@@ -137,20 +128,21 @@ class SettingsViewController: UITableViewController {
         }
     }
     
-    private func configureLevelButton(for level: Int) -> LevelButton {
+    private func configureLevelButton(for level: Level) -> LevelButton {
         let fontSize: CGFloat = 25.0
-        let cornerRadius: CGFloat = 8.0
-        let title = String(level)
+        let cornerRadius: CGFloat = 10.0
+        let title = String(level.serial)
         let side: CGFloat = 44.0
 
         let levelButton = LevelButton()
         levelButton.setTitle(title, for: .normal)
-        levelButton.setTitleColor(.systemBlue, for: .normal)
+        levelButton.setTitleColor(level.isAvailable ? .systemBlue : .systemGray, for: .normal)
         levelButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: fontSize)
         levelButton.layer.borderWidth = 2
-        levelButton.layer.borderColor = UIColor.systemBlue.cgColor
-        levelButton.tag = level
+        levelButton.layer.borderColor = level.isAvailable ? UIColor.systemBlue.cgColor : UIColor.systemGray.cgColor
+        levelButton.tag = level.index
         levelButton.layer.cornerRadius = cornerRadius
+        levelButton.isEnabled = level.isAvailable
         
         levelButton.addTarget(self, action: #selector(levelButtonPressed(_:)), for: .touchUpInside)
         
@@ -168,8 +160,8 @@ class SettingsViewController: UITableViewController {
     }
     
     private func configureLevelButtons(for game: Game) {
-        for i in 1...game.maxLevel {
-            levelButtons.append(configureLevelButton(for: i))
+        for level in game.levels {
+            levelButtons.append(configureLevelButton(for: level))
         }
     }
     

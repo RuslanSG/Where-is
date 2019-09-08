@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 enum GameFinishingReason {
     case wrongNumberTapped, timeIsOver, levelPassed
@@ -14,7 +15,8 @@ enum GameFinishingReason {
 
 protocol GameDelegate: class {
     
-    func gameFinished(reason: GameFinishingReason, numbersFound: Int)
+    func game(_ game: Game, didChangeLevelTo level: Level)
+    func game(_ game: Game, didFinishGameWithReason reason: GameFinishingReason, numbersFound: Int)
 }
 
 final class Game {
@@ -23,12 +25,11 @@ final class Game {
     
     weak var delegate: GameDelegate?
     
-    var level: Level {
-        let index = levels.firstIndex { $0.index == currentLevelIndex }
-        guard let i = index else { return levels.first! }
-        return levels[i]
+    var currentLevel: Level {
+        return levels.first { $0.isSelected }!
     }
     
+    private(set) var levels = [Level]()
     private(set) var numbers = [Int]()
     private(set) var currentNumber = 0
     private(set) var nextNumber = 1
@@ -36,70 +37,74 @@ final class Game {
     private(set) var isRunning = false
     private(set) var numbersFound = 0
     private(set) var maxLevel = 10
-
+    
     // MARK: - Private Properties
     
+    private var memoryManager = MemoryManager.shared
     private var timer: Timer?
-    private var levels = [Level]()
-//    private var currentLevelIndex = 1
-    private var currentLevelIndex: Int {
-        get {
-            return UserDefaults.standard.integer(forKey: UserDefaults.Key.levelIndex)
-        }
-        set {
-            UserDefaults.standard.set(newValue, forKey: UserDefaults.Key.levelIndex)
-        }
-    }
     
     // MARK: - Initialization
     
     init() {
-        setLevels()
-        setNumbers(count: level.numbers)
+        loadLevels()
+        setNumbers(count: currentLevel.numbersCount)
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(applicationWillResignActive),
+                                               name: UIApplication.willResignActiveNotification,
+                                               object: nil)
     }
     
     // MARK: - Actions
     
     @objc internal func timerSceduled(_ timer: Timer) {
-        delegate?.gameFinished(reason: .timeIsOver, numbersFound: numbersFound)
+        delegate?.game(self, didFinishGameWithReason: .timeIsOver, numbersFound: numbersFound)
     }
     
     // MARK: - Public Methods
     
-    func numberSelected(_ number: Int) -> Bool {
+    func numberSelected(_ number: Int) -> Bool { // Returns if selected number is right
         if number == nextNumber {
-            if number == numbers.max() {
-                delegate?.gameFinished(reason: .levelPassed, numbersFound: numbersFound + 1)
-                return true
-            }
-            
             numbersFound += 1
             nextNumber += 1
             currentNumber += 1
-            numberToSet = number + level.numbers
+            numberToSet = number + currentLevel.numbersCount
+            
+            if number == currentLevel.goal {
+                setLevelPassed(index: currentLevel.index)
+                let nextLevelIndex = currentLevel.index + 1
+                if levels.indices.contains(nextLevelIndex) {
+                    setLevelAvailable(index: nextLevelIndex)
+                    setCurrentLevel(index: nextLevelIndex)
+                }
+                
+                delegate?.game(self, didFinishGameWithReason: .levelPassed, numbersFound: numbersFound)
+                return false
+            }
             
             guard let index = numbers.firstIndex(of: number) else { fatalError("Current number didn't find in numbers array") }
             numbers[index] = number + numbers.count
             
             timer?.invalidate()
-            setTimer(to: level.interval)
+            setTimer(to: currentLevel.interval)
             return true
         } else {
-            delegate?.gameFinished(reason: .wrongNumberTapped, numbersFound: numbersFound)
+            delegate?.game(self, didFinishGameWithReason: .wrongNumberTapped, numbersFound: numbersFound)
             return false
         }
+        
     }
     
     func newGame() {
         finishGame()
-        setNumbers(count: level.numbers)
+        setNumbers(count: currentLevel.numbersCount)
         nextNumber = 1
         numbersFound = 0
     }
     
     func startGame() {
         isRunning = true
-        setTimer(to: level.interval)
+        setTimer(to: currentLevel.interval)
     }
     
     func finishGame() {
@@ -111,8 +116,14 @@ final class Game {
         numbers.shuffle()
     }
     
-    func setLevel(to levelIndex: Int) {
-        currentLevelIndex = levelIndex
+    func setCurrentLevel(index: Int) {
+        let selectedLevelIndex = levels.firstIndex { $0.isSelected }
+        if let i = selectedLevelIndex {
+            levels[i].isSelected = false
+            levels[index].isSelected = true
+            newGame()
+            delegate?.game(self, didChangeLevelTo: levels[index])
+        }
     }
     
     // MARK: - Private Methods
@@ -126,31 +137,59 @@ final class Game {
         numbers.shuffle()
     }
     
-    private func setLevels() {
+    private func loadLevels() {
+        if let levels = memoryManager.loadLevels() {
+            self.levels = levels
+        } else {
+            self.levels = configureLevels()
+            memoryManager.saveLevels(self.levels)
+        }
+    }
+    
+    private func configureLevels() -> [Level] {
         let parameters = LevelParameters()
+        
+        var levels = [Level]()
+        
         for i in 1...maxLevel {
-            let index = i
-            let numbersCount = parameters.numbersCountForLevel[i]!
+            let serial = i
+            let index = i - 1
+            let numbers = parameters.numbersCountForLevel[i]!
             let interval = parameters.intervalForLevel[i]!
+            let goal = parameters.goalForLevel[i]!
             let colorsModeFor = (numbers: parameters.colorModeFor.numbersForLevel[i]!,
                                  cells: parameters.colorModeFor.cellsForLevel[i]!)
             let winkMode = parameters.winkModeForLevel[i]!
             let swapMode = parameters.swapModeForLevel[i]!
             let shuffleMode = parameters.shuffleModeForLevel[i]!
-
-            let level = Level(index: index,
-                              numbersCount: numbersCount,
+            
+            let level = Level(serial: serial,
+                              index: index,
+                              isAvailable: i == 1,
+                              isPassed: false,
+                              isSelected: i == 1,
+                              numbersCount: numbers,
                               interval: interval,
-                              colorModeFor: colorsModeFor,
+                              goal: goal,
+                              colorfulNumbers: colorsModeFor.numbers,
+                              colorfulCells: colorsModeFor.cells,
                               winkMode: winkMode,
                               swapMode: swapMode,
                               shuffleMode: shuffleMode)
-
+            
             levels.append(level)
         }
+        
+        return levels
     }
     
-    // MARK: - Helper Methods
+    private func setLevelPassed(index: Int) {
+        levels[index].isPassed = true
+    }
+    
+    private func setLevelAvailable(index: Int) {
+        levels[index].isAvailable = true
+    }
     
     private func setTimer(to time: Double) {
         timer = Timer.scheduledTimer(timeInterval: time,
@@ -160,4 +199,13 @@ final class Game {
                                      repeats: false)
     }
     
+}
+
+// MARK: - Notifications
+
+extension Game {
+    
+    @objc internal func applicationWillResignActive() {
+        memoryManager.saveLevels(levels)
+    }
 }

@@ -36,6 +36,7 @@
 		2AE8420222DE3AFB00D724E0 /* UserDefaults+Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE8420122DE3AFB00D724E0 /* UserDefaults+Key.swift */; };
 		2AE8420422DE3B0D00D724E0 /* UIColor+CellColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE8420322DE3B0D00D724E0 /* UIColor+CellColor.swift */; };
 		2AE8420722DE3BE900D724E0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE8420622DE3BE900D724E0 /* AppDelegate.swift */; };
+		2AF6193223252AC7008DA4A4 /* MemoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF6193123252AC7008DA4A4 /* MemoryManager.swift */; };
 		7F705113E96C575DDF0B29E6 /* Pods_25.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69C4B541956BA2E70DD7D54D /* Pods_25.framework */; };
 /* End PBXBuildFile section */
 
@@ -72,6 +73,7 @@
 		2AE8420122DE3AFB00D724E0 /* UserDefaults+Key.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Key.swift"; sourceTree = "<group>"; };
 		2AE8420322DE3B0D00D724E0 /* UIColor+CellColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+CellColor.swift"; sourceTree = "<group>"; };
 		2AE8420622DE3BE900D724E0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		2AF6193123252AC7008DA4A4 /* MemoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryManager.swift; sourceTree = "<group>"; };
 		5CA357FDB184547893460637 /* Pods-25.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-25.release.xcconfig"; path = "Pods/Target Support Files/Pods-25/Pods-25.release.xcconfig"; sourceTree = "<group>"; };
 		69C4B541956BA2E70DD7D54D /* Pods_25.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_25.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		88725F259EA3F250A806BD5E /* Pods-25.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-25.debug.xcconfig"; path = "Pods/Target Support Files/Pods-25/Pods-25.debug.xcconfig"; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				2AE841FD22DE3ABC00D724E0 /* CellsManager.swift */,
+				2AF6193123252AC7008DA4A4 /* MemoryManager.swift */,
 				2A85C82122F1C2EE0039D678 /* LevelParameters.swift */,
 				2ACDF75B213D5B43004FEA1B /* FeedbackGenerator.swift */,
 				2A3271DE22E8685A00F303A5 /* BlurryPresentationController.swift */,
@@ -379,6 +382,7 @@
 				2ACDF75C213D5B43004FEA1B /* FeedbackGenerator.swift in Sources */,
 				2AE841EC22DE394600D724E0 /* SettingsViewController.swift in Sources */,
 				2A68B4202312AAC9005DC9AF /* InstructionsViewController.swift in Sources */,
+				2AF6193223252AC7008DA4A4 /* MemoryManager.swift in Sources */,
 				2AE841F522DE39BA00D724E0 /* CellView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

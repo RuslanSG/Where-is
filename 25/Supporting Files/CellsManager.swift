@@ -37,7 +37,7 @@ final class CellsManager {
     }
     
     func setNumbers(_ numbers: [Int], animated: Bool) {
-        assert(cells.count == numbers.count, "Cells count must be equal to numbers count provided (cells: \(cells.count), numbers: \(numbers.count)")
+        assert(cells.count == numbers.count, "Cells count (\(cells.count)) must be equal to numbers count (\(numbers.count)) provided.")
         for i in cells.indices {
             cells[i].setNumber(numbers[i], animateIfNeeded: animated)
         }
@@ -122,7 +122,7 @@ final class CellsManager {
     
     @objc private func cellReleased(_ cell: CellView) {
         guard cell.isSetEnabled else { return }
-        let hideNumberNeeded = game.level.shuffleMode || !game.isRunning
+        let hideNumberNeeded = game.currentLevel.shuffleMode || !game.isRunning
         cell.uncompress(showNumber: !hideNumberNeeded)
         delegate?.cellReleased(cell)
     }

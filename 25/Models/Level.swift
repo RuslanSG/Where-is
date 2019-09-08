@@ -8,42 +8,22 @@
 
 import Foundation
 
-class Level {
+struct Level: Codable, Equatable {
     
-    var description: String {
-        return "Index: \(index)\n" +
-            "Numbers Count: \(numbers)\n" +
-            "Passed:\(passed)\n" +
-            "Available\(available)\n" +
-            "Colorful Numbers: \(colorModeFor.numbers)\n" +
-            "Colorful Cells: \(colorModeFor.cells)\n" +
-            "Wink Mode: \(winkMode)\n" +
-            "Swap Mode: \(swapMode)\n" +
-            "Shuffle Mode \(shuffleMode)\n"
-    }
-    
+    var serial: Int
     var index: Int
-    var numbers: Int
-    var interval: Double
-    var available: Bool
-    var passed: Bool
+    var isAvailable: Bool
+    var isPassed: Bool
+    var isSelected: Bool
     
-    var colorModeFor: (numbers: Bool, cells: Bool)
+    var numbersCount: Int
+    var interval: Double
+    var goal: Int
+    
+    var colorfulNumbers: Bool
+    var colorfulCells: Bool
     var winkMode: Bool
     var swapMode: Bool
     var shuffleMode: Bool
-    
-    init(index: Int, numbersCount: Int, interval: Double, colorModeFor: (numbers: Bool, cells: Bool), winkMode: Bool, swapMode: Bool, shuffleMode: Bool) {
-        self.index = index
-        self.numbers = numbersCount
-        self.interval = interval
-        self.colorModeFor = colorModeFor
-        self.winkMode = winkMode
-        self.swapMode = swapMode
-        self.shuffleMode = shuffleMode
-        self.available = true
-        self.passed = false
-    }
-    
+        
 }
-

@@ -43,7 +43,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func registerUserDefaults() {
         UserDefaults.standard.register(defaults: [UserDefaults.Key.firstTime : true])
-        UserDefaults.standard.register(defaults: [UserDefaults.Key.levelIndex : 1])
         UserDefaults.standard.register(defaults: [UserDefaults.Key.stopGameHintNeeded : true])
         UserDefaults.standard.register(defaults: [UserDefaults.Key.findNumberHintNeeded : true])
     }

@@ -68,7 +68,7 @@ class GameViewController: UIViewController {
     private var cellStyle: CellView.Style {
         var style: CellView.Style
         
-        switch (game.level.colorModeFor.cells, game.level.colorModeFor.numbers) {
+        switch (game.currentLevel.colorfulCells, game.currentLevel.colorfulNumbers) {
         case (true, true):
             style = .colorfulWithColorfulNumber
         case (true, false):
@@ -182,11 +182,11 @@ class GameViewController: UIViewController {
         cellsManager.showNumbers(animated: true)
         cellsManager.enableCells()
         
-        if game.level.winkMode { cellsManager.startWinking() }
-        if game.level.swapMode { cellsManager.startSwapping() }
+        if game.currentLevel.winkMode { cellsManager.startWinking() }
+        if game.currentLevel.swapMode { cellsManager.startSwapping() }
         
         timeLeftProgressView.show(animated: true)
-        timeLeftProgressView.startAnimation(duration: game.level.interval)
+        timeLeftProgressView.startAnimation(duration: game.currentLevel.interval)
         
         UIView.animate(withDuration: 0.2) {
             self.view.layoutIfNeeded()
@@ -423,11 +423,11 @@ extension GameViewController {
     }
     
     private func updateViewFromModel() {
-        if cellsGrid.cells.count < game.level.numbers {
-            let numberOfRowsToAdd = (game.level.numbers - cellsGrid.cells.count) / rowSize
+        if cellsGrid.cells.count < game.currentLevel.numbersCount {
+            let numberOfRowsToAdd = (game.currentLevel.numbersCount - cellsGrid.cells.count) / rowSize
             cellsGrid.addRows(count: numberOfRowsToAdd, animated: false)
-        } else if cellsGrid.cells.count > game.level.numbers {
-            let numberOfRowsToRemove = (cellsGrid.cells.count - game.level.numbers) / rowSize
+        } else if cellsGrid.cells.count > game.currentLevel.numbersCount {
+            let numberOfRowsToRemove = (cellsGrid.cells.count - game.currentLevel.numbersCount) / rowSize
             cellsGrid.removeRows(count: numberOfRowsToRemove, animated: false)
         }
         cellsGrid.layoutIfNeeded()
@@ -471,10 +471,10 @@ extension GameViewController {
     
     private func startTimer() {
         startTime = Date().timeIntervalSinceReferenceDate
-        timeLeft = game.level.interval
+        timeLeft = game.currentLevel.interval
         
         guard let countdownLabel = findNumberHintLabels?.details else { return }
-        let timeString = String(format: "%.2f", game.level.interval)
+        let timeString = String(format: "%.2f", game.currentLevel.interval)
         countdownLabel.text = timeString
         
         timer = Timer.scheduledTimer(timeInterval: 0.05,
@@ -524,10 +524,11 @@ extension GameViewController: CellsManagerDelegate {
             }
             
             timeLeftProgressView.reset()
-            timeLeftProgressView.startAnimation(duration: game.level.interval)
+            timeLeftProgressView.startAnimation(duration: game.currentLevel.interval)
             
-            if game.level.shuffleMode {
+            if game.currentLevel.shuffleMode {
                 game.shuffleNumbers()
+                #warning("Move shuffling to the model!")
                 cellsManager.updateNumbers(with: game.numbers, animated: true)
             } else {
                 cell.setNumber(game.numberToSet, animateIfNeeded: false)
@@ -544,22 +545,16 @@ extension GameViewController: CellsManagerDelegate {
 
 extension GameViewController: GameDelegate {
     
-    internal func gameFinished(reason: GameFinishingReason, numbersFound: Int) {
+    func game(_ game: Game, didChangeLevelTo level: Level) {
+        updateViewFromModel()
+    }
+    
+    func game(_ game: Game, didFinishGameWithReason reason: GameFinishingReason, numbersFound: Int) {
         gameFinishingReason = reason
         self.numbersFound = numbersFound
         feedbackGenerator.playVibrationFeedback()
         prepareForNewGame()
         performSegue(withIdentifier: "ShowResults", sender: nil)
-    }
-}
-
-// MARK: - SettingsViewControllerDelegate
-
-extension GameViewController: SettingsViewControllerDelegate {
-    
-    internal func levelDidChange(to level: Level) {
-        game.newGame()
-        updateViewFromModel()
     }
 }
 
@@ -582,7 +577,6 @@ extension GameViewController {
             let navigationController = segue.destination as! UINavigationController
             let settingsViewContoller = navigationController.viewControllers.first! as! SettingsViewController
             settingsViewContoller.game = game
-            settingsViewContoller.delegate = self
         } else if segue.identifier == "ShowResults" {
             let resultsViewController = segue.destination as! ResultsViewController
             resultsViewController.numbersFound = numbersFound
