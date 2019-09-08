@@ -19,6 +19,8 @@ protocol GameDelegate: class {
 
 final class Game {
     
+    // MARK: - Public Properties
+    
     weak var delegate: GameDelegate?
     
     var level: Level {
@@ -33,10 +35,12 @@ final class Game {
     private(set) var numberToSet = 0
     private(set) var isRunning = false
     private(set) var numbersFound = 0
+    private(set) var maxLevel = 10
+
+    // MARK: - Private Properties
     
     private var timer: Timer?
     private var levels = [Level]()
-    private var maxLevel = 10
 //    private var currentLevelIndex = 1
     private var currentLevelIndex: Int {
         get {
