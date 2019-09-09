@@ -155,8 +155,8 @@ final class Game {
             let serial = i
             let index = i - 1
             let numbers = parameters.numbersCountForLevel[i]!
-            let interval = parameters.intervalForLevel[i]!
-            let goal = parameters.goalForLevel[i]!
+            let interval = 15.0 //parameters.intervalForLevel[i]!
+            let goal = 5 //parameters.goalForLevel[i]!
             let colorsModeFor = (numbers: parameters.colorModeFor.numbersForLevel[i]!,
                                  cells: parameters.colorModeFor.cellsForLevel[i]!)
             let winkMode = parameters.winkModeForLevel[i]!
@@ -165,7 +165,7 @@ final class Game {
             
             let level = Level(serial: serial,
                               index: index,
-                              isAvailable: i == 1,
+                              isAvailable: true, //i == 1,
                               isPassed: false,
                               isSelected: i == 1,
                               numbersCount: numbers,

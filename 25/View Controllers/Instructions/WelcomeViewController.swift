@@ -28,12 +28,12 @@ class WelcomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if #available(iOS 13.0, *) {
-            view.backgroundColor = .systemBackground
-            labels.forEach { $0.textColor = .label }
-            nextButton.tintColor = .systemBlue
-            skipButton.tintColor = .systemBlue
-        }
+//        if #available(iOS 13.0, *) {
+//            view.backgroundColor = .systemBackground
+//            labels.forEach { $0.textColor = .label }
+//            nextButton.tintColor = .systemBlue
+//            skipButton.tintColor = .systemBlue
+//        }
         
         setAttributedTextToWelcomeLabel()
     }

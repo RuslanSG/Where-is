@@ -126,7 +126,7 @@ final class TimeLeftProgressView: UIView {
         isHidden = true
         
         trackColor = .cellDefault
-        progressColor = .systemBlue
+        progressColor = tintColor
     }
     
 }

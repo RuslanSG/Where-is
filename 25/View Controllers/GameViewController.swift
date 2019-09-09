@@ -250,9 +250,9 @@ class GameViewController: UIViewController {
     // MARK: - Helper Methods
     
     private func setupUI() {
-        if #available(iOS 13.0, *) {
-            view.backgroundColor = .systemBackground
-        }
+//        if #available(iOS 13.0, *) {
+//            view.backgroundColor = .systemBackground
+//        }
         setupFeedbackView()
         setupCellsGrid()
         cellsGrid.setOrientation(to: orientation)
@@ -534,7 +534,8 @@ extension GameViewController: CellsManagerDelegate {
                 cell.setNumber(game.numberToSet, animateIfNeeded: false)
             }
                     
-            if game.nextNumber == 11 {
+            if game.nextNumber == 4 {
+                #warning("Set it to 11!")
                 UserDefaults.standard.set(false, forKey: UserDefaults.Key.findNumberHintNeeded)
             }
         }

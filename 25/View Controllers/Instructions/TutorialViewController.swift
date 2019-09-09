@@ -33,11 +33,11 @@ class TutorialViewController: UIViewController {
         super.viewDidLoad()
         configureCells()
         
-        if #available(iOS 13.0, *) {
-            view.backgroundColor = .systemBackground
-            labels.forEach { $0.textColor = .label }
-            doneButton.tintColor = .systemBlue
-        }
+//        if #available(iOS 13.0, *) {
+//            view.backgroundColor = .systemBackground
+//            labels.forEach { $0.textColor = .label }
+//            doneButton.tintColor = .systemBlue
+//        }
     }
     
     // MARK: - Actions

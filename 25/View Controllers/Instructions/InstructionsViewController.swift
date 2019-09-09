@@ -21,10 +21,10 @@ class InstructionsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if #available(iOS 13.0, *) {
-            isModalInPresentation = needsToShowWelcome
-            view.backgroundColor = .systemBackground
-        }
+//        if #available(iOS 13.0, *) {
+//            isModalInPresentation = needsToShowWelcome
+//            view.backgroundColor = .systemBackground
+//        }
         
         configurePageViewController()
         configureDetailViewControllers()

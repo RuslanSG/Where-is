@@ -136,10 +136,10 @@ class SettingsViewController: UITableViewController {
 
         let levelButton = LevelButton()
         levelButton.setTitle(title, for: .normal)
-        levelButton.setTitleColor(level.isAvailable ? .systemBlue : .systemGray, for: .normal)
+        levelButton.setTitleColor(level.isAvailable ? view.tintColor : .lightGray, for: .normal)
         levelButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: fontSize)
         levelButton.layer.borderWidth = 2
-        levelButton.layer.borderColor = level.isAvailable ? UIColor.systemBlue.cgColor : UIColor.systemGray.cgColor
+        levelButton.layer.borderColor = level.isAvailable ? view.tintColor.cgColor : UIColor.lightGray.cgColor
         levelButton.tag = level.index
         levelButton.layer.cornerRadius = cornerRadius
         levelButton.isEnabled = level.isAvailable
@@ -169,11 +169,11 @@ class SettingsViewController: UITableViewController {
         if animated {
             UIView.animate(withDuration: 0.2) {
                 levelButton.setTitleColor(.white, for: .normal)
-                levelButton.backgroundColor = .systemBlue
+                levelButton.backgroundColor = self.view.tintColor
             }
         } else {
             levelButton.setTitleColor(.white, for: .normal)
-            levelButton.backgroundColor = .systemBlue
+            levelButton.backgroundColor = view.tintColor
         }
         levelButton.isSelected = true
         selectedLevelButton = levelButton
@@ -182,11 +182,11 @@ class SettingsViewController: UITableViewController {
     private func deselectLevelButton(_ levelButton: LevelButton, animated: Bool) {
         if animated {
             UIView.animate(withDuration: 0.2) {
-                levelButton.setTitleColor(.systemBlue, for: .normal)
+                levelButton.setTitleColor(self.view.tintColor, for: .normal)
                 levelButton.backgroundColor = .clear
             }
         } else {
-            levelButton.setTitleColor(.systemBlue, for: .normal)
+            levelButton.setTitleColor(view.tintColor, for: .normal)
             levelButton.backgroundColor = .clear
         }
         levelButton.isSelected = false
