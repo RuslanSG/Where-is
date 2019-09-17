@@ -29,6 +29,10 @@ final class Game {
         return levels.first { $0.isSelected }!
     }
     
+    var lastLevel: Level {
+        return levels.last!
+    }
+    
     private(set) var levels = [Level]()
     private(set) var numbers = [Int]()
     private(set) var currentNumber = 0
@@ -64,45 +68,45 @@ final class Game {
     // MARK: - Public Methods
     
     func numberSelected(_ number: Int) -> Bool { // Returns if selected number is right
-        if number == nextNumber {
-            numbersFound += 1
-            nextNumber += 1
-            currentNumber += 1
-            numberToSet = number + currentLevel.numbersCount
-            
-            if number == currentLevel.goal {
-                setLevelPassed(index: currentLevel.index)
-                let nextLevelIndex = currentLevel.index + 1
-                if levels.indices.contains(nextLevelIndex) {
-                    setLevelAvailable(index: nextLevelIndex)
-                    setCurrentLevel(index: nextLevelIndex)
-                }
-                
-                delegate?.game(self, didFinishGameWithReason: .levelPassed, numbersFound: numbersFound)
-                return false
-            }
-            
-            guard let index = numbers.firstIndex(of: number) else { fatalError("Current number didn't find in numbers array") }
-            numbers[index] = number + numbers.count
-            
-            timer?.invalidate()
-            setTimer(to: currentLevel.interval)
-            return true
-        } else {
+        guard number == nextNumber else {
             delegate?.game(self, didFinishGameWithReason: .wrongNumberTapped, numbersFound: numbersFound)
             return false
         }
         
+        numbersFound += 1
+        nextNumber += 1
+        currentNumber += 1
+        numberToSet = number + currentLevel.numbersCount
+        
+        if number == currentLevel.goal {
+            setLevelPassed(index: currentLevel.index)
+            let nextLevelIndex = currentLevel.index + 1
+            if levels.indices.contains(nextLevelIndex) {
+                setLevelAvailable(index: nextLevelIndex)
+                setCurrentLevel(index: nextLevelIndex)
+            }
+            
+            delegate?.game(self, didFinishGameWithReason: .levelPassed, numbersFound: numbersFound)
+            return false
+        }
+        
+        guard let index = numbers.firstIndex(of: number) else { fatalError("Current number didn't find in numbers array") }
+        numbers[index] = number + numbers.count
+        
+        timer?.invalidate()
+        setTimer(to: currentLevel.interval)
+        
+        return true
     }
     
     func newGame() {
         finishGame()
         setNumbers(count: currentLevel.numbersCount)
         nextNumber = 1
-        numbersFound = 0
     }
     
     func startGame() {
+        numbersFound = 0
         isRunning = true
         setTimer(to: currentLevel.interval)
     }
@@ -166,16 +170,16 @@ final class Game {
             let level = Level(serial: serial,
                               index: index,
                               isAvailable: true, //i == 1,
-                              isPassed: false,
-                              isSelected: i == 1,
-                              numbersCount: numbers,
-                              interval: interval,
-                              goal: goal,
-                              colorfulNumbers: colorsModeFor.numbers,
-                              colorfulCells: colorsModeFor.cells,
-                              winkMode: winkMode,
-                              swapMode: swapMode,
-                              shuffleMode: shuffleMode)
+                isPassed: false,
+                isSelected: i == 1,
+                numbersCount: numbers,
+                interval: interval,
+                goal: goal,
+                colorfulNumbers: colorsModeFor.numbers,
+                colorfulCells: colorsModeFor.cells,
+                winkMode: winkMode,
+                swapMode: swapMode,
+                shuffleMode: shuffleMode)
             
             levels.append(level)
         }

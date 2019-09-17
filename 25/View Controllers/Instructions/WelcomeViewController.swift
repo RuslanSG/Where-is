@@ -28,12 +28,12 @@ class WelcomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        if #available(iOS 13.0, *) {
-//            view.backgroundColor = .systemBackground
-//            labels.forEach { $0.textColor = .label }
-//            nextButton.tintColor = .systemBlue
-//            skipButton.tintColor = .systemBlue
-//        }
+        if #available(iOS 13.0, *) {
+            view.backgroundColor = .systemBackground
+            labels.forEach { $0.textColor = .label }
+            nextButton.tintColor = .systemBlue
+            skipButton.tintColor = .systemBlue
+        }
         
         setAttributedTextToWelcomeLabel()
     }
@@ -54,7 +54,7 @@ class WelcomeViewController: UIViewController {
         let stringToColor = "Where is?!"
         let colorfulTextRange = (welcomeLabel.text! as NSString).range(of: stringToColor)
         let attributedString = NSMutableAttributedString(string: welcomeLabel.text!)
-        attributedString.addAttribute(.foregroundColor, value: UIColor.cellTurquoise, range: colorfulTextRange)
+        attributedString.addAttribute(.foregroundColor, value: UIColor.cellRed, range: colorfulTextRange)
         welcomeLabel.attributedText = attributedString
     }
     

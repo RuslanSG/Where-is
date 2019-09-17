@@ -137,23 +137,7 @@ class CellView: UIButton {
     }
     
     func setStyle(_ style: Style, palette: Palette, animated: Bool) {
-        let hotColors: [UIColor] = [.cellRed, .cellYellow, .cellPurple]
-        let coldColors: [UIColor] = [.cellDarkBlue, .cellBlue, .cellTurquoise]
-        let greenColors: [UIColor] = [.cellDarkGreen, .cellGreen, .cellLightGreen]
-        let greyColors: [UIColor] = [.cellDarkGrey, .cellGrey, .cellLightGrey]
-        
-        var colorsForCells: [UIColor]
-        
-        switch palette {
-        case .hot:
-            colorsForCells = hotColors
-        case .cold:
-            colorsForCells = coldColors
-        case .green:
-            colorsForCells = greenColors
-        case .grey:
-            colorsForCells = greyColors
-        }
+        var colorsForCells: [UIColor] = [.cellDefault, .cellRed]
         
         let newCellColor: UIColor
         let newNumberColor: UIColor

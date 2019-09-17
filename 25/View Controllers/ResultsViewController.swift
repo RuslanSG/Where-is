@@ -10,16 +10,11 @@ import UIKit
 
 class ResultsViewController: UIViewController {
     
-    var numbersFound: Int!
     var gameFinishingReason: GameFinishingReason!
     
-    private var blurEffectView = UIVisualEffectView()
-    private var vibrancyEffectView = UIVisualEffectView()
-    private var numbersCountLabel = UILabel()
-    private var numbersFoundLabel = UILabel()
-    private var tapAnywhereToHideLabel = UILabel()
-    private var titleLabel = UILabel()
-    private var labels = [UILabel]()
+    internal var blurEffectView = UIVisualEffectView()
+    internal var vibrancyEffectView = UIVisualEffectView()
+    internal var tapAnywhereToHideLabel = UILabel()
     
     // MARK: - Lifecycle
     
@@ -31,9 +26,7 @@ class ResultsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        numbersCountLabel.text = String(numbersFound)
-        configureUI()
-        configureGestureRecognizer()
+        configure()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -59,19 +52,19 @@ class ResultsViewController: UIViewController {
         var blurEffect: UIBlurEffect
         var vibrancyEffect: UIVibrancyEffect
         
-//        if #available(iOS 13.0, *) {
-//            blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
-//            vibrancyEffect = UIVibrancyEffect(blurEffect: blurEffect, style: .secondaryLabel)
-//        } else {
+        if #available(iOS 13.0, *) {
+            blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+            vibrancyEffect = UIVibrancyEffect(blurEffect: blurEffect, style: .secondaryLabel)
+        } else {
             blurEffect = UIBlurEffect(style: .light)
             vibrancyEffect = UIVibrancyEffect(blurEffect: UIBlurEffect(style: .extraLight))
             blurEffectView.contentView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.07)
-//        }
+        }
         
         let blurAnimator = UIViewPropertyAnimator(duration: 0.2, curve: .easeOut) {
             self.blurEffectView.effect = blurEffect
             self.vibrancyEffectView.effect = vibrancyEffect
-            self.labels.forEach { $0.alpha = 1 }
+            self.vibrancyEffectView.contentView.subviews.forEach { $0.alpha = 1 }
         }
         blurAnimator.startAnimation()
     }
@@ -79,7 +72,7 @@ class ResultsViewController: UIViewController {
     private func hide(completion: @escaping () -> Void) {
         let blurAnimator = UIViewPropertyAnimator(duration: 0.2, curve: .easeOut) {
             self.blurEffectView.effect = nil
-            self.labels.forEach { $0.alpha = 0 }
+            self.vibrancyEffectView.contentView.subviews.forEach { $0.alpha = 0 }
         }
         blurAnimator.addCompletion { (_) in
             completion()
@@ -89,8 +82,8 @@ class ResultsViewController: UIViewController {
     
     // MARK: - Helper Methods
     
-    private func configureUI() {
-        /// Configure blur effect view
+    internal func configure() {
+        // Configure blur effect view
         blurEffectView = UIVisualEffectView(effect: nil)
         
         view.addSubview(blurEffectView)
@@ -101,7 +94,7 @@ class ResultsViewController: UIViewController {
         blurEffectView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         blurEffectView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         
-        /// Configure vibrancy effect view
+        // Configure vibrancy effect view
         vibrancyEffectView = UIVisualEffectView(effect: nil)
         
         blurEffectView.contentView.addSubview(vibrancyEffectView)
@@ -114,51 +107,7 @@ class ResultsViewController: UIViewController {
         vibrancyEffectView.leftAnchor.constraint(equalTo: blurEffectView.leftAnchor).isActive = true
         vibrancyEffectView.rightAnchor.constraint(equalTo: blurEffectView.rightAnchor).isActive = true
         
-        /// Configure title lable
-        vibrancyEffectView.contentView.addSubview(titleLabel)
-        if gameFinishingReason == .timeIsOver {
-            titleLabel.text = "Time Is Over!"
-        } else if gameFinishingReason == .wrongNumberTapped {
-            titleLabel.text = "Wrong Number Tapped!"
-        } else {
-            titleLabel.text = "Level Passed!"
-        }
-        titleLabel.numberOfLines = 0
-        titleLabel.textAlignment = .center
-        titleLabel.font = .systemFont(ofSize: 30)
-        
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.topAnchor.constraint(equalTo: vibrancyEffectView.contentView.topAnchor, constant: 30).isActive = true
-        titleLabel.leftAnchor.constraint(equalTo: vibrancyEffectView.contentView.leftAnchor).isActive = true
-        titleLabel.rightAnchor.constraint(equalTo: vibrancyEffectView.contentView.rightAnchor).isActive = true
-        
-        labels.append(titleLabel)
-        
-        /// Configure numbers count label
-        vibrancyEffectView.contentView.addSubview(numbersCountLabel)
-        numbersCountLabel.text = String(numbersFound)
-        numbersCountLabel.textAlignment = .center
-        numbersCountLabel.font = .systemFont(ofSize: 80)
-        
-        numbersCountLabel.translatesAutoresizingMaskIntoConstraints = false
-        numbersCountLabel.centerXAnchor.constraint(equalTo: vibrancyEffectView.contentView.centerXAnchor).isActive = true
-        numbersCountLabel.centerYAnchor.constraint(equalTo: vibrancyEffectView.contentView.centerYAnchor).isActive = true
-        
-        labels.append(numbersCountLabel)
-        
-        /// Configure "Numbers Found" label
-        vibrancyEffectView.contentView.addSubview(numbersFoundLabel)
-        numbersFoundLabel.text = "Numbers Found:"
-        numbersFoundLabel.textAlignment = .center
-        numbersFoundLabel.font = .systemFont(ofSize: 15)
-        
-        numbersFoundLabel.translatesAutoresizingMaskIntoConstraints = false
-        numbersFoundLabel.centerXAnchor.constraint(equalTo: vibrancyEffectView.contentView.centerXAnchor).isActive = true
-        numbersFoundLabel.bottomAnchor.constraint(equalTo: numbersCountLabel.topAnchor, constant: -10).isActive = true
-        
-        labels.append(numbersFoundLabel)
-        
-        /// Configure "Tap anywhere to hide" label
+        // Configure "Tap anywhere to hide" label
         vibrancyEffectView.contentView.addSubview(tapAnywhereToHideLabel)
         tapAnywhereToHideLabel.text = "Tap anywhere to hide"
         tapAnywhereToHideLabel.textAlignment = .center
@@ -167,11 +116,9 @@ class ResultsViewController: UIViewController {
         tapAnywhereToHideLabel.translatesAutoresizingMaskIntoConstraints = false
         tapAnywhereToHideLabel.centerXAnchor.constraint(equalTo: vibrancyEffectView.contentView.centerXAnchor).isActive = true
         tapAnywhereToHideLabel.bottomAnchor.constraint(equalTo: vibrancyEffectView.contentView.bottomAnchor, constant: -7).isActive = true
-        
-        labels.append(tapAnywhereToHideLabel)
-    }
-    
-    private func configureGestureRecognizer() {
+        tapAnywhereToHideLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
+                
+        // Configure gesture recognizer
         let tap = UITapGestureRecognizer(target: self, action: #selector(close))
         vibrancyEffectView.contentView.addGestureRecognizer(tap)
     }

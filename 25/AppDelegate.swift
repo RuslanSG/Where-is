@@ -45,6 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UserDefaults.standard.register(defaults: [UserDefaults.Key.firstTime : true])
         UserDefaults.standard.register(defaults: [UserDefaults.Key.stopGameHintNeeded : true])
         UserDefaults.standard.register(defaults: [UserDefaults.Key.findNumberHintNeeded : true])
+        UserDefaults.standard.register(defaults: [UserDefaults.Key.allLevelPassedCongratulationsNedded : true])
     }
     
 }

@@ -250,9 +250,9 @@ class GameViewController: UIViewController {
     // MARK: - Helper Methods
     
     private func setupUI() {
-//        if #available(iOS 13.0, *) {
-//            view.backgroundColor = .systemBackground
-//        }
+        if #available(iOS 13.0, *) {
+            view.backgroundColor = .systemBackground
+        }
         setupFeedbackView()
         setupCellsGrid()
         cellsGrid.setOrientation(to: orientation)
@@ -512,7 +512,7 @@ extension GameViewController: CellsManagerDelegate {
     
     internal func cellReleased(_ cell: CellView) {
         guard game.isRunning else { return }
-        
+                
         feedbackGenerator.playSelectionHapticFeedback()
         
         if game.numberSelected(cell.number) {
@@ -553,9 +553,18 @@ extension GameViewController: GameDelegate {
     func game(_ game: Game, didFinishGameWithReason reason: GameFinishingReason, numbersFound: Int) {
         gameFinishingReason = reason
         self.numbersFound = numbersFound
+        
         feedbackGenerator.playVibrationFeedback()
+        
         prepareForNewGame()
-        performSegue(withIdentifier: "ShowResults", sender: nil)
+        
+        switch reason {
+        case .levelPassed:
+            performSegue(withIdentifier: "ShowLevelPassed", sender: nil)
+        case .wrongNumberTapped, .timeIsOver:
+            performSegue(withIdentifier: "ShowGameFinished", sender: nil)
+        }
+        
     }
 }
 
@@ -578,10 +587,14 @@ extension GameViewController {
             let navigationController = segue.destination as! UINavigationController
             let settingsViewContoller = navigationController.viewControllers.first! as! SettingsViewController
             settingsViewContoller.game = game
-        } else if segue.identifier == "ShowResults" {
-            let resultsViewController = segue.destination as! ResultsViewController
-            resultsViewController.numbersFound = numbersFound
-            resultsViewController.gameFinishingReason = gameFinishingReason
+        } else if segue.identifier == "ShowGameFinished" {
+            let levelFailedViewController = segue.destination as! GameFinishedViewController
+            levelFailedViewController.game = game
+            levelFailedViewController.gameFinishingReason = gameFinishingReason
+        } else if segue.identifier == "ShowLevelPassed" {
+            let levelPassedViewController = segue.destination as! LevelPassedViewController
+            levelPassedViewController.game = game
+            levelPassedViewController.gameFinishingReason = gameFinishingReason
         }
     }
     

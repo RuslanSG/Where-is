@@ -60,11 +60,11 @@ final class HintLabel: UILabel {
     private func configure() {
         let labelTextColor: UIColor
         
-//        if #available (iOS 13.0, *) {
-//            labelTextColor = .label
-//        } else {
+        if #available (iOS 13.0, *) {
+            labelTextColor = .label
+        } else {
             labelTextColor = .black
-//        }
+        }
         
         textColor = labelTextColor
         adjustsFontSizeToFitWidth = true
