@@ -9,14 +9,10 @@
 import Foundation
 import UIKit
 
-enum GameFinishingReason {
-    case wrongNumberTapped, timeIsOver, levelPassed
-}
-
 protocol GameDelegate: class {
     
     func game(_ game: Game, didChangeLevelTo level: Level)
-    func game(_ game: Game, didFinishGameWithReason reason: GameFinishingReason, numbersFound: Int)
+    func game(_ game: Game, didFinishSession session: GameSession)
 }
 
 final class Game {
@@ -24,6 +20,13 @@ final class Game {
     // MARK: - Public Properties
     
     weak var delegate: GameDelegate?
+    
+    let maxLevel = 10
+
+    private(set) var levels = [Level]()
+    private(set) var numbers = [Int]()
+    private(set) lazy var session = GameSession(level: currentLevel)
+    private(set) var isRunning = false
     
     var currentLevel: Level {
         return levels.first { $0.isSelected }!
@@ -33,19 +36,11 @@ final class Game {
         return levels.last!
     }
     
-    private(set) var levels = [Level]()
-    private(set) var numbers = [Int]()
-    private(set) var currentNumber = 0
-    private(set) var nextNumber = 1
-    private(set) var numberToSet = 0
-    private(set) var isRunning = false
-    private(set) var numbersFound = 0
-    private(set) var maxLevel = 10
-    
     // MARK: - Private Properties
     
     private var memoryManager = MemoryManager.shared
-    private var timer: Timer?
+    private var intervalTimer: Timer?
+    private var gameSessionTimer: Timer?
     
     // MARK: - Initialization
     
@@ -62,58 +57,63 @@ final class Game {
     // MARK: - Actions
     
     @objc internal func timerSceduled(_ timer: Timer) {
-        delegate?.game(self, didFinishGameWithReason: .timeIsOver, numbersFound: numbersFound)
+        finish(reason: .timeIsOver)
     }
     
     // MARK: - Public Methods
     
     func numberSelected(_ number: Int) -> Bool { // Returns if selected number is right
-        guard number == nextNumber else {
-            delegate?.game(self, didFinishGameWithReason: .wrongNumberTapped, numbersFound: numbersFound)
+        guard number == session.nextNumber else {
+            finish(reason: .wrongNumberTapped)
             return false
         }
         
-        numbersFound += 1
-        nextNumber += 1
-        currentNumber += 1
-        numberToSet = number + currentLevel.numbersCount
+        session.numbersFound += 1
+        session.nextNumber += 1
+        session.currentNumber += 1
+        session.newNumber = number + currentLevel.numbersCount
         
         if number == currentLevel.goal {
             setLevelPassed(index: currentLevel.index)
+            
             let nextLevelIndex = currentLevel.index + 1
+            
             if levels.indices.contains(nextLevelIndex) {
                 setLevelAvailable(index: nextLevelIndex)
                 setCurrentLevel(index: nextLevelIndex)
             }
             
-            delegate?.game(self, didFinishGameWithReason: .levelPassed, numbersFound: numbersFound)
+            finish(reason: .levelPassed)
+            
             return false
         }
         
         guard let index = numbers.firstIndex(of: number) else { fatalError("Current number didn't find in numbers array") }
         numbers[index] = number + numbers.count
         
-        timer?.invalidate()
-        setTimer(to: currentLevel.interval)
+        intervalTimer?.invalidate()
+        setIntevalTimer(to: currentLevel.interval)
         
         return true
     }
     
-    func newGame() {
-        finishGame()
+    func new() {
         setNumbers(count: currentLevel.numbersCount)
-        nextNumber = 1
+        session = GameSession(level: currentLevel)
     }
     
-    func startGame() {
-        numbersFound = 0
+    func start() {
+        session.startTime = Date()
         isRunning = true
-        setTimer(to: currentLevel.interval)
+        setIntevalTimer(to: currentLevel.interval)
     }
     
-    func finishGame() {
+    func finish(reason: GameSessionFinishingReason) {
+        session.finishingReason = reason
+        session.finishTime = Date()
+        delegate?.game(self, didFinishSession: session)
         isRunning = false
-        timer?.invalidate()
+        intervalTimer?.invalidate()
     }
     
     func shuffleNumbers() {
@@ -125,7 +125,7 @@ final class Game {
         if let i = selectedLevelIndex {
             levels[i].isSelected = false
             levels[index].isSelected = true
-            newGame()
+            new()
             delegate?.game(self, didChangeLevelTo: levels[index])
         }
     }
@@ -195,8 +195,8 @@ final class Game {
         levels[index].isAvailable = true
     }
     
-    private func setTimer(to time: Double) {
-        timer = Timer.scheduledTimer(timeInterval: time,
+    private func setIntevalTimer(to time: Double) {
+        intervalTimer = Timer.scheduledTimer(timeInterval: time,
                                      target: self,
                                      selector: #selector(timerSceduled(_:)),
                                      userInfo: nil,

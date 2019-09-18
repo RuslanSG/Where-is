@@ -13,11 +13,12 @@ class GameFinishedViewController: ResultsViewController {
     
     // MARK: - Public Properties
     
-    var game: Game!
+    var session: GameSession!
     
     // MARK: - Private Properties
     
     private var titleLabel = UILabel()
+    private var reasonLabel = UILabel()
     private var numbersCountLabel = UILabel()
     private var numbersFoundLabel = UILabel()
 
@@ -35,11 +36,8 @@ class GameFinishedViewController: ResultsViewController {
         
         // Configure title lable
         vibrancyEffectView.contentView.addSubview(titleLabel)
-        if gameFinishingReason == .timeIsOver {
-            titleLabel.text = "Time Is Over!"
-        } else if gameFinishingReason == .wrongNumberTapped {
-            titleLabel.text = "Wrong Number Tapped!"
-        }
+        
+        titleLabel.text = "Title"
         
         titleLabel.numberOfLines = 0
         titleLabel.textAlignment = .center
@@ -50,9 +48,12 @@ class GameFinishedViewController: ResultsViewController {
         titleLabel.leftAnchor.constraint(equalTo: vibrancyEffectView.contentView.leftAnchor).isActive = true
         titleLabel.rightAnchor.constraint(equalTo: vibrancyEffectView.contentView.rightAnchor).isActive = true
         
+        // Configure reason label
+        
+        
         // Configure numbers count label
         vibrancyEffectView.contentView.addSubview(numbersCountLabel)
-        numbersCountLabel.text = String(game.numbersFound)
+        numbersCountLabel.text = String(session.numbersFound)
         numbersCountLabel.textAlignment = .center
         numbersCountLabel.font = .systemFont(ofSize: 80)
         

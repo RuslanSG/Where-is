@@ -13,7 +13,7 @@ class LevelPassedViewController: ResultsViewController {
     
     // MARK: - Public Properties
     
-    var game: Game!
+    var session: GameSession!
     
     // MARK: - Private Properties
 
@@ -41,7 +41,7 @@ class LevelPassedViewController: ResultsViewController {
         // Configure detials label
         vibrancyEffectView.contentView.addSubview(detailsLabel)
         
-        detailsLabel.text = "Level \(game.currentLevel.serial) is available!"
+        detailsLabel.text = "Level \(session.level.serial) is available!"
         detailsLabel.textAlignment = .center
         detailsLabel.numberOfLines = 0
         detailsLabel.font = .systemFont(ofSize: titleLabel.font.pointSize)

@@ -23,7 +23,6 @@ class GameViewController: UIViewController {
     
     private var feedbackView = FeedbackView()
     private var feedbackGenerator = FeedbackGenerator()
-    private var gameFinishingReason: GameFinishingReason!
     
     private lazy var stopGameHintLabel: HintLabel? = {
         let stopGameHintNeeded = UserDefaults.standard.bool(forKey: UserDefaults.Key.stopGameHintNeeded)
@@ -175,7 +174,7 @@ class GameViewController: UIViewController {
     // MARK: - Actions
     
     @objc private func startGame() {
-        game.startGame()
+        game.start()
         
         startGameButton.hide()
         
@@ -220,6 +219,7 @@ class GameViewController: UIViewController {
     }
     
     @objc func swipeDown() {
+        game.finish(reason: .stopped)
         prepareForNewGame()
         
         UIView.animate(withDuration: 0.2) {
@@ -264,7 +264,7 @@ class GameViewController: UIViewController {
     }
     
     private func prepareForNewGame() {
-        game.newGame()
+        game.new()
         
         cellsManager.stopWinking()
         cellsManager.stopSwapping()
@@ -514,10 +514,10 @@ extension GameViewController: CellsManagerDelegate {
         guard game.isRunning else { return }
                 
         feedbackGenerator.playSelectionHapticFeedback()
-        
+                
         if game.numberSelected(cell.number) {
             if let findNumberHintLabels = findNumberHintLabels {
-                let newText = findNumberHintLabels.title.text!.components(separatedBy: CharacterSet.decimalDigits).joined() + String(game.nextNumber)
+                let newText = findNumberHintLabels.title.text!.components(separatedBy: CharacterSet.decimalDigits).joined() + String(game.session.nextNumber)
                 findNumberHintLabels.title.text = newText
                 timer?.invalidate()
                 startTimer()
@@ -531,10 +531,10 @@ extension GameViewController: CellsManagerDelegate {
                 #warning("Move shuffling to the model!")
                 cellsManager.updateNumbers(with: game.numbers, animated: true)
             } else {
-                cell.setNumber(game.numberToSet, animateIfNeeded: false)
+                cell.setNumber(game.session.newNumber, animateIfNeeded: false)
             }
                     
-            if game.nextNumber == 4 {
+            if game.session.nextNumber == 4 {
                 #warning("Set it to 11!")
                 UserDefaults.standard.set(false, forKey: UserDefaults.Key.findNumberHintNeeded)
             }
@@ -550,19 +550,16 @@ extension GameViewController: GameDelegate {
         updateViewFromModel()
     }
     
-    func game(_ game: Game, didFinishGameWithReason reason: GameFinishingReason, numbersFound: Int) {
-        gameFinishingReason = reason
-        self.numbersFound = numbersFound
-        
-        feedbackGenerator.playVibrationFeedback()
-        
+    func game(_ game: Game, didFinishSession session: GameSession) {
         prepareForNewGame()
         
-        switch reason {
+        switch session.finishingReason {
         case .levelPassed:
-            performSegue(withIdentifier: "ShowLevelPassed", sender: nil)
+            performSegue(withIdentifier: "ShowLevelPassed", sender: session)
         case .wrongNumberTapped, .timeIsOver:
-            performSegue(withIdentifier: "ShowGameFinished", sender: nil)
+            feedbackGenerator.playVibrationFeedback()
+            performSegue(withIdentifier: "ShowGameFinished", sender: session)
+        default: break
         }
         
     }
@@ -588,13 +585,13 @@ extension GameViewController {
             let settingsViewContoller = navigationController.viewControllers.first! as! SettingsViewController
             settingsViewContoller.game = game
         } else if segue.identifier == "ShowGameFinished" {
-            let levelFailedViewController = segue.destination as! GameFinishedViewController
-            levelFailedViewController.game = game
-            levelFailedViewController.gameFinishingReason = gameFinishingReason
+            guard let session = sender as? GameSession else { return }
+            let gameFinishedViewController = segue.destination as! GameFinishedViewController
+            gameFinishedViewController.session = session
         } else if segue.identifier == "ShowLevelPassed" {
+            guard let session = sender as? GameSession else { return }
             let levelPassedViewController = segue.destination as! LevelPassedViewController
-            levelPassedViewController.game = game
-            levelPassedViewController.gameFinishingReason = gameFinishingReason
+            levelPassedViewController.session = session
         }
     }
     

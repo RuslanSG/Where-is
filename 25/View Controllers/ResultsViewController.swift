@@ -9,9 +9,7 @@
 import UIKit
 
 class ResultsViewController: UIViewController {
-    
-    var gameFinishingReason: GameFinishingReason!
-    
+        
     internal var blurEffectView = UIVisualEffectView()
     internal var vibrancyEffectView = UIVisualEffectView()
     internal var tapAnywhereToHideLabel = UILabel()
