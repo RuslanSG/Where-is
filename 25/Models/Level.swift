@@ -15,6 +15,7 @@ struct Level: Codable, Equatable {
     var isAvailable: Bool
     var isPassed: Bool
     var isSelected: Bool
+    var record: Int
     
     var numbersCount: Int
     var interval: Double

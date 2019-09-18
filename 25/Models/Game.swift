@@ -115,8 +115,12 @@ final class Game {
         isRunning = false
         intervalTimer?.invalidate()
         
+        if reason != .stopped {
+            setNewRecord()
+        }
+        
         delegate?.game(self, didFinishSession: session)
-                
+             
         if reason == .levelPassed {
             openNextLevel()
         }
@@ -180,6 +184,7 @@ final class Game {
                               isAvailable: true, //i == 1,
                 isPassed: false,
                 isSelected: i == 1,
+                record: 0,
                 numbersCount: numbers,
                 interval: interval,
                 goal: goal,
@@ -212,6 +217,13 @@ final class Game {
     
     private func setLevelAvailable(index: Int) {
         levels[index].isAvailable = true
+    }
+    
+    private func setNewRecord() {
+        if currentLevel.record < session.numbersFound {
+            levels[currentLevel.index].record = session.numbersFound
+            session.level = currentLevel
+        }
     }
     
     private func setIntevalTimer(to time: Double) {

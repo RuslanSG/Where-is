@@ -566,6 +566,8 @@ extension GameViewController: GameDelegate {
         default: break
         }
         
+        print(session.level.record)
+        
     }
 }
 
