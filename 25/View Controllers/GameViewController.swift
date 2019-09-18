@@ -526,6 +526,10 @@ extension GameViewController: CellsManagerDelegate {
             timeLeftProgressView.reset()
             timeLeftProgressView.startAnimation(duration: game.currentLevel.interval)
             
+            if cell.number == game.currentLevel.goal {
+                cell.highlight()
+            }
+            
             if game.currentLevel.shuffleMode {
                 game.shuffleNumbers()
                 #warning("Move shuffling to the model!")

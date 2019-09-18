@@ -41,7 +41,12 @@ class LevelPassedViewController: ResultsViewController {
         // Configure detials label
         vibrancyEffectView.contentView.addSubview(detailsLabel)
         
-        detailsLabel.text = "Level \(session.level.serial) is available!"
+        if let nextLevelSerial = session.nextLevel?.serial {
+            detailsLabel.text = "Level \(nextLevelSerial) is available!"
+        } else {
+            detailsLabel.text = "All levels available!"
+        }
+       
         detailsLabel.textAlignment = .center
         detailsLabel.numberOfLines = 0
         detailsLabel.font = .systemFont(ofSize: titleLabel.font.pointSize)

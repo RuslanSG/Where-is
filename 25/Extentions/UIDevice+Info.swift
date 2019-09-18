@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 
+#warning("Add the new iPhones!")
+
 extension UIDevice {
     enum DevicePlatform: String {
         case other          = "Old Device"
@@ -28,7 +30,9 @@ extension UIDevice {
         get {
             var sysinfo = utsname()
             uname(&sysinfo)
-            let platform = String(bytes: Data(bytes: &sysinfo.machine, count: Int(_SYS_NAMELEN)), encoding: .ascii)!.trimmingCharacters(in: .controlCharacters)
+            let platform = String(bytes: Data(bytes: &sysinfo.machine,
+                                              count: Int(_SYS_NAMELEN)),
+                                  encoding: .ascii)!.trimmingCharacters(in: .controlCharacters)
             switch platform {
             case "iPhone11,6", "iPhone11,4":
                 return .iPhoneXSMax

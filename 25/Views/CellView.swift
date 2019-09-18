@@ -243,6 +243,20 @@ class CellView: UIButton {
         }
     }
     
+    func highlight() {
+        let oldBackgroundColor = backgroundColor
+        
+        if #available(iOS 13.0, *) {
+            backgroundColor = .systemGreen
+        } else {
+            backgroundColor = .green
+        }
+        
+        UIView.animate(withDuration: 1) {
+            self.backgroundColor = oldBackgroundColor
+        }
+    }
+    
     // MARK: - Private Methods
     
     private func configure() {

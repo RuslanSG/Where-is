@@ -25,11 +25,19 @@ final class Game {
 
     private(set) var levels = [Level]()
     private(set) var numbers = [Int]()
-    private(set) lazy var session = GameSession(level: currentLevel)
+    private(set) var session: GameSession!
     private(set) var isRunning = false
     
     var currentLevel: Level {
         return levels.first { $0.isSelected }!
+    }
+    
+    var nextLevel: Level? {
+        let nextLevelIndex = currentLevel.index + 1
+        if levels.indices.contains(nextLevelIndex) {
+            return levels[nextLevelIndex]
+        }
+        return nil
     }
     
     var lastLevel: Level {
@@ -46,8 +54,8 @@ final class Game {
     
     init() {
         loadLevels()
-        setNumbers(count: currentLevel.numbersCount)
-        
+        new()
+                
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(applicationWillResignActive),
                                                name: UIApplication.willResignActiveNotification,
@@ -62,7 +70,7 @@ final class Game {
     
     // MARK: - Public Methods
     
-    func numberSelected(_ number: Int) -> Bool { // Returns if selected number is right
+    func numberSelected(_ number: Int) -> Bool { // Returns true if selected number is right
         guard number == session.nextNumber else {
             finish(reason: .wrongNumberTapped)
             return false
@@ -73,22 +81,14 @@ final class Game {
         session.currentNumber += 1
         session.newNumber = number + currentLevel.numbersCount
         
-        if number == currentLevel.goal {
-            setLevelPassed(index: currentLevel.index)
-            
-            let nextLevelIndex = currentLevel.index + 1
-            
-            if levels.indices.contains(nextLevelIndex) {
-                setLevelAvailable(index: nextLevelIndex)
-                setCurrentLevel(index: nextLevelIndex)
-            }
-            
+        if number == currentLevel.goal, !currentLevel.isPassed {
             finish(reason: .levelPassed)
-            
             return false
         }
         
-        guard let index = numbers.firstIndex(of: number) else { fatalError("Current number didn't find in numbers array") }
+        guard let index = numbers.firstIndex(of: number) else {
+            fatalError("Current number didn't find in numbers array")
+        }
         numbers[index] = number + numbers.count
         
         intervalTimer?.invalidate()
@@ -100,6 +100,7 @@ final class Game {
     func new() {
         setNumbers(count: currentLevel.numbersCount)
         session = GameSession(level: currentLevel)
+        session.nextLevel = nextLevel
     }
     
     func start() {
@@ -111,9 +112,14 @@ final class Game {
     func finish(reason: GameSessionFinishingReason) {
         session.finishingReason = reason
         session.finishTime = Date()
-        delegate?.game(self, didFinishSession: session)
         isRunning = false
         intervalTimer?.invalidate()
+        
+        delegate?.game(self, didFinishSession: session)
+                
+        if reason == .levelPassed {
+            openNextLevel()
+        }
     }
     
     func shuffleNumbers() {
@@ -125,6 +131,8 @@ final class Game {
         if let i = selectedLevelIndex {
             levels[i].isSelected = false
             levels[index].isSelected = true
+            session.level = currentLevel
+            session.nextLevel = nextLevel
             new()
             delegate?.game(self, didChangeLevelTo: levels[index])
         }
@@ -185,6 +193,17 @@ final class Game {
         }
         
         return levels
+    }
+    
+    private func openNextLevel() {
+        setLevelPassed(index: currentLevel.index)
+        
+        let nextLevelIndex = currentLevel.index + 1
+        
+        if levels.indices.contains(nextLevelIndex) {
+            setLevelAvailable(index: nextLevelIndex)
+            setCurrentLevel(index: nextLevelIndex)
+        }
     }
     
     private func setLevelPassed(index: Int) {

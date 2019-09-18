@@ -15,6 +15,7 @@ enum GameSessionFinishingReason {
 struct GameSession {
     
     var level: Level
+    var nextLevel: Level?
         
     var currentNumber: Int
     var nextNumber: Int
