@@ -96,7 +96,7 @@ class StartGameView: UIVisualEffectView {
         
         if #available(iOS 13.0, *) {
             blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
-            vibrancyEffect = UIVibrancyEffect(blurEffect: blurEffect, style: .secondaryLabel)
+            vibrancyEffect = UIVibrancyEffect(blurEffect: blurEffect, style: .label)
         } else {
             blurEffect = UIBlurEffect(style: .light)
             vibrancyEffect = UIVibrancyEffect(blurEffect: blurEffect)

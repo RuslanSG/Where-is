@@ -13,11 +13,7 @@ class CellView: UIButton {
     // MARK: - Public Properties
     
     enum Style {
-        case defaultWithWhiteNumber, defaultWithBlackNumber, colorfulWithWhiteNumber, colorfulWithColorfulNumber
-    }
-    
-    enum Palette {
-        case hot, cold, green, grey
+        case gray, colorful, colorfulWithColorfulNumber
     }
     
     var isSetEnabled = true
@@ -136,20 +132,21 @@ class CellView: UIButton {
         isWinkEnabled = false
     }
     
-    func setStyle(_ style: Style, palette: Palette, animated: Bool) {
+    func setStyle(_ style: Style, animated: Bool) {
         var colorsForCells: [UIColor] = [.cellDefault, .cellRed]
         
         let newCellColor: UIColor
         let newNumberColor: UIColor
         
         switch style {
-        case .defaultWithWhiteNumber:
+        case .gray:
             newCellColor = .cellDefault
-            newNumberColor = .white
-        case .defaultWithBlackNumber:
-            newCellColor = .cellDefault
-            newNumberColor = .black
-        case .colorfulWithWhiteNumber:
+            if #available(iOS 13.0, *) {
+                newNumberColor = .label
+            } else {
+                newNumberColor = .white
+            }
+        case .colorful:
             newCellColor = colorsForCells[Int.random(in: colorsForCells.indices)]
             newNumberColor = .white
         case .colorfulWithColorfulNumber:

@@ -21,6 +21,9 @@ struct GameSession {
     var nextNumber: Int
     var numbersFound: Int
     var newNumber: Int
+    var goalAchieved: Bool {
+        return level.goal <= numbersFound
+    }
 
     var finishingReason: GameSessionFinishingReason?
     

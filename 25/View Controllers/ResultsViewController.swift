@@ -29,7 +29,7 @@ class ResultsViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        show()
+        show(animated: true)
     }
     
     deinit {
@@ -46,31 +46,38 @@ class ResultsViewController: UIViewController {
     
     // MARK: - Private Methods
     
-    private func show() {
+    private func show(animated: Bool) {
         var blurEffect: UIBlurEffect
         var vibrancyEffect: UIVibrancyEffect
         
         if #available(iOS 13.0, *) {
             blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
-            vibrancyEffect = UIVibrancyEffect(blurEffect: blurEffect, style: .secondaryLabel)
+            vibrancyEffect = UIVibrancyEffect(blurEffect: blurEffect, style: .quaternaryLabel)
         } else {
             blurEffect = UIBlurEffect(style: .light)
             vibrancyEffect = UIVibrancyEffect(blurEffect: UIBlurEffect(style: .extraLight))
             blurEffectView.contentView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.07)
         }
         
-        let blurAnimator = UIViewPropertyAnimator(duration: 0.2, curve: .easeOut) {
-            self.blurEffectView.effect = blurEffect
-            self.vibrancyEffectView.effect = vibrancyEffect
-            self.vibrancyEffectView.contentView.subviews.forEach { $0.alpha = 1 }
+        if animated {
+            let blurAnimator = UIViewPropertyAnimator(duration: 0.2, curve: .easeOut) {
+                self.blurEffectView.effect = blurEffect
+                self.vibrancyEffectView.effect = vibrancyEffect
+                self.vibrancyEffectView.contentView.subviews.forEach { $0.alpha = 1 }
+            }
+            blurAnimator.startAnimation()
+        } else {
+            blurEffectView.effect = blurEffect
+            vibrancyEffectView.effect = vibrancyEffect
+            vibrancyEffectView.contentView.subviews.forEach { $0.alpha = 1 }
         }
-        blurAnimator.startAnimation()
     }
     
     private func hide(completion: @escaping () -> Void) {
         let blurAnimator = UIViewPropertyAnimator(duration: 0.2, curve: .easeOut) {
             self.blurEffectView.effect = nil
             self.vibrancyEffectView.contentView.subviews.forEach { $0.alpha = 0 }
+            self.view.subviews.forEach { $0.alpha = 0 }
         }
         blurAnimator.addCompletion { (_) in
             completion()

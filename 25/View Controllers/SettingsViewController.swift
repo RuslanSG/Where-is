@@ -135,11 +135,19 @@ class SettingsViewController: UITableViewController {
         let side: CGFloat = 44.0
 
         let levelButton = LevelButton()
+        
+        if #available(iOS 13.0, *) {
+            levelButton.setTitleColor(level.isAvailable ? view.tintColor : .systemGray3, for: .normal)
+            levelButton.layer.borderColor = level.isAvailable ? view.tintColor.cgColor : UIColor.systemGray3.cgColor
+        } else {
+            levelButton.setTitleColor(level.isAvailable ? view.tintColor : .gray, for: .normal)
+            levelButton.layer.borderColor = level.isAvailable ? view.tintColor.cgColor : UIColor.gray.cgColor
+        }
+        
         levelButton.setTitle(title, for: .normal)
-        levelButton.setTitleColor(level.isAvailable ? view.tintColor : .lightGray, for: .normal)
+        
         levelButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: fontSize)
         levelButton.layer.borderWidth = 2
-        levelButton.layer.borderColor = level.isAvailable ? view.tintColor.cgColor : UIColor.lightGray.cgColor
         levelButton.tag = level.index
         levelButton.layer.cornerRadius = cornerRadius
         levelButton.isEnabled = level.isAvailable
@@ -154,7 +162,6 @@ class SettingsViewController: UITableViewController {
         widthConstraint.priority = UILayoutPriority(rawValue: 999)
         heightConstraint.isActive = true
         widthConstraint.isActive = true
-
 
         return levelButton
     }

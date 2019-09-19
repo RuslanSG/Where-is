@@ -32,8 +32,8 @@ final class CellsManager {
     
     // MARK: - Public Methods
     
-    func setStyle(to style: CellView.Style, palette: CellView.Palette, animated: Bool) {
-        cells.forEach { $0.setStyle(style, palette: palette, animated: animated) }
+    func setStyle(to style: CellView.Style, animated: Bool) {
+        cells.forEach { $0.setStyle(style, animated: animated) }
     }
     
     func setNumbers(_ numbers: [Int], animated: Bool) {
@@ -66,7 +66,7 @@ final class CellsManager {
     
     func updateCellsStyle(to style: CellView.Style, animated: Bool) {
         cells.forEach { (cell) in
-            cell.setStyle(style, palette: .hot, animated: animated)
+            cell.setStyle(style, animated: animated)
         }
     }
     

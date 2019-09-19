@@ -71,9 +71,9 @@ class GameViewController: UIViewController {
         case (true, true):
             style = .colorfulWithColorfulNumber
         case (true, false):
-            style = .colorfulWithWhiteNumber
+            style = .colorful
         default:
-            style = traitCollection.userInterfaceStyle == .light ? .defaultWithBlackNumber : .defaultWithWhiteNumber
+            style = .gray
         }
         
         return style
@@ -331,7 +331,7 @@ extension GameViewController {
         cellsGrid.leftConstraint = cellsGrid.leftAnchor.constraint(greaterThanOrEqualTo: margins.leftAnchor)
         
         cellsGrid.addRows(count: game.numbers.count / rowSize, animated: false)
-        cellsManager.setStyle(to: cellStyle, palette: .hot, animated: false)
+        cellsManager.setStyle(to: cellStyle, animated: false)
     }
     
     private func setupFeedbackView() {
@@ -431,7 +431,7 @@ extension GameViewController {
             cellsGrid.removeRows(count: numberOfRowsToRemove, animated: false)
         }
         cellsGrid.layoutIfNeeded()
-        cellsManager.setStyle(to: cellStyle, palette: .hot, animated: false)
+        cellsManager.setStyle(to: cellStyle, animated: false)
         cellsManager.setNumbers(game.numbers, animated: false)
         cellsManager.hideNumbers(animated: false)
         updateStartGameViewFrame()
@@ -557,17 +557,12 @@ extension GameViewController: GameDelegate {
     func game(_ game: Game, didFinishSession session: GameSession) {
         prepareForNewGame()
         
-        switch session.finishingReason {
-        case .levelPassed:
-            performSegue(withIdentifier: "ShowLevelPassed", sender: session)
-        case .wrongNumberTapped, .timeIsOver:
-            feedbackGenerator.playVibrationFeedback()
+        if session.finishingReason != .stopped {
+            if !session.goalAchieved {
+                feedbackGenerator.playVibrationFeedback()
+            }
             performSegue(withIdentifier: "ShowGameFinished", sender: session)
-        default: break
         }
-        
-        print(session.level.record)
-        
     }
 }
 
@@ -594,10 +589,6 @@ extension GameViewController {
             guard let session = sender as? GameSession else { return }
             let gameFinishedViewController = segue.destination as! GameFinishedViewController
             gameFinishedViewController.session = session
-        } else if segue.identifier == "ShowLevelPassed" {
-            guard let session = sender as? GameSession else { return }
-            let levelPassedViewController = segue.destination as! LevelPassedViewController
-            levelPassedViewController.session = session
         }
     }
     
