@@ -21,7 +21,6 @@ class GameViewController: UIViewController {
     private let game = Game()
     private lazy var cellsManager = CellsManager(with: cellsGrid.cells, game: game)
     
-    private var feedbackView = FeedbackView()
     private var feedbackGenerator = FeedbackGenerator()
     
     private lazy var stopGameHintLabel: HintLabel? = {
@@ -253,7 +252,6 @@ class GameViewController: UIViewController {
         if #available(iOS 13.0, *) {
             view.backgroundColor = .systemBackground
         }
-        setupFeedbackView()
         setupCellsGrid()
         cellsGrid.setOrientation(to: orientation)
         setupStartGameButton()
@@ -333,18 +331,9 @@ extension GameViewController {
         cellsGrid.addRows(count: game.numbers.count / rowSize, animated: false)
         cellsManager.setStyle(to: cellStyle, animated: false)
     }
-    
-    private func setupFeedbackView() {
-        self.view.addSubview(feedbackView)
-        feedbackView.translatesAutoresizingMaskIntoConstraints = false
-        feedbackView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
-        feedbackView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
-        feedbackView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        feedbackView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
-    }
-    
+        
     private func setupStartGameButton() {
-        startGameButton = StartGameView()
+        startGameButton = StartGameView(level: game.currentLevel)
         
         self.view.addSubview(startGameButton)
         
@@ -552,6 +541,7 @@ extension GameViewController: GameDelegate {
     
     func game(_ game: Game, didChangeLevelTo level: Level) {
         updateViewFromModel()
+        startGameButton.level = level
     }
     
     func game(_ game: Game, didFinishSession session: GameSession) {
@@ -561,6 +551,7 @@ extension GameViewController: GameDelegate {
             if !session.goalAchieved {
                 feedbackGenerator.playVibrationFeedback()
             }
+            startGameButton.level = game.currentLevel
             performSegue(withIdentifier: "ShowGameFinished", sender: session)
         }
     }

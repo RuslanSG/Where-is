@@ -193,7 +193,6 @@ class GameFinishedViewController: ResultsViewController {
             titleStackView.rightAnchor.constraint(equalTo: margins.centerXAnchor, constant: -16),
             gameSessionInfoStackView.leftAnchor.constraint(equalTo: margins.centerXAnchor, constant: 8),
         ])
-        
     }
     
     private func configureSeparator(height: CGFloat) -> UIView {

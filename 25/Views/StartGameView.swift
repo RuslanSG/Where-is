@@ -11,25 +11,46 @@ import UIKit
 class StartGameView: UIVisualEffectView {
     
     private enum Strings {
-        static let startButtonText = NSLocalizedString("Start", comment: "Start gmae button")
-        static let goalText = NSLocalizedString("Time: ", comment: "Time given to find all of the numbers")
+        static let titleText = NSLocalizedString("Start", comment: "Start gmae button")
+        static let detailsText = NSLocalizedString("Time: ", comment: "Time given to find all of the numbers")
     }
     
-    var interval = 0.0
+    // MARK: - Public Properties
     
-    private var vibrancyEffectView = UIVisualEffectView()
-    private let titleLabel: UILabel = {
+    var level: Level! {
+        didSet {
+            updateDetails()
+        }
+    }
+    
+    var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = Strings.startButtonText
-        label.font = .systemFont(ofSize: 35.0)
+        label.font = .systemFont(ofSize: 35.0, weight: .heavy)
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
         return label
     }()
     
-    init() {
+    var detailsLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 17.0, weight: .bold)
+        label.adjustsFontSizeToFitWidth = true
+        label.textAlignment = .center
+        label.alpha = 0.7
+        return label
+    }()
+    
+    // MARK: - Private Properties
+    
+    private let titleLabelDefaultAlpha: CGFloat = 1.0
+    private let detailsLabelDefaultAlpha: CGFloat = 0.7
+        
+    // MARK: - Initialization
+    
+    init(level: Level) {
+        self.level = level
         super.init(effect: nil)
-        configureUI()
+        configure()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -42,15 +63,16 @@ class StartGameView: UIVisualEffectView {
         guard isHidden else { return }
         isHidden = false
         isUserInteractionEnabled = true
-        
-        let effects = getEffects()
-        
+                
         let blurAnimator = UIViewPropertyAnimator(duration: 0.2, curve: .easeOut) {
-            self.effect = effects.blur
-            self.vibrancyEffectView.effect = effects.vibrancy
-            self.titleLabel.alpha = 1
+            if #available(iOS 13.0, *) {
+                self.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+            } else {
+                self.effect = UIBlurEffect(style: .light)
+            }
+            self.titleLabel.alpha = self.titleLabelDefaultAlpha
+            self.detailsLabel.alpha = self.detailsLabelDefaultAlpha
         }
-        
         blurAnimator.startAnimation()
     }
     
@@ -61,6 +83,7 @@ class StartGameView: UIVisualEffectView {
         let blurAnimator = UIViewPropertyAnimator(duration: 0.1, curve: .easeOut) {
             self.effect = nil
             self.titleLabel.alpha = 0
+            self.detailsLabel.alpha = 0
         }
         blurAnimator.addCompletion { (_) in
             self.isHidden = true
@@ -70,40 +93,37 @@ class StartGameView: UIVisualEffectView {
     
     // MARK: - Private Methods
     
-    private func configureUI() {
-        let effects = getEffects()
-        
-        effect = effects.blur
-        vibrancyEffectView.effect = effects.vibrancy
-        
-        contentView.addSubview(vibrancyEffectView)
-        vibrancyEffectView.contentView.addSubview(titleLabel)
-        
-        vibrancyEffectView.translatesAutoresizingMaskIntoConstraints = false
-        vibrancyEffectView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-        vibrancyEffectView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
-        vibrancyEffectView.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
-        vibrancyEffectView.rightAnchor.constraint(equalTo: contentView.rightAnchor).isActive = true
-        
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
-        titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
-    }
-    
-    private func getEffects() -> (blur: UIBlurEffect, vibrancy: UIVibrancyEffect) {
-        var blurEffect: UIBlurEffect
-        var vibrancyEffect: UIVibrancyEffect
-        
+    private func configure() {
         if #available(iOS 13.0, *) {
-            blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
-            vibrancyEffect = UIVibrancyEffect(blurEffect: blurEffect, style: .label)
+            effect = UIBlurEffect(style: .systemUltraThinMaterial)
         } else {
-            blurEffect = UIBlurEffect(style: .light)
-            vibrancyEffect = UIVibrancyEffect(blurEffect: blurEffect)
-            contentView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.1)
+            effect = UIBlurEffect(style: .light)
         }
+    
+        titleLabel.text = "START"
         
-        return (blur: blurEffect, vibrancy: vibrancyEffect)
+        updateDetails()
+                
+        let stackView = UIStackView(arrangedSubviews: [titleLabel, detailsLabel])
+        stackView.axis = .vertical
+        stackView.spacing = 2
+        stackView.distribution = .fill
+        stackView.alignment = .center
+        
+        contentView.addSubview(stackView)
+        
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            stackView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            stackView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+        ])
     }
     
+    private func updateDetails() {
+        if level.isPassed {
+            detailsLabel.text = "Record: \(level.record)"
+        } else {
+            detailsLabel.text = "Find \(level.goal) Numbers"
+        }
+    }
 }
