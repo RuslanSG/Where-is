@@ -86,6 +86,10 @@ final class Game {
             return false
         }
         
+        if number > currentLevel.record {
+            session.newRecord = true
+        }
+        
         guard let index = numbers.firstIndex(of: number) else {
             fatalError("Current number didn't find in numbers array")
         }
@@ -187,7 +191,7 @@ final class Game {
                 record: 0,
                 numbersCount: numbers,
                 interval: interval,
-                goal: goal,
+                goal: 3, //goal,
                 colorfulNumbers: colorsModeFor.numbers,
                 colorfulCells: colorsModeFor.cells,
                 winkMode: winkMode,

@@ -10,9 +10,6 @@ import UIKit
 
 class InstructionsPageViewController: UIPageViewController {
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
 }
 
 

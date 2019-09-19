@@ -16,6 +16,10 @@ class CellView: UIButton {
         case gray, colorful, colorfulWithColorfulNumber
     }
     
+    enum HighlightReason {
+        case goalAchieved, newRecord
+    }
+    
     var isSetEnabled = true
     var isWinkEnabled = true
     var isSwapEnabled = true
@@ -144,7 +148,7 @@ class CellView: UIButton {
             if #available(iOS 13.0, *) {
                 newNumberColor = .label
             } else {
-                newNumberColor = .white
+                newNumberColor = .black
             }
         case .colorful:
             newCellColor = colorsForCells[Int.random(in: colorsForCells.indices)]
@@ -240,13 +244,13 @@ class CellView: UIButton {
         }
     }
     
-    func highlight() {
+    func highlight(reason: HighlightReason) {
         let oldBackgroundColor = backgroundColor
         
-        if #available(iOS 13.0, *) {
+        if reason == .goalAchieved {
             backgroundColor = .systemGreen
         } else {
-            backgroundColor = .green
+            backgroundColor = .systemOrange
         }
         
         UIView.animate(withDuration: 1) {

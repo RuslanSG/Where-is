@@ -56,7 +56,6 @@ class ResultsViewController: UIViewController {
         } else {
             blurEffect = UIBlurEffect(style: .light)
             vibrancyEffect = UIVibrancyEffect(blurEffect: UIBlurEffect(style: .extraLight))
-            blurEffectView.contentView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.07)
         }
         
         if animated {
@@ -64,12 +63,18 @@ class ResultsViewController: UIViewController {
                 self.blurEffectView.effect = blurEffect
                 self.vibrancyEffectView.effect = vibrancyEffect
                 self.vibrancyEffectView.contentView.subviews.forEach { $0.alpha = 1 }
+                if #available(iOS 12.0, *) {
+                    self.blurEffectView.contentView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.07)
+                }
             }
             blurAnimator.startAnimation()
         } else {
             blurEffectView.effect = blurEffect
             vibrancyEffectView.effect = vibrancyEffect
             vibrancyEffectView.contentView.subviews.forEach { $0.alpha = 1 }
+            if #available(iOS 12.0, *) {
+                blurEffectView.contentView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.07)
+            }
         }
     }
     
@@ -77,6 +82,7 @@ class ResultsViewController: UIViewController {
         let blurAnimator = UIViewPropertyAnimator(duration: 0.2, curve: .easeOut) {
             self.blurEffectView.effect = nil
             self.vibrancyEffectView.contentView.subviews.forEach { $0.alpha = 0 }
+            self.blurEffectView.contentView.backgroundColor = .clear
             self.view.subviews.forEach { $0.alpha = 0 }
         }
         blurAnimator.addCompletion { (_) in

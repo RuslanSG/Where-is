@@ -25,7 +25,7 @@ class StartGameView: UIVisualEffectView {
     
     var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 35.0, weight: .heavy)
+        label.font = .systemFont(ofSize: 32.0, weight: .heavy)
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
         return label
@@ -33,7 +33,7 @@ class StartGameView: UIVisualEffectView {
     
     var detailsLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 17.0, weight: .bold)
+        label.font = .systemFont(ofSize: 15.0, weight: .bold)
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
         label.alpha = 0.7

@@ -14,7 +14,7 @@ extension UIColor {
         if #available(iOS 13.0, *) {
             return .systemGray4
         } else {
-            return .lightGray
+            return #colorLiteral(red: 0.8274509804, green: 0.8235294118, blue: 0.8392156863, alpha: 1)
         }
     }
     

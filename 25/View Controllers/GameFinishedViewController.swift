@@ -76,7 +76,7 @@ class GameFinishedViewController: ResultsViewController {
         titleLabel.alpha = 0.7
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.widthAnchor.constraint(equalToConstant: titleLabel.intrinsicContentSize.width).isActive = true
+        titleLabel.textAlignment = .center
         
         let checkmarkImage = UIImage(named: "checkmark")?.withRenderingMode(.alwaysTemplate)
         let crossImage = UIImage(named: "cross")?.withRenderingMode(.alwaysTemplate)
@@ -90,10 +90,11 @@ class GameFinishedViewController: ResultsViewController {
         }
         
         titleImageView.alpha = 0.7
+        titleImageView.contentMode = .scaleAspectFit
         
         titleImageView.translatesAutoresizingMaskIntoConstraints = false
         titleImageView.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        titleImageView.widthAnchor.constraint(equalTo: titleImageView.heightAnchor).isActive = true
+        titleImageView.widthAnchor.constraint(equalToConstant: 40).isActive = true
                 
         let titleLabelStackView = UIStackView(arrangedSubviews: [titleImageView, titleLabel])
         titleLabelStackView.axis = .horizontal
@@ -119,7 +120,7 @@ class GameFinishedViewController: ResultsViewController {
         detailsLabel.alpha = titleLabel.alpha
         
         titleStackView = UIStackView(arrangedSubviews: [titleLabelStackView, detailsLabel])
-        titleStackView.alignment = .center
+        titleStackView.alignment = .fill
         titleStackView.axis = .vertical
         titleStackView.spacing = 20
         titleStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -142,6 +143,22 @@ class GameFinishedViewController: ResultsViewController {
         
         let recordStackView = configureRowStackView(title: "Record",
                                                     value: Double(session.level.record))
+        
+        if session.newRecord {
+            let recordTextLabel = recordStackView.arrangedSubviews[0] as! UILabel
+            recordTextLabel.text! += " NEW"
+            let stringToAttribute = "NEW"
+            let attributedTextRange = (recordTextLabel.text! as NSString).range(of: stringToAttribute)
+            let attributedString = NSMutableAttributedString(string: recordTextLabel.text!)
+            attributedString.addAttribute(.foregroundColor,
+                                          value: UIColor.systemOrange,
+                                          range: attributedTextRange)
+            attributedString.addAttribute(.font,
+                                          value: UIFont.systemFont(ofSize: recordTextLabel.font.pointSize,
+                                                                   weight: .black),
+                                          range: attributedTextRange)
+            recordTextLabel.attributedText = attributedString
+        }
         
         let messageLabel = UILabel()
         if let nextLevelSerial = session.nextLevel?.serial, session.goalAchieved, !session.level.isPassed {
@@ -170,9 +187,7 @@ class GameFinishedViewController: ResultsViewController {
         
         configureConstraints()
     }
-    
-    // MARK: - Private Methods
-    
+        
     private func configureConstraints() {
         let margins = view.layoutMarginsGuide
         

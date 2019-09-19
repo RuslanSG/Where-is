@@ -515,8 +515,10 @@ extension GameViewController: CellsManagerDelegate {
             timeLeftProgressView.reset()
             timeLeftProgressView.startAnimation(duration: game.currentLevel.interval)
             
-            if cell.number == game.currentLevel.goal {
-                cell.highlight()
+            if cell.number - game.currentLevel.record == 1 && cell.number != 1 {
+                cell.highlight(reason: .newRecord)
+            } else if cell.number == game.currentLevel.goal {
+                cell.highlight(reason: .goalAchieved)
             }
             
             if game.currentLevel.shuffleMode {
