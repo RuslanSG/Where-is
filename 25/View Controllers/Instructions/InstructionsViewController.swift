@@ -19,7 +19,7 @@ class InstructionsViewController: UIViewController {
     
     private var pageViewController: InstructionsPageViewController!
     private var detailViewControllers = [UIViewController]()
-    private var currentViewControllerIndex = 0
+    private lazy var currentViewControllerIndex = firstTime ? 0 : 1
 
     // MARK: - Lifecycle
     

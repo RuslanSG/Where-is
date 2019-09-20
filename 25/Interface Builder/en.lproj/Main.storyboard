@@ -394,14 +394,14 @@
                             <constraint firstItem="UxF-9W-owG" firstAttribute="top" secondItem="dPo-6y-PL3" secondAttribute="top" constant="75" id="dar-a9-DE3">
                                 <variation key="heightClass=compact" constant="53"/>
                             </constraint>
-                            <constraint firstItem="HeO-ia-35N" firstAttribute="leading" secondItem="dPo-6y-PL3" secondAttribute="leading" constant="35" id="e7Y-yI-lkm"/>
+                            <constraint firstItem="HeO-ia-35N" firstAttribute="leading" secondItem="dPo-6y-PL3" secondAttribute="leading" priority="999" constant="35" id="e7Y-yI-lkm"/>
                             <constraint firstItem="HeO-ia-35N" firstAttribute="width" secondItem="UxF-9W-owG" secondAttribute="width" id="hqX-Tv-O9g"/>
                             <constraint firstItem="HeO-ia-35N" firstAttribute="bottom" secondItem="4d5-xk-wAq" secondAttribute="bottom" id="jY4-Qg-7gf"/>
                             <constraint firstItem="pW6-LQ-p3I" firstAttribute="leading" secondItem="UxF-9W-owG" secondAttribute="trailing" constant="16" id="juK-46-wNo"/>
                             <constraint firstItem="pW6-LQ-p3I" firstAttribute="centerY" secondItem="rQU-Si-1Rl" secondAttribute="centerY" id="pHh-V0-Nqb"/>
                             <constraint firstItem="rFH-qg-MC1" firstAttribute="centerX" secondItem="HeO-ia-35N" secondAttribute="centerX" id="voS-oS-enT"/>
                             <constraint firstItem="rFH-qg-MC1" firstAttribute="bottom" secondItem="HeO-ia-35N" secondAttribute="bottom" id="w5H-q1-wLn"/>
-                            <constraint firstItem="dPo-6y-PL3" firstAttribute="trailing" secondItem="HeO-ia-35N" secondAttribute="trailing" constant="35" id="zcP-Iy-3x1"/>
+                            <constraint firstItem="dPo-6y-PL3" firstAttribute="trailing" secondItem="HeO-ia-35N" secondAttribute="trailing" priority="999" constant="35" id="zcP-Iy-3x1"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="dPo-6y-PL3"/>
                         <variation key="default">
@@ -530,16 +530,18 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show Tutorial" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZCP-fu-Tbr">
-                                                    <rect key="frame" x="108" y="11.5" width="104" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show Tutorial" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZCP-fu-Tbr">
+                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="ZCP-fu-Tbr" firstAttribute="centerX" secondItem="iBF-WB-yZM" secondAttribute="centerX" id="Ger-71-VoE"/>
-                                                <constraint firstItem="ZCP-fu-Tbr" firstAttribute="centerY" secondItem="iBF-WB-yZM" secondAttribute="centerY" id="suv-4t-3ng"/>
+                                                <constraint firstItem="ZCP-fu-Tbr" firstAttribute="leading" secondItem="iBF-WB-yZM" secondAttribute="leading" id="Ezp-rF-0wQ"/>
+                                                <constraint firstAttribute="trailing" secondItem="ZCP-fu-Tbr" secondAttribute="trailing" id="J8E-hQ-uer"/>
+                                                <constraint firstAttribute="bottom" secondItem="ZCP-fu-Tbr" secondAttribute="bottom" id="p6f-qt-Ql9"/>
+                                                <constraint firstItem="ZCP-fu-Tbr" firstAttribute="top" secondItem="iBF-WB-yZM" secondAttribute="top" id="td6-or-9jH"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
