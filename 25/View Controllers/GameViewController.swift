@@ -498,6 +498,7 @@ extension GameViewController: CellsManagerDelegate {
         lastPressedCell = cell
         feedbackGenerator.playSelectionHapticFeedback()
         freezeUI(for: 0.1)
+        performSegue(withIdentifier: "ShowCongratulations", sender: nil)
     }
     
     internal func cellReleased(_ cell: CellView) {
@@ -552,7 +553,7 @@ extension GameViewController: GameDelegate {
                 feedbackGenerator.playVibrationFeedback()
             }
             startGameButton.level = game.currentLevel
-            performSegue(withIdentifier: "ShowGameFinished", sender: session)
+//            performSegue(withIdentifier: "ShowGameFinished", sender: session)
         }
     }
 }

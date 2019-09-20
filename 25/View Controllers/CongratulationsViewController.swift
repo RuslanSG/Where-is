@@ -29,24 +29,26 @@ class CongratulationsViewController: ResultsViewController {
     override func configure() {
         super.configure()
         
-        vibrancyEffectView.contentView.addSubview(titleLabel)
-        vibrancyEffectView.contentView.addSubview(bodyLabel)
-        vibrancyEffectView.contentView.addSubview(rateButton)
+        view.addSubview(titleLabel)
+        view.addSubview(bodyLabel)
+        view.addSubview(rateButton)
         
         // Configure title lable
-        titleLabel.text = "Congratulations!"
-        titleLabel.numberOfLines = 0
+        titleLabel.text = "CONGRATULATIONS!"
+        titleLabel.font = .systemFont(ofSize: 35, weight: .black)
+        titleLabel.alpha = 0.7
+        titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.textAlignment = .center
-        titleLabel.font = .systemFont(ofSize: 30)
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.topAnchor.constraint(equalTo: vibrancyEffectView.contentView.topAnchor, constant: 30).isActive = true
-        titleLabel.leftAnchor.constraint(equalTo: vibrancyEffectView.contentView.leftAnchor).isActive = true
-        titleLabel.rightAnchor.constraint(equalTo: vibrancyEffectView.contentView.rightAnchor).isActive = true
-        titleLabel.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        titleLabel.leftAnchor.constraint(equalTo: vibrancyEffectView.contentView.leftAnchor, constant: 16).isActive = true
+        titleLabel.rightAnchor.constraint(equalTo: vibrancyEffectView.contentView.rightAnchor, constant: -16).isActive = true
+        titleLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
         // Configure body label
-        bodyLabel.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sem elit, tempus efficitur magna et, blandit sodales nunc. Aenean tempus porta facilisis. Sed venenatis dolor a nisi viverra, ac egestas orci viverra. Suspendisse dignissim accumsan sapien quis accumsan. Etiam dapibus, urna eget consectetur rutrum, felis nunc malesuada nisl, eget gravida diam purus vel urna. Mauris maximus magna vitae purus lacinia blandit. Nullam faucibus, erat sed mattis scelerisque, risus tellus tincidunt sapien, sit amet molestie ipsum metus vel metus. Cras malesuada erat eu elit blandit, at egestas ex pharetra."
+        bodyLabel.text = "Congratulations and well done! You have passed all levels and completed a great game! And have proven that you attentiveness is greater than all the powers of Where is. You are the master now. If you enjoyed this game, plaese leave me your feedback. Love."
+        bodyLabel.font = .systemFont(ofSize: 17, weight: .medium)
         bodyLabel.textAlignment = .center
         bodyLabel.numberOfLines = 0
         bodyLabel.adjustsFontSizeToFitWidth = true
@@ -58,12 +60,16 @@ class CongratulationsViewController: ResultsViewController {
         bodyLabel.bottomAnchor.constraint(equalTo: rateButton.topAnchor, constant: -16).isActive = true
         
         // Configure rate button
-        rateButton.setTitle("Оставить отзыв", for: .normal)
+        rateButton.setTitle("Rate App", for: .normal)
         rateButton.addTarget(self, action: #selector(rateButtonPressed(_:)), for: .touchUpInside)
         rateButton.titleLabel?.font = .boldSystemFont(ofSize: 15)
-        rateButton.backgroundColor = UIColor.white.withAlphaComponent(0.5)
         rateButton.layer.cornerRadius = 12
         rateButton.translatesAutoresizingMaskIntoConstraints = false
+        if #available(iOS 13.0, *) {
+            rateButton.backgroundColor = UIColor.white.withAlphaComponent(0.3)
+        } else {
+            rateButton.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
+        }
         
         rateButton.centerXAnchor.constraint(equalTo: vibrancyEffectView.contentView.centerXAnchor).isActive = true
         rateButton.bottomAnchor.constraint(equalTo: tapAnywhereToHideLabel.topAnchor, constant: -30).isActive = true
