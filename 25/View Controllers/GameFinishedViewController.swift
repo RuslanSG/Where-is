@@ -18,7 +18,6 @@ class GameFinishedViewController: ResultsViewController {
     // MARK: - Private Properties
     
     private var titleLabel = UILabel()
-    private var titleImageView = UIImageView()
     private var titleStackView = UIStackView()
     private var gameSessionInfoStackView = UIStackView()
     private var detailsLabel = UILabel()
@@ -61,12 +60,8 @@ class GameFinishedViewController: ResultsViewController {
         super.configure()
         
         // Configure title
-        if session.goalAchieved {
-            if !session.level.isPassed {
-                titleLabel.text = "LEVEL PASSED".uppercased()
-            } else {
-                titleLabel.text = "GAME OVER".uppercased()
-            }
+        if session.goalAchieved && !session.level.isPassed {
+            titleLabel.text = "LEVEL PASSED".uppercased()
         } else {
             titleLabel.text = "GAME OVER".uppercased()
         }
@@ -77,32 +72,8 @@ class GameFinishedViewController: ResultsViewController {
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.textAlignment = .center
-        
-        let checkmarkImage = UIImage(named: "checkmark")?.withRenderingMode(.alwaysTemplate)
-        let crossImage = UIImage(named: "cross")?.withRenderingMode(.alwaysTemplate)
-        
-        if session.goalAchieved {
-            titleImageView.image = checkmarkImage
-            titleImageView.tintColor = .systemGreen
-        } else {
-            titleImageView.image = crossImage
-            titleImageView.tintColor = .systemRed
-        }
-        
-        titleImageView.alpha = 0.7
-        titleImageView.contentMode = .scaleAspectFit
-        
-        titleImageView.translatesAutoresizingMaskIntoConstraints = false
-        titleImageView.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        titleImageView.widthAnchor.constraint(equalToConstant: 40).isActive = true
-                
-        let titleLabelStackView = UIStackView(arrangedSubviews: [titleImageView, titleLabel])
-        titleLabelStackView.axis = .horizontal
-        titleLabelStackView.spacing = 16
                 
         switch session.finishingReason {
-        case .levelPassed:
-            detailsLabel.text = "Goal Achieved"
         case .timeIsOver:
             detailsLabel.text = "Time Is Over"
         case .wrongNumberTapped:
@@ -110,16 +81,12 @@ class GameFinishedViewController: ResultsViewController {
         default: break
         }
         
-        if session.finishingReason != .levelPassed {
-            detailsLabel.text! += session.goalAchieved ? "\n(Goal Achieved)" : "\n(Goal Not Achieved)"
-        }
-        
         detailsLabel.font = .systemFont(ofSize: 23, weight: .bold)
         detailsLabel.textAlignment = .center
         detailsLabel.numberOfLines = 0
         detailsLabel.alpha = titleLabel.alpha
         
-        titleStackView = UIStackView(arrangedSubviews: [titleLabelStackView, detailsLabel])
+        titleStackView = UIStackView(arrangedSubviews: [titleLabel, detailsLabel])
         titleStackView.alignment = .fill
         titleStackView.axis = .vertical
         titleStackView.spacing = 20
@@ -129,8 +96,42 @@ class GameFinishedViewController: ResultsViewController {
         view.addSubview(titleStackView)
         
         // Configure game session info
-        let topSeparator = configureSeparator(height: 2)
-        let bottomSeparator = configureSeparator(height: 2)
+        
+        let goalAchievedLabel = UILabel()
+        goalAchievedLabel.font = .systemFont(ofSize: 20, weight: .bold)
+        goalAchievedLabel.alpha = titleLabel.alpha
+        
+        if session.goalAchieved {
+            goalAchievedLabel.text = "Goal Achieved"
+        } else {
+            goalAchievedLabel.text = "Goal Not Achieved"
+        }
+
+        let goalAchievedImageView = UIImageView()
+        
+        let checkmarkImage = UIImage(named: "checkmark")?.withRenderingMode(.alwaysTemplate)
+        let crossImage = UIImage(named: "cross")?.withRenderingMode(.alwaysTemplate)
+        
+        if session.goalAchieved {
+            goalAchievedImageView.image = checkmarkImage
+            goalAchievedImageView.tintColor = .systemGreen
+        } else {
+            goalAchievedImageView.image = crossImage
+            goalAchievedImageView.tintColor = .systemRed
+        }
+        
+        goalAchievedImageView.alpha = 0.7
+        goalAchievedImageView.contentMode = .scaleAspectFit
+        goalAchievedImageView.translatesAutoresizingMaskIntoConstraints = false
+        goalAchievedImageView.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        goalAchievedImageView.widthAnchor.constraint(equalToConstant: 25).isActive = true
+                
+        let goalAchievedStackView = UIStackView(arrangedSubviews: [goalAchievedImageView, goalAchievedLabel])
+        goalAchievedStackView.axis = .horizontal
+        goalAchievedStackView.spacing = 8
+        
+        let separator1 = configureSeparator(height: 2)
+        let separator2 = configureSeparator(height: 2)
         
         let timeTakenStackView = configureRowStackView(title: "Time Taken",
                                                        value: session.timeTaken ?? -1.0)
@@ -144,7 +145,7 @@ class GameFinishedViewController: ResultsViewController {
         let recordStackView = configureRowStackView(title: "Record",
                                                     value: Double(session.level.record))
         
-        if session.newRecord {
+        if session.hasNewRecord {
             let recordTextLabel = recordStackView.arrangedSubviews[0] as! UILabel
             recordTextLabel.text! += " NEW"
             let stringToAttribute = "NEW"
@@ -171,12 +172,13 @@ class GameFinishedViewController: ResultsViewController {
         messageLabel.numberOfLines = 0
         messageLabel.alpha = titleLabel.alpha
         
-        gameSessionInfoStackView = UIStackView(arrangedSubviews: [topSeparator,
+        gameSessionInfoStackView = UIStackView(arrangedSubviews: [goalAchievedStackView,
+                                                                  separator1,
                                                                   numbersFoundStackView,
                                                                   goalStackView,
                                                                   recordStackView,
                                                                   timeTakenStackView,
-                                                                  bottomSeparator,
+                                                                  separator2,
                                                                   messageLabel])
         gameSessionInfoStackView.axis = .vertical
         gameSessionInfoStackView.spacing = 10

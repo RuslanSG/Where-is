@@ -21,7 +21,7 @@
                     <connections>
                         <segue destination="gWo-6P-9fp" kind="showDetail" identifier="ShowSettings" id="20o-YP-UAA"/>
                         <segue destination="TYI-cY-Z0f" kind="presentation" identifier="ShowCongratulations" animates="NO" id="Mfp-3n-tI0"/>
-                        <segue destination="pme-eb-0Xv" kind="presentation" id="CbV-UB-noN"/>
+                        <segue destination="pme-eb-0Xv" kind="presentation" identifier="ShowInstructions" id="CbV-UB-noN"/>
                         <segue destination="9Cu-i3-p9o" kind="presentation" identifier="ShowGameFinished" animates="NO" id="nm2-1k-w8a"/>
                         <segue destination="1iX-3R-lFx" kind="presentation" identifier="ShowLevelPassed" animates="NO" id="ifj-qj-N3g"/>
                     </connections>

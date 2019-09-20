@@ -87,7 +87,11 @@ final class Game {
         }
         
         if number > currentLevel.record {
-            session.newRecord = true
+            session.hasNewRecord = true
+        }
+        
+        if currentLevel.shuffleMode {
+            shuffleNumbers()
         }
         
         guard let index = numbers.firstIndex(of: number) else {

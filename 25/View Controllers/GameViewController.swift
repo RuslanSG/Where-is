@@ -522,15 +522,12 @@ extension GameViewController: CellsManagerDelegate {
             }
             
             if game.currentLevel.shuffleMode {
-                game.shuffleNumbers()
-                #warning("Move shuffling to the model!")
                 cellsManager.updateNumbers(with: game.numbers, animated: true)
             } else {
                 cell.setNumber(game.session.newNumber, animateIfNeeded: false)
             }
                     
-            if game.session.nextNumber == 4 {
-                #warning("Set it to 11!")
+            if game.session.nextNumber == 11 {
                 UserDefaults.standard.set(false, forKey: UserDefaults.Key.findNumberHintNeeded)
             }
         }
