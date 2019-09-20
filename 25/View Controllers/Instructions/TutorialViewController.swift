@@ -15,16 +15,24 @@ protocol TutorialViewControllerDelegate: class {
 
 class TutorialViewController: UIViewController {
     
-    @IBOutlet var cells: [CellView]!
-    @IBOutlet var labels: [UILabel]!
-    @IBOutlet weak var findNumberLabel: UILabel!
-    @IBOutlet weak var doneButton: UIButton!
+    // MARK: - Public Properties
     
     weak var delegate: TutorialViewControllerDelegate?
     
+    var showCloseButtonNeeded = false
+    
+    // MARK: - Private Properties
+    
+    @IBOutlet private var cells: [CellView]!
+    @IBOutlet private var labels: [UILabel]!
+    @IBOutlet private weak var findNumberLabel: UILabel!
+    @IBOutlet private weak var doneButton: UIButton!
+    @IBOutlet private weak var closeButton: UIButton!
+    
+    // MARK: - Private Properties
+    
     private var numberToFind = 1
     private let maxNumberToFind = 10
-    
     private var trainingCompleted = false
     
     // MARK: - Lifecycle
@@ -37,6 +45,10 @@ class TutorialViewController: UIViewController {
             view.backgroundColor = .systemBackground
             labels.forEach { $0.textColor = .label }
             doneButton.tintColor = .systemBlue
+        }
+        
+        if !showCloseButtonNeeded {
+            closeButton.isHidden = true
         }
     }
     
@@ -62,7 +74,11 @@ class TutorialViewController: UIViewController {
         sender.uncompress(showNumber: !trainingCompleted)
     }
     
-    @IBAction func doneButtonPressed(_ sender: CellView) {
+    @IBAction func doneButtonPressed(_ sender: UIButton) {
+        delegate?.doneButtonPressed(self)
+    }
+    
+    @IBAction func closeButtonPressed(_ sender: UIButton) {
         delegate?.doneButtonPressed(self)
     }
     

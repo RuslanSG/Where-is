@@ -195,7 +195,7 @@ final class Game {
                 record: 0,
                 numbersCount: numbers,
                 interval: interval,
-                goal: 3, //goal,
+                goal: goal,
                 colorfulNumbers: colorsModeFor.numbers,
                 colorfulCells: colorsModeFor.cells,
                 winkMode: winkMode,

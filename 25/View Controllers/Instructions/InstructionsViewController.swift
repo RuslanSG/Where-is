@@ -10,7 +10,12 @@ import UIKit
 
 class InstructionsViewController: UIViewController {
     
-    var needsToShowWelcome = true
+    // MARK: - Public Properties
+    
+    var showWelcomeNeeded = true
+    var firstTime = false
+    
+    // MARK: - Private Properties
     
     private var pageViewController: InstructionsPageViewController!
     private var detailViewControllers = [UIViewController]()
@@ -22,7 +27,7 @@ class InstructionsViewController: UIViewController {
         super.viewDidLoad()
         
         if #available(iOS 13.0, *) {
-            isModalInPresentation = needsToShowWelcome
+            isModalInPresentation = showWelcomeNeeded
             view.backgroundColor = .systemBackground
         }
         
@@ -59,10 +64,11 @@ class InstructionsViewController: UIViewController {
         
         welcomeViewController.delegate = self
         tutorialViewController.delegate = self
+        tutorialViewController.showCloseButtonNeeded = !firstTime
         
         detailViewControllers = [welcomeViewController, tutorialViewController]
         
-        let initialViewController = needsToShowWelcome ? welcomeViewController : tutorialViewController
+        let initialViewController = showWelcomeNeeded ? welcomeViewController : tutorialViewController
         pageViewController.setViewControllers([initialViewController], direction: .forward, animated: true)
     }
 

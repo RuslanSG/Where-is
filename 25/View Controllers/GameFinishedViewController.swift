@@ -202,13 +202,13 @@ class GameFinishedViewController: ResultsViewController {
         regularConstraints.append(contentsOf: [
             titleStackView.topAnchor.constraint(equalTo: margins.topAnchor, constant: 40),
             titleStackView.rightAnchor.constraint(equalTo: margins.rightAnchor, constant: -16),
-            gameSessionInfoStackView.leftAnchor.constraint(equalTo: margins.leftAnchor, constant: 16),
+            gameSessionInfoStackView.leftAnchor.constraint(equalTo: margins.leftAnchor, constant: 16)
         ])
         
         compactConstraints.append(contentsOf: [
             titleStackView.centerYAnchor.constraint(equalTo: margins.centerYAnchor),
             titleStackView.rightAnchor.constraint(equalTo: margins.centerXAnchor, constant: -16),
-            gameSessionInfoStackView.leftAnchor.constraint(equalTo: margins.centerXAnchor, constant: 8),
+            gameSessionInfoStackView.leftAnchor.constraint(equalTo: margins.centerXAnchor, constant: 8)
         ])
     }
     

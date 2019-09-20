@@ -223,7 +223,7 @@ extension SettingsViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 1, indexPath.row == 0 {
             guard let instructionsViewController = storyboard?.instantiateViewController(withIdentifier: String(describing: InstructionsViewController.self)) as? InstructionsViewController else { return }
-            instructionsViewController.needsToShowWelcome = false
+            instructionsViewController.showWelcomeNeeded = false
             present(instructionsViewController, animated: true)
         }
     }
