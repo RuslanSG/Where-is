@@ -60,7 +60,7 @@ class CongratulationsViewController: ResultsViewController {
         bodyLabel.bottomAnchor.constraint(equalTo: rateButton.topAnchor, constant: -16).isActive = true
         
         // Configure rate button
-        rateButton.setTitle("Rate App", for: .normal)
+        rateButton.setTitle("RATE", for: .normal)
         rateButton.addTarget(self, action: #selector(rateButtonPressed(_:)), for: .touchUpInside)
         rateButton.titleLabel?.font = .boldSystemFont(ofSize: 15)
         rateButton.layer.cornerRadius = 12

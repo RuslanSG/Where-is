@@ -13,7 +13,7 @@ class CellView: UIButton {
     // MARK: - Public Properties
     
     enum Style {
-        case gray, colorful, colorfulWithColorfulNumber
+        case standart, colorful
     }
     
     enum HighlightReason {
@@ -143,7 +143,7 @@ class CellView: UIButton {
         let newNumberColor: UIColor
         
         switch style {
-        case .gray:
+        case .standart:
             newCellColor = .cellDefault
             if #available(iOS 13.0, *) {
                 newNumberColor = .label
@@ -152,27 +152,20 @@ class CellView: UIButton {
             }
         case .colorful:
             newCellColor = colorsForCells[Int.random(in: colorsForCells.indices)]
-            newNumberColor = .white
-        case .colorfulWithColorfulNumber:
-            newCellColor = colorsForCells[Int.random(in: colorsForCells.indices)]
             let index = colorsForCells.firstIndex(of: newCellColor)!
             colorsForCells.remove(at: index)
             newNumberColor = colorsForCells[Int.random(in: colorsForCells.indices)]
         }
         
-        if !animated {
-            self.backgroundColor = newCellColor
-            self.setTitleColor(newNumberColor, for: .normal)
-            return
+        if animated {
+            UIView.animate(withDuration: 0.2) {
+                self.contentView.backgroundColor = newCellColor
+                self.setTitleColor(newNumberColor, for: .normal)
+            }
+        } else {
+            backgroundColor = newCellColor
+            setTitleColor(newNumberColor, for: .normal)
         }
-        
-        UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.2,
-                                                       delay: 0,
-                                                       options: .curveEaseOut,
-                                                       animations: {
-                                                        self.contentView.backgroundColor = newCellColor
-                                                        self.setTitleColor(newNumberColor, for: .normal)
-        })
     }
     
     func setCornerRadius(_ cornerRadius: CGFloat) {

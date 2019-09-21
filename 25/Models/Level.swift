@@ -21,8 +21,7 @@ struct Level: Codable, Equatable {
     var interval: Double
     var goal: Int
     
-    var colorfulNumbers: Bool
-    var colorfulCells: Bool
+    var colorMode: Bool
     var winkMode: Bool
     var swapMode: Bool
     var shuffleMode: Bool

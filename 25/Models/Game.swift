@@ -181,26 +181,24 @@ final class Game {
             let numbers = parameters.numbersCountForLevel[i]!
             let interval = parameters.intervalForLevel[i]!
             let goal = parameters.goalForLevel[i]!
-            let colorsModeFor = (numbers: parameters.colorModeFor.numbersForLevel[i]!,
-                                 cells: parameters.colorModeFor.cellsForLevel[i]!)
+            let colorMode = parameters.colorModeForLevel[i]!
             let winkMode = parameters.winkModeForLevel[i]!
             let swapMode = parameters.swapModeForLevel[i]!
             let shuffleMode = parameters.shuffleModeForLevel[i]!
             
             let level = Level(serial: serial,
                               index: index,
-                              isAvailable: true,//i == 1,
-                isPassed: false,
-                isSelected: i == 1,
-                record: 0,
-                numbersCount: numbers,
-                interval: interval,
-                goal: goal,
-                colorfulNumbers: colorsModeFor.numbers,
-                colorfulCells: colorsModeFor.cells,
-                winkMode: winkMode,
-                swapMode: swapMode,
-                shuffleMode: shuffleMode)
+                              isAvailable: true, // i == 1
+                              isPassed: false,
+                              isSelected: i == 1,
+                              record: 0,
+                              numbersCount: numbers,
+                              interval: interval,
+                              goal: goal,
+                              colorMode: colorMode,
+                              winkMode: winkMode,
+                              swapMode: swapMode,
+                              shuffleMode: shuffleMode)
             
             levels.append(level)
         }

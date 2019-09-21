@@ -64,18 +64,11 @@ class GameViewController: UIViewController {
     private var firstTime = true
     
     private var cellStyle: CellView.Style {
-        var style: CellView.Style
-        
-        switch (game.currentLevel.colorfulCells, game.currentLevel.colorfulNumbers) {
-        case (true, true):
-            style = .colorfulWithColorfulNumber
-        case (true, false):
-            style = .colorful
-        default:
-            style = .gray
+        if game.currentLevel.colorMode {
+            return .colorful
+        } else {
+            return .standart
         }
-        
-        return style
     }
     
     private var cellHeight: CGFloat {
