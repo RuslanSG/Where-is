@@ -10,8 +10,8 @@ import UIKit
 
 protocol WelcomeViewControllerDelegate: class {
     
-    func nextButtonPressed(_ viewController: WelcomeViewController)
-    func skipButtonPressed(_ viewController: WelcomeViewController)
+    func welcomeViewController(_ welcomeViewController: WelcomeViewController, nextButtonDidPress nextButton: UIButton)
+    func welcomeViewController(_ welcomeViewController: WelcomeViewController, skipButtonDidPress nextButton: UIButton)
 }
 
 class WelcomeViewController: UIViewController {
@@ -41,11 +41,11 @@ class WelcomeViewController: UIViewController {
     // MARK: - Actions
     
     @IBAction func nextButtonPressed(_ sender: UIButton) {
-        delegate?.nextButtonPressed(self)
+        delegate?.welcomeViewController(self, nextButtonDidPress: sender)
     }
     
     @IBAction func skipButtonPressed(_ sender: UIButton) {
-        delegate?.skipButtonPressed(self)
+        delegate?.welcomeViewController(self, skipButtonDidPress: sender)
     }
     
     // MARK: - Helper Methods

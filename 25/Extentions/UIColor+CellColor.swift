@@ -12,7 +12,7 @@ extension UIColor {
     
     static var cellDefault: UIColor {
         if #available(iOS 13.0, *) {
-            return .systemGray4
+            return .systemGray5
         } else {
             return #colorLiteral(red: 0.8274509804, green: 0.8235294118, blue: 0.8392156863, alpha: 1)
         }

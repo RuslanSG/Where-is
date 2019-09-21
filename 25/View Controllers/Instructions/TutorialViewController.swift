@@ -10,7 +10,8 @@ import UIKit
 
 protocol TutorialViewControllerDelegate: class {
     
-    func doneButtonPressed(_ viewController: TutorialViewController)
+    func tutorialViewController(_ tutorialViewController: TutorialViewController, doneButtonDidPress doneButton: UIButton)
+    func tutorialViewController(_ tutorialViewController: TutorialViewController, closeButtonDidPress closeButton: UIButton)
 }
 
 class TutorialViewController: UIViewController {
@@ -75,11 +76,11 @@ class TutorialViewController: UIViewController {
     }
     
     @IBAction func doneButtonPressed(_ sender: UIButton) {
-        delegate?.doneButtonPressed(self)
+        delegate?.tutorialViewController(self, doneButtonDidPress: sender)
     }
     
     @IBAction func closeButtonPressed(_ sender: UIButton) {
-        delegate?.doneButtonPressed(self)
+        delegate?.tutorialViewController(self, closeButtonDidPress: sender)
     }
     
     // MARK: - Helper Methods

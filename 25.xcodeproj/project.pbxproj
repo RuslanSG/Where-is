@@ -16,7 +16,6 @@
 		2A370E7222FC829000E81166 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A370E7122FC829000E81166 /* Helpers.swift */; };
 		2A527BAF22E7856900F68407 /* ResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A527BAE22E7856900F68407 /* ResultsViewController.swift */; };
 		2A5B443D22FD89C800ECF2C7 /* GameViewControllerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5B443C22FD89C800ECF2C7 /* GameViewControllerHelper.swift */; };
-		2A68B41B23129A7D005DC9AF /* InstructionsPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A68B41A23129A7D005DC9AF /* InstructionsPageViewController.swift */; };
 		2A68B4202312AAC9005DC9AF /* InstructionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A68B41F2312AAC9005DC9AF /* InstructionsViewController.swift */; };
 		2A68B4222312B102005DC9AF /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A68B4212312B102005DC9AF /* WelcomeViewController.swift */; };
 		2A68B4242312B97F005DC9AF /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A68B4232312B97F005DC9AF /* TutorialViewController.swift */; };
@@ -44,7 +43,7 @@
 
 /* Begin PBXFileReference section */
 		2A1038B62321AAC10003C09B /* TimeLeftProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLeftProgressView.swift; sourceTree = "<group>"; };
-		2A118DB0211A132F0059E252 /* 25.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 25.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2A118DB0211A132F0059E252 /* Where is.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Where is.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A118DBD211A13300059E252 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2A118DC2211A13300059E252 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2A118DC9211A1BD50059E252 /* UIDevice+Info.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Info.swift"; sourceTree = "<group>"; };
@@ -52,7 +51,6 @@
 		2A370E7122FC829000E81166 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		2A527BAE22E7856900F68407 /* ResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsViewController.swift; sourceTree = "<group>"; };
 		2A5B443C22FD89C800ECF2C7 /* GameViewControllerHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewControllerHelper.swift; sourceTree = "<group>"; };
-		2A68B41A23129A7D005DC9AF /* InstructionsPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionsPageViewController.swift; sourceTree = "<group>"; };
 		2A68B41F2312AAC9005DC9AF /* InstructionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionsViewController.swift; sourceTree = "<group>"; };
 		2A68B4212312B102005DC9AF /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		2A68B4232312B97F005DC9AF /* TutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
@@ -107,7 +105,7 @@
 		2A118DB1211A132F0059E252 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2A118DB0211A132F0059E252 /* 25.app */,
+				2A118DB0211A132F0059E252 /* Where is.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -132,12 +130,12 @@
 		2A118DC8211A13450059E252 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				2A5B443C22FD89C800ECF2C7 /* GameViewControllerHelper.swift */,
 				2AE841FD22DE3ABC00D724E0 /* CellsManager.swift */,
 				2AF6193123252AC7008DA4A4 /* MemoryManager.swift */,
 				2A85C82122F1C2EE0039D678 /* LevelParameters.swift */,
 				2ACDF75B213D5B43004FEA1B /* FeedbackGenerator.swift */,
 				2A3271DE22E8685A00F303A5 /* BlurryPresentationController.swift */,
-				2A5B443C22FD89C800ECF2C7 /* GameViewControllerHelper.swift */,
 				2A370E7122FC829000E81166 /* Helpers.swift */,
 			);
 			path = "Supporting Files";
@@ -156,7 +154,6 @@
 			isa = PBXGroup;
 			children = (
 				2A68B41F2312AAC9005DC9AF /* InstructionsViewController.swift */,
-				2A68B41A23129A7D005DC9AF /* InstructionsPageViewController.swift */,
 				2A68B4212312B102005DC9AF /* WelcomeViewController.swift */,
 				2A68B4232312B97F005DC9AF /* TutorialViewController.swift */,
 			);
@@ -252,7 +249,7 @@
 			);
 			name = 25;
 			productName = 25;
-			productReference = 2A118DB0211A132F0059E252 /* 25.app */;
+			productReference = 2A118DB0211A132F0059E252 /* Where is.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -368,7 +365,6 @@
 				2A5B443D22FD89C800ECF2C7 /* GameViewControllerHelper.swift in Sources */,
 				2A68B4222312B102005DC9AF /* WelcomeViewController.swift in Sources */,
 				2A3271DF22E8685A00F303A5 /* BlurryPresentationController.swift in Sources */,
-				2A68B41B23129A7D005DC9AF /* InstructionsPageViewController.swift in Sources */,
 				2AE8420722DE3BE900D724E0 /* AppDelegate.swift in Sources */,
 				2A85C82222F1C2EE0039D678 /* LevelParameters.swift in Sources */,
 				2A68B4242312B97F005DC9AF /* TutorialViewController.swift in Sources */,
@@ -549,7 +545,7 @@
 				);
 				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ruslangritsenko.-25";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Where is";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -573,7 +569,7 @@
 				);
 				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ruslangritsenko.-25";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Where is";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

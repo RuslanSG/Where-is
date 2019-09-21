@@ -17,7 +17,7 @@ class InstructionsViewController: UIViewController {
     
     // MARK: - Private Properties
     
-    private var pageViewController: InstructionsPageViewController!
+    private var pageViewController = UIPageViewController()
     private var detailViewControllers = [UIViewController]()
     private lazy var currentViewControllerIndex = firstTime ? 0 : 1
 
@@ -38,13 +38,13 @@ class InstructionsViewController: UIViewController {
     // MARK: - Private Methods
     
     private func configurePageViewController() {
-        guard let pageViewController = storyboard?.instantiateViewController(withIdentifier: String(describing: InstructionsPageViewController.self)) as? InstructionsPageViewController else { return }
-        
-        self.pageViewController = pageViewController
+        pageViewController = UIPageViewController(transitionStyle: .scroll,
+                                                  navigationOrientation: .horizontal,
+                                                  options: [:])
         
         pageViewController.delegate = self
         pageViewController.dataSource = self
-        
+                        
         addChild(pageViewController)
         pageViewController.didMove(toParent: self)
         
@@ -56,6 +56,21 @@ class InstructionsViewController: UIViewController {
         pageViewController.view.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
         pageViewController.view.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         pageViewController.view.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        
+        configurePageControl()
+    }
+    
+    private func configurePageControl() {
+        let pageControl = pageViewController.view.subviews.first { $0 is UIPageControl } as? UIPageControl
+        if let pageControl = pageControl {
+            if #available(iOS 13.0, *) {
+                pageControl.pageIndicatorTintColor = .systemGray4
+                pageControl.currentPageIndicatorTintColor = .systemGray
+            } else {
+                pageControl.pageIndicatorTintColor = .lightGray
+                pageControl.currentPageIndicatorTintColor = .darkGray
+            }
+        }
     }
     
     private func configureDetailViewControllers() {
@@ -111,13 +126,13 @@ extension InstructionsViewController: UIPageViewControllerDelegate, UIPageViewCo
 
 extension InstructionsViewController: WelcomeViewControllerDelegate {
     
-    func nextButtonPressed(_ viewController: WelcomeViewController) {
-        guard let index = detailViewControllers.firstIndex(of: viewController) else { return }
+   func welcomeViewController(_ welcomeViewController: WelcomeViewController, nextButtonDidPress nextButton: UIButton) {
+        guard let index = detailViewControllers.firstIndex(of: welcomeViewController) else { return }
         let nextViewController = detailViewControllers[index + 1]
         pageViewController.setViewControllers([nextViewController], direction: .forward, animated: true)
     }
     
-    func skipButtonPressed(_ viewController: WelcomeViewController) {
+    func welcomeViewController(_ welcomeViewController: WelcomeViewController, skipButtonDidPress skipButton: UIButton) {
         UserDefaults.standard.set(false, forKey: UserDefaults.Key.firstTime)
         dismiss(animated: true)
     }
@@ -125,8 +140,12 @@ extension InstructionsViewController: WelcomeViewControllerDelegate {
 
 extension InstructionsViewController: TutorialViewControllerDelegate {
     
-    func doneButtonPressed(_ viewController: TutorialViewController) {
+    func tutorialViewController(_ tutorialViewController: TutorialViewController, doneButtonDidPress doneButton: UIButton) {
         UserDefaults.standard.set(false, forKey: UserDefaults.Key.firstTime)
+        dismiss(animated: true)
+    }
+    
+    func tutorialViewController(_ tutorialViewController: TutorialViewController, closeButtonDidPress closeButton: UIButton) {
         dismiss(animated: true)
     }
 }
