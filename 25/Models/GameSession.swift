@@ -17,11 +17,12 @@ struct GameSession {
     var level: Level
     var nextLevel: Level?
         
-    var currentNumber: Int
-    var nextNumber: Int
-    var numbersFound: Int
-    var newNumber: Int
-    var hasNewRecord: Bool
+    var currentNumber = 0
+    var nextNumber = 1
+    var numbersFound = 0
+    var newNumber = -1
+    var hasNewRecord = false
+    var levelPassed = false
     var goalAchieved: Bool {
         return level.goal <= numbersFound
     }
@@ -36,15 +37,5 @@ struct GameSession {
         }
         return nil
     }
-    
-    // MARK: - Initialization
-    
-    init(level: Level) {
-        currentNumber = 0
-        nextNumber = 1
-        numbersFound = 0
-        newNumber = -1
-        self.level = level
-        hasNewRecord = false
-    }
+
 }

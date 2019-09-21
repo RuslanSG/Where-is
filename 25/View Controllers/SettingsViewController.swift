@@ -61,7 +61,7 @@ class SettingsViewController: UITableViewController {
     // MARK: - Actions
     
     @objc private func levelButtonPressed(_ sender: LevelButton) {
-        game.setCurrentLevel(index: sender.tag)
+        game.setCurrentLevel(to: sender.tag)
         
         if sender !== selectedLevelButton {
             if let selectedLevelButton = selectedLevelButton {

@@ -60,7 +60,7 @@ class GameFinishedViewController: ResultsViewController {
         super.configure()
         
         // Configure title
-        if session.goalAchieved && !session.level.isPassed {
+        if session.levelPassed {
             titleLabel.text = "LEVEL PASSED".uppercased()
         } else {
             titleLabel.text = "GAME OVER".uppercased()
@@ -162,7 +162,7 @@ class GameFinishedViewController: ResultsViewController {
         }
         
         let messageLabel = UILabel()
-        if let nextLevelSerial = session.nextLevel?.serial, session.goalAchieved, !session.level.isPassed {
+        if let nextLevelSerial = session.nextLevel?.serial, session.levelPassed {
             messageLabel.text = "Level \(nextLevelSerial) is available!"
         } else {
             messageLabel.text = ""

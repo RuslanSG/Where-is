@@ -539,13 +539,17 @@ extension GameViewController: GameDelegate {
     
     func game(_ game: Game, didFinishSession session: GameSession) {
         if session.finishingReason != .stopped {
-            if !session.goalAchieved {
-                feedbackGenerator.playVibrationFeedback()
-            }
             startGameButton.level = game.currentLevel
+            
             if game.currentLevel == game.lastLevel && !game.currentLevel.isPassed && game.session.finishingReason == .levelPassed {
+                feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .success)
                 performSegue(withIdentifier: "ShowCongratulations", sender: session)
             } else {
+                if session.goalAchieved && session.levelPassed {
+                    feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .success)
+                } else {
+                    feedbackGenerator.playVibrationFeedback()
+                }
                 performSegue(withIdentifier: "ShowGameFinished", sender: session)
             }
             

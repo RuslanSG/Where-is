@@ -82,6 +82,8 @@ final class Game {
         session.newNumber = number + currentLevel.numbersCount
         
         if number == currentLevel.goal, !currentLevel.isPassed {
+            setLevelPassed(currentLevel)
+            session.levelPassed = true
             finish(reason: .levelPassed)
             return false
         }
@@ -138,7 +140,7 @@ final class Game {
         numbers.shuffle()
     }
     
-    func setCurrentLevel(index: Int) {
+    func setCurrentLevel(to index: Int) {
         let selectedLevelIndex = levels.firstIndex { $0.isSelected }
         if let i = selectedLevelIndex {
             levels[i].isSelected = false
@@ -207,21 +209,19 @@ final class Game {
     }
     
     private func openNextLevel() {
-        setLevelPassed(index: currentLevel.index)
-        
-        let nextLevelIndex = currentLevel.index + 1
-        
-        if levels.indices.contains(nextLevelIndex) {
-            setLevelAvailable(index: nextLevelIndex)
-            setCurrentLevel(index: nextLevelIndex)
+        if let nextLevel = nextLevel {
+            setLevelAvailable(nextLevel)
+            setCurrentLevel(to: nextLevel.index)
         }
     }
     
-    private func setLevelPassed(index: Int) {
+    private func setLevelPassed(_ level: Level) {
+        guard let index = levels.firstIndex(of: level) else { return }
         levels[index].isPassed = true
     }
     
-    private func setLevelAvailable(index: Int) {
+    private func setLevelAvailable(_ level: Level) {
+        guard let index = levels.firstIndex(of: level) else { return }
         levels[index].isAvailable = true
     }
     
