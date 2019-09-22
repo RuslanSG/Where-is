@@ -66,9 +66,9 @@ class GameFinishedViewController: ResultsViewController {
         
         // Configure title
         if session.levelPassed {
-            titleLabel.text = "LEVEL PASSED".uppercased()
+            titleLabel.text = NSLocalizedString("LEVEL PASSED", comment: "Localized kind: title label").uppercased()
         } else {
-            titleLabel.text = "GAME OVER".uppercased()
+            titleLabel.text = NSLocalizedString("GAME OVER", comment: "Localized kind: title label").uppercased()
         }
         
         titleLabel.font = .systemFont(ofSize: 35, weight: .black)
@@ -80,9 +80,9 @@ class GameFinishedViewController: ResultsViewController {
                 
         switch session.finishingReason {
         case .timeIsOver:
-            detailsLabel.text = "Time Is Over"
+            detailsLabel.text = NSLocalizedString("Time Is Over", comment: "Localized kind: game finishing reason label")
         case .wrongNumberTapped:
-             detailsLabel.text = "Wrong Number Tapped"
+             detailsLabel.text = NSLocalizedString("Wrong Number Tapped", comment: "Localized kind: game finishing reason label")
         default: break
         }
         
@@ -107,9 +107,9 @@ class GameFinishedViewController: ResultsViewController {
         goalAchievedLabel.alpha = titleLabel.alpha
         
         if session.goalAchieved {
-            goalAchievedLabel.text = "Goal Achieved"
+            goalAchievedLabel.text = NSLocalizedString("Goal Achieved", comment: "Localized kind: info label")
         } else {
-            goalAchievedLabel.text = "Goal Not Achieved"
+            goalAchievedLabel.text = NSLocalizedString("Goal Not Achieved", comment: "Localized kind: info label")
         }
 
         let goalAchievedImageView = UIImageView()
@@ -138,16 +138,16 @@ class GameFinishedViewController: ResultsViewController {
         let separator1 = configureSeparator(height: 2)
         let separator2 = configureSeparator(height: 2)
         
-        let timeTakenStackView = configureRowStackView(title: "Time Taken",
+        let timeTakenStackView = configureRowStackView(title: NSLocalizedString("Time Taken", comment: "Localized kind: game session info label"),
                                                        value: session.timeTaken ?? -1.0)
             
-        let numbersFoundStackView = configureRowStackView(title: "Numbers Found",
+        let numbersFoundStackView = configureRowStackView(title: NSLocalizedString("Numbers Found", comment: "Localized kind: game session info label"),
                                                           value: Double(session.numbersFound))
         
-        let goalStackView = configureRowStackView(title: "Goal",
+        let goalStackView = configureRowStackView(title: NSLocalizedString("Goal", comment: "Localized kind: game session info label"),
                                                   value: Double(session.level.goal))
         
-        let recordStackView = configureRowStackView(title: "Record",
+        let recordStackView = configureRowStackView(title: NSLocalizedString("Record", comment: "Localized kind: game session info label"),
                                                     value: Double(session.level.record))
         
         if session.hasNewRecord {
@@ -168,7 +168,7 @@ class GameFinishedViewController: ResultsViewController {
         
         let messageLabel = UILabel()
         if let nextLevelSerial = session.nextLevel?.serial, session.levelPassed {
-            messageLabel.text = "Level \(nextLevelSerial) is available!"
+            messageLabel.text = String(format: NSLocalizedString("Level %d is available!" , comment: "Localized kind: game session info label"), nextLevelSerial)
         } else {
             messageLabel.text = ""
         }

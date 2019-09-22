@@ -10,11 +10,6 @@ import UIKit
 
 class StartGameView: UIVisualEffectView {
     
-    private enum Strings {
-        static let titleText = NSLocalizedString("Start", comment: "Start gmae button")
-        static let detailsText = NSLocalizedString("Time: ", comment: "Time given to find all of the numbers")
-    }
-    
     // MARK: - Public Properties
     
     var level: Level! {
@@ -100,7 +95,7 @@ class StartGameView: UIVisualEffectView {
             effect = UIBlurEffect(style: .light)
         }
     
-        titleLabel.text = "START"
+        titleLabel.text = NSLocalizedString("START", comment: "Localized kind: start button")
         
         updateDetails()
                 
@@ -121,9 +116,11 @@ class StartGameView: UIVisualEffectView {
     
     private func updateDetails() {
         if level.isPassed {
-            detailsLabel.text = "Record: \(level.record)"
+            detailsLabel.text = NSLocalizedString("Record:", comment: "Localized kind: record label") + " " + String(level.record)
+            
         } else {
-            detailsLabel.text = "Find \(level.goal) Numbers"
+            detailsLabel.text = String(format: NSLocalizedString("Find %d Numbers", comment: "Localized kind: task label"), level.goal) 
+            
         }
     }
 }

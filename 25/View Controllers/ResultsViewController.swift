@@ -120,7 +120,7 @@ class ResultsViewController: UIViewController {
         
         // Configure "Tap anywhere to hide" label
         vibrancyEffectView.contentView.addSubview(tapAnywhereToHideLabel)
-        tapAnywhereToHideLabel.text = "Tap anywhere to hide"
+        tapAnywhereToHideLabel.text = NSLocalizedString("Tap anywhere to hide", comment: "Localized kind: hint label")
         tapAnywhereToHideLabel.textAlignment = .center
         tapAnywhereToHideLabel.font = .boldSystemFont(ofSize: 15)
         

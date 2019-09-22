@@ -62,14 +62,14 @@ class TutorialViewController: UIViewController {
         
         if number == maxNumberToFind {
             hideCellNumbers()
-            findNumberLabel.text = "Awesome!"
+            findNumberLabel.text = NSLocalizedString("Awesome!", comment: "Localized kind: awesome label")
             trainingCompleted = true
             showDoneButton()
             feedbackGenerator.playSucceessFeedback()
         } else if number == numberToFind {
             sender.setNumber(number + cells.count, animateIfNeeded: false)
             numberToFind += 1
-            findNumberLabel.text = "Find \(numberToFind)"
+            findNumberLabel.text = NSLocalizedString("Find", comment: "Localized kind: find %number%") + " " + String(numberToFind)
             feedbackGenerator.playSelectionFeedback()
         }
         sender.compress()

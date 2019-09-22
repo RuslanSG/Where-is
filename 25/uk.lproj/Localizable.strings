@@ -1,0 +1,66 @@
+/* Localized kind: hint label */
+"↓ Swipe down to stop" = "↓ Змахніть вниз, щоб зупинити";
+
+/* Localized kind: awesome label */
+"Awesome!" = "Відмінно!";
+
+/* Localized kind: game end congratulations text */
+"Congratulations and well done! You have passed all levels and completed a great game! And have proven that you attentiveness is greater than all the powers of Where is. You are the master now. If you enjoyed this game, plaese leave me your feedback. Love." = "Вітаємо та чудова робота! Ви пройшли всі рівні й показали відмінну гру! А ще довели, що Ваша уважність сильніше, ніж всі виклики Where is. Ви — майстер! Якщо Вам сподобалася гра, будь ласка, залиште свій відгук. Успіхів!";
+
+/* Localized kind: title label */
+"CONGRATULATIONS!" = "ВІТАЄМО!";
+
+/* Localized kind: find %number% */
+"Find" = "Знайдіть";
+
+/* Localized kind: task label */
+"Find %d Numbers" = "Знайдіть %d чисел";
+
+/* Localized kind: hint label */
+"Find 1" = "Знайдіть 1";
+
+/* Localized kind: title label */
+"GAME OVER" = "ГРУ ЗАКІНЧЕНО";
+
+/* Localized kind: game session info label */
+"Goal" = "Ціль";
+
+/* Localized kind: info label */
+"Goal Achieved" = "Ціль досягнута";
+
+/* Localized kind: info label */
+"Goal Not Achieved" = "Ціль не досягнута";
+
+/* Localized kind: game session info label */
+"Level %d is available!" = "Доступний %d рівень!";
+
+/* Localized kind: title label */
+"LEVEL PASSED" = "РІВЕНЬ ПРОЙДЕНО";
+
+/* Localized kind: game session info label */
+"Numbers Found" = "Чисел знайдено";
+
+/* Localized kind: title label */
+"RATE" = "ЗАЛИШИТИ ВІДГУК";
+
+/* Localized kind: game session info label */
+"Record" = "Рекорд";
+
+/* Localized kind: record label */
+"Record:" = "Рекорд:";
+
+/* Localized kind: start button */
+"START" = "СТАРТ";
+
+/* Localized kind: hint label */
+"Tap anywhere to hide" = "Торкніться, щоб закрити";
+
+/* Localized kind: game finishing reason label */
+"Time Is Over" = "Час вийшов";
+
+/* Localized kind: game session info label */
+"Time Taken" = "Час";
+
+/* Localized kind: game finishing reason label */
+"Wrong Number Tapped" = "Натиснута невірна цифра";
+

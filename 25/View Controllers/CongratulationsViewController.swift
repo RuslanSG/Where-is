@@ -34,7 +34,7 @@ class CongratulationsViewController: ResultsViewController {
         view.addSubview(rateButton)
         
         // Configure title lable
-        titleLabel.text = "CONGRATULATIONS!"
+        titleLabel.text = NSLocalizedString("CONGRATULATIONS!", comment: "Localized kind: title label").uppercased()
         titleLabel.font = .systemFont(ofSize: 35, weight: .black)
         titleLabel.alpha = 0.7
         titleLabel.adjustsFontSizeToFitWidth = true
@@ -47,7 +47,7 @@ class CongratulationsViewController: ResultsViewController {
         titleLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
         // Configure body label
-        bodyLabel.text = "Congratulations and well done! You have passed all levels and completed a great game! And have proven that you attentiveness is greater than all the powers of Where is. You are the master now. If you enjoyed this game, plaese leave me your feedback. Love."
+        bodyLabel.text = NSLocalizedString("Congratulations and well done! You have passed all levels and completed a great game! And have proven that you attentiveness is greater than all the powers of Where is. You are the master now. If you enjoyed this game, plaese leave me your feedback. Love.", comment: "Localized kind: game end congratulations text")
         bodyLabel.font = .systemFont(ofSize: 17, weight: .medium)
         bodyLabel.textAlignment = .center
         bodyLabel.numberOfLines = 0
@@ -60,7 +60,7 @@ class CongratulationsViewController: ResultsViewController {
         bodyLabel.bottomAnchor.constraint(equalTo: rateButton.topAnchor, constant: -16).isActive = true
         
         // Configure rate button
-        rateButton.setTitle("RATE", for: .normal)
+        rateButton.setTitle(NSLocalizedString("RATE", comment: "Localized kind: title label").uppercased(), for: .normal) 
         rateButton.addTarget(self, action: #selector(rateButtonPressed(_:)), for: .touchUpInside)
         rateButton.titleLabel?.font = .boldSystemFont(ofSize: 15)
         rateButton.layer.cornerRadius = 12

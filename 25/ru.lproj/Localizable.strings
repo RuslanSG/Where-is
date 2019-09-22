@@ -1,0 +1,66 @@
+/* Localized kind: hint label */
+"↓ Swipe down to stop" = "↓ Смахните вниз, чтобы остановить";
+
+/* Localized kind: awesome label */
+"Awesome!" = "Отлично!";
+
+/* Localized kind: game end congratulations text */
+"Congratulations and well done! You have passed all levels and completed a great game! And have proven that you attentiveness is greater than all the powers of Where is. You are the master now. If you enjoyed this game, plaese leave me your feedback. Love." = "Поздравляем и отличная работа! Вы прошли все уровни и показали отличную игру! А еще доказали, что Ваша внимательность сильнее, чем все вызовы Where is. Вы — мастер! Если Вам понравилась игра, пожалуйста, оставьте свой отзыв. Удачи!";
+
+/* Localized kind: title label */
+"CONGRATULATIONS!" = "ПОЗДРАВЛЯЕМ!";
+
+/* Localized kind: find %number% */
+"Find" = "Найдите";
+
+/* Localized kind: task label */
+"Find %d Numbers" = "Найдите %d чисел";
+
+/* Localized kind: hint label */
+"Find 1" = "Найдите 1";
+
+/* Localized kind: title label */
+"GAME OVER" = "ИГРА ОКОНЧЕНА";
+
+/* Localized kind: game session info label */
+"Goal" = "Цель";
+
+/* Localized kind: info label */
+"Goal Achieved" = "Цель достигнута";
+
+/* Localized kind: info label */
+"Goal Not Achieved" = "Цель не достигнута";
+
+/* Localized kind: game session info label */
+"Level %d is available!" = "Доступен %d уровень!";
+
+/* Localized kind: title label */
+"LEVEL PASSED" = "УРОВЕНЬ ПРОЙДЕН";
+
+/* Localized kind: game session info label */
+"Numbers Found" = "Чисел найдено";
+
+/* Localized kind: title label */
+"RATE" = "ОСТАВИТЬ ОТЗЫВ";
+
+/* Localized kind: game session info label */
+"Record" = "Рекорд";
+
+/* Localized kind: record label */
+"Record:" = "Рекорд:";
+
+/* Localized kind: start button */
+"START" = "СТАРТ";
+
+/* Localized kind: hint label */
+"Tap anywhere to hide" = "Коснитесь, чтобы закрыть";
+
+/* Localized kind: game finishing reason label */
+"Time Is Over" = "Время вышло";
+
+/* Localized kind: game session info label */
+"Time Taken" = "Время";
+
+/* Localized kind: game finishing reason label */
+"Wrong Number Tapped" = "Нажата неверная цифра";
+

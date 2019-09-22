@@ -30,7 +30,7 @@ class GameViewController: UIViewController {
         if stopGameHintNeeded {
             let label = HintLabel()
             
-            label.text = "↓ Swipe down to stop"
+            label.text = NSLocalizedString("↓ Swipe down to stop", comment: "Localized kind: hint label")
             label.font = UIFont.boldSystemFont(ofSize: 15)
             
             return label
@@ -44,7 +44,7 @@ class GameViewController: UIViewController {
             let titleLabel = HintLabel()
             let detailsLabel = HintLabel()
                     
-            titleLabel.text = "Find 1"
+            titleLabel.text = NSLocalizedString("Find 1", comment: "Localized kind: hint label")
             titleLabel.font = UIFont.boldSystemFont(ofSize: 25)
             
             detailsLabel.text = ""
@@ -271,7 +271,7 @@ class GameViewController: UIViewController {
         
         stopGameHintLabel?.hide(animated: true)
         findNumberHintLabels?.title.hide(animated: true)
-        findNumberHintLabels?.title.text = "Find 1"
+        findNumberHintLabels?.title.text = NSLocalizedString("Find 1", comment: "Localized kind: hint label")
         findNumberHintLabels?.details.hide(animated: true)
         
         timeLeftProgressView.hide(animated: true)
