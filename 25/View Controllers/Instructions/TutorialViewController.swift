@@ -87,7 +87,7 @@ class TutorialViewController: UIViewController {
     
     private func configureCells() {
         for cell in cells {
-            cell.setCornerRadius(globalCornerRadius)
+            cell.setCornerRadius(cellCornerRadius)
             cell.setStyle(.colorful, animated: false)
         }
     }

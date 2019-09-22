@@ -71,10 +71,10 @@ extension GameViewController {
             return .zero
         }
         
-        return getRectUnion(of: centralCells).inset(by: UIEdgeInsets(top: globalCellInset,
-                                                                     left: globalCellInset,
-                                                                     bottom: globalCellInset,
-                                                                     right: globalCellInset))
+        return getRectUnion(of: centralCells).inset(by: UIEdgeInsets(top: cellInset,
+                                                                     left: cellInset,
+                                                                     bottom: cellInset,
+                                                                     right: cellInset))
     }
     
     internal func settingsButtonRect(aspectRatio: SettingsButtonAspectRatio) -> CGRect {
@@ -100,9 +100,9 @@ extension GameViewController {
         guard let targetCells = cellsGrid.getCells(origin: origin, size: size) else { return .zero }
         cellsUnderSettingsButton = targetCells
         
-        return getRectUnion(of: targetCells).inset(by: UIEdgeInsets(top: globalCellInset,
-                                                                    left: globalCellInset,
-                                                                    bottom: globalCellInset,
-                                                                    right: globalCellInset))
+        return getRectUnion(of: targetCells).inset(by: UIEdgeInsets(top: cellInset,
+                                                                    left: cellInset,
+                                                                    bottom: cellInset,
+                                                                    right: cellInset))
     }
 }

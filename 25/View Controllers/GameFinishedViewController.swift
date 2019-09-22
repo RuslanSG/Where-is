@@ -193,16 +193,23 @@ class GameFinishedViewController: ResultsViewController {
     private func configureConstraints() {
         let margins = view.layoutMarginsGuide
         
+        let gameSessionInfoStackViewRightConstraint = gameSessionInfoStackView.rightAnchor.constraint(equalTo: margins.rightAnchor, constant: -16)
+        gameSessionInfoStackViewRightConstraint.priority = UILayoutPriority(999)
+        
+        let gameSessionInfoStackViewLeftConstraint = gameSessionInfoStackView.rightAnchor.constraint(equalTo: margins.rightAnchor, constant: -16)
+        gameSessionInfoStackViewLeftConstraint.priority = UILayoutPriority(999)
+        
         sharedConstraints.append(contentsOf: [
             titleStackView.leftAnchor.constraint(equalTo: margins.leftAnchor, constant: 16),
-            gameSessionInfoStackView.rightAnchor.constraint(equalTo: margins.rightAnchor, constant: -16),
+            gameSessionInfoStackViewRightConstraint,
             gameSessionInfoStackView.centerYAnchor.constraint(equalTo: margins.centerYAnchor)
         ])
         
         regularConstraints.append(contentsOf: [
             titleStackView.topAnchor.constraint(equalTo: margins.topAnchor, constant: 40),
             titleStackView.rightAnchor.constraint(equalTo: margins.rightAnchor, constant: -16),
-            gameSessionInfoStackView.leftAnchor.constraint(equalTo: margins.leftAnchor, constant: 16)
+            gameSessionInfoStackViewLeftConstraint,
+            gameSessionInfoStackView.centerXAnchor.constraint(equalTo: margins.centerXAnchor)
         ])
         
         compactConstraints.append(contentsOf: [
@@ -210,6 +217,10 @@ class GameFinishedViewController: ResultsViewController {
             titleStackView.rightAnchor.constraint(equalTo: margins.centerXAnchor, constant: -16),
             gameSessionInfoStackView.leftAnchor.constraint(equalTo: margins.centerXAnchor, constant: 8)
         ])
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            gameSessionInfoStackView.widthAnchor.constraint(equalToConstant: 400).isActive = true
+        }
     }
     
     private func configureSeparator(height: CGFloat) -> UIView {

@@ -152,9 +152,9 @@ class CellsGrid: UIStackView {
     private func addCells(count: Int, animated: Bool) {
         assert(count.isMultiple(of: rowSize), "Reason: invalid number of views. Provide a multiple of row size (\(rowSize)) number.")
         for _ in 0..<count {
-            let cell = CellView(frame: .zero, contentViewInset: globalCellInset)
-            cell.setCornerRadius(globalCornerRadius)
-            cell.titleLabel?.font = .systemFont(ofSize: 35.0)
+            let cell = CellView(frame: .zero, contentViewInset: cellInset)
+            cell.setCornerRadius(cellCornerRadius)
+            cell.titleLabel?.font = .systemFont(ofSize: cellNumbersFontSize)
             
             let firstCellInRow = cells.count % rowSize == 0
             if currentRow == nil || firstCellInRow {

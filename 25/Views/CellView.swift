@@ -75,7 +75,7 @@ class CellView: UIButton {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        contentViewInset = globalCellInset
+        contentViewInset = cellInset
         configure()
     }
     
@@ -259,7 +259,7 @@ class CellView: UIButton {
         titleLabel?.textAlignment = .center
         titleLabel?.numberOfLines = 1
         titleLabel?.adjustsFontSizeToFitWidth = true
-        titleLabel?.minimumScaleFactor = 0.5
+        titleLabel?.minimumScaleFactor = 0.2
         
         contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.topAnchor.constraint(equalTo: self.topAnchor, constant: contentViewInset).isActive = true

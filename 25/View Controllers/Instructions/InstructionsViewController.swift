@@ -129,6 +129,7 @@ extension InstructionsViewController: WelcomeViewControllerDelegate {
    func welcomeViewController(_ welcomeViewController: WelcomeViewController, nextButtonDidPress nextButton: UIButton) {
         guard let index = detailViewControllers.firstIndex(of: welcomeViewController) else { return }
         let nextViewController = detailViewControllers[index + 1]
+        currentViewControllerIndex += 1
         pageViewController.setViewControllers([nextViewController], direction: .forward, animated: true)
     }
     

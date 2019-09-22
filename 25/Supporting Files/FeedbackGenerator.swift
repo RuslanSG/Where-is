@@ -16,7 +16,7 @@ final class FeedbackGenerator {
     private let notifitationFeedbackGenerator = UINotificationFeedbackGenerator()
             
     func playSelectionFeedback() {
-        AudioServicesPlaySystemSound(1460)
+        AudioServicesPlaySystemSound(1459)
         selectionFeedbackGenerator.selectionChanged()
     }
     

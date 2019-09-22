@@ -73,9 +73,9 @@ class GameViewController: UIViewController {
     
     private var cellHeight: CGFloat {
         if orientation == .portrait {
-            return (view.layoutMarginsGuide.layoutFrame.width - globalCellInset) / CGFloat(rowSize)
+            return (view.layoutMarginsGuide.layoutFrame.width - cellInset) / CGFloat(rowSize)
         } else {
-            return (view.layoutMarginsGuide.layoutFrame.height - globalCellInset) / CGFloat(rowSize)
+            return (view.layoutMarginsGuide.layoutFrame.height - cellInset) / CGFloat(rowSize)
         }
     }
     
@@ -182,9 +182,7 @@ class GameViewController: UIViewController {
         UIView.animate(withDuration: 0.2) {
             self.view.layoutIfNeeded()
         }
-        
-        freezeUI(for: 0.2)
-        
+                
         swipeDownGestureRecognizer.isEnabled = true
         
         feedbackGenerator.playSelectionFeedback()
@@ -314,10 +312,10 @@ extension GameViewController {
         cellsGrid.translatesAutoresizingMaskIntoConstraints = false
         
         let margins = view.layoutMarginsGuide
-        cellsGrid.centerXAnchor.constraint(equalTo: margins.centerXAnchor).isActive = true
-        cellsGrid.centerYAnchor.constraint(equalTo: margins.centerYAnchor).isActive = true
+        cellsGrid.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        cellsGrid.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
 
-        cellsGrid.topConstraint = cellsGrid.topAnchor.constraint(greaterThanOrEqualTo: margins.topAnchor, constant: globalCellInset)
+        cellsGrid.topConstraint = cellsGrid.topAnchor.constraint(greaterThanOrEqualTo: margins.topAnchor, constant: cellInset)
         cellsGrid.leftConstraint = cellsGrid.leftAnchor.constraint(greaterThanOrEqualTo: margins.leftAnchor)
         
         cellsGrid.addRows(count: game.numbers.count / rowSize, animated: false)
@@ -329,7 +327,7 @@ extension GameViewController {
         
         self.view.addSubview(startGameButton)
         
-        startGameButton.layer.cornerRadius = globalCornerRadius
+        startGameButton.layer.cornerRadius = cellCornerRadius
         startGameButton.clipsToBounds = true
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(startGame))
@@ -339,12 +337,13 @@ extension GameViewController {
     private func setupSettingsButton() {
         let gearImage = UIImage(named: "gear")?.withRenderingMode(.alwaysTemplate)
         
+       
+        
         settingsButton = UIButton()
         settingsButton.setImage(gearImage, for: .normal)
         settingsButton.imageView?.contentMode = .scaleAspectFit
-        settingsButton.imageEdgeInsets = UIEdgeInsets(top: 17.0, left: 17.0, bottom: 17.0, right: 17.0)
         settingsButton.backgroundColor = cellsUnderSettingsButton.first?.backgroundColor
-        settingsButton.layer.cornerRadius = globalCornerRadius
+        settingsButton.layer.cornerRadius = cellCornerRadius
         settingsButton.addTarget(self, action: #selector(settingsButtonPressed), for: .touchDown)
         settingsButton.addTarget(self, action: #selector(settingsButtonReleased), for: .touchUpInside)
         settingsButton.addTarget(self, action: #selector(settingsButtonReleased), for: .touchUpOutside)
@@ -367,11 +366,11 @@ extension GameViewController {
 
         let margins = view.layoutMarginsGuide
         timeLeftProgressView.translatesAutoresizingMaskIntoConstraints = false
-        timeLeftProgressView.bottomAnchor.constraint(equalTo: cellsGrid.topAnchor, constant: -globalCellInset).isActive = true
+        timeLeftProgressView.bottomAnchor.constraint(equalTo: cellsGrid.topAnchor, constant: -cellInset).isActive = true
         timeLeftProgressView.centerXAnchor.constraint(equalTo: cellsGrid.centerXAnchor).isActive = true
-        timeLeftProgressView.widthAnchor.constraint(equalTo: cellsGrid.widthAnchor, constant: -globalCellInset * 2).isActive = true
+        timeLeftProgressView.widthAnchor.constraint(equalTo: cellsGrid.widthAnchor, constant: -cellInset * 2).isActive = true
         timeLeftProgressView.heightAnchor.constraint(equalToConstant: 5).isActive = true
-        timeLeftProgressView.topAnchor.constraint(greaterThanOrEqualTo: margins.topAnchor, constant: globalCellInset * 2).isActive = true
+        timeLeftProgressView.topAnchor.constraint(greaterThanOrEqualTo: margins.topAnchor, constant: cellInset * 2).isActive = true
     }
     
     private func setupHintLabels() {
@@ -446,6 +445,18 @@ extension GameViewController {
         settingsButton.frame = settingsButtonRect(aspectRatio: aspectRatio)
         settingsButton.backgroundColor = cellsUnderSettingsButton.first?.backgroundColor
         settingsButton.tintColor = cellsUnderSettingsButton.first?.titleLabel?.textColor
+        
+        let tempLabel = UILabel()
+        tempLabel.text = "44"
+        tempLabel.font = .systemFont(ofSize: cellNumbersFontSize)
+               
+        let imageHeight = tempLabel.intrinsicContentSize.width
+        let imageInset = (settingsButton.frame.width - imageHeight) / 2
+        
+        settingsButton.imageEdgeInsets = UIEdgeInsets(top: 0,
+                                                      left: imageInset,
+                                                      bottom: 0,
+                                                      right: imageInset)
     }
     
     // MARK: - Timer
@@ -488,12 +499,10 @@ extension GameViewController: CellsManagerDelegate {
     internal func cellPressed(_ cell: CellView) {
         lastPressedCell = cell
         feedbackGenerator.playSelectionFeedback()
-        freezeUI(for: 0.1)
     }
     
     internal func cellReleased(_ cell: CellView) {
         guard game.isRunning else { return }
-                
                 
         if game.numberSelected(cell.number) {
             if let findNumberHintLabels = findNumberHintLabels {

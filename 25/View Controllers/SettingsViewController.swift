@@ -26,7 +26,7 @@ class SettingsViewController: UITableViewController {
     private var levelButtonsStackView = UIStackView()
     
     private var levelButtonsGridParameters: (rows: Int, colums: Int) {
-        if orientation == .portrait {
+        if UIScreen.main.traitCollection.horizontalSizeClass == .compact && orientation == .portrait {
             return (rows: 2, colums: 5)
         } else {
             return (rows: 1, colums: 10)
@@ -208,7 +208,7 @@ extension SettingsViewController {
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == 0, indexPath.section == 0 {
-            if orientation == .portrait {
+            if UIScreen.main.traitCollection.horizontalSizeClass == .compact && orientation == .portrait {
                 return levelButtonTopConstraintConstant + levelButtonSide + 8.0 + levelButtonSide + levelButtonBottomConstraintConstant
             } else {
                 return levelButtonTopConstraintConstant + levelButtonSide + levelButtonBottomConstraintConstant
