@@ -36,6 +36,8 @@ class TutorialViewController: UIViewController {
     private let maxNumberToFind = 10
     private var trainingCompleted = false
     
+    private let feedbackGenerator = FeedbackGenerator()
+    
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
@@ -63,10 +65,12 @@ class TutorialViewController: UIViewController {
             findNumberLabel.text = "Awesome!"
             trainingCompleted = true
             showDoneButton()
+            feedbackGenerator.playSucceessFeedback()
         } else if number == numberToFind {
             sender.setNumber(number + cells.count, animateIfNeeded: false)
             numberToFind += 1
             findNumberLabel.text = "Find \(numberToFind)"
+            feedbackGenerator.playSelectionFeedback()
         }
         sender.compress()
     }

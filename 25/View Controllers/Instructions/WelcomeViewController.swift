@@ -51,7 +51,7 @@ class WelcomeViewController: UIViewController {
     // MARK: - Helper Methods
     
     private func setAttributedTextToWelcomeLabel() {
-        let stringToColor = "Where is?!"
+        let stringToColor = "Where is"
         let colorfulTextRange = (welcomeLabel.text! as NSString).range(of: stringToColor)
         let attributedString = NSMutableAttributedString(string: welcomeLabel.text!)
         attributedString.addAttribute(.foregroundColor, value: UIColor.cellRed, range: colorfulTextRange)
