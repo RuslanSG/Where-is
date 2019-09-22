@@ -187,7 +187,7 @@ class GameViewController: UIViewController {
         
         swipeDownGestureRecognizer.isEnabled = true
         
-        feedbackGenerator.playSelectionHapticFeedback()
+        feedbackGenerator.playSelectionFeedback()
         
         UIView.animate(withDuration: 0.2) {
             self.settingsButton.isHidden = true
@@ -226,7 +226,6 @@ class GameViewController: UIViewController {
             self.settingsButton.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
         }
         cellsUnderSettingsButton.forEach { $0.compress() }
-        feedbackGenerator.playSelectionHapticFeedback()
     }
 
     @objc func settingsButtonReleased() {
@@ -236,7 +235,6 @@ class GameViewController: UIViewController {
             self.settingsButton.transform = CGAffineTransform.identity
         }
         cellsUnderSettingsButton.forEach { $0.uncompress(showNumber: false) }
-        feedbackGenerator.playSelectionHapticFeedback()
     }
     
     // MARK: - Helper Methods
@@ -489,14 +487,13 @@ extension GameViewController: CellsManagerDelegate {
     
     internal func cellPressed(_ cell: CellView) {
         lastPressedCell = cell
-        feedbackGenerator.playSelectionHapticFeedback()
+        feedbackGenerator.playSelectionFeedback()
         freezeUI(for: 0.1)
     }
     
     internal func cellReleased(_ cell: CellView) {
         guard game.isRunning else { return }
                 
-        feedbackGenerator.playSelectionHapticFeedback()
                 
         if game.numberSelected(cell.number) {
             if let findNumberHintLabels = findNumberHintLabels {
@@ -511,8 +508,12 @@ extension GameViewController: CellsManagerDelegate {
             
             if cell.number - game.currentLevel.record == 1 && cell.number != 1 {
                 cell.highlight(reason: .newRecord)
+                feedbackGenerator.playNotificationFeedback()
             } else if cell.number == game.currentLevel.goal {
                 cell.highlight(reason: .goalAchieved)
+                feedbackGenerator.playSucceessFeedback()
+            } else {
+                feedbackGenerator.playSelectionFeedback()
             }
             
             if game.currentLevel.shuffleMode {
@@ -542,13 +543,13 @@ extension GameViewController: GameDelegate {
             startGameButton.level = game.currentLevel
             
             if game.currentLevel == game.lastLevel && !game.currentLevel.isPassed && game.session.finishingReason == .levelPassed {
-                feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .success)
+                feedbackGenerator.playSucceessFeedback()
                 performSegue(withIdentifier: "ShowCongratulations", sender: session)
             } else {
                 if session.goalAchieved && session.levelPassed {
-                    feedbackGenerator.playNotificationHapticFeedback(notificationFeedbackType: .success)
+                    feedbackGenerator.playSucceessFeedback()
                 } else {
-                    feedbackGenerator.playVibrationFeedback()
+                    feedbackGenerator.playFailFeedback()
                 }
                 performSegue(withIdentifier: "ShowGameFinished", sender: session)
             }

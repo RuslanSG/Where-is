@@ -8,53 +8,29 @@
 
 import UIKit
 import AudioToolbox.AudioServices
+import AVFoundation
 
 final class FeedbackGenerator {
     
-    private let feedbackGenerator: (
-        notification: UINotificationFeedbackGenerator,
-        impact: (light: UIImpactFeedbackGenerator, medium: UIImpactFeedbackGenerator, heavy: UIImpactFeedbackGenerator),
-        selection: UISelectionFeedbackGenerator) = {
-        return (
-            notification: UINotificationFeedbackGenerator(),
-            impact: (light: UIImpactFeedbackGenerator(style: .light), medium: UIImpactFeedbackGenerator(style: .medium), heavy: UIImpactFeedbackGenerator(style: .heavy)),
-            selection: UISelectionFeedbackGenerator())
-    }()
-    
-    func playNotificationHapticFeedback(notificationFeedbackType: UINotificationFeedbackGenerator.FeedbackType) {
-        if UIDevice.current.hasHapticFeedback {
-            feedbackGenerator.notification.notificationOccurred(notificationFeedbackType)
-        } else if UIDevice.current.hasTapticEngine, notificationFeedbackType == .error {
-            let cancelled = SystemSoundID(1521)
-            AudioServicesPlaySystemSound(cancelled)
-        } else if notificationFeedbackType == .error {
-            let cancelled = SystemSoundID(kSystemSoundID_Vibrate)
-            AudioServicesPlaySystemSound(cancelled)
-        }
+    private let selectionFeedbackGenerator = UISelectionFeedbackGenerator()
+    private let notifitationFeedbackGenerator = UINotificationFeedbackGenerator()
+            
+    func playSelectionFeedback() {
+        AudioServicesPlaySystemSound(1460)
+        selectionFeedbackGenerator.selectionChanged()
     }
     
-    func playImpactHapticFeedback(needsToPrepare: Bool, style: UIImpactFeedbackGenerator.FeedbackStyle) {
-        if UIDevice.current.hasHapticFeedback {
-            feedbackGenerator.impact.light.impactOccurred()
-            if needsToPrepare {
-                feedbackGenerator.impact.light.prepare()
-            }
-        } else if UIDevice.current.hasTapticEngine {
-            let peek = SystemSoundID(1519)
-            AudioServicesPlaySystemSound(peek)
-        }
+    func playSucceessFeedback() {
+        AudioServicesPlaySystemSound(1394)
     }
     
-    func playSelectionHapticFeedback() {
-        if UIDevice.current.hasHapticFeedback {
-            feedbackGenerator.selection.selectionChanged()
-            feedbackGenerator.selection.prepare()
-        }
+    func playFailFeedback() {
+        AudioServicesPlaySystemSound(1395)
     }
     
-    func playVibrationFeedback() {
-        let cancelled = SystemSoundID(kSystemSoundID_Vibrate)
-        AudioServicesPlaySystemSound(cancelled)
+    func playNotificationFeedback() {
+        AudioServicesPlaySystemSound(1504)
+        notifitationFeedbackGenerator.notificationOccurred(.success)
     }
     
 }
