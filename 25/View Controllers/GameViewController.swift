@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import StoreKit
 
 class GameViewController: UIViewController {
     
@@ -118,6 +119,11 @@ class GameViewController: UIViewController {
                                                selector: #selector(applicationWillResignActive),
                                                name: UIApplication.willResignActiveNotification,
                                                object: nil)
+        
+        let firstTime = UserDefaults.standard.bool(forKey: UserDefaults.Key.firstTime)
+        if !firstTime {
+            SKStoreReviewController.requestReview()
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -521,8 +527,6 @@ extension GameViewController: CellsManagerDelegate {
             } else if cell.number == game.currentLevel.goal {
                 cell.highlight(reason: .goalAchieved)
                 feedbackGenerator.playSucceessFeedback()
-            } else {
-                feedbackGenerator.playSelectionFeedback()
             }
             
             if game.currentLevel.shuffleMode {

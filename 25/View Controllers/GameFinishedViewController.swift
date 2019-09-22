@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import StoreKit
 
 class GameFinishedViewController: ResultsViewController {
     
@@ -32,6 +33,10 @@ class GameFinishedViewController: ResultsViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
+        
+        if session.levelPassed, session.level.serial == 1 {
+            SKStoreReviewController.requestReview()
+        }
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
