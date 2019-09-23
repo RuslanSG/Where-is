@@ -63,6 +63,13 @@ class GameViewController: UIViewController {
     private var numbersFound = 0
     
     private var firstTime = true
+    private var statusBarIsHidden = false {
+        didSet {
+            UIView.animate(withDuration: 0.2) { () -> Void in
+                self.setNeedsStatusBarAppearanceUpdate()
+            }
+        }
+    }
     
     private var cellStyle: CellView.Style {
         if game.currentLevel.colorMode {
@@ -190,6 +197,7 @@ class GameViewController: UIViewController {
         }
                 
         swipeDownGestureRecognizer.isEnabled = true
+        statusBarIsHidden = true
         
         feedbackGenerator.playSelectionFeedback()
         
@@ -282,6 +290,8 @@ class GameViewController: UIViewController {
         }
         
         lastPressedCell?.uncompress(showNumber: false)
+        
+        statusBarIsHidden = false
         
         timer?.invalidate()
         
@@ -463,6 +473,16 @@ extension GameViewController {
                                                       left: imageInset,
                                                       bottom: 0,
                                                       right: imageInset)
+    }
+    
+    // MARK: - Status Bar
+    
+    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation{
+        return .fade
+    }
+    
+    override var prefersStatusBarHidden: Bool{
+        return statusBarIsHidden
     }
     
     // MARK: - Timer
