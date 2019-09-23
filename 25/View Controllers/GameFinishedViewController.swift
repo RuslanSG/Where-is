@@ -34,7 +34,7 @@ class GameFinishedViewController: ResultsViewController {
         super.viewDidLoad()
         configure()
         
-        if session.levelPassed, session.level.serial == 1 {
+        if session.levelPassed, session.level.serial == 2 {
             SKStoreReviewController.requestReview()
         }
     }

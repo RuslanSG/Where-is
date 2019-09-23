@@ -18,6 +18,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         registerUserDefaults()
         
+        let firstTime = UserDefaults.standard.bool(forKey: UserDefaults.Key.firstTime)
+        if firstTime {
+            cleanUserDefaults()
+        }
+        
         let window = UIWindow(frame: UIScreen.main.bounds)
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         
@@ -46,6 +51,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UserDefaults.standard.register(defaults: [UserDefaults.Key.stopGameHintNeeded : true])
         UserDefaults.standard.register(defaults: [UserDefaults.Key.findNumberHintNeeded : true])
         UserDefaults.standard.register(defaults: [UserDefaults.Key.allLevelPassedCongratulationsNedded : true])
+    }
+    
+    private func cleanUserDefaults() {
+        let domain = Bundle.main.bundleIdentifier!
+        UserDefaults.standard.removePersistentDomain(forName: domain)
+        UserDefaults.standard.synchronize()
     }
     
 }
