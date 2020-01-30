@@ -39,7 +39,7 @@ final class CellsManager {
     func setNumbers(_ numbers: [Int], animated: Bool) {
         assert(cells.count == numbers.count, "Cells count (\(cells.count)) must be equal to numbers count (\(numbers.count)) provided.")
         for i in cells.indices {
-            cells[i].setNumber(numbers[i], animateIfNeeded: animated)
+            cells[i].setNumber(numbers[i], animated: animated)
         }
     }
     
@@ -48,60 +48,28 @@ final class CellsManager {
         for i in cells.indices {
             let cell = cells[i]
             let number = numbers[i]
-            cell.setNumber(number, animateIfNeeded: animated)
+            cell.setNumber(number, animated: animated)
         }
     }
     
     func showNumbers(animated: Bool) {
-        for cell in cells {
-            cell.showNumber(animated: animated)
-        }
+        cells.forEach { $0.showNumber(animated: animated) }
     }
     
-    func hideNumbers(animated: Bool) {
-        for cell in cells {
-            cell.hideNumber(animated: animated)
-        }
+    func hideNumbers() {
+        cells.forEach { $0.hideNumber() }
     }
     
     func updateCellsStyle(to style: CellView.Style, animated: Bool) {
-        cells.forEach { (cell) in
-            cell.setStyle(style, animated: animated)
-        }
+        cells.forEach { $0.setStyle(style, animated: animated) }
     }
     
     func startWinking() {
-        guard !isWinking else { return }
-        isWinking = true
-        let winkingSpeed = 3.0 // less = faster
-        let interval = winkingSpeed / Double(cells.count)
-        timer = Timer.scheduledTimer(timeInterval: interval,
-                                     target: self,
-                                     selector: #selector(winkRandomNumber),
-                                     userInfo: nil,
-                                     repeats: true)
-    }
-    
-    func startSwapping() {
-        guard !isSwapping else { return }
-        isSwapping = true
-        let swappingSpeed = 8.0 // less = faster
-        let interval = swappingSpeed / Double(cells.count)
-        timer = Timer.scheduledTimer(timeInterval: interval,
-                                     target: self,
-                                     selector: #selector(swapRandomNumbers),
-                                     userInfo: nil,
-                                     repeats: true)
+        cells.forEach { $0.startWinking() }
     }
     
     func stopWinking() {
-        isWinking = false
-        stopAnimations()
-    }
-    
-    func stopSwapping() {
-        isSwapping = false 
-        stopAnimations()
+        cells.forEach { $0.stopWinking() }
     }
     
     func enableCells() {
@@ -115,41 +83,14 @@ final class CellsManager {
     // MARK: - Action Methods
     
     @objc private func cellPressed(_ cell: CellView) {
-        guard cell.isSetEnabled else { return }
         cell.compress()
         delegate?.cellPressed(cell)
     }
     
     @objc private func cellReleased(_ cell: CellView) {
-        guard cell.isSetEnabled else { return }
         let hideNumberNeeded = game.currentLevel.shuffleMode || !game.isRunning
         cell.uncompress(showNumber: !hideNumberNeeded)
         delegate?.cellReleased(cell)
-    }
-    
-    @objc private func winkRandomNumber() {
-        guard game.isRunning else { return }
-        let cellsToWink = cells.filter { $0.isWinkEnabled }
-        let cellToWink = cellsToWink.randomElement()
-        cellToWink?.wink()
-    }
-    
-    @objc private func swapRandomNumbers() {
-//        guard game.isRunning else { return }
-//        var cellsNotAnimating = cells.filter { !$0.swapEnabled }
-//        if cellsNotAnimating.count < 2 { return }
-//
-//        let cell1 = cellsNotAnimating.randomElement()!
-//        guard let index1 = cellsNotAnimating.firstIndex(of: cell1) else { return }
-//        cellsNotAnimating.remove(at: index1)
-//
-//        let cell2 = cellsNotAnimating.randomElement()!
-//
-//        let number1 = cell1.number
-//        let number2 = cell2.number
-//
-//        cell1.setNumber(number2, animateIfNeeded: true, animationSpeed: .slow)
-//        cell2.setNumber(number1, animateIfNeeded: true, animationSpeed: .slow)
     }
     
     // MARK: - Private Methods
@@ -160,16 +101,6 @@ final class CellsManager {
             cell.addTarget(self, action: #selector(cellReleased(_:)), for: .touchUpInside)
             cell.addTarget(self, action: #selector(cellReleased(_:)), for: .touchUpOutside)
         }
-    }
-    
-    private func stopTimer() {
-        timer?.invalidate()
-        timer = nil
-    }
-    
-    private func stopAnimations() {
-        stopTimer()
-        cells.forEach { $0.removeAllAnimations() }
     }
 }
 

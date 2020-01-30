@@ -65,7 +65,8 @@ final class Game {
     // MARK: - Actions
     
     @objc internal func timerSceduled(_ timer: Timer) {
-        finish(reason: .timeIsOver)
+        #warning("Enable it!")
+//        finish(reason: .timeIsOver)
     }
     
     // MARK: - Public Methods
@@ -190,7 +191,7 @@ final class Game {
             
             let level = Level(serial: serial,
                               index: index,
-                              isAvailable: i == 1,
+                              isAvailable: true, //i == 1,
                               isPassed: false,
                               isSelected: i == 1,
                               record: 0,

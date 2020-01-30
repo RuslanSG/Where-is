@@ -67,7 +67,7 @@ class TutorialViewController: UIViewController {
             showDoneButton()
             feedbackGenerator.playSucceessFeedback()
         } else if number == numberToFind {
-            sender.setNumber(number + cells.count, animateIfNeeded: false)
+            sender.setNumber(number + cells.count, animated: false)
             numberToFind += 1
             findNumberLabel.text = NSLocalizedString("Find", comment: "Localized kind: find %number%") + " " + String(numberToFind)
             feedbackGenerator.playSelectionFeedback()
@@ -97,7 +97,7 @@ class TutorialViewController: UIViewController {
     }
     
     private func hideCellNumbers() {
-        cells.forEach { $0.hideNumber(animated: true) }
+        cells.forEach { $0.hideNumber() }
     }
     
     private func showDoneButton() {

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CellView: UIButton {
+public class CellView: UIButton {
     
     // MARK: - Public Properties
     
@@ -20,12 +20,13 @@ class CellView: UIButton {
         case goalAchieved, newRecord
     }
     
-    var isSetEnabled = true
-    var isWinkEnabled = true
-    var isSwapEnabled = true
-    var number = 0
+    var number = 0 {
+        didSet {
+            setTitle(String(number), for: .normal)
+        }
+    }
     
-    override var backgroundColor: UIColor? {
+    override public var backgroundColor: UIColor? {
         set {
             contentView.backgroundColor = newValue
         }
@@ -34,25 +35,13 @@ class CellView: UIButton {
         }
     }
     
-    // MARK: - Private Properties
-    
-    override var description: String {
+    override public var description: String {
         return "|\(number)|"
     }
+
     
-    private enum NumberState {
-        case visible
-        case invisible
-        case appearing
-        case disappearing
-    }
-    
-    private var winkDisappearingAnimator: UIViewPropertyAnimator?
-    private var winkAppearingAnimator: UIViewPropertyAnimator?
-    
-    private var setAppearingAnimator: UIViewPropertyAnimator?
-    private var setDisappearingAnimator: UIViewPropertyAnimator?
-    
+    // MARK: - Private Properties
+        
     private var contentView: UIView = {
         let view = UIView()
         view.isUserInteractionEnabled = false
@@ -60,10 +49,9 @@ class CellView: UIButton {
     }()
     
     private var contentViewInset: CGFloat = 0.0
-    private var numberState: NumberState = .visible
     private var numberCurrentAlpha: CGFloat = 1.0
-    private var isWinking = false
-    private var isSetting = false
+    
+    private var winkAnimator: UIViewPropertyAnimator?
     
     // MARK: - Lifecycle
     
@@ -81,59 +69,35 @@ class CellView: UIButton {
     
     // MARK: - Public Methods
     
-    func setNumber(_ number: Int, animateIfNeeded: Bool) {
-        self.number = number
-        
-        if !animateIfNeeded || (numberState == .invisible && isWinking) {
-            setTitle(String(number), for: .normal)
-            return
-        }
-        
-        if numberState == .invisible {
-            setTitle(String(number), for: .normal)
-            isSetEnabled = false
-            showNumber(animated: true) {
-                self.isSetEnabled = true
+    func setNumber(_ number: Int, animated: Bool) {
+        if animated {
+            if let animator = winkAnimator {
+                animator.pauseAnimation()
+                let fractionComplete = animator.fractionComplete
+                
+                animator.stopAnimation(false)
+                let currentAlpha = titleLabel!.alpha
+                
+                titleLabel?.alpha = 0
+                self.number = number
+                
+                UIView.animate(withDuration: 0.33, delay: 0, options: [.curveEaseOut], animations: {
+                    self.titleLabel?.alpha = currentAlpha
+                }) { (_) in
+                    animator.finishAnimation(at: .current)
+                    self.startWinking(fractionComplete: fractionComplete)
+                }
+            } else {
+                titleLabel?.alpha = 0
+                self.number = number
+                
+                UIView.animate(withDuration: 0.33, delay: 0, options: [.curveEaseOut], animations: {
+                    self.titleLabel?.alpha = 1
+                })
             }
-            return
+        } else {
+            self.number = number
         }
-        
-        let isWinking = self.isWinking
-        let numberState = self.numberState
-        
-        setDisappearingAnimator = UIViewPropertyAnimator(duration: 0.1, curve: .easeInOut) {
-            self.titleLabel?.alpha = 0.0
-        }
-        
-        setAppearingAnimator = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) {
-            self.titleLabel?.alpha = isWinking ? self.numberCurrentAlpha : 1.0
-        }
-        
-        setDisappearingAnimator?.addCompletion { (_) in
-            self.setTitle(String(number), for: .normal)
-            /// Phase 2 (appearing)
-            self.setAppearingAnimator?.startAnimation()
-        }
-        
-        setAppearingAnimator?.addCompletion { (_) in
-            /// Phase 3 (visible)
-            self.numberState = .visible
-            self.isWinkEnabled = true
-            self.isSetting = false
-            
-            if isWinking {
-                self.wink(from: numberState, fractionComplete: 1.0)
-            }
-        }
-        
-        numberCurrentAlpha = titleLabel!.alpha
-        removeWinkAnimations()
-        
-        /// Phase 1 (disappearing)
-        setDisappearingAnimator?.startAnimation()
-        
-        isSetting = true
-        isWinkEnabled = false
     }
     
     func setStyle(_ style: Style, animated: Bool) {
@@ -172,64 +136,43 @@ class CellView: UIButton {
         contentView.layer.cornerRadius = cornerRadius
     }
     
-    func showNumber(animated: Bool, completion: (() -> Void)? = nil) {
-        isEnabled = true
-                if !animated {
-            titleLabel?.alpha = 1.0
-            numberState = .visible
-            return
+    func showNumber(animated: Bool, completion: ((Bool) -> Void)? = nil) {
+        if animated {
+            UIView.animate(withDuration: 0.33, delay: 0, options: .curveEaseOut, animations: {
+                self.titleLabel?.alpha = 1
+            }, completion: completion)
+        } else {
+            titleLabel?.alpha = 1
         }
-        
-        isWinkEnabled = false
-        numberState = .appearing
-        
-        let show = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) {
-            self.titleLabel?.alpha = 1.0
-        }
-        show.addCompletion { (_) in
-            self.isWinkEnabled = true
-            self.numberState = .visible
-            completion?()
-        }
-        show.startAnimation()
     }
     
-    func hideNumber(animated: Bool) {
-        if !animated {
-            titleLabel?.alpha = 0.0
-            numberState = .invisible
-            return
-        }
-        
-        isWinkEnabled = false
-        numberState = .disappearing
+    func hideNumber() {
+        titleLabel?.alpha = 0
+    }
+    
+    func startWinking(fractionComplete: CGFloat = 0) {
+        let delay = Double.random(in: 0...4)
 
-        let hide = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) {
-            self.titleLabel?.alpha = 0.0
-        }
-        hide.addCompletion { _ in
-            self.isWinkEnabled = true
-            self.numberState = .invisible
-        }
-        hide.startAnimation()
+        winkAnimator = AnimationFactory.startWinking(view: titleLabel!, delay: delay, fractionComplete: fractionComplete, completion: { (position) in
+            if position == .end {
+                self.startWinking()
+            }
+        })
+
     }
     
-    func wink() {
-        wink(from: .visible)
-    }
-    
-    func removeAllAnimations() {
-        removeWinkAnimations()
-        removeSetAnimations()
+    func stopWinking() {
+        winkAnimator?.stopAnimation(true)
+        winkAnimator = nil
     }
     
     func compress() {
         transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-        hideNumber(animated: false)
+        hideNumber()
     }
     
     func uncompress(showNumber: Bool = true) {
-        UIView.animate(withDuration: 0.2) {
+        UIView.animate(withDuration: 0.33) {
             self.transform = CGAffineTransform.identity
         }
         if showNumber {
@@ -266,80 +209,5 @@ class CellView: UIButton {
         contentView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -contentViewInset).isActive = true
         contentView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -contentViewInset).isActive = true
         contentView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: contentViewInset).isActive = true
-    }
-    
-    private func wink(from state: NumberState = .visible, fractionComplete: CGFloat = 1.0) {
-        guard isWinkEnabled else { return }
-        
-        let disappearingDuration = 0.5 * Double(fractionComplete)
-        let disappearedDuration = 1.5
-        let appearingDuration = 0.5 * Double(fractionComplete)
-        
-        winkDisappearingAnimator = UIViewPropertyAnimator(duration: disappearingDuration, curve: .easeInOut) {
-            self.titleLabel?.alpha = 0
-        }
-        
-        winkDisappearingAnimator?.addCompletion { (_) in
-            /// Phase 2 (invisible)
-            self.numberState = .invisible
-            
-            self.winkDisappearingAnimator = nil
-            
-            guard self.isWinking else { return }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + disappearedDuration, execute: {
-                /// Phase 3 (appearing)
-                self.winkAppearingAnimator?.startAnimation()
-                self.numberState = .appearing
-            })
-        }
-        
-        winkAppearingAnimator = UIViewPropertyAnimator(duration: appearingDuration, curve: .easeInOut) {
-            self.titleLabel?.alpha = 1
-        }
-        
-        winkAppearingAnimator?.addCompletion { (_) in
-            /// Final (visible)
-            self.numberState = .visible
-            self.isWinking = false
-            self.winkAppearingAnimator = nil
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
-                self.isWinkEnabled = true
-            })
-        }
-        
-        if state == .invisible || state == .appearing {
-            winkAppearingAnimator?.startAnimation()
-            numberState = .appearing
-        } else {
-            winkDisappearingAnimator?.startAnimation()
-            numberState = .disappearing
-        }
-        
-        isWinking = true
-        isWinkEnabled = false
-    }
-    
-    private func removeWinkAnimations() {
-        isWinking = false
-        isWinkEnabled = true
-        
-        winkAppearingAnimator?.stopAnimation(true)
-        winkDisappearingAnimator?.stopAnimation(true)
-        
-        winkAppearingAnimator = nil
-        winkDisappearingAnimator = nil
-    }
-    
-    private func removeSetAnimations() {
-        isSetting = false
-        isWinkEnabled = true
-        
-        setAppearingAnimator?.stopAnimation(true)
-        setDisappearingAnimator?.stopAnimation(true)
-        
-        setAppearingAnimator = nil
-        setDisappearingAnimator = nil
     }
 }

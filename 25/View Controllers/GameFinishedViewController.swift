@@ -185,6 +185,7 @@ class GameFinishedViewController: ResultsViewController {
                                                                   timeTakenStackView,
                                                                   separator2,
                                                                   messageLabel])
+        
         gameSessionInfoStackView.axis = .vertical
         gameSessionInfoStackView.spacing = 10
         gameSessionInfoStackView.translatesAutoresizingMaskIntoConstraints = false

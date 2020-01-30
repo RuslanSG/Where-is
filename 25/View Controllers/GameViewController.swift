@@ -129,7 +129,7 @@ class GameViewController: UIViewController {
         
         let firstTime = UserDefaults.standard.bool(forKey: UserDefaults.Key.firstTime)
         if !firstTime {
-            SKStoreReviewController.requestReview()
+//            SKStoreReviewController.requestReview()
         }
     }
     
@@ -183,27 +183,23 @@ class GameViewController: UIViewController {
         
         startGameButton.hide()
         
-        cellsManager.showNumbers(animated: true)
+        cellsManager.showNumbers(animated: false)
         cellsManager.enableCells()
         
         if game.currentLevel.winkMode { cellsManager.startWinking() }
-        if game.currentLevel.swapMode { cellsManager.startSwapping() }
         
         timeLeftProgressView.show(animated: true)
         timeLeftProgressView.startAnimation(duration: game.currentLevel.interval)
         
         UIView.animate(withDuration: 0.2) {
             self.view.layoutIfNeeded()
+            self.settingsButton.isHidden = true
         }
                 
         swipeDownGestureRecognizer.isEnabled = true
         statusBarIsHidden = true
         
         feedbackGenerator.playSelectionFeedback()
-        
-        UIView.animate(withDuration: 0.2) {
-            self.settingsButton.isHidden = true
-        }
         
         if orientation == .portrait {
             (UIApplication.shared.delegate as! AppDelegate).restrictRotation = .portrait
@@ -231,6 +227,7 @@ class GameViewController: UIViewController {
         }
         
         UserDefaults.standard.set(false, forKey: UserDefaults.Key.stopGameHintNeeded)
+        
     }
     
     @objc func settingsButtonPressed() {
@@ -268,10 +265,9 @@ class GameViewController: UIViewController {
         game.new()
         
         cellsManager.stopWinking()
-        cellsManager.stopSwapping()
         cellsManager.disableCells()
         cellsManager.updateNumbers(with: game.numbers, animated: false)
-        cellsManager.hideNumbers(animated: false)
+        cellsManager.hideNumbers()
         
         swipeDownGestureRecognizer.isEnabled = false
         
@@ -294,6 +290,13 @@ class GameViewController: UIViewController {
         statusBarIsHidden = false
         
         timer?.invalidate()
+        
+        // TODO: Make this
+//        if game.currentLevel.winkMode {
+//            cellsGrid.cells.forEach { (cellView) in
+//                cellView.currentState = Bool.random() ? VisibleState.identifier : InvisibleState.identifier
+//            }
+//        }
         
         (UIApplication.shared.delegate as! AppDelegate).restrictRotation = .allButUpsideDown
     }
@@ -429,7 +432,7 @@ extension GameViewController {
         cellsGrid.layoutIfNeeded()
         cellsManager.setStyle(to: cellStyle, animated: false)
         cellsManager.setNumbers(game.numbers, animated: false)
-        cellsManager.hideNumbers(animated: false)
+        cellsManager.hideNumbers()
         updateStartGameViewFrame()
         updateSettingsButtonFrameAndBackgroundColor()
     }
@@ -552,7 +555,7 @@ extension GameViewController: CellsManagerDelegate {
             if game.currentLevel.shuffleMode {
                 cellsManager.updateNumbers(with: game.numbers, animated: true)
             } else {
-                cell.setNumber(game.session.newNumber, animateIfNeeded: false)
+                cell.setNumber(game.session.newNumber, animated: false)
             }
                     
             if game.session.nextNumber == 11 {
