@@ -71,6 +71,8 @@ public class CellView: UIButton {
     
     func setNumber(_ number: Int, animated: Bool) {
         if animated {
+            let duration = 0.33
+            
             if let animator = winkAnimator {
                 animator.pauseAnimation()
                 let fractionComplete = animator.fractionComplete
@@ -81,7 +83,7 @@ public class CellView: UIButton {
                 titleLabel?.alpha = 0
                 self.number = number
                 
-                UIView.animate(withDuration: 0.33, delay: 0, options: [.curveEaseOut], animations: {
+                UIView.animate(withDuration: duration, delay: 0, options: [.curveEaseOut], animations: {
                     self.titleLabel?.alpha = currentAlpha
                 }) { (_) in
                     animator.finishAnimation(at: .current)
@@ -91,7 +93,7 @@ public class CellView: UIButton {
                 titleLabel?.alpha = 0
                 self.number = number
                 
-                UIView.animate(withDuration: 0.33, delay: 0, options: [.curveEaseOut], animations: {
+                UIView.animate(withDuration: duration, delay: 0, options: [.curveEaseOut], animations: {
                     self.titleLabel?.alpha = 1
                 })
             }

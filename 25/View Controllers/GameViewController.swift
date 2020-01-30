@@ -450,6 +450,8 @@ extension GameViewController {
         }
        
         startGameButton.frame = startGameViewRect(aspectRatio: aspectRatio)
+        startGameButton.frame.origin.y -= 1
+        startGameButton.frame.size.height += 2
     }
     
     private func updateSettingsButtonFrameAndBackgroundColor() {
