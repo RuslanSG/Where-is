@@ -191,7 +191,7 @@ final class Game {
             
             let level = Level(serial: serial,
                               index: index,
-                              isAvailable: true, //i == 1,
+                              isAvailable: i == 1,
                               isPassed: false,
                               isSelected: i == 1,
                               record: 0,
