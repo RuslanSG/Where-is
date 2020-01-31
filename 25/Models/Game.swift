@@ -49,6 +49,7 @@ final class Game {
     private var memoryManager = MemoryManager.shared
     private var intervalTimer: Timer?
     private var gameSessionTimer: Timer?
+    private let firebaseManager = FirebaseManager()
     
     // MARK: - Initialization
     
@@ -65,8 +66,7 @@ final class Game {
     // MARK: - Actions
     
     @objc internal func timerSceduled(_ timer: Timer) {
-        #warning("Enable it!")
-//        finish(reason: .timeIsOver)
+        finish(reason: .timeIsOver)
     }
     
     // MARK: - Public Methods
@@ -219,6 +219,8 @@ final class Game {
     private func setLevelPassed(_ level: Level) {
         guard let index = levels.firstIndex(of: level) else { return }
         levels[index].isPassed = true
+        
+        firebaseManager.logLevelPassed(levels[index].serial)
     }
     
     private func setLevelAvailable(_ level: Level) {

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -36,6 +37,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let pageControl = UIPageControl.appearance()
         pageControl.currentPageIndicatorTintColor = .darkGray
         pageControl.pageIndicatorTintColor = .lightGray
+        
+        FirebaseApp.configure()
                 
         return true
     }
