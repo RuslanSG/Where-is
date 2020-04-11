@@ -167,6 +167,9 @@ final class Game {
     }
     
     private func loadLevels() {
+        #if TEST
+        self.levels = configureLevels()
+        #else
         if let levels = memoryManager.loadLevels() {
             self.levels = levels
         } else {
@@ -175,6 +178,7 @@ final class Game {
             memoryManager.saveLevels(self.levels)
             #endif
         }
+        #endif
     }
     
     private func configureLevels() -> [Level] {
@@ -259,6 +263,8 @@ final class Game {
 extension Game {
     
     @objc internal func applicationWillResignActive() {
+        #if !TEST
         memoryManager.saveLevels(levels)
+        #endif
     }
 }
