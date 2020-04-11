@@ -11,6 +11,8 @@ import Firebase
 class FirebaseManager {
     
     func logLevelPassed(_ level: Int) {
+        #if PROD
         Analytics.logEvent("level_\(level)_passed", parameters: nil)
+        #endif
     }
 }
