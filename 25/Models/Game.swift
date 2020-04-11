@@ -66,7 +66,9 @@ final class Game {
     // MARK: - Actions
     
     @objc internal func timerSceduled(_ timer: Timer) {
+        #if !TEST
         finish(reason: .timeIsOver)
+        #endif
     }
     
     // MARK: - Public Methods
@@ -169,7 +171,9 @@ final class Game {
             self.levels = levels
         } else {
             self.levels = configureLevels()
+            #if !TEST
             memoryManager.saveLevels(self.levels)
+            #endif
         }
     }
     
@@ -189,9 +193,14 @@ final class Game {
             let swapMode = parameters.swapModeForLevel[i]!
             let shuffleMode = parameters.shuffleModeForLevel[i]!
             
+            var isAvailable = i == 1
+            #if TEST
+            isAvailable = true
+            #endif
+            
             let level = Level(serial: serial,
                               index: index,
-                              isAvailable: i == 1,
+                              isAvailable: isAvailable,
                               isPassed: false,
                               isSelected: i == 1,
                               record: 0,
