@@ -94,8 +94,9 @@ class StartGameView: UIVisualEffectView {
         } else {
             effect = UIBlurEffect(style: .light)
         }
-    
+            
         titleLabel.text = NSLocalizedString("START", comment: "Localized kind: start button")
+        titleLabel.accessibilityIdentifier = "start_label"
         
         updateDetails()
                 

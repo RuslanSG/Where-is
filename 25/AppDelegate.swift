@@ -41,6 +41,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         #if PROD
         FirebaseApp.configure()
         #endif
+        
+        #if FASTLANE
+        UIView.setAnimationsEnabled(false)
+        #endif
                 
         return true
     }

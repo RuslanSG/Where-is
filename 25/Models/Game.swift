@@ -74,6 +74,14 @@ final class Game {
     // MARK: - Public Methods
     
     func numberSelected(_ number: Int) -> Bool { // Returns true if selected number is right
+        #if FASTLANE
+        setLevelPassed(currentLevel)
+        session.levelPassed = true
+        session.numbersFound = currentLevel.goal
+        finish(reason: .levelPassed)
+        return true
+        #else
+        
         guard number == session.nextNumber else {
             finish(reason: .wrongNumberTapped)
             return false
@@ -108,6 +116,7 @@ final class Game {
         setIntevalTimer(to: currentLevel.interval)
         
         return true
+        #endif
     }
     
     func new() {
@@ -167,16 +176,14 @@ final class Game {
     }
     
     private func loadLevels() {
-        #if TEST
+        #if TEST || FASTLANE
         self.levels = configureLevels()
         #else
         if let levels = memoryManager.loadLevels() {
             self.levels = levels
         } else {
             self.levels = configureLevels()
-            #if !TEST
             memoryManager.saveLevels(self.levels)
-            #endif
         }
         #endif
     }
@@ -198,10 +205,10 @@ final class Game {
             let shuffleMode = parameters.shuffleModeForLevel[i]!
             
             var isAvailable = i == 1
-            #if TEST
+            #if TEST || FASTLANE
             isAvailable = true
             #endif
-            
+                        
             let level = Level(serial: serial,
                               index: index,
                               isAvailable: isAvailable,

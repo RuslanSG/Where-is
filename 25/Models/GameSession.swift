@@ -32,10 +32,14 @@ struct GameSession {
     var startTime: Date?
     var finishTime: Date?
     var timeTaken: TimeInterval? {
+        #if FASTLANE
+        return 57.69
+        #else
         if let startTime = startTime, let finishTime = finishTime {
             return finishTime.timeIntervalSinceReferenceDate - startTime.timeIntervalSinceReferenceDate
         }
         return nil
+        #endif
     }
 
 }

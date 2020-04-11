@@ -126,11 +126,12 @@ class GameViewController: UIViewController {
                                                selector: #selector(applicationWillResignActive),
                                                name: UIApplication.willResignActiveNotification,
                                                object: nil)
-        
+        #if PROD
         let firstTime = UserDefaults.standard.bool(forKey: UserDefaults.Key.firstTime)
         if !firstTime {
-//            SKStoreReviewController.requestReview()
+            SKStoreReviewController.requestReview()
         }
+        #endif
     }
     
     override func viewDidLayoutSubviews() {
@@ -146,7 +147,10 @@ class GameViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        #if !FASTLANE
         showTutorialIfNeeded()
+        #endif
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {

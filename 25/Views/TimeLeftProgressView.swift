@@ -90,7 +90,11 @@ final class TimeLeftProgressView: UIView {
     }
     
     func startAnimation(duration: Double) {
-        self.progressViewWidthConstraint?.constant = -bounds.size.width
+        #if FASTLANE
+        progressViewWidthConstraint?.constant = -bounds.size.width * 0.75
+        #else
+        progressViewWidthConstraint?.constant = -bounds.size.width
+        #endif
         UIView.animate(withDuration: duration,
                        delay: 0,
                        options: .curveEaseOut,
