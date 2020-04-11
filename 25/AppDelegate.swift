@@ -38,7 +38,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         pageControl.currentPageIndicatorTintColor = .darkGray
         pageControl.pageIndicatorTintColor = .lightGray
         
+        #if PROD
         FirebaseApp.configure()
+        #endif
                 
         return true
     }
