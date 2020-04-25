@@ -273,6 +273,4 @@ class GameFinishedViewController: ResultsViewController {
         
         return rowStackView
     }
-    
-    
 }
