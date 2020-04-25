@@ -958,7 +958,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.1;
+				MARKETING_VERSION = 2.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ruslangritsenko.-25";
 				PRODUCT_NAME = "Where is";
 				SWIFT_VERSION = 5.0;
@@ -982,7 +982,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.1;
+				MARKETING_VERSION = 2.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ruslangritsenko.-25";
 				PRODUCT_NAME = "Where is";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = PROD;

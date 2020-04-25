@@ -3,6 +3,11 @@ update_fastlane
 default_platform(:ios)
 
 platform :ios do
+
+  desc "Create app on Apple Developer and App Store Connect sites"
+  lane :create_app do
+​    produce
+  end
   
   desc "Taking screenshots"
   lane :take_screenshots do
@@ -12,6 +17,7 @@ platform :ios do
   desc "Create ipa"
   lane :build do
     enable_automatic_code_signing
+    increment_build_number
     gym
   end
 
