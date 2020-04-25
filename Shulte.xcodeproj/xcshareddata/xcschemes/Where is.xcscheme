@@ -9,15 +9,15 @@
          <BuildActionEntry
             buildForTesting = "YES"
             buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8F1AB544243F404E006AB2EE"
-               BuildableName = "Where is TEST.app"
-               BlueprintName = "Where is TEST"
-               ReferencedContainer = "container:25.xcodeproj">
+               BlueprintIdentifier = "2A118DAF211A132F0059E252"
+               BuildableName = "Where is.app"
+               BlueprintName = "Where is"
+               ReferencedContainer = "container:Shulte.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -44,10 +44,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8F1AB544243F404E006AB2EE"
-            BuildableName = "Where is TEST.app"
-            BlueprintName = "Where is TEST"
-            ReferencedContainer = "container:25.xcodeproj">
+            BlueprintIdentifier = "2A118DAF211A132F0059E252"
+            BuildableName = "Where is.app"
+            BlueprintName = "Where is"
+            ReferencedContainer = "container:Shulte.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -57,15 +57,16 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8F1AB544243F404E006AB2EE"
-            BuildableName = "Where is TEST.app"
-            BlueprintName = "Where is TEST"
-            ReferencedContainer = "container:25.xcodeproj">
+            BlueprintIdentifier = "2A118DAF211A132F0059E252"
+            BuildableName = "Where is.app"
+            BlueprintName = "Where is"
+            ReferencedContainer = "container:Shulte.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
