@@ -49,7 +49,9 @@ final class Game {
     private var memoryManager = MemoryManager.shared
     private var intervalTimer: Timer?
     private var gameSessionTimer: Timer?
+    #if PROD
     private let firebaseManager = FirebaseManager()
+    #endif
     
     // MARK: - Initialization
     
@@ -239,8 +241,9 @@ final class Game {
     private func setLevelPassed(_ level: Level) {
         guard let index = levels.firstIndex(of: level) else { return }
         levels[index].isPassed = true
-        
+        #if PROD
         firebaseManager.logLevelPassed(levels[index].serial)
+        #endif
     }
     
     private func setLevelAvailable(_ level: Level) {
