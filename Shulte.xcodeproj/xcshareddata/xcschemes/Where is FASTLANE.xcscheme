@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1020"
-   version = "1.7">
+   LastUpgradeVersion = "1140"
+   version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
@@ -9,15 +9,15 @@
          <BuildActionEntry
             buildForTesting = "YES"
             buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2A118DAF211A132F0059E252"
-               BuildableName = "Where is.app"
-               BlueprintName = "25"
-               ReferencedContainer = "container:25.xcodeproj">
+               BlueprintIdentifier = "8F15735D24433FA000BE3BC7"
+               BuildableName = "Where is FASTLANE.app"
+               BlueprintName = "Where is FASTLANE"
+               ReferencedContainer = "container:Shulte.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -27,23 +27,23 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2A118DAF211A132F0059E252"
-            BuildableName = "Where is.app"
-            BlueprintName = "25"
-            ReferencedContainer = "container:25.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "8F1573192442053300BE3BC7"
+               BuildableName = "Fastlane UITests.xctest"
+               BlueprintName = "Fastlane UITests"
+               ReferencedContainer = "container:Shulte.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      language = "ru"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
@@ -54,16 +54,12 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2A118DAF211A132F0059E252"
-            BuildableName = "Where is.app"
-            BlueprintName = "25"
-            ReferencedContainer = "container:25.xcodeproj">
+            BlueprintIdentifier = "8F15735D24433FA000BE3BC7"
+            BuildableName = "Where is FASTLANE.app"
+            BlueprintName = "Where is FASTLANE"
+            ReferencedContainer = "container:Shulte.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <LocationScenarioReference
-         identifier = "com.apple.dt.IDEFoundation.CurrentLocationScenarioIdentifier"
-         referenceType = "1">
-      </LocationScenarioReference>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -71,16 +67,6 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2A118DAF211A132F0059E252"
-            BuildableName = "Where is.app"
-            BlueprintName = "25"
-            ReferencedContainer = "container:25.xcodeproj">
-         </BuildableReference>
-      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

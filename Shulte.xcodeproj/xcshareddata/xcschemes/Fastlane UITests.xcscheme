@@ -17,7 +17,7 @@
                BlueprintIdentifier = "8F1573192442053300BE3BC7"
                BuildableName = "Fastlane UITests.xctest"
                BlueprintName = "Fastlane UITests"
-               ReferencedContainer = "container:25.xcodeproj">
+               ReferencedContainer = "container:Shulte.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,7 +35,7 @@
                BlueprintIdentifier = "8F1573192442053300BE3BC7"
                BuildableName = "Fastlane UITests.xctest"
                BlueprintName = "Fastlane UITests"
-               ReferencedContainer = "container:25.xcodeproj">
+               ReferencedContainer = "container:Shulte.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -63,7 +63,7 @@
             BlueprintIdentifier = "8F1573192442053300BE3BC7"
             BuildableName = "Fastlane UITests.xctest"
             BlueprintName = "Fastlane UITests"
-            ReferencedContainer = "container:25.xcodeproj">
+            ReferencedContainer = "container:Shulte.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>
