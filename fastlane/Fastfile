@@ -15,4 +15,9 @@ platform :ios do
     gym
   end
 
+  desc "Upload to App Store"
+  lane :upload do
+    deliver
+  end
+
 end

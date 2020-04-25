@@ -1,0 +1,10 @@
+price_tier(0)
+submission_information({
+    export_compliance_encryption_updated: false,
+    export_compliance_uses_encryption: false,
+    content_rights_contains_third_party_content: false,
+    add_id_info_uses_idfa: false
+})
+ipa("./fastlane/builds/Where is.ipa”)
+submit_for_review(false)
+automatic_release(true)

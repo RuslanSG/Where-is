@@ -1,0 +1,2 @@
+• Small user interface improvements
+• Stability improvement and bug fixed

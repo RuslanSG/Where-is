@@ -26,6 +26,11 @@ Taking screenshots
 fastlane ios build
 ```
 Create ipa
+### ios upload
+```
+fastlane ios upload
+```
+Upload to App Store
 
 ----
 
