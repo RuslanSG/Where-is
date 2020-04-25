@@ -7,7 +7,9 @@
 //
 
 import UIKit
+#if PROD
 import Firebase
+#endif
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

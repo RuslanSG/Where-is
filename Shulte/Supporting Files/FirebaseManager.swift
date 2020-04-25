@@ -6,13 +6,12 @@
 //  Copyright © 2020 Ruslan Gritsenko. All rights reserved.
 //
 
+#if PROD
 import Firebase
 
 class FirebaseManager {
-    
     func logLevelPassed(_ level: Int) {
-        #if PROD
         Analytics.logEvent("level_\(level)_passed", parameters: nil)
-        #endif
     }
 }
+#endif
