@@ -21,6 +21,11 @@ or alternatively using `brew cask install fastlane`
 fastlane ios take_screenshots
 ```
 Taking screenshots
+### ios build
+```
+fastlane ios build
+```
+Create ipa
 
 ----
 
