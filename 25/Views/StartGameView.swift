@@ -58,32 +58,21 @@ class StartGameView: UIVisualEffectView {
         guard isHidden else { return }
         isHidden = false
         isUserInteractionEnabled = true
-                
-        let blurAnimator = UIViewPropertyAnimator(duration: 0.2, curve: .easeOut) {
-            if #available(iOS 13.0, *) {
-                self.effect = UIBlurEffect(style: .systemUltraThinMaterial)
-            } else {
-                self.effect = UIBlurEffect(style: .light)
-            }
-            self.titleLabel.alpha = self.titleLabelDefaultAlpha
-            self.detailsLabel.alpha = self.detailsLabelDefaultAlpha
+        
+        UIView.animate(withDuration: 0.2) {
+            self.alpha = 1
         }
-        blurAnimator.startAnimation()
     }
     
     func hide() {
         guard !isHidden else { return }
         isUserInteractionEnabled = false
         
-        let blurAnimator = UIViewPropertyAnimator(duration: 0.1, curve: .easeOut) {
-            self.effect = nil
-            self.titleLabel.alpha = 0
-            self.detailsLabel.alpha = 0
-        }
-        blurAnimator.addCompletion { (_) in
+        UIView.animate(withDuration: 0.1, animations: {
+            self.alpha = 0
+        }) { _ in
             self.isHidden = true
         }
-        blurAnimator.startAnimation()
     }
     
     // MARK: - Private Methods
