@@ -97,9 +97,10 @@ public class CellView: UIButton {
                     self.titleLabel?.alpha = 1
                 })
             }
-        } else {
-            self.number = number
+            return
         }
+        self.number = number
+        accessibilityIdentifier = "\(number)_button"
     }
     
     func setStyle(_ style: Style, animated: Bool) {

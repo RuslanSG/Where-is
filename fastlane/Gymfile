@@ -1,0 +1,5 @@
+scheme("Where is")
+output_directory("./fastlane/builds")
+include_bitcode(true)
+include_symbols(true)
+export_xcargs("-allowProvisioningUpdates")

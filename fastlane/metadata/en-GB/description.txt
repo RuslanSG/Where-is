@@ -1,0 +1,10 @@
+‘Where is’ includes:
+
+• A table of 25-40 randomly spaced numbers, each of which must be found in a certain time. The concept is based on the development of the scientist Walter Schulte which is called the "Schulte Table", but a time limits have been added.
+
+• 10 levels, each of which is more difficult than the previous one. Each of them has its own specific mode (for example, colored numbers, winking numbers, shuffling numbers, etc.), as well as its own time goal for each number finding and found numbers count that must be completed to pass a level.
+
+• Dark mode, which gives the game interface dark colors. This allows you to more comfortably use the application in low light conditions. The dark mode in the application is synchronized with the system settings of your device.
+
+Support:
+whereisassist@gmail.com

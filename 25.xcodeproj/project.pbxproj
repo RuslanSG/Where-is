@@ -42,6 +42,41 @@
 		2AEA5DC023E33EEC00E25FB0 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEA5DBF23E33EEC00E25FB0 /* FirebaseManager.swift */; };
 		2AF6193223252AC7008DA4A4 /* MemoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF6193123252AC7008DA4A4 /* MemoryManager.swift */; };
 		7F705113E96C575DDF0B29E6 /* Pods_25.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69C4B541956BA2E70DD7D54D /* Pods_25.framework */; };
+		8F1573252442061600BE3BC7 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1573242442061600BE3BC7 /* SnapshotHelper.swift */; };
+		8F15736024433FA000BE3BC7 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEA5DBF23E33EEC00E25FB0 /* FirebaseManager.swift */; };
+		8F15736124433FA000BE3BC7 /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE841F122DE399400D724E0 /* Level.swift */; };
+		8F15736224433FA000BE3BC7 /* AnimationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEA5D7F23E09AF600E25FB0 /* AnimationFactory.swift */; };
+		8F15736324433FA000BE3BC7 /* StartGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE841F622DE39DD00D724E0 /* StartGameView.swift */; };
+		8F15736424433FA000BE3BC7 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A370E7122FC829000E81166 /* Helpers.swift */; };
+		8F15736524433FA000BE3BC7 /* GameViewControllerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5B443C22FD89C800ECF2C7 /* GameViewControllerHelper.swift */; };
+		8F15736624433FA000BE3BC7 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A68B4212312B102005DC9AF /* WelcomeViewController.swift */; };
+		8F15736724433FA000BE3BC7 /* BlurryPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3271DE22E8685A00F303A5 /* BlurryPresentationController.swift */; };
+		8F15736824433FA000BE3BC7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE8420622DE3BE900D724E0 /* AppDelegate.swift */; };
+		8F15736924433FA000BE3BC7 /* LevelParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A85C82122F1C2EE0039D678 /* LevelParameters.swift */; };
+		8F15736A24433FA000BE3BC7 /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A68B4232312B97F005DC9AF /* TutorialViewController.swift */; };
+		8F15736B24433FA000BE3BC7 /* UIColor+CellColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE8420322DE3B0D00D724E0 /* UIColor+CellColor.swift */; };
+		8F15736C24433FA000BE3BC7 /* TimeLeftProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1038B62321AAC10003C09B /* TimeLeftProgressView.swift */; };
+		8F15736D24433FA000BE3BC7 /* UIDevice+Info.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A118DC9211A1BD50059E252 /* UIDevice+Info.swift */; };
+		8F15736E24433FA000BE3BC7 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE841EF22DE398600D724E0 /* Game.swift */; };
+		8F15736F24433FA000BE3BC7 /* HintLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ACF1A6B232049C900183DF4 /* HintLabel.swift */; };
+		8F15737024433FA000BE3BC7 /* ResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A527BAE22E7856900F68407 /* ResultsViewController.swift */; };
+		8F15737124433FA000BE3BC7 /* UserDefaults+Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE8420122DE3AFB00D724E0 /* UserDefaults+Key.swift */; };
+		8F15737224433FA000BE3BC7 /* GameFinishedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB2D09D232FBD9E0073660C /* GameFinishedViewController.swift */; };
+		8F15737324433FA000BE3BC7 /* CellsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE841FD22DE3ABC00D724E0 /* CellsManager.swift */; };
+		8F15737424433FA000BE3BC7 /* CellsGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE841FA22DE3A2600D724E0 /* CellsGrid.swift */; };
+		8F15737524433FA000BE3BC7 /* GameSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AAB38462332BC9C00BB1876 /* GameSession.swift */; };
+		8F15737624433FA000BE3BC7 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE841E922DE38D800D724E0 /* GameViewController.swift */; };
+		8F15737724433FA000BE3BC7 /* FeedbackGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ACDF75B213D5B43004FEA1B /* FeedbackGenerator.swift */; };
+		8F15737824433FA000BE3BC7 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE841EB22DE394600D724E0 /* SettingsViewController.swift */; };
+		8F15737924433FA000BE3BC7 /* InstructionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A68B41F2312AAC9005DC9AF /* InstructionsViewController.swift */; };
+		8F15737A24433FA000BE3BC7 /* MemoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF6193123252AC7008DA4A4 /* MemoryManager.swift */; };
+		8F15737B24433FA000BE3BC7 /* CellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE841F422DE39BA00D724E0 /* CellView.swift */; };
+		8F15737C24433FA000BE3BC7 /* CongratulationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AAB384423317A5000BB1876 /* CongratulationsViewController.swift */; };
+		8F15737E24433FA000BE3BC7 /* Pods_25.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69C4B541956BA2E70DD7D54D /* Pods_25.framework */; };
+		8F15738024433FA000BE3BC7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2A9F63E523382B410007AB6A /* Localizable.strings */; };
+		8F15738124433FA000BE3BC7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2A118DBF211A13300059E252 /* LaunchScreen.storyboard */; };
+		8F15738224433FA000BE3BC7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2A118DBD211A13300059E252 /* Assets.xcassets */; };
+		8F15738324433FA000BE3BC7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2A118DB7211A132F0059E252 /* Main.storyboard */; };
 		8F1AB547243F404E006AB2EE /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEA5DBF23E33EEC00E25FB0 /* FirebaseManager.swift */; };
 		8F1AB548243F404E006AB2EE /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE841F122DE399400D724E0 /* Level.swift */; };
 		8F1AB549243F404E006AB2EE /* AnimationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEA5D7F23E09AF600E25FB0 /* AnimationFactory.swift */; };
@@ -76,7 +111,18 @@
 		8F1AB568243F404E006AB2EE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2A118DBF211A13300059E252 /* LaunchScreen.storyboard */; };
 		8F1AB56A243F404E006AB2EE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2A118DBD211A13300059E252 /* Assets.xcassets */; };
 		8F1AB56B243F404E006AB2EE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2A118DB7211A132F0059E252 /* Main.storyboard */; };
+		8F733A9C2443654700A2B267 /* Where_is_UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F15731C2442053300BE3BC7 /* Where_is_UITests.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		8F15738A24433FB600BE3BC7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A118DA8211A132F0059E252 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8F15735D24433FA000BE3BC7;
+			remoteInfo = "Where is FASTLANE";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		2A1038B62321AAC10003C09B /* TimeLeftProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLeftProgressView.swift; sourceTree = "<group>"; };
@@ -121,6 +167,12 @@
 		5CA357FDB184547893460637 /* Pods-25.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-25.release.xcconfig"; path = "Pods/Target Support Files/Pods-25/Pods-25.release.xcconfig"; sourceTree = "<group>"; };
 		69C4B541956BA2E70DD7D54D /* Pods_25.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_25.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		88725F259EA3F250A806BD5E /* Pods-25.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-25.debug.xcconfig"; path = "Pods/Target Support Files/Pods-25/Pods-25.debug.xcconfig"; sourceTree = "<group>"; };
+		8F15731A2442053300BE3BC7 /* Fastlane UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Fastlane UITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8F15731C2442053300BE3BC7 /* Where_is_UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Where_is_UITests.swift; sourceTree = "<group>"; };
+		8F15731E2442053300BE3BC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8F1573242442061600BE3BC7 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
+		8F15738824433FA000BE3BC7 /* Where is FASTLANE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Where is FASTLANE.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8F15738924433FA000BE3BC7 /* Fastlane-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Fastlane-Info.plist"; path = "/Users/hruslan/Developer/Personal/Where-is/Fastlane-Info.plist"; sourceTree = "<absolute>"; };
 		8F1AB570243F404E006AB2EE /* Where is TEST.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Where is TEST.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F1AB571243F404E006AB2EE /* Test-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Test-Info.plist"; path = "/Users/hruslan/Developer/Personal/Where-is/Test-Info.plist"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
@@ -131,6 +183,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				7F705113E96C575DDF0B29E6 /* Pods_25.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8F1573172442053300BE3BC7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8F15737D24433FA000BE3BC7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8F15737E24433FA000BE3BC7 /* Pods_25.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -149,6 +216,7 @@
 			isa = PBXGroup;
 			children = (
 				2A118DB2211A132F0059E252 /* 25 */,
+				8F15731B2442053300BE3BC7 /* Where is UITests */,
 				2A118DB1211A132F0059E252 /* Products */,
 				2FC3AAF029933E8E0930FFF5 /* Pods */,
 				5914BF3D0020C3A72BA00621 /* Frameworks */,
@@ -160,6 +228,8 @@
 			children = (
 				2A118DB0211A132F0059E252 /* Where is.app */,
 				8F1AB570243F404E006AB2EE /* Where is TEST.app */,
+				8F15731A2442053300BE3BC7 /* Fastlane UITests.xctest */,
+				8F15738824433FA000BE3BC7 /* Where is FASTLANE.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -177,6 +247,7 @@
 				2AE8420522DE3BCB00D724E0 /* Recources */,
 				2A118DC2211A13300059E252 /* Info.plist */,
 				8F1AB571243F404E006AB2EE /* Test-Info.plist */,
+				8F15738924433FA000BE3BC7 /* Fastlane-Info.plist */,
 				2AEA5DBD23E33DCD00E25FB0 /* GoogleService-Info.plist */,
 				2A9F63E523382B410007AB6A /* Localizable.strings */,
 			);
@@ -288,6 +359,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		8F15731B2442053300BE3BC7 /* Where is UITests */ = {
+			isa = PBXGroup;
+			children = (
+				8F15731C2442053300BE3BC7 /* Where_is_UITests.swift */,
+				8F1573242442061600BE3BC7 /* SnapshotHelper.swift */,
+				8F15731E2442053300BE3BC7 /* Info.plist */,
+			);
+			path = "Where is UITests";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -308,6 +389,43 @@
 			name = "Where is";
 			productName = 25;
 			productReference = 2A118DB0211A132F0059E252 /* Where is.app */;
+			productType = "com.apple.product-type.application";
+		};
+		8F1573192442053300BE3BC7 /* Fastlane UITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8F1573232442053300BE3BC7 /* Build configuration list for PBXNativeTarget "Fastlane UITests" */;
+			buildPhases = (
+				8F1573162442053300BE3BC7 /* Sources */,
+				8F1573172442053300BE3BC7 /* Frameworks */,
+				8F1573182442053300BE3BC7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8F15738B24433FB600BE3BC7 /* PBXTargetDependency */,
+			);
+			name = "Fastlane UITests";
+			productName = "Where is UITests";
+			productReference = 8F15731A2442053300BE3BC7 /* Fastlane UITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		8F15735D24433FA000BE3BC7 /* Where is FASTLANE */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8F15738524433FA000BE3BC7 /* Build configuration list for PBXNativeTarget "Where is FASTLANE" */;
+			buildPhases = (
+				8F15735E24433FA000BE3BC7 /* [CP] Check Pods Manifest.lock */,
+				8F15735F24433FA000BE3BC7 /* Sources */,
+				8F15737D24433FA000BE3BC7 /* Frameworks */,
+				8F15737F24433FA000BE3BC7 /* Resources */,
+				8F15738424433FA000BE3BC7 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Where is FASTLANE";
+			productName = 25;
+			productReference = 8F15738824433FA000BE3BC7 /* Where is FASTLANE.app */;
 			productType = "com.apple.product-type.application";
 		};
 		8F1AB544243F404E006AB2EE /* Where is TEST */ = {
@@ -335,18 +453,30 @@
 		2A118DA8211A132F0059E252 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0940;
+				LastSwiftUpdateCheck = 1140;
 				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = "Ruslan Gritsenko";
 				TargetAttributes = {
 					2A118DAF211A132F0059E252 = {
 						CreatedOnToolsVersion = 9.4.1;
 						LastSwiftMigration = 1020;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 0;
 							};
 						};
+					};
+					8F1573192442053300BE3BC7 = {
+						CreatedOnToolsVersion = 11.4;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 8F15735D24433FA000BE3BC7;
+					};
+					8F15735D24433FA000BE3BC7 = {
+						ProvisioningStyle = Automatic;
+					};
+					8F1AB544243F404E006AB2EE = {
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -367,6 +497,8 @@
 			targets = (
 				2A118DAF211A132F0059E252 /* Where is */,
 				8F1AB544243F404E006AB2EE /* Where is TEST */,
+				8F15735D24433FA000BE3BC7 /* Where is FASTLANE */,
+				8F1573192442053300BE3BC7 /* Fastlane UITests */,
 			);
 		};
 /* End PBXProject section */
@@ -384,6 +516,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8F1573182442053300BE3BC7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8F15737F24433FA000BE3BC7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8F15738024433FA000BE3BC7 /* Localizable.strings in Resources */,
+				8F15738124433FA000BE3BC7 /* LaunchScreen.storyboard in Resources */,
+				8F15738224433FA000BE3BC7 /* Assets.xcassets in Resources */,
+				8F15738324433FA000BE3BC7 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8F1AB566243F404E006AB2EE /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -398,6 +548,45 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		8F15735E24433FA000BE3BC7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-25-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8F15738424433FA000BE3BC7 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-25/Pods-25-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-25/Pods-25-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-25/Pods-25-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		8F1AB545243F404E006AB2EE /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -515,6 +704,51 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8F1573162442053300BE3BC7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8F1573252442061600BE3BC7 /* SnapshotHelper.swift in Sources */,
+				8F733A9C2443654700A2B267 /* Where_is_UITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8F15735F24433FA000BE3BC7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8F15736024433FA000BE3BC7 /* FirebaseManager.swift in Sources */,
+				8F15736124433FA000BE3BC7 /* Level.swift in Sources */,
+				8F15736224433FA000BE3BC7 /* AnimationFactory.swift in Sources */,
+				8F15736324433FA000BE3BC7 /* StartGameView.swift in Sources */,
+				8F15736424433FA000BE3BC7 /* Helpers.swift in Sources */,
+				8F15736524433FA000BE3BC7 /* GameViewControllerHelper.swift in Sources */,
+				8F15736624433FA000BE3BC7 /* WelcomeViewController.swift in Sources */,
+				8F15736724433FA000BE3BC7 /* BlurryPresentationController.swift in Sources */,
+				8F15736824433FA000BE3BC7 /* AppDelegate.swift in Sources */,
+				8F15736924433FA000BE3BC7 /* LevelParameters.swift in Sources */,
+				8F15736A24433FA000BE3BC7 /* TutorialViewController.swift in Sources */,
+				8F15736B24433FA000BE3BC7 /* UIColor+CellColor.swift in Sources */,
+				8F15736C24433FA000BE3BC7 /* TimeLeftProgressView.swift in Sources */,
+				8F15736D24433FA000BE3BC7 /* UIDevice+Info.swift in Sources */,
+				8F15736E24433FA000BE3BC7 /* Game.swift in Sources */,
+				8F15736F24433FA000BE3BC7 /* HintLabel.swift in Sources */,
+				8F15737024433FA000BE3BC7 /* ResultsViewController.swift in Sources */,
+				8F15737124433FA000BE3BC7 /* UserDefaults+Key.swift in Sources */,
+				8F15737224433FA000BE3BC7 /* GameFinishedViewController.swift in Sources */,
+				8F15737324433FA000BE3BC7 /* CellsManager.swift in Sources */,
+				8F15737424433FA000BE3BC7 /* CellsGrid.swift in Sources */,
+				8F15737524433FA000BE3BC7 /* GameSession.swift in Sources */,
+				8F15737624433FA000BE3BC7 /* GameViewController.swift in Sources */,
+				8F15737724433FA000BE3BC7 /* FeedbackGenerator.swift in Sources */,
+				8F15737824433FA000BE3BC7 /* SettingsViewController.swift in Sources */,
+				8F15737924433FA000BE3BC7 /* InstructionsViewController.swift in Sources */,
+				8F15737A24433FA000BE3BC7 /* MemoryManager.swift in Sources */,
+				8F15737B24433FA000BE3BC7 /* CellView.swift in Sources */,
+				8F15737C24433FA000BE3BC7 /* CongratulationsViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8F1AB546243F404E006AB2EE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -552,6 +786,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		8F15738B24433FB600BE3BC7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8F15735D24433FA000BE3BC7 /* Where is FASTLANE */;
+			targetProxy = 8F15738A24433FB600BE3BC7 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		2A118DB7211A132F0059E252 /* Main.storyboard */ = {
@@ -716,8 +958,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.1;
-				"OTHER_SWIFT_FLAGS[arch=*]" = "";
+				MARKETING_VERSION = 2.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ruslangritsenko.-25";
 				PRODUCT_NAME = "Where is";
 				SWIFT_VERSION = 5.0;
@@ -741,11 +982,105 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.1;
-				"OTHER_SWIFT_FLAGS[arch=*]" = "";
+				MARKETING_VERSION = 2.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ruslangritsenko.-25";
 				PRODUCT_NAME = "Where is";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = PROD;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		8F1573212442053300BE3BC7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 88X53XUV8A;
+				INFOPLIST_FILE = "Where is UITests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.griddynamics.Where-is-UITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Where is FASTLANE";
+			};
+			name = Debug;
+		};
+		8F1573222442053300BE3BC7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 88X53XUV8A;
+				INFOPLIST_FILE = "Where is UITests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.griddynamics.Where-is-UITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Where is FASTLANE";
+			};
+			name = Release;
+		};
+		8F15738624433FA000BE3BC7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 88725F259EA3F250A806BD5E /* Pods-25.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 88X53XUV8A;
+				ENABLE_BITCODE = YES;
+				GCC_OPTIMIZATION_LEVEL = s;
+				INFOPLIST_FILE = "Fastlane-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 2.0.1;
+				OTHER_SWIFT_FLAGS = "-DFASTLANE";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ruslangritsenko.-25";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8F15738724433FA000BE3BC7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5CA357FDB184547893460637 /* Pods-25.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 88X53XUV8A;
+				ENABLE_BITCODE = YES;
+				GCC_OPTIMIZATION_LEVEL = s;
+				INFOPLIST_FILE = "Fastlane-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 2.0.1;
+				OTHER_SWIFT_FLAGS = "-DFASTLANE";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ruslangritsenko.-25";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -819,6 +1154,24 @@
 			buildConfigurations = (
 				2A118DC6211A13300059E252 /* Debug */,
 				2A118DC7211A13300059E252 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8F1573232442053300BE3BC7 /* Build configuration list for PBXNativeTarget "Fastlane UITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8F1573212442053300BE3BC7 /* Debug */,
+				8F1573222442053300BE3BC7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8F15738524433FA000BE3BC7 /* Build configuration list for PBXNativeTarget "Where is FASTLANE" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8F15738624433FA000BE3BC7 /* Debug */,
+				8F15738724433FA000BE3BC7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
