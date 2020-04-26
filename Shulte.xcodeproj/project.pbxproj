@@ -169,9 +169,9 @@
 		8F15731E2442053300BE3BC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8F1573242442061600BE3BC7 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = "Shulte UITests/Fastlane/SnapshotHelper.swift"; sourceTree = SOURCE_ROOT; };
 		8F15738824433FA000BE3BC7 /* Where is FASTLANE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Where is FASTLANE.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		8F15738924433FA000BE3BC7 /* Fastlane-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Fastlane-Info.plist"; path = "/Users/hruslan/Developer/Personal/Where-is/Fastlane-Info.plist"; sourceTree = "<absolute>"; };
 		8F1AB570243F404E006AB2EE /* Where is TEST.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Where is TEST.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		8F1AB571243F404E006AB2EE /* Test-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Test-Info.plist"; path = "/Users/hruslan/Developer/Personal/Where-is/Test-Info.plist"; sourceTree = "<absolute>"; };
+		8F808C4D2455B51700FC5752 /* Fastlane-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Fastlane-Info.plist"; sourceTree = "<group>"; };
+		8F808C4E2455B51700FC5752 /* Test-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Test-Info.plist"; sourceTree = "<group>"; };
 		BFB0BDC7379D0BCF7F042C86 /* Pods-Where is.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Where is.release.xcconfig"; path = "Pods/Target Support Files/Pods-Where is/Pods-Where is.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -240,11 +240,7 @@
 				2A118DC8211A13450059E252 /* Supporting Files */,
 				2A527BD022E795E000F68407 /* Interface Builder */,
 				2AE841FC22DE3A9B00D724E0 /* Extentions */,
-				2AE8420522DE3BCB00D724E0 /* Recources */,
-				2A118DC2211A13300059E252 /* Info.plist */,
-				8F1AB571243F404E006AB2EE /* Test-Info.plist */,
-				8F15738924433FA000BE3BC7 /* Fastlane-Info.plist */,
-				2AEA5DBD23E33DCD00E25FB0 /* GoogleService-Info.plist */,
+				2AE8420522DE3BCB00D724E0 /* Resources */,
 				2A9F63E523382B410007AB6A /* Localizable.strings */,
 			);
 			path = Shulte;
@@ -330,12 +326,16 @@
 			path = Extentions;
 			sourceTree = "<group>";
 		};
-		2AE8420522DE3BCB00D724E0 /* Recources */ = {
+		2AE8420522DE3BCB00D724E0 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 				2A118DBD211A13300059E252 /* Assets.xcassets */,
+				2A118DC2211A13300059E252 /* Info.plist */,
+				8F808C4E2455B51700FC5752 /* Test-Info.plist */,
+				8F808C4D2455B51700FC5752 /* Fastlane-Info.plist */,
+				2AEA5DBD23E33DCD00E25FB0 /* GoogleService-Info.plist */,
 			);
-			path = Recources;
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		2FC3AAF029933E8E0930FFF5 /* Pods */ = {
@@ -874,7 +874,7 @@
 				DEVELOPMENT_TEAM = 88X53XUV8A;
 				ENABLE_BITCODE = YES;
 				GCC_OPTIMIZATION_LEVEL = s;
-				INFOPLIST_FILE = "$(SRCROOT)/Shulte/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Shulte/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -898,7 +898,7 @@
 				DEVELOPMENT_TEAM = 88X53XUV8A;
 				ENABLE_BITCODE = YES;
 				GCC_OPTIMIZATION_LEVEL = s;
-				INFOPLIST_FILE = "$(SRCROOT)/Shulte/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Shulte/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -966,7 +966,7 @@
 				DEVELOPMENT_TEAM = 88X53XUV8A;
 				ENABLE_BITCODE = YES;
 				GCC_OPTIMIZATION_LEVEL = s;
-				INFOPLIST_FILE = "Fastlane-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Shulte/Resources/IFastlane-nfo.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -991,7 +991,7 @@
 				DEVELOPMENT_TEAM = 88X53XUV8A;
 				ENABLE_BITCODE = YES;
 				GCC_OPTIMIZATION_LEVEL = s;
-				INFOPLIST_FILE = "Fastlane-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Shulte/Resources/IFastlane-nfo.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1015,7 +1015,7 @@
 				DEVELOPMENT_TEAM = 88X53XUV8A;
 				ENABLE_BITCODE = YES;
 				GCC_OPTIMIZATION_LEVEL = s;
-				INFOPLIST_FILE = "Test-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Shulte/Resources/Test-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1040,7 +1040,7 @@
 				DEVELOPMENT_TEAM = 88X53XUV8A;
 				ENABLE_BITCODE = YES;
 				GCC_OPTIMIZATION_LEVEL = s;
-				INFOPLIST_FILE = "Test-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Shulte/Resources/Test-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
