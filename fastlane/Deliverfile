@@ -10,5 +10,3 @@ submit_for_review(false)
 automatic_release(true)
 username "gritsenko.ruslan@gmail.com"
 team_id "119351964"
-
-# FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD "ukir-dzfc-llyx-boqm"
