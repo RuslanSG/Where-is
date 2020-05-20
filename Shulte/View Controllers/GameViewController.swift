@@ -606,6 +606,9 @@ extension GameViewController: GameDelegate {
 extension GameViewController {
     
     @objc internal func applicationWillResignActive() {
+        if game.isRunning {
+            game.finish(reason: .stopped)
+        }
         cellsUnderSettingsButton.forEach { $0.uncompress(showNumber: false) }
         prepareForNewGame()
     }

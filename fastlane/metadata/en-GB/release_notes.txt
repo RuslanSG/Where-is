@@ -1,2 +1,1 @@
-• Small user interface improvements
-• Stability improvement and bug fixed
+Fixed bug when closing the application during the game and reopening, results appears with '-1' time.
