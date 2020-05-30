@@ -154,7 +154,13 @@ class CellsGrid: UIStackView {
         for _ in 0..<count {
             let cell = CellView(frame: .zero, contentViewInset: cellInset)
             cell.setCornerRadius(cellCornerRadius)
-            cell.titleLabel?.font = .systemFont(ofSize: cellNumbersFontSize)
+            if #available(iOS 13, *) {
+                if let descriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).withDesign(.rounded) {
+                    cell.titleLabel?.font = UIFont(descriptor: descriptor, size: cellNumbersFontSize)
+                }
+            } else {
+                cell.titleLabel?.font = .systemFont(ofSize: cellNumbersFontSize)
+            }
             
             let firstCellInRow = cells.count % rowSize == 0
             if currentRow == nil || firstCellInRow {
