@@ -80,6 +80,10 @@ final class CellsManager {
         cells.forEach { $0.isUserInteractionEnabled = false }
     }
     
+    func cell(with number: Int) -> CellView? {
+        cells.first { $0.titleLabel?.text == String(number) }
+    }
+    
     // MARK: - Action Methods
     
     @objc private func cellPressed(_ cell: CellView) {

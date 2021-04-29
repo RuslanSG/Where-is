@@ -484,6 +484,11 @@ extension GameViewController {
                                                       right: imageInset)
     }
     
+    private func highlightLostCell(with number: Int, duration: Double) {
+        guard let cell = cellsManager.cell(with: number) else { return }
+        cell.highlight(reason: .notFound, duration: duration)
+    }
+    
     // MARK: - Status Bar
     
     override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation{
@@ -581,23 +586,36 @@ extension GameViewController: GameDelegate {
     }
     
     func game(_ game: Game, didFinishSession session: GameSession) {
-        if session.finishingReason != .stopped {
-            startGameButton.level = game.currentLevel
-            
-            if game.currentLevel == game.lastLevel && !game.currentLevel.isPassed && game.session.finishingReason == .levelPassed {
-                feedbackGenerator.playSucceessFeedback()
-                performSegue(withIdentifier: "ShowCongratulations", sender: session)
-            } else {
-                if session.goalAchieved && session.levelPassed {
-                    feedbackGenerator.playSucceessFeedback()
-                } else {
-                    feedbackGenerator.playFailFeedback()
-                }
-                performSegue(withIdentifier: "ShowGameFinished", sender: session)
-            }
-            
+        guard session.finishingReason != .stopped else { return }
+        startGameButton.level = game.currentLevel
+                
+        if game.currentLevel == game.lastLevel &&
+           game.session.finishingReason == .levelPassed {
+            feedbackGenerator.playSucceessFeedback()
+            performSegue(withIdentifier: "ShowCongratulations", sender: session)
             prepareForNewGame()
+            return
         }
+        
+        let endGameAction = {
+            if session.goalAchieved && session.levelPassed {
+                self.feedbackGenerator.playSucceessFeedback()
+            } else {
+                self.feedbackGenerator.playFailFeedback()
+            }
+            self.performSegue(withIdentifier: "ShowGameFinished", sender: session)
+            self.prepareForNewGame()
+        }
+        
+        guard session.finishingReason == .timeIsOver else {
+            endGameAction()
+            return
+        }
+        
+        let deadline = 1.3
+        freezeUI(for: deadline)
+        highlightLostCell(with: session.nextNumber, duration: deadline)
+        DispatchQueue.main.asyncAfter(deadline: .now() + deadline, execute: endGameAction)
     }
 }
 
