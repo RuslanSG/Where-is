@@ -17,7 +17,7 @@ public class CellView: UIButton {
     }
     
     enum HighlightReason {
-        case goalAchieved, newRecord
+        case goalAchieved, newRecord, notFound
     }
     
     var number = 0 {
@@ -183,17 +183,35 @@ public class CellView: UIButton {
         }
     }
     
-    func highlight(reason: HighlightReason) {
+    func highlight(reason: HighlightReason, duration: Double = 0) {
         let oldBackgroundColor = backgroundColor
         
-        if reason == .goalAchieved {
-            backgroundColor = .systemGreen
-        } else {
-            backgroundColor = .systemOrange
+        let backwardsAnimation = {
+            UIView.animate(withDuration: 1, delay: duration) {
+                self.backgroundColor = oldBackgroundColor
+            }
         }
         
-        UIView.animate(withDuration: 1) {
-            self.backgroundColor = oldBackgroundColor
+        switch reason {
+        case .goalAchieved:
+            backgroundColor = .systemGreen
+            backwardsAnimation()
+        case .newRecord:
+            backgroundColor = .systemOrange
+            backwardsAnimation()
+        case .notFound:
+            stopWinking()
+            UIView.animate(
+                withDuration: 0.5,
+                animations: {
+                    self.setTitleColor(.white, for: .normal)
+                    self.backgroundColor = .systemBlue
+                    self.showNumber(animated: false)
+                },
+                completion: { _ in
+                    backwardsAnimation()
+                }
+            )
         }
     }
     
