@@ -185,11 +185,19 @@ public class CellView: UIButton {
     
     func highlight(reason: HighlightReason, duration: Double = 0) {
         let oldBackgroundColor = backgroundColor
+        let oldTextColor = titleLabel?.textColor
         
         let backwardsAnimation = {
-            UIView.animate(withDuration: 1, delay: duration) {
-                self.backgroundColor = oldBackgroundColor
-            }
+            UIView.animate(
+                withDuration: 1,
+                delay: duration,
+                animations: {
+                    self.backgroundColor = oldBackgroundColor
+                },
+                completion: { _ in
+                    self.setTitleColor(oldTextColor, for: .normal)
+                }
+            )
         }
         
         switch reason {
