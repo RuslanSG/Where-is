@@ -52,6 +52,7 @@ public class CellView: UIButton {
     private var numberCurrentAlpha: CGFloat = 1.0
     
     private var winkAnimator: UIViewPropertyAnimator?
+    private var isWinking = false
     
     // MARK: - Lifecycle
     
@@ -87,7 +88,7 @@ public class CellView: UIButton {
                     self.titleLabel?.alpha = currentAlpha
                 }) { (_) in
                     animator.finishAnimation(at: .current)
-                    self.startWinking(fractionComplete: fractionComplete)
+                    self.wink(fractionComplete: fractionComplete)
                 }
             } else {
                 titleLabel?.alpha = 0
@@ -154,19 +155,18 @@ public class CellView: UIButton {
     }
     
     func startWinking(fractionComplete: CGFloat = 0) {
-        let delay = Double.random(in: 0...4)
-
-        winkAnimator = AnimationFactory.startWinking(view: titleLabel!, delay: delay, fractionComplete: fractionComplete, completion: { (position) in
-            if position == .end {
-                self.startWinking()
-            }
-        })
-
+        isWinking = true
+        wink(fractionComplete: fractionComplete)
     }
-    
+        
     func stopWinking() {
+        defer { winkAnimator = nil }
+        isWinking = false
+        guard winkAnimator?.state != .stopped else {
+            winkAnimator?.finishAnimation(at: .end)
+            return
+        }
         winkAnimator?.stopAnimation(true)
-        winkAnimator = nil
     }
     
     func compress() {
@@ -230,5 +230,18 @@ public class CellView: UIButton {
         contentView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -contentViewInset).isActive = true
         contentView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -contentViewInset).isActive = true
         contentView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: contentViewInset).isActive = true
+    }
+    
+    private func wink(fractionComplete: CGFloat = 0) {
+        guard isWinking else { return }
+        let delay = Double.random(in: 0...4)
+        winkAnimator = AnimationFactory.startWinking(
+            view: titleLabel!,
+            delay: delay,
+            fractionComplete: fractionComplete
+        ) { position in
+            guard position == .end else { return }
+            self.wink()
+        }
     }
 }
