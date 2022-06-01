@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol TutorialViewControllerDelegate: class {
+protocol TutorialViewControllerDelegate: AnyObject {
     
     func tutorialViewController(_ tutorialViewController: TutorialViewController, doneButtonDidPress doneButton: UIButton)
     func tutorialViewController(_ tutorialViewController: TutorialViewController, closeButtonDidPress closeButton: UIButton)
