@@ -1,4 +1,4 @@
-platform :ios, '10.3'
+platform :ios, '12.0'
 
 target 'Where is' do
   use_frameworks!

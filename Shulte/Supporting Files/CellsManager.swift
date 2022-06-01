@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol CellsManagerDelegate: class {
+protocol CellsManagerDelegate: AnyObject {
     
     func cellPressed(_ cell: CellView)
     func cellReleased(_ cell: CellView)

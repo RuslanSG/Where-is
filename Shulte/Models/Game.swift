@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-protocol GameDelegate: class {
+protocol GameDelegate: AnyObject {
     
     func game(_ game: Game, didChangeLevelTo level: Level)
     func game(_ game: Game, didFinishSession session: GameSession)

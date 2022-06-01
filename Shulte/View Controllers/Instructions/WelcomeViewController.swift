@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol WelcomeViewControllerDelegate: class {
+protocol WelcomeViewControllerDelegate: AnyObject {
     
     func welcomeViewController(_ welcomeViewController: WelcomeViewController, nextButtonDidPress nextButton: UIButton)
     func welcomeViewController(_ welcomeViewController: WelcomeViewController, skipButtonDidPress nextButton: UIButton)
@@ -51,10 +51,23 @@ class WelcomeViewController: UIViewController {
     // MARK: - Helper Methods
     
     private func setAttributedTextToWelcomeLabel() {
-        let stringToColor = "Where is"
-        let colorfulTextRange = (welcomeLabel.text! as NSString).range(of: stringToColor)
+        let `where` = "Where"
+        let `is` = "is"
+        
+        let whereRange = (welcomeLabel.text! as NSString).range(of: `where`)
+        let isRange = (welcomeLabel.text! as NSString).range(of: `is`)
+        
         let attributedString = NSMutableAttributedString(string: welcomeLabel.text!)
-        attributedString.addAttribute(.foregroundColor, value: UIColor.cellRed, range: colorfulTextRange)
+        attributedString.addAttribute(
+            .foregroundColor,
+            value: UIColor.systemBlue,
+            range: whereRange
+        )
+        attributedString.addAttribute(
+            .foregroundColor,
+            value: UIColor.systemYellow,
+            range: isRange
+        )
         welcomeLabel.attributedText = attributedString
     }
     

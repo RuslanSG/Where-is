@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol CellsGridDelegate: class {
+protocol CellsGridDelegate: AnyObject {
     
     func cellsCountDidChange(cells: [CellView])
 }
