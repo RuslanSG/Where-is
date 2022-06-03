@@ -8,6 +8,7 @@
 
 import UIKit
 #if PROD
+import AppTrackingTransparency
 import Firebase
 #endif
 
@@ -17,7 +18,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var restrictRotation: UIInterfaceOrientationMask = .allButUpsideDown
     
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+    func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+    ) -> Bool {
         
         registerUserDefaults()
         
@@ -40,10 +44,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         pageControl.currentPageIndicatorTintColor = .darkGray
         pageControl.pageIndicatorTintColor = .lightGray
         
-        #if PROD
-        FirebaseApp.configure()
-        #endif
-        
         #if FASTLANE
         UIView.setAnimationsEnabled(false)
         #endif
@@ -51,8 +51,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
-        return self.restrictRotation
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        #if PROD
+        guard #available(iOS 14.5, *) else {
+            FirebaseApp.configure()
+            return
+        }
+        ATTrackingManager.requestTrackingAuthorization { status in
+            guard status == .authorized else { return }
+            FirebaseApp.configure()
+        }
+        #endif
+    }
+    
+    func application(
+        _ application: UIApplication,
+        supportedInterfaceOrientationsFor window: UIWindow?
+    ) -> UIInterfaceOrientationMask {
+        restrictRotation
     }
     
     // MARK: - Helper Methods

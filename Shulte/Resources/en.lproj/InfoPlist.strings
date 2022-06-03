@@ -1,0 +1,9 @@
+/* 
+  InfoPlist.strings
+  Shulte
+
+  Created by Hrytsenko Ruslan on 03.06.2022.
+  Copyright © 2022 Ruslan Gritsenko. All rights reserved.
+*/
+
+NSUserTrackingUsageDescription = "Examples of tracked events: number of levels completed, viewed screens, is the application updated, etc."

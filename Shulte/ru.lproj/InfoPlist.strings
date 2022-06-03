@@ -1,0 +1,9 @@
+/* 
+  InfoPlist.strings
+  Shulte
+
+  Created by Hrytsenko Ruslan on 03.06.2022.
+  Copyright © 2022 Ruslan Gritsenko. All rights reserved.
+*/
+
+NSUserTrackingUsageDescription = "Примеры отслеживаемых событий: количество пройденных уровней, просматриваемые экраны, обновлено ли приложение и т.д.";

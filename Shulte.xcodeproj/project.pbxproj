@@ -109,6 +109,10 @@
 		8F1AB568243F404E006AB2EE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2A118DBF211A13300059E252 /* LaunchScreen.storyboard */; };
 		8F1AB56A243F404E006AB2EE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2A118DBD211A13300059E252 /* Assets.xcassets */; };
 		8F1AB56B243F404E006AB2EE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2A118DB7211A132F0059E252 /* Main.storyboard */; };
+		8F26F488284A2E200035AB8C /* AppTrackingTransparency.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F26F487284A2E200035AB8C /* AppTrackingTransparency.framework */; };
+		8F26F4A5284A34370035AB8C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8F26F4A9284A34370035AB8C /* InfoPlist.strings */; };
+		8F26F4A6284A34370035AB8C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8F26F4A9284A34370035AB8C /* InfoPlist.strings */; };
+		8F26F4A7284A34370035AB8C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8F26F4A9284A34370035AB8C /* InfoPlist.strings */; };
 		8F733A9C2443654700A2B267 /* ShulteUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F15731C2442053300BE3BC7 /* ShulteUITests.swift */; };
 /* End PBXBuildFile section */
 
@@ -170,6 +174,9 @@
 		8F1573242442061600BE3BC7 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = "Shulte UITests/Fastlane/SnapshotHelper.swift"; sourceTree = SOURCE_ROOT; };
 		8F15738824433FA000BE3BC7 /* Where is FASTLANE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Where is FASTLANE.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F1AB570243F404E006AB2EE /* Where is TEST.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Where is TEST.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8F26F487284A2E200035AB8C /* AppTrackingTransparency.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppTrackingTransparency.framework; path = System/Library/Frameworks/AppTrackingTransparency.framework; sourceTree = SDKROOT; };
+		8F26F4A8284A34370035AB8C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		8F26F4AA284A34380035AB8C /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8F808C4D2455B51700FC5752 /* Fastlane-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Fastlane-Info.plist"; sourceTree = "<group>"; };
 		8F808C4E2455B51700FC5752 /* Test-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Test-Info.plist"; sourceTree = "<group>"; };
 		BFB0BDC7379D0BCF7F042C86 /* Pods-Where is.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Where is.release.xcconfig"; path = "Pods/Target Support Files/Pods-Where is/Pods-Where is.release.xcconfig"; sourceTree = "<group>"; };
@@ -181,6 +188,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				457E1F23500ECF4981C976AA /* Pods_Where_is.framework in Frameworks */,
+				8F26F488284A2E200035AB8C /* AppTrackingTransparency.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -241,6 +249,7 @@
 				2A527BD022E795E000F68407 /* Interface Builder */,
 				2AE841FC22DE3A9B00D724E0 /* Extentions */,
 				2AE8420522DE3BCB00D724E0 /* Resources */,
+				8F26F4A9284A34370035AB8C /* InfoPlist.strings */,
 				2A9F63E523382B410007AB6A /* Localizable.strings */,
 			);
 			path = Shulte;
@@ -350,6 +359,7 @@
 		5914BF3D0020C3A72BA00621 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8F26F487284A2E200035AB8C /* AppTrackingTransparency.framework */,
 				575E113A2D0A777214D38EEC /* Pods_Where_is.framework */,
 			);
 			name = Frameworks;
@@ -509,6 +519,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2A9F63E723382B410007AB6A /* Localizable.strings in Resources */,
+				8F26F4A5284A34370035AB8C /* InfoPlist.strings in Resources */,
 				2A118DC1211A13300059E252 /* LaunchScreen.storyboard in Resources */,
 				2AEA5DBE23E33DCD00E25FB0 /* GoogleService-Info.plist in Resources */,
 				2A118DBE211A13300059E252 /* Assets.xcassets in Resources */,
@@ -531,6 +542,7 @@
 				8F15738124433FA000BE3BC7 /* LaunchScreen.storyboard in Resources */,
 				8F15738224433FA000BE3BC7 /* Assets.xcassets in Resources */,
 				8F15738324433FA000BE3BC7 /* Main.storyboard in Resources */,
+				8F26F4A7284A34370035AB8C /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -542,6 +554,7 @@
 				8F1AB568243F404E006AB2EE /* LaunchScreen.storyboard in Resources */,
 				8F1AB56A243F404E006AB2EE /* Assets.xcassets in Resources */,
 				8F1AB56B243F404E006AB2EE /* Main.storyboard in Resources */,
+				8F26F4A6284A34370035AB8C /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -745,6 +758,15 @@
 			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
+		8F26F4A9284A34370035AB8C /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8F26F4A8284A34370035AB8C /* ru */,
+				8F26F4AA284A34380035AB8C /* uk */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -872,7 +894,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 88X53XUV8A;
 				ENABLE_BITCODE = NO;
 				GCC_OPTIMIZATION_LEVEL = s;
@@ -896,7 +918,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 88X53XUV8A;
 				ENABLE_BITCODE = NO;
 				GCC_OPTIMIZATION_LEVEL = s;
@@ -964,7 +986,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 88X53XUV8A;
 				ENABLE_BITCODE = NO;
 				GCC_OPTIMIZATION_LEVEL = s;
@@ -989,7 +1011,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 88X53XUV8A;
 				ENABLE_BITCODE = NO;
 				GCC_OPTIMIZATION_LEVEL = s;
@@ -1013,7 +1035,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 88X53XUV8A;
 				ENABLE_BITCODE = NO;
 				GCC_OPTIMIZATION_LEVEL = s;
@@ -1038,7 +1060,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 88X53XUV8A;
 				ENABLE_BITCODE = NO;
 				GCC_OPTIMIZATION_LEVEL = s;

@@ -1,9 +1,0 @@
-/* Bundle display name */
-"CFBundleDisplayName" = "Where is?!";
-
-/* Bundle name */
-"CFBundleName" = "$(PRODUCT_NAME)";
-
-/* Privacy - Location When In Use Usage Description */
-"NSLocationWhenInUseUsageDescription" = "Location is needed for Auto-Dark Mode feature.";
-
